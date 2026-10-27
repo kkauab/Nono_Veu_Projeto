@@ -28,3 +28,7 @@ As alturas do ajuste v9 permanecem: corredor 40 px, guarda 44 px, lanceiro 46 px
 `tests/enemy_motion_v12_test.gd` exercita uma perseguição real, a mudança de direção da apresentação, a parada ao perder o alvo, a progressão dos golpes, o contato de dano único, o recuo e o reinício no ponto de descanso. Os testes de combate, resistência v9, navegação e desenho em repouso complementam a verificação.
 
 `tools/qa/capture_enemy_motion_v12.gd` apresenta os quatro tipos com Senu em escala comum 3× e grava os quadros para revisão da caminhada e dos ataques.
+
+Verificação final: movimento 28/28, combate 26/26, resistência 56/56, navegação 8/8 e cache/desempenho 6/6. O teste de movimento compara também os pixels das oito poses de passos e das cinco poses de golpe de cada tipo, para detectar repetições literais.
+
+A prévia `qa/enemy_motion_v12_preview.gif` contém 80 quadros em 4 segundos, 960×540, capturados pelo Godot. A folha `qa/enemy_v12_guard_stride_review.png` permite conferir lado a lado os apoios do guarda.

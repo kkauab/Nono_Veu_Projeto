@@ -148,7 +148,7 @@
         ],
         "bounds": [
           51,
-          66,
+          67,
           79,
           111
         ]
@@ -174,7 +174,7 @@
         ],
         "bounds": [
           50,
-          71,
+          69,
           80,
           112
         ]
@@ -942,6 +942,10 @@
     "734f39",
     "aa7750"
   ],
+  "native_retouches": {
+    "guard_walk_6": "Upper anatomy lowered1pixel; boots unchanged.",
+    "guard_walk_8": "Upper anatomy raised2pixels; supporting thigh seam repainted, boots unchanged."
+  },
   "source": "art/pixelorama/enemies_v12/port_enemies_v12.pxo",
   "provenance": "Four newly drawn16-pose sheets generated with the built-in image tool; opposite steps5–8 revised using a knee/ankle pose guide. One anatomical scale per archetype. PNG exported by installed Pixelorama."
 }

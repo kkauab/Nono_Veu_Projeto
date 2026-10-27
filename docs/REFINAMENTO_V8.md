@@ -24,7 +24,7 @@ Senu mede aproximadamente 38 pixels no mundo. A escala dos inimigos foi ajustada
 
 Esses contatos incluem a cadência real do combo. Colisão cobre os pés, com raio 6 nos comuns e 10 no chefe. O teste de resistência executa golpes, recuperação, derrota e restauração reais: 56/56. O ajuste de tamanho v9 foi mantido; os novos movimentos ficam em `art/pixelorama/enemies_v12/`, com atlas `assets/sprites/port_enemies_v12.png`.
 
-Cada tipo recebeu oito poses de caminhada e cinco fases de ataque, além de descanso e recuo. Os passos usam a distância que o corpo realmente percorreu depois da colisão; ficar parado ou bloqueado não faz os pés dançarem. A arma acompanha a preparação, o contato do dano e a recuperação existentes. O tamanho do desenho permanece constante. Detalhes e verificação em [INIMIGOS_MOVIMENTO_V12.md](INIMIGOS_MOVIMENTO_V12.md).
+Cada tipo recebeu oito poses de caminhada e cinco fases de ataque, além de descanso e recuo. Os passos usam a distância que o corpo realmente percorreu depois da colisão; ficar parado ou bloqueado não faz os pés dançarem. A arma acompanha a preparação, o contato do dano e a recuperação existentes. O tamanho do desenho permanece constante. Dois quadros do guarda receberam retoque nativo do tronco e da junção da coxa para reduzir a oscilação da cabeça a dois pixels, mantendo os apoios das botas. Detalhes em [INIMIGOS_MOVIMENTO_V12.md](INIMIGOS_MOVIMENTO_V12.md); fontes, prompts e exportação em [enemies_v12/README.md](../art/pixelorama/enemies_v12/README.md).
 
 ## Espada
 
@@ -50,6 +50,8 @@ Cada nova jornada inicia a abertura automaticamente. Enter ou E revela a fala e 
 
 O contexto apresenta Alexandria, o Porto dos Esquecidos, a Inversão e a busca de Senu por Iri. O pescador relata apenas o que viu: um homem com um livro embrulhado perguntou pelo Santuário da Primeira Palavra. Seu irmão já não se lembra do nome do pescador. Senu segue essa pista com a promessa de voltar com alguma resposta. O jogador real permanece parado e protegido enquanto a encenação roda; controles, HUD e mundo são restaurados juntos.
 
-O teste pelo botão Novo Jogo aprovou 23/23 verificações, incluindo seis falas, Enter/E, manutenção contínua da tecla Espaço, segunda nova jornada e conclusão natural. O componente aprovou 28/28 e a captura completa alcançou o último marco com as seis falas. Migração e arquivo do progresso: 32/32. HUD: 19/19; espada: 118/118; compatibilidade: 97/97; combate: 26/26; padronização: 58/58.
+O teste pelo botão Novo Jogo aprovou 23/23 verificações, incluindo seis falas, Enter/E, manutenção contínua da tecla Espaço, segunda nova jornada e conclusão natural. O componente aprovou 28/28 e a captura completa alcançou o último marco com as seis falas. Movimento dos inimigos: 28/28, incluindo perseguição física, bloqueio por parede, recuo, contato único do ataque e conferência dos novos cels. Combate: 26/26; resistência: 56/56; navegação: 8/8; desenho em repouso: 6/6. Os resultados anteriores da migração (32/32), HUD (19/19), espada (118/118), compatibilidade (97/97) e padronização (58/58) continuam registrados.
+
+Prévias atuais: `qa/opening_fisherman_v13_preview.gif` e `qa/enemy_motion_v12_preview.gif`. A abertura foi capturada até o fim com as seis falas. A prévia dos inimigos compara os quatro tipos com Senu na mesma escala e mostra os passos e golpes na cadência do jogo.
 
 Os testes usam somente `user://qa/`. O progresso real não foi apagado. Reabra `JOGAR.cmd` para carregar os arquivos atuais.

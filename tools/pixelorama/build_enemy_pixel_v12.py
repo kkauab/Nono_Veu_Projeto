@@ -19,6 +19,29 @@ PIVOT=(64,112)
 POSES=['idle']+[f'walk_{i+1}' for i in range(8)]+['anticipation','acceleration','contact','follow_through','recovery','hurt','rest']
 native.PALETTE += ['3b3542','5a4a56','826b73','734f39','aa7750']
 
+def register_guard_torso(cel,pose):
+    """Native-resolution anatomy cleanup, with the planted boots unchanged.
+
+    Generated poses6/8 exaggerated the torso rise/fall. Re-register the upper
+    anatomy by1/2pixels and paint the tiny thigh seam; never scale the figure.
+    """
+    original=cel.copy()
+    if pose==8:
+        # Extend the bent supporting thigh by two pixels. Both boot drawings
+        # and their ground contact remain byte-for-byte intact below row101.
+        cel=Image.new('RGBA',(CELL,CELL))
+        cel.paste(original.crop((0,101,CELL,CELL)),(0,101))
+        cel.paste(original.crop((0,0,CELL,101)),(0,-2))
+        seam=original.crop((0,101,CELL,102))
+        cel.paste(seam,(0,99));cel.paste(seam,(0,100))
+    elif pose==6:
+        cel=Image.new('RGBA',(CELL,CELL))
+        cel.paste(original.crop((0,101,CELL,CELL)),(0,101))
+        cel.paste(original.crop((0,0,CELL,100)),(0,1))
+    if pose in (6,8):
+        assert cel.crop((0,105,CELL,CELL)).tobytes()==original.crop((0,105,CELL,CELL)).tobytes()
+    return cel
+
 def cleaned_selection(image, rect):
     crop=image.crop(rect).convert('RGBA')
     arr=np.array(crop)
@@ -83,6 +106,7 @@ def build():
             cel=Image.new('RGBA',(CELL,CELL))
             offset=(PIVOT[0]-round(anchor[0]*factor),PIVOT[1]-round(anchor[1]*factor))
             cel.paste(small,offset)
+            if name=='guard':cel=register_guard_torso(cel,pose)
             bounds=cel.getchannel('A').getbbox()
             assert bounds and min(bounds[:2])>0 and bounds[2]<CELL and bounds[3]<CELL,(name,pose,bounds)
             frames.append(cel)
@@ -92,6 +116,7 @@ def build():
     plan={'version':12,'texture':'res://assets/sprites/port_enemies_v12.png','canvas':[CELL,CELL],
           'atlas_size':[2048,512],'columns':16,'rows':4,'frames':64,'pivot':list(PIVOT),
           'profiles':profiles,'poses':POSES,'registration':registration,'palette':native.PALETTE,
+          'native_retouches':{'guard_walk_6':'Upper anatomy lowered1pixel; boots unchanged.','guard_walk_8':'Upper anatomy raised2pixels; supporting thigh seam repainted, boots unchanged.'},
           'source':'art/pixelorama/enemies_v12/port_enemies_v12.pxo',
           'provenance':'Four newly drawn16-pose sheets generated with the built-in image tool; opposite steps5–8 revised using a knee/ankle pose guide. One anatomical scale per archetype. PNG exported by installed Pixelorama.'}
     (ART/'export_plan.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2),encoding='utf8')
