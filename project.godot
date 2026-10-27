@@ -1,0 +1,35 @@
+; O Nono Véu — demonstração A01
+config_version=5
+
+[application]
+config/name="O Nono Véu"
+run/main_scene="res://scenes/boot/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://assets/ui/icon.svg"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="nono_veu_demo"
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/scale_mode="fractional"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0.025, 0.045, 0.065, 1)
+2d/snap/snap_2d_transforms_to_pixel=true
+
+[physics]
+common/physics_ticks_per_second=60
+
+[layer_names]
+2d_physics/layer_1="Cenário e portões"
+2d_physics/layer_2="Senu"
+2d_physics/layer_3="Inimigos"
+

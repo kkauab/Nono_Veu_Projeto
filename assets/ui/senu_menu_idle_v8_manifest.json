@@ -1,0 +1,30 @@
+{
+  "canvas": [
+    160,
+    192
+  ],
+  "columns": 4,
+  "frames": 12,
+  "texture": "res://assets/ui/senu_menu_idle_v8.png",
+  "blink": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "wind": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "blink_period_seconds": 5.2,
+  "blink_duration_seconds": 0.3,
+  "wind_fps": 5,
+  "source": "art/pixelorama/port_v7/senu_portrait_v7.pxo",
+  "provenance": "Pixelorama native portrait source; eye pixels and separated ribbon cels; final PNG must be exported by installed Pixelorama."
+}

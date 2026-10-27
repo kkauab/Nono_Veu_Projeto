@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "e01_khopesh_discipulo"
+display_name = "Khopesh do Discípulo"
+category = "espada"
+damage = 22
+attack_interval = 0.43
+range_px = 42.0
+arc_degrees = 142.0
+color = Color(0.91, 0.74, 0.46, 1)
+power_id = "riposta_hermetica"
+power_name = "Riposta hermética"
+power_cooldown = 5.0
+power_cost = 0
+description = "Lâmina curva preservada pelo discípulo. Golpes amplos; aparar fortalece a próxima riposta."

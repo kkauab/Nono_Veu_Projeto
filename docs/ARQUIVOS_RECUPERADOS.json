@@ -1,0 +1,27 @@
+{
+  "source": "https://chatgpt.com/share/6add4eaa-65a0-83ea-9eb5-decb6f34144a",
+  "version": "1.1",
+  "recovery": "partial",
+  "note": "Manifesto dos documentos originais restaurados. README e registros de trabalho evoluíram com a implementação da demo e não fazem parte desta lista de integridade.",
+  "pending_originals": [
+    "docs/concept_art/personagens.png",
+    "docs/concept_art/mundo.png"
+  ],
+  "files": [
+    {
+      "path": "docs/O_NONO_VEU_GDD.md",
+      "bytes": 86160,
+      "sha256": "9d4d8151e31b6f03194dc410057c2d421911701d9eeba562c32ae82d672215cb"
+    },
+    {
+      "path": "docs/O_NONO_VEU_MAPA_MESTRE.dot",
+      "bytes": 2880,
+      "sha256": "a13fc4dfd3640f2a9189743bf1fb4e3b1893cd07241dddc123cb2fc6bfc1b105"
+    },
+    {
+      "path": "docs/O_NONO_VEU_MAPA_MESTRE.png",
+      "bytes": 330004,
+      "sha256": "1bcaf12a748dccb4c4582f299728eaccbe94e7fb25a0a1055f7e53364bcb9cf7"
+    }
+  ]
+}

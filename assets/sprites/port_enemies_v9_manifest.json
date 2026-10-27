@@ -1,0 +1,80 @@
+{
+  "version": 9,
+  "texture": "res://assets/sprites/port_enemies_v9.png",
+  "canvas": [
+    128,
+    128
+  ],
+  "pivot": [
+    64,
+    112
+  ],
+  "columns": 4,
+  "profiles": {
+    "guard": {
+      "row": 0,
+      "height": 44,
+      "source_scale": 0.15547703180212014
+    },
+    "runner": {
+      "row": 1,
+      "height": 40,
+      "source_scale": 0.15151515151515152
+    },
+    "lancer": {
+      "row": 2,
+      "height": 46,
+      "source_scale": 0.14696485623003194
+    },
+    "keeper": {
+      "row": 3,
+      "height": 46,
+      "source_scale": 0.1488673139158576
+    }
+  },
+  "poses": [
+    "idle",
+    "left_step",
+    "right_step",
+    "strike"
+  ],
+  "palette": [
+    "14252c",
+    "1e343a",
+    "2b4449",
+    "3c5659",
+    "526765",
+    "6d7b70",
+    "8c9380",
+    "b4b298",
+    "dbcfaa",
+    "eee0ba",
+    "343b38",
+    "4b5553",
+    "646b60",
+    "81816e",
+    "a09a7e",
+    "bdad89",
+    "332e28",
+    "4b3b2d",
+    "674d34",
+    "846443",
+    "a27d50",
+    "c39e65",
+    "e0bd7e",
+    "1f444b",
+    "2c5b61",
+    "3e7373",
+    "609087",
+    "5a623e",
+    "7d8051",
+    "a49e66",
+    "be733a",
+    "e69d4a",
+    "f5cc76",
+    "3b3542",
+    "5a4a56",
+    "826b73"
+  ],
+  "source": "art/pixelorama/enemies_v7/source_sheet.png"
+}

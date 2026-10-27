@@ -1,0 +1,93 @@
+{
+  "canvas": [
+    128,
+    128
+  ],
+  "atlas_size": [
+    512,
+    256
+  ],
+  "columns": 4,
+  "frames": 8,
+  "pivot": [
+    64,
+    112
+  ],
+  "floor_region": [
+    32,
+    96,
+    64,
+    32
+  ],
+  "frame_order": [
+    "stone",
+    "wood",
+    "ferryman_idle",
+    "ferryman_step_left",
+    "ferryman_step_right",
+    "ferry_boat",
+    "oil_lantern",
+    "sanctuary_sign"
+  ],
+  "source": "art/pixelorama/opening_rpg_v11/intro_atlas.pxo",
+  "texture": "res://assets/cinematics/rpg_v11/intro_atlas.png",
+  "palette": {
+    "ink": "17272e",
+    "edge": "263b3e",
+    "deep": "334a4d",
+    "stone_d": "435d5c",
+    "stone": "5a736a",
+    "stone_l": "7f8c7a",
+    "stone_h": "a4aa8c",
+    "stone_chip": "c4c0a0",
+    "water": "244750",
+    "teal_d": "27434a",
+    "teal": "365f62",
+    "teal_l": "54817a",
+    "teal_h": "83a89a",
+    "wood_black": "302b26",
+    "wood_d": "49392c",
+    "wood_s": "654b33",
+    "wood": "82613f",
+    "wood_l": "a48251",
+    "wood_h": "c6a66d",
+    "wood_warm": "9b7348",
+    "rope_d": "765d3b",
+    "rope": "b39b6b",
+    "rope_l": "d6c292",
+    "bronze_d": "5f5037",
+    "bronze": "987545",
+    "bronze_l": "c5a065",
+    "bronze_h": "e2bf7c",
+    "ivory_d": "9d9678",
+    "ivory": "d5c9a0",
+    "ivory_h": "eee1b6",
+    "ochre_d": "675033",
+    "ochre": "9c773c",
+    "ochre_l": "bd9751",
+    "ochre_h": "d5b56d",
+    "skin_d": "704a34",
+    "skin_s": "98633f",
+    "skin": "ba8050",
+    "skin_l": "d5a06b",
+    "skin_h": "e4b780",
+    "hair": "292a25",
+    "hair_l": "494231",
+    "pants_d": "303f42",
+    "pants": "485958",
+    "pants_l": "66766b",
+    "fire_d": "ad6537",
+    "fire": "e8a04e",
+    "fire_l": "f6ce7b",
+    "fire_h": "fff0b4"
+  },
+  "layers": [
+    "Terreno e objetos",
+    "Pernas e botas",
+    "Manto e bolsa",
+    "Túnica e braços",
+    "Rosto e lenço",
+    "Acabamentos"
+  ],
+  "provenance": "Original hand-placed native-resolution pixel art; layered editable Pixelorama project. Final PNG exported by installed Pixelorama."
+}

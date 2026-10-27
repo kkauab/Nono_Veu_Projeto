@@ -1,0 +1,90 @@
+{
+  "version": 12,
+  "canvas": [
+    128,
+    128
+  ],
+  "atlas_size": [
+    512,
+    128
+  ],
+  "columns": 4,
+  "frames": 4,
+  "pivot": [
+    64,
+    112
+  ],
+  "order": [
+    "hull_back",
+    "hull_front",
+    "waterline_a",
+    "waterline_b"
+  ],
+  "draw_order": [
+    "waterline",
+    "hull_back",
+    "passenger",
+    "hull_front"
+  ],
+  "standing_anchor": [
+    69,
+    87
+  ],
+  "boarding_anchor": [
+    89,
+    88
+  ],
+  "mooring_anchor": [
+    103,
+    97
+  ],
+  "standing_offset": [
+    5,
+    -25
+  ],
+  "boarding_offset": [
+    25,
+    -24
+  ],
+  "mooring_offset": [
+    39,
+    -15
+  ],
+  "hull_axis": [
+    2,
+    1
+  ],
+  "palette": {
+    "outline": "202e30",
+    "wood_black": "302e28",
+    "wood_dark": "493b2d",
+    "wood_shadow": "604b34",
+    "wood": "7c603f",
+    "wood_warm": "927248",
+    "wood_light": "ae8d58",
+    "wood_edge": "c7ab71",
+    "nail": "374044",
+    "bronze": "a78b52",
+    "rope_dark": "6c6045",
+    "rope": "a69467",
+    "rope_light": "cbb990",
+    "net": "657366",
+    "net_dark": "3e5652",
+    "teal_dark": "2c4a4d",
+    "teal": "436565",
+    "teal_light": "709184",
+    "foam_dark": "284c50",
+    "foam": "43686a",
+    "foam_light": "628884"
+  },
+  "source": "art/pixelorama/opening_boat_v12/arrival_boat.pxo",
+  "texture": "res://assets/cinematics/rpg_v12/arrival_boat.png",
+  "layers": [
+    "Fundo e tábuas",
+    "Bordas do casco",
+    "Bancos",
+    "Equipamento de pesca",
+    "Acabamentos e água"
+  ],
+  "provenance": "Original native-resolution editable pixel art; final PNG exported by installed Pixelorama."
+}

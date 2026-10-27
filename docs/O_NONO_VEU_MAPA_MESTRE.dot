@@ -1,0 +1,57 @@
+digraph mundo {
+  graph [bgcolor="#111821", rankdir=TB, compound=true, splines=polyline, nodesep=0.34, ranksep=0.85, pad=0.35, fontname="DejaVu Sans", label="O NONO VÉU  |  MAPA-MESTRE DE CONEXÕES\nESQUEMA TOPOLÓGICO • NÃO ESTÁ EM ESCALA GEOGRÁFICA", labelloc="t", fontsize=22, fontcolor="#ece0c8", outputorder=edgesfirst];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=12, fontcolor="#fffaf0", penwidth=1.7, margin="0.18,0.14"];
+  edge [color="#a8b2be", fontname="DejaVu Sans", fontsize=10, fontcolor="#d1d9de", arrowsize=0.7, penwidth=1.7];
+  hub [label="HUB  ·  SANTUÁRIO DA\nPRIMEIRA PALAVRA", fillcolor="#836c3f", color="#e1b96c", penwidth=3, fontsize=14, margin="0.3,0.2"];
+  subgraph cluster_I {
+    label="CAPÍTULO I  ·  ALEXANDRIA E FAIUM"; color="#3c8f86"; fontcolor="#b7ddd6"; style="rounded,dashed"; penwidth=1.5;
+    node [fillcolor="#225454",color="#60aea3"];
+    a01 [label="01  PORTO DOS\nESQUECIDOS"];
+    a02 [label="02  CATACUMBAS\nDO ECO"];
+    a03 [label="03  SANTUÁRIO\nDA PALAVRA"];
+    a04 [label="04  JARDIM\nDAS FORMAS"];
+    {rank=same; a01 a02}
+    {rank=same; a03 a04}
+  }
+  subgraph cluster_II {
+    label="CAPÍTULO II  ·  ALTO EGITO"; color="#b68c50"; fontcolor="#e3c79e"; style="rounded,dashed"; penwidth=1.5;
+    node [fillcolor="#65502f",color="#c49a64"];
+    a05 [label="05  TEMPLO DAS\nDUAS VERDADES"];
+    a06 [label="06  VALE DOS REIS\nADORMECIDOS"];
+    a07 [label="07  SANTUÁRIO\nDAS LÁGRIMAS"];
+    a08 [label="08  BIBLIOTECA\nSUBMERSA"];
+    {rank=same; a05 a06}
+    {rank=same; a07 a08}
+  }
+  subgraph cluster_III {
+    label="CAPÍTULO III  ·  MAR VERMELHO E AXUM"; color="#9375ab"; fontcolor="#d9c8e8"; style="rounded,dashed"; penwidth=1.5;
+    node [fillcolor="#574365",color="#a98fc1"];
+    a09 [label="09  DESERTO\nDAS VOZES"];
+    a10 [label="10  MERCADO\nDAS ALMAS"];
+    a11 [label="11  NECRÓPOLE\nDAS ESTELAS"];
+    a12 [label="12  O NONO VÉU"];
+    {rank=same; a09 a10}
+    {rank=same; a11 a12}
+  }
+  hub -> a01 [color="#e4c17e"];
+  hub -> a02 [color="#e4c17e"];
+  hub -> a03 [color="#e4c17e"];
+  a01 -> a02 [dir=both];
+  a02 -> a03 [dir=both];
+  a01 -> a04 [dir=both];
+  a03 -> a04 [dir=both];
+  a04 -> a05 [color="#d6b783", label="Nilo"];
+  a05 -> a06 [dir=both];
+  a05 -> a07 [dir=both, label="barco"];
+  a06 -> a08 [dir=both];
+  a07 -> a08 [dir=both];
+  a07 -> a09 [label="caravana"];
+  a09 -> a10 [label="Mar Vermelho"];
+  a10 -> a11 [dir=both, label="terras altas"];
+  a11 -> a12 [color="#e0cbef"];
+  a02 -> a08 [style=dashed, color="#bd9be3", constraint=false, dir=both];
+  a04 -> a07 [style=dashed, color="#bd9be3", constraint=false, dir=both];
+  a08 -> hub [style=dashed, color="#bd9be3", constraint=false, dir=both];
+  a11 -> hub [style=dashed, color="#bd9be3", constraint=false, dir=both];
+  a09 -> a03 [style=dashed, color="#bd9be3", constraint=false, dir=both];
+}

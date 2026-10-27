@@ -1,0 +1,207 @@
+{
+  "directions": {
+    "down": {
+      "rect": [
+        0,
+        0,
+        384,
+        512
+      ],
+      "mirror": false,
+      "body_height": 150
+    },
+    "down_left": {
+      "rect": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "mirror": false,
+      "body_height": 150
+    },
+    "left": {
+      "rect": [
+        768,
+        0,
+        1152,
+        512
+      ],
+      "mirror": false,
+      "body_height": 150
+    },
+    "up_left": {
+      "rect": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "mirror": false,
+      "body_height": 150
+    },
+    "up": {
+      "rect": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "mirror": false,
+      "body_height": 150
+    },
+    "right": {
+      "rect": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "mirror": false,
+      "body_height": 150
+    },
+    "down_right": {
+      "rect": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "mirror": false,
+      "body_height": 150
+    },
+    "up_right": {
+      "rect": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "mirror": true,
+      "body_height": 150
+    }
+  },
+  "combat": {
+    "down_left": {
+      "rectangles": [
+        [
+          0,
+          0,
+          314,
+          314
+        ],
+        [
+          314,
+          0,
+          627,
+          314
+        ],
+        [
+          627,
+          0,
+          940,
+          314
+        ],
+        [
+          940,
+          0,
+          1254,
+          314
+        ]
+      ],
+      "scale": 0.5882352941176471
+    },
+    "down_right": {
+      "rectangles": [
+        [
+          0,
+          314,
+          314,
+          627
+        ],
+        [
+          314,
+          314,
+          627,
+          627
+        ],
+        [
+          627,
+          314,
+          940,
+          627
+        ],
+        [
+          940,
+          314,
+          1254,
+          627
+        ]
+      ],
+      "scale": 0.5681818181818182
+    },
+    "up_left": {
+      "rectangles": [
+        [
+          0,
+          627,
+          314,
+          940
+        ],
+        [
+          314,
+          627,
+          627,
+          940
+        ],
+        [
+          627,
+          627,
+          940,
+          940
+        ],
+        [
+          940,
+          627,
+          1254,
+          940
+        ]
+      ],
+      "scale": 0.5597014925373134
+    },
+    "up_right": {
+      "rectangles": [
+        [
+          0,
+          940,
+          314,
+          1254
+        ],
+        [
+          314,
+          940,
+          627,
+          1254
+        ],
+        [
+          627,
+          940,
+          940,
+          1254
+        ],
+        [
+          940,
+          940,
+          1254,
+          1254
+        ]
+      ],
+      "scale": 0.5639097744360902
+    }
+  },
+  "notes": [
+    "Generated reference orientation was visually inspected; northeast base is reflected northwest.",
+    "Action views use four real diagonal key-pose rows; cardinal actions choose the nearest row.",
+    "Cels are source selections and keyed mesh deformation, not optical-flow or dissolve frames."
+  ]
+}

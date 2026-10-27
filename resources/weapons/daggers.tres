@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "l01_adagas_reverso"
+display_name = "Adagas do Reverso"
+category = "leve"
+damage = 10
+attack_interval = 0.29
+range_px = 31.0
+arc_degrees = 105.0
+color = Color(0.66, 0.66, 0.94, 1)
+power_id = "passo_sombra"
+power_name = "Passo de sombra"
+power_cooldown = 4.0
+power_cost = 0
+description = "Duas lâminas de metal opaco. Ataques duplos e um passo evasivo deixam um eco cortante."

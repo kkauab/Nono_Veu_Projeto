@@ -1,0 +1,203 @@
+{
+	"canvas": [
+		512.0,
+		512.0
+	],
+	"exported_by": "Pixelorama v1.2.3-stable",
+	"frame_count": 20,
+	"materials": [
+		"stone",
+		"sand",
+		"wood",
+		"mosaic",
+		"garden",
+		"crypt",
+		"grate",
+		"water"
+	],
+	"pivot": [
+		256.0,
+		464.0
+	],
+	"props": {
+		"arch": {
+			"content_size": [
+				286,
+				380
+			],
+			"frame": 10,
+			"source": "props",
+			"source_rect": [
+				610.0,
+				25.0,
+				1000.0,
+				545.0
+			]
+		},
+		"boat": {
+			"content_size": [
+				440,
+				351
+			],
+			"frame": 18,
+			"source": "architecture",
+			"source_rect": [
+				0.0,
+				650.0,
+				745.0,
+				1254.0
+			]
+		},
+		"brazier": {
+			"content_size": [
+				183,
+				350
+			],
+			"frame": 9,
+			"source": "props",
+			"source_rect": [
+				370.0,
+				140.0,
+				600.0,
+				540.0
+			]
+		},
+		"cargo": {
+			"content_size": [
+				314,
+				260
+			],
+			"frame": 13,
+			"source": "props",
+			"source_rect": [
+				420.0,
+				710.0,
+				780.0,
+				1080.0
+			]
+		},
+		"lighthouse": {
+			"content_size": [
+				304,
+				440
+			],
+			"frame": 19,
+			"source": "architecture",
+			"source_rect": [
+				740.0,
+				585.0,
+				1254.0,
+				1254.0
+			]
+		},
+		"obelisk": {
+			"content_size": [
+				215,
+				400
+			],
+			"frame": 8,
+			"source": "props",
+			"source_rect": [
+				20.0,
+				25.0,
+				320.0,
+				540.0
+			]
+		},
+		"palm": {
+			"content_size": [
+				313,
+				440
+			],
+			"frame": 14,
+			"source": "props",
+			"source_rect": [
+				685.0,
+				530.0,
+				1065.0,
+				1086.0
+			]
+		},
+		"stairs": {
+			"content_size": [
+				272,
+				270
+			],
+			"frame": 11,
+			"source": "props",
+			"source_rect": [
+				995.0,
+				95.0,
+				1448.0,
+				555.0
+			]
+		},
+		"stall": {
+			"content_size": [
+				297,
+				340
+			],
+			"frame": 12,
+			"source": "props",
+			"source_rect": [
+				0.0,
+				550.0,
+				420.0,
+				1080.0
+			]
+		},
+		"temple": {
+			"content_size": [
+				366,
+				420
+			],
+			"frame": 17,
+			"source": "architecture",
+			"source_rect": [
+				730.0,
+				0.0,
+				1254.0,
+				620.0
+			]
+		},
+		"wall": {
+			"content_size": [
+				274,
+				280
+			],
+			"frame": 15,
+			"source": "props",
+			"source_rect": [
+				1035.0,
+				620.0,
+				1448.0,
+				1086.0
+			]
+		},
+		"warehouse": {
+			"content_size": [
+				440,
+				401
+			],
+			"frame": 16,
+			"source": "architecture",
+			"source_rect": [
+				0.0,
+				0.0,
+				732.0,
+				660.0
+			]
+		}
+	},
+	"source_hashes": {
+		"architecture": "9a729e3f14a3865f13fca44b0bc3da743f3ddf49a77287bf264bfef69444ef07",
+		"materials": "9d27854948a3d826845342a1efee2e32c14153ea1928758f4a5e244caec4914a",
+		"props": "01708804de0a5da98fb1ecf8da72c6744f4292d2c2a2795ce5577dfe0ef0d98a"
+	},
+	"texture": "res://assets/world/port_art_v6.png",
+	"texture_size": [
+		2048,
+		2560
+	],
+	"version": 6.0
+}

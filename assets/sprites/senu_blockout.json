@@ -1,0 +1,40 @@
+{
+  "description": "Original procedural blockout, idle proof only; not final art or an animation set.",
+  "blender_version": "5.2.3 LTS",
+  "image": "senu_blockout.png",
+  "width": 512,
+  "height": 80,
+  "frame_width": 64,
+  "frame_height": 80,
+  "pivot": [
+    32,
+    66
+  ],
+  "directions": [
+    "down",
+    "down_right",
+    "right",
+    "up_right",
+    "up",
+    "up_left",
+    "left",
+    "down_left"
+  ],
+  "filter": "nearest",
+  "suggested_game_scale": 0.5,
+  "animations": {
+    "idle": {
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "directional": true
+    }
+  }
+}

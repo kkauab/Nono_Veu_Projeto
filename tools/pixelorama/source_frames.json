@@ -1,0 +1,3980 @@
+{
+  "schema": 1,
+  "canvas": [
+    256,
+    256
+  ],
+  "game_scale": 0.26,
+  "game_body_target_px": 38,
+  "sources": {
+    "movement": "movement.png",
+    "combat": "combat.png",
+    "reactions": "reactions.png",
+    "weapons": "weapons.png"
+  },
+  "source_size": [
+    1448,
+    1086
+  ],
+  "directions_order": [
+    "down",
+    "down_right",
+    "right",
+    "up_right",
+    "up",
+    "up_left",
+    "left",
+    "down_left"
+  ],
+  "clips": {
+    "idle": {
+      "fps": 5,
+      "loop": true,
+      "directions": {
+        "up": [
+          {
+            "source": "movement",
+            "rect": [
+              525,
+              0,
+              160,
+              201
+            ],
+            "pivot": [
+              82,
+              199
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_left": [
+          {
+            "source": "movement",
+            "rect": [
+              297,
+              198,
+              204,
+              186
+            ],
+            "pivot": [
+              113,
+              185
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "left": [
+          {
+            "source": "movement",
+            "rect": [
+              128,
+              750,
+              128,
+              185
+            ],
+            "pivot": [
+              50,
+              184
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down_left": [
+          {
+            "source": "movement",
+            "rect": [
+              73,
+              382,
+              167,
+              190
+            ],
+            "pivot": [
+              101,
+              186
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down": [
+          {
+            "source": "movement",
+            "rect": [
+              639,
+              382,
+              172,
+              188
+            ],
+            "pivot": [
+              100,
+              186
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "note": "Only one clean frontal standing frame is supplied; reuse rather than invent a six-frame front walk.",
+            "isolate_body": true
+          }
+        ],
+        "down_right": [
+          {
+            "source": "movement",
+            "rect": [
+              850,
+              380,
+              142,
+              192
+            ],
+            "pivot": [
+              73,
+              190
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "note": "Check bottom few pixels for neighboring-row residue.",
+            "isolate_body": true
+          }
+        ],
+        "right": [
+          {
+            "source": "movement",
+            "rect": [
+              73,
+              570,
+              183,
+              184
+            ],
+            "pivot": [
+              101,
+              181
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_right": [
+          {
+            "source": "movement",
+            "rect": [
+              297,
+              198,
+              204,
+              186
+            ],
+            "pivot": [
+              113,
+              185
+            ],
+            "scale": 0.2,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ]
+      },
+      "direction_aliases": {
+        "up_right": {
+          "source_direction": "up_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        }
+      }
+    },
+    "walk": {
+      "fps": 7,
+      "loop": true,
+      "directions": {
+        "up": [
+          {
+            "source": "movement",
+            "rect": [
+              525,
+              0,
+              160,
+              201
+            ],
+            "pivot": [
+              82,
+              199
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              727,
+              0,
+              172,
+              198
+            ],
+            "pivot": [
+              88,
+              196
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              945,
+              0,
+              142,
+              201
+            ],
+            "pivot": [
+              68,
+              198
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_left": [
+          {
+            "source": "movement",
+            "rect": [
+              297,
+              198,
+              204,
+              186
+            ],
+            "pivot": [
+              113,
+              185
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              539,
+              198,
+              182,
+              186
+            ],
+            "pivot": [
+              86,
+              185
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "left": [
+          {
+            "source": "movement",
+            "rect": [
+              128,
+              750,
+              128,
+              185
+            ],
+            "pivot": [
+              50,
+              184
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              319,
+              750,
+              132,
+              183
+            ],
+            "pivot": [
+              66,
+              180
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              521,
+              750,
+              139,
+              185
+            ],
+            "pivot": [
+              64,
+              184
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              1268,
+              750,
+              126,
+              193
+            ],
+            "pivot": [
+              58,
+              190
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down_left": [
+          {
+            "source": "movement",
+            "rect": [
+              73,
+              382,
+              167,
+              190
+            ],
+            "pivot": [
+              101,
+              186
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              270,
+              382,
+              144,
+              189
+            ],
+            "pivot": [
+              77,
+              188
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "note": "Check top/bottom few pixels for neighboring-row residue in Pixelorama.",
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              425,
+              382,
+              188,
+              187
+            ],
+            "pivot": [
+              103,
+              186
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "note": "Check bottom two pixels for neighboring-row residue.",
+            "isolate_body": true
+          }
+        ],
+        "down": [
+          {
+            "source": "movement",
+            "rect": [
+              639,
+              382,
+              172,
+              188
+            ],
+            "pivot": [
+              100,
+              186
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "note": "Only one clean frontal standing frame is supplied; reuse rather than invent a six-frame front walk.",
+            "isolate_body": true
+          }
+        ],
+        "down_right": [
+          {
+            "source": "movement",
+            "rect": [
+              850,
+              380,
+              142,
+              192
+            ],
+            "pivot": [
+              73,
+              190
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "note": "Check bottom few pixels for neighboring-row residue.",
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              1027,
+              380,
+              144,
+              193
+            ],
+            "pivot": [
+              75,
+              190
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "note": "Check bottom few pixels for neighboring-row residue.",
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              1197,
+              380,
+              144,
+              193
+            ],
+            "pivot": [
+              83,
+              189
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "right": [
+          {
+            "source": "movement",
+            "rect": [
+              73,
+              570,
+              183,
+              184
+            ],
+            "pivot": [
+              101,
+              181
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              1176,
+              570,
+              193,
+              177
+            ],
+            "pivot": [
+              91,
+              174
+            ],
+            "scale": 0.2,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_right": [
+          {
+            "source": "movement",
+            "rect": [
+              297,
+              198,
+              204,
+              186
+            ],
+            "pivot": [
+              113,
+              185
+            ],
+            "scale": 0.2,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "movement",
+            "rect": [
+              539,
+              198,
+              182,
+              186
+            ],
+            "pivot": [
+              86,
+              185
+            ],
+            "scale": 0.2,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ]
+      },
+      "direction_aliases": {
+        "up_right": {
+          "source_direction": "up_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        }
+      }
+    },
+    "attack_light": {
+      "fps": 10,
+      "loop": false,
+      "directions": {
+        "down_left": [
+          {
+            "source": "combat",
+            "rect": [
+              12,
+              37,
+              84,
+              119
+            ],
+            "pivot": [
+              44,
+              115
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              103,
+              186,
+              91,
+              134
+            ],
+            "pivot": [
+              47,
+              129
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              180,
+              190,
+              108,
+              127
+            ],
+            "pivot": [
+              57,
+              119
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              258,
+              37,
+              95,
+              118
+            ],
+            "pivot": [
+              48,
+              114
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down": [
+          {
+            "source": "combat",
+            "rect": [
+              375,
+              37,
+              104,
+              119
+            ],
+            "pivot": [
+              45,
+              116
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              447,
+              202,
+              110,
+              113
+            ],
+            "pivot": [
+              62,
+              108
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              526,
+              207,
+              119,
+              112
+            ],
+            "pivot": [
+              72,
+              109
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              624,
+              37,
+              90,
+              118
+            ],
+            "pivot": [
+              47,
+              114
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_left": [
+          {
+            "source": "combat",
+            "rect": [
+              733,
+              37,
+              88,
+              119
+            ],
+            "pivot": [
+              53,
+              114
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              730,
+              202,
+              123,
+              116
+            ],
+            "pivot": [
+              55,
+              113
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              840,
+              190,
+              89,
+              128
+            ],
+            "pivot": [
+              40,
+              124
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              987,
+              37,
+              88,
+              119
+            ],
+            "pivot": [
+              43,
+              115
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_right": [
+          {
+            "source": "combat",
+            "rect": [
+              1090,
+              37,
+              94,
+              119
+            ],
+            "pivot": [
+              47,
+              115
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              1165,
+              203,
+              84,
+              115
+            ],
+            "pivot": [
+              49,
+              112
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              1247,
+              186,
+              91,
+              135
+            ],
+            "pivot": [
+              51,
+              131
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              1335,
+              37,
+              113,
+              119
+            ],
+            "pivot": [
+              58,
+              115
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down_right": [
+          {
+            "source": "combat",
+            "rect": [
+              12,
+              37,
+              84,
+              119
+            ],
+            "pivot": [
+              44,
+              115
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              103,
+              186,
+              91,
+              134
+            ],
+            "pivot": [
+              47,
+              129
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              180,
+              190,
+              108,
+              127
+            ],
+            "pivot": [
+              57,
+              119
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              258,
+              37,
+              95,
+              118
+            ],
+            "pivot": [
+              48,
+              114
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "right": [
+          {
+            "source": "combat",
+            "rect": [
+              12,
+              37,
+              84,
+              119
+            ],
+            "pivot": [
+              44,
+              115
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              103,
+              186,
+              91,
+              134
+            ],
+            "pivot": [
+              47,
+              129
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              180,
+              190,
+              108,
+              127
+            ],
+            "pivot": [
+              57,
+              119
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              258,
+              37,
+              95,
+              118
+            ],
+            "pivot": [
+              48,
+              114
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up": [
+          {
+            "source": "combat",
+            "rect": [
+              733,
+              37,
+              88,
+              119
+            ],
+            "pivot": [
+              53,
+              114
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              730,
+              202,
+              123,
+              116
+            ],
+            "pivot": [
+              55,
+              113
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              840,
+              190,
+              89,
+              128
+            ],
+            "pivot": [
+              40,
+              124
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              987,
+              37,
+              88,
+              119
+            ],
+            "pivot": [
+              43,
+              115
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "left": [
+          {
+            "source": "combat",
+            "rect": [
+              12,
+              37,
+              84,
+              119
+            ],
+            "pivot": [
+              44,
+              115
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              103,
+              186,
+              91,
+              134
+            ],
+            "pivot": [
+              47,
+              129
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              180,
+              190,
+              108,
+              127
+            ],
+            "pivot": [
+              57,
+              119
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              258,
+              37,
+              95,
+              118
+            ],
+            "pivot": [
+              48,
+              114
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ]
+      },
+      "direction_aliases": {
+        "down_right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "up": {
+          "source_direction": "up_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "left": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        }
+      }
+    },
+    "attack_heavy": {
+      "fps": 8,
+      "loop": false,
+      "directions": {
+        "down_left": [
+          {
+            "source": "combat",
+            "rect": [
+              12,
+              550,
+              111,
+              123
+            ],
+            "pivot": [
+              57,
+              118
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              116,
+              511,
+              80,
+              166
+            ],
+            "pivot": [
+              43,
+              164
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              180,
+              543,
+              119,
+              134
+            ],
+            "pivot": [
+              57,
+              128
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              299,
+              548,
+              65,
+              124
+            ],
+            "pivot": [
+              33,
+              119
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down": [
+          {
+            "source": "combat",
+            "rect": [
+              368,
+              550,
+              103,
+              124
+            ],
+            "pivot": [
+              52,
+              120
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "note": "Principal character selected; neighboring figures excluded from irregular source sheet."
+          },
+          {
+            "source": "combat",
+            "rect": [
+              550,
+              517,
+              112,
+              162
+            ],
+            "pivot": [
+              50,
+              159
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              624,
+              37,
+              90,
+              118
+            ],
+            "pivot": [
+              47,
+              114
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "note": "Clean supplied frontal recovery pose replaces an overlapping source cell."
+          }
+        ],
+        "up_left": [
+          {
+            "source": "combat",
+            "rect": [
+              736,
+              520,
+              107,
+              160
+            ],
+            "pivot": [
+              56,
+              157
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "note": "Principal character selected; neighboring figures excluded from irregular source sheet."
+          },
+          {
+            "source": "combat",
+            "rect": [
+              906,
+              550,
+              97,
+              132
+            ],
+            "pivot": [
+              38,
+              128
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "note": "Principal character selected; neighboring figures excluded from irregular source sheet."
+          },
+          {
+            "source": "combat",
+            "rect": [
+              996,
+              550,
+              87,
+              126
+            ],
+            "pivot": [
+              45,
+              121
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_right": [
+          {
+            "source": "combat",
+            "rect": [
+              1088,
+              551,
+              105,
+              129
+            ],
+            "pivot": [
+              50,
+              125
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "note": "Principal character selected; neighboring figures excluded from irregular source sheet."
+          },
+          {
+            "source": "combat",
+            "rect": [
+              1241,
+              527,
+              103,
+              154
+            ],
+            "pivot": [
+              51,
+              150
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "note": "Principal character selected; neighboring figures excluded from irregular source sheet."
+          },
+          {
+            "source": "combat",
+            "rect": [
+              1334,
+              550,
+              103,
+              130
+            ],
+            "pivot": [
+              52,
+              127
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down_right": [
+          {
+            "source": "combat",
+            "rect": [
+              12,
+              550,
+              111,
+              123
+            ],
+            "pivot": [
+              57,
+              118
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              116,
+              511,
+              80,
+              166
+            ],
+            "pivot": [
+              43,
+              164
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              180,
+              543,
+              119,
+              134
+            ],
+            "pivot": [
+              57,
+              128
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              299,
+              548,
+              65,
+              124
+            ],
+            "pivot": [
+              33,
+              119
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "right": [
+          {
+            "source": "combat",
+            "rect": [
+              12,
+              550,
+              111,
+              123
+            ],
+            "pivot": [
+              57,
+              118
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              116,
+              511,
+              80,
+              166
+            ],
+            "pivot": [
+              43,
+              164
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              180,
+              543,
+              119,
+              134
+            ],
+            "pivot": [
+              57,
+              128
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              299,
+              548,
+              65,
+              124
+            ],
+            "pivot": [
+              33,
+              119
+            ],
+            "scale": 0.34,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up": [
+          {
+            "source": "combat",
+            "rect": [
+              736,
+              520,
+              107,
+              160
+            ],
+            "pivot": [
+              56,
+              157
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "note": "Principal character selected; neighboring figures excluded from irregular source sheet."
+          },
+          {
+            "source": "combat",
+            "rect": [
+              906,
+              550,
+              97,
+              132
+            ],
+            "pivot": [
+              38,
+              128
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "note": "Principal character selected; neighboring figures excluded from irregular source sheet."
+          },
+          {
+            "source": "combat",
+            "rect": [
+              996,
+              550,
+              87,
+              126
+            ],
+            "pivot": [
+              45,
+              121
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "left": [
+          {
+            "source": "combat",
+            "rect": [
+              12,
+              550,
+              111,
+              123
+            ],
+            "pivot": [
+              57,
+              118
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              116,
+              511,
+              80,
+              166
+            ],
+            "pivot": [
+              43,
+              164
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              180,
+              543,
+              119,
+              134
+            ],
+            "pivot": [
+              57,
+              128
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "combat",
+            "rect": [
+              299,
+              548,
+              65,
+              124
+            ],
+            "pivot": [
+              33,
+              119
+            ],
+            "scale": 0.34,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ]
+      },
+      "direction_aliases": {
+        "down_right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "up": {
+          "source_direction": "up_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "left": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        }
+      }
+    },
+    "dodge": {
+      "fps": 12,
+      "loop": false,
+      "directions": {
+        "down_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              12,
+              31,
+              96,
+              135
+            ],
+            "pivot": [
+              49,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              94,
+              36,
+              133,
+              136
+            ],
+            "pivot": [
+              71,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              232,
+              36,
+              125,
+              135
+            ],
+            "pivot": [
+              62,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "erase_rects": [
+              [
+                0,
+                69,
+                14,
+                66
+              ]
+            ],
+            "note": "Neighboring dust below the left wrist excluded; source area x232..246,y105..171. Cape, wrist and both boots preserved."
+          }
+        ],
+        "up_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              749,
+              42,
+              97,
+              131
+            ],
+            "pivot": [
+              46,
+              126
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              830,
+              52,
+              124,
+              115
+            ],
+            "pivot": [
+              72,
+              111
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              958,
+              45,
+              108,
+              122
+            ],
+            "pivot": [
+              61,
+              118
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              1060,
+              33,
+              134,
+              143
+            ],
+            "pivot": [
+              67,
+              138
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1185,
+              37,
+              132,
+              138
+            ],
+            "pivot": [
+              70,
+              134
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1314,
+              31,
+              130,
+              134
+            ],
+            "pivot": [
+              68,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down": [
+          {
+            "source": "reactions",
+            "rect": [
+              12,
+              31,
+              96,
+              135
+            ],
+            "pivot": [
+              49,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              94,
+              36,
+              133,
+              136
+            ],
+            "pivot": [
+              71,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              232,
+              36,
+              125,
+              135
+            ],
+            "pivot": [
+              62,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "erase_rects": [
+              [
+                0,
+                69,
+                14,
+                66
+              ]
+            ],
+            "note": "Neighboring dust below the left wrist excluded; source area x232..246,y105..171. Cape, wrist and both boots preserved."
+          }
+        ],
+        "down_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              12,
+              31,
+              96,
+              135
+            ],
+            "pivot": [
+              49,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              94,
+              36,
+              133,
+              136
+            ],
+            "pivot": [
+              71,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              232,
+              36,
+              125,
+              135
+            ],
+            "pivot": [
+              62,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "erase_rects": [
+              [
+                0,
+                69,
+                14,
+                66
+              ]
+            ],
+            "note": "Neighboring dust below the left wrist excluded; source area x232..246,y105..171. Cape, wrist and both boots preserved."
+          }
+        ],
+        "right": [
+          {
+            "source": "reactions",
+            "rect": [
+              12,
+              31,
+              96,
+              135
+            ],
+            "pivot": [
+              49,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              94,
+              36,
+              133,
+              136
+            ],
+            "pivot": [
+              71,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              232,
+              36,
+              125,
+              135
+            ],
+            "pivot": [
+              62,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "erase_rects": [
+              [
+                0,
+                69,
+                14,
+                66
+              ]
+            ],
+            "note": "Neighboring dust below the left wrist excluded; source area x232..246,y105..171. Cape, wrist and both boots preserved."
+          }
+        ],
+        "up": [
+          {
+            "source": "reactions",
+            "rect": [
+              749,
+              42,
+              97,
+              131
+            ],
+            "pivot": [
+              46,
+              126
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              830,
+              52,
+              124,
+              115
+            ],
+            "pivot": [
+              72,
+              111
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              958,
+              45,
+              108,
+              122
+            ],
+            "pivot": [
+              61,
+              118
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "left": [
+          {
+            "source": "reactions",
+            "rect": [
+              12,
+              31,
+              96,
+              135
+            ],
+            "pivot": [
+              49,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              94,
+              36,
+              133,
+              136
+            ],
+            "pivot": [
+              71,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              232,
+              36,
+              125,
+              135
+            ],
+            "pivot": [
+              62,
+              132
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true,
+            "erase_rects": [
+              [
+                0,
+                69,
+                14,
+                66
+              ]
+            ],
+            "note": "Neighboring dust below the left wrist excluded; source area x232..246,y105..171. Cape, wrist and both boots preserved."
+          }
+        ]
+      },
+      "direction_aliases": {
+        "down": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "down_right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "up": {
+          "source_direction": "up_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "left": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        }
+      }
+    },
+    "parry": {
+      "fps": 8,
+      "loop": false,
+      "directions": {
+        "down_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              11,
+              685,
+              106,
+              160
+            ],
+            "pivot": [
+              54,
+              155
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              114,
+              702,
+              110,
+              133
+            ],
+            "pivot": [
+              56,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down": [
+          {
+            "source": "reactions",
+            "rect": [
+              557,
+              691,
+              97,
+              159
+            ],
+            "pivot": [
+              51,
+              154
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              652,
+              708,
+              108,
+              132
+            ],
+            "pivot": [
+              55,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              229,
+              691,
+              107,
+              156
+            ],
+            "pivot": [
+              53,
+              151
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              333,
+              691,
+              101,
+              161
+            ],
+            "pivot": [
+              51,
+              157
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              1088,
+              697,
+              116,
+              147
+            ],
+            "pivot": [
+              55,
+              142
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1199,
+              708,
+              109,
+              136
+            ],
+            "pivot": [
+              51,
+              131
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              11,
+              685,
+              106,
+              160
+            ],
+            "pivot": [
+              54,
+              155
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              114,
+              702,
+              110,
+              133
+            ],
+            "pivot": [
+              56,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "right": [
+          {
+            "source": "reactions",
+            "rect": [
+              11,
+              685,
+              106,
+              160
+            ],
+            "pivot": [
+              54,
+              155
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              114,
+              702,
+              110,
+              133
+            ],
+            "pivot": [
+              56,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up": [
+          {
+            "source": "reactions",
+            "rect": [
+              229,
+              691,
+              107,
+              156
+            ],
+            "pivot": [
+              53,
+              151
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              333,
+              691,
+              101,
+              161
+            ],
+            "pivot": [
+              51,
+              157
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "left": [
+          {
+            "source": "reactions",
+            "rect": [
+              11,
+              685,
+              106,
+              160
+            ],
+            "pivot": [
+              54,
+              155
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              114,
+              702,
+              110,
+              133
+            ],
+            "pivot": [
+              56,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ]
+      },
+      "direction_aliases": {
+        "down_right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "up": {
+          "source_direction": "up_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "left": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        }
+      }
+    },
+    "hurt": {
+      "fps": 9,
+      "loop": false,
+      "directions": {
+        "down_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              19,
+              383,
+              112,
+              147
+            ],
+            "pivot": [
+              60,
+              143
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              127,
+              399,
+              118,
+              134
+            ],
+            "pivot": [
+              58,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              262,
+              395,
+              100,
+              133
+            ],
+            "pivot": [
+              53,
+              129
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              741,
+              401,
+              126,
+              124
+            ],
+            "pivot": [
+              61,
+              119
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              859,
+              428,
+              115,
+              107
+            ],
+            "pivot": [
+              59,
+              102
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              1079,
+              392,
+              120,
+              140
+            ],
+            "pivot": [
+              58,
+              136
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1193,
+              397,
+              118,
+              138
+            ],
+            "pivot": [
+              60,
+              134
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down": [
+          {
+            "source": "reactions",
+            "rect": [
+              19,
+              383,
+              112,
+              147
+            ],
+            "pivot": [
+              60,
+              143
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              127,
+              399,
+              118,
+              134
+            ],
+            "pivot": [
+              58,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              262,
+              395,
+              100,
+              133
+            ],
+            "pivot": [
+              53,
+              129
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              19,
+              383,
+              112,
+              147
+            ],
+            "pivot": [
+              60,
+              143
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              127,
+              399,
+              118,
+              134
+            ],
+            "pivot": [
+              58,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              262,
+              395,
+              100,
+              133
+            ],
+            "pivot": [
+              53,
+              129
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "right": [
+          {
+            "source": "reactions",
+            "rect": [
+              19,
+              383,
+              112,
+              147
+            ],
+            "pivot": [
+              60,
+              143
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              127,
+              399,
+              118,
+              134
+            ],
+            "pivot": [
+              58,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              262,
+              395,
+              100,
+              133
+            ],
+            "pivot": [
+              53,
+              129
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up": [
+          {
+            "source": "reactions",
+            "rect": [
+              741,
+              401,
+              126,
+              124
+            ],
+            "pivot": [
+              61,
+              119
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              859,
+              428,
+              115,
+              107
+            ],
+            "pivot": [
+              59,
+              102
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "left": [
+          {
+            "source": "reactions",
+            "rect": [
+              19,
+              383,
+              112,
+              147
+            ],
+            "pivot": [
+              60,
+              143
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              127,
+              399,
+              118,
+              134
+            ],
+            "pivot": [
+              58,
+              130
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              262,
+              395,
+              100,
+              133
+            ],
+            "pivot": [
+              53,
+              129
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ]
+      },
+      "direction_aliases": {
+        "down": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "down_right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "up": {
+          "source_direction": "up_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "left": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        }
+      }
+    },
+    "death": {
+      "fps": 7,
+      "loop": false,
+      "directions": {
+        "down_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              18,
+              558,
+              140,
+              103
+            ],
+            "pivot": [
+              73,
+              98
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              300,
+              561,
+              215,
+              94
+            ],
+            "pivot": [
+              110,
+              89
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              509,
+              578,
+              188,
+              79
+            ],
+            "pivot": [
+              100,
+              74
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              910,
+              538,
+              160,
+              125
+            ],
+            "pivot": [
+              76,
+              120
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1067,
+              562,
+              183,
+              98
+            ],
+            "pivot": [
+              96,
+              93
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1233,
+              572,
+              194,
+              84
+            ],
+            "pivot": [
+              97,
+              79
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down": [
+          {
+            "source": "reactions",
+            "rect": [
+              18,
+              558,
+              140,
+              103
+            ],
+            "pivot": [
+              73,
+              98
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              300,
+              561,
+              215,
+              94
+            ],
+            "pivot": [
+              110,
+              89
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              509,
+              578,
+              188,
+              79
+            ],
+            "pivot": [
+              100,
+              74
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              18,
+              558,
+              140,
+              103
+            ],
+            "pivot": [
+              73,
+              98
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              300,
+              561,
+              215,
+              94
+            ],
+            "pivot": [
+              110,
+              89
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              509,
+              578,
+              188,
+              79
+            ],
+            "pivot": [
+              100,
+              74
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "right": [
+          {
+            "source": "reactions",
+            "rect": [
+              18,
+              558,
+              140,
+              103
+            ],
+            "pivot": [
+              73,
+              98
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              300,
+              561,
+              215,
+              94
+            ],
+            "pivot": [
+              110,
+              89
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              509,
+              578,
+              188,
+              79
+            ],
+            "pivot": [
+              100,
+              74
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              910,
+              538,
+              160,
+              125
+            ],
+            "pivot": [
+              76,
+              120
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1067,
+              562,
+              183,
+              98
+            ],
+            "pivot": [
+              96,
+              93
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1233,
+              572,
+              194,
+              84
+            ],
+            "pivot": [
+              97,
+              79
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up": [
+          {
+            "source": "reactions",
+            "rect": [
+              910,
+              538,
+              160,
+              125
+            ],
+            "pivot": [
+              76,
+              120
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1067,
+              562,
+              183,
+              98
+            ],
+            "pivot": [
+              96,
+              93
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1233,
+              572,
+              194,
+              84
+            ],
+            "pivot": [
+              97,
+              79
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "left": [
+          {
+            "source": "reactions",
+            "rect": [
+              18,
+              558,
+              140,
+              103
+            ],
+            "pivot": [
+              73,
+              98
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              300,
+              561,
+              215,
+              94
+            ],
+            "pivot": [
+              110,
+              89
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              509,
+              578,
+              188,
+              79
+            ],
+            "pivot": [
+              100,
+              74
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ]
+      },
+      "direction_aliases": {
+        "down": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "down_right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "up_right": {
+          "source_direction": "up_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "up": {
+          "source_direction": "up_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "left": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        }
+      }
+    },
+    "power": {
+      "fps": 8,
+      "loop": false,
+      "directions": {
+        "down_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              11,
+              685,
+              106,
+              160
+            ],
+            "pivot": [
+              54,
+              155
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              114,
+              702,
+              110,
+              133
+            ],
+            "pivot": [
+              56,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down": [
+          {
+            "source": "reactions",
+            "rect": [
+              557,
+              691,
+              97,
+              159
+            ],
+            "pivot": [
+              51,
+              154
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              652,
+              708,
+              108,
+              132
+            ],
+            "pivot": [
+              55,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_left": [
+          {
+            "source": "reactions",
+            "rect": [
+              229,
+              691,
+              107,
+              156
+            ],
+            "pivot": [
+              53,
+              151
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              333,
+              691,
+              101,
+              161
+            ],
+            "pivot": [
+              51,
+              157
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              1088,
+              697,
+              116,
+              147
+            ],
+            "pivot": [
+              55,
+              142
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              1199,
+              708,
+              109,
+              136
+            ],
+            "pivot": [
+              51,
+              131
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "down_right": [
+          {
+            "source": "reactions",
+            "rect": [
+              11,
+              685,
+              106,
+              160
+            ],
+            "pivot": [
+              54,
+              155
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              114,
+              702,
+              110,
+              133
+            ],
+            "pivot": [
+              56,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "right": [
+          {
+            "source": "reactions",
+            "rect": [
+              11,
+              685,
+              106,
+              160
+            ],
+            "pivot": [
+              54,
+              155
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              114,
+              702,
+              110,
+              133
+            ],
+            "pivot": [
+              56,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": true,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "up": [
+          {
+            "source": "reactions",
+            "rect": [
+              229,
+              691,
+              107,
+              156
+            ],
+            "pivot": [
+              53,
+              151
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              333,
+              691,
+              101,
+              161
+            ],
+            "pivot": [
+              51,
+              157
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ],
+        "left": [
+          {
+            "source": "reactions",
+            "rect": [
+              11,
+              685,
+              106,
+              160
+            ],
+            "pivot": [
+              54,
+              155
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          },
+          {
+            "source": "reactions",
+            "rect": [
+              114,
+              702,
+              110,
+              133
+            ],
+            "pivot": [
+              56,
+              128
+            ],
+            "scale": 0.28,
+            "flip_h": false,
+            "embedded_weapon": true,
+            "isolate_body": true
+          }
+        ]
+      },
+      "direction_aliases": {
+        "down_right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "right": {
+          "source_direction": "down_left",
+          "flip_h": true,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "up": {
+          "source_direction": "up_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        },
+        "left": {
+          "source_direction": "down_left",
+          "flip_h": false,
+          "reason": "Nearest supplied view; no newly authored directional frames."
+        }
+      },
+      "note": "Uses raised/guard body poses from reactions; add separate slash effect. No clean full power body sequence is isolated in the supplied sheet."
+    }
+  },
+  "extras": {
+    "khopesh_static": [
+      {
+        "source": "weapons",
+        "rect": [
+          92,
+          18,
+          270,
+          348
+        ],
+        "pivot": [
+          49,
+          291
+        ],
+        "scale": 0.085,
+        "flip_h": false,
+        "embedded_weapon": false
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          434,
+          170,
+          263,
+          178
+        ],
+        "pivot": [
+          34,
+          149
+        ],
+        "scale": 0.1,
+        "flip_h": false,
+        "embedded_weapon": false
+      }
+    ],
+    "khopesh_views": [
+      {
+        "source": "weapons",
+        "rect": [
+          73,
+          415,
+          75,
+          309
+        ],
+        "pivot": [
+          37,
+          275
+        ],
+        "scale": 0.095,
+        "flip_h": false,
+        "embedded_weapon": false
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          171,
+          415,
+          195,
+          280
+        ],
+        "pivot": [
+          158,
+          249
+        ],
+        "scale": 0.095,
+        "flip_h": false,
+        "embedded_weapon": false
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          409,
+          410,
+          127,
+          295
+        ],
+        "pivot": [
+          72,
+          262
+        ],
+        "scale": 0.095,
+        "flip_h": false,
+        "embedded_weapon": false
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          569,
+          419,
+          149,
+          301
+        ],
+        "pivot": [
+          112,
+          265
+        ],
+        "scale": 0.095,
+        "flip_h": false,
+        "embedded_weapon": false
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          761,
+          412,
+          119,
+          308
+        ],
+        "pivot": [
+          38,
+          270
+        ],
+        "scale": 0.095,
+        "flip_h": false,
+        "embedded_weapon": false
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          922,
+          410,
+          136,
+          285
+        ],
+        "pivot": [
+          54,
+          255
+        ],
+        "scale": 0.095,
+        "flip_h": false,
+        "embedded_weapon": false
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          1095,
+          410,
+          163,
+          294
+        ],
+        "pivot": [
+          46,
+          257
+        ],
+        "scale": 0.095,
+        "flip_h": false,
+        "embedded_weapon": false
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          1304,
+          410,
+          80,
+          283
+        ],
+        "pivot": [
+          48,
+          250
+        ],
+        "scale": 0.095,
+        "flip_h": false,
+        "embedded_weapon": false
+      }
+    ],
+    "slash_fx": [
+      {
+        "source": "weapons",
+        "rect": [
+          28,
+          758,
+          295,
+          276
+        ],
+        "pivot": [
+          153,
+          247
+        ],
+        "scale": 0.22,
+        "flip_h": false,
+        "embedded_weapon": false,
+        "isolate_body": true,
+        "note": "Principal connected slash effect selected to exclude arcs from adjacent cells; some isolated dust particles are omitted."
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          291,
+          842,
+          234,
+          160
+        ],
+        "pivot": [
+          114,
+          136
+        ],
+        "scale": 0.22,
+        "flip_h": false,
+        "embedded_weapon": false,
+        "isolate_body": true,
+        "note": "Principal connected slash effect selected to exclude arcs from adjacent cells; some isolated dust particles are omitted."
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          509,
+          766,
+          203,
+          263
+        ],
+        "pivot": [
+          96,
+          238
+        ],
+        "scale": 0.22,
+        "flip_h": false,
+        "embedded_weapon": false,
+        "isolate_body": true,
+        "note": "Principal connected slash effect selected to exclude arcs from adjacent cells; some isolated dust particles are omitted."
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          732,
+          772,
+          187,
+          271
+        ],
+        "pivot": [
+          89,
+          238
+        ],
+        "scale": 0.22,
+        "flip_h": false,
+        "embedded_weapon": false,
+        "isolate_body": true,
+        "note": "Principal connected slash effect selected to exclude arcs from adjacent cells; some isolated dust particles are omitted."
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          944,
+          786,
+          249,
+          198
+        ],
+        "pivot": [
+          122,
+          182
+        ],
+        "scale": 0.22,
+        "flip_h": false,
+        "embedded_weapon": false,
+        "isolate_body": true,
+        "note": "Principal connected slash effect selected to exclude arcs from adjacent cells; some isolated dust particles are omitted."
+      },
+      {
+        "source": "weapons",
+        "rect": [
+          1188,
+          787,
+          248,
+          258
+        ],
+        "pivot": [
+          123,
+          224
+        ],
+        "scale": 0.22,
+        "flip_h": false,
+        "embedded_weapon": false,
+        "isolate_body": true,
+        "note": "Principal connected slash effect selected to exclude arcs from adjacent cells; some isolated dust particles are omitted."
+      }
+    ]
+  },
+  "notes": [
+    "Metadata refers to original unmodified supplied PNGs.",
+    "Source sheets are not uniform grids. Some action sword/effect contours overlap adjacent cells; inspect selected regions and remove foreign residue in Pixelorama.",
+    "The last row of movement is visually cut off and is deliberately unused. Northeast movement is a horizontal reflection of northwest.",
+    "Frontal walking has one clean supplied pose; it is not represented as a fully authored front walk.",
+    "Many source frames already include a khopesh. Do not overlay an extra procedural sword on those frames.",
+    "Alpha is real, mostly near251; opaque red/green/yellow fringe pixels exist and need technical cleanup.",
+    "Per-frame scale is desired in-game scale. For Pixelorama canvas384x384 with export/game_scale .26, normalize each source image by frame.scale/.26.",
+    "Flip horizontally around the normalized foot pivot; pivot.x remains expressed in the unflipped source rectangle.",
+    "The curated metadata offers nearest-view aliases for unavailable orientations; these are explicit adaptations, not new original poses.",
+    "Principal connected body selections remove isolated neighboring fragments. Wide overlapping heavy-attack cells use tighter regions. These are extraction selections, not newly painted poses.",
+    "Slash effects use the same principal-component selection to remove adjacent arcs; isolated loose debris may be omitted."
+  ]
+}

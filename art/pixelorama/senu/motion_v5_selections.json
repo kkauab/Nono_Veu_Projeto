@@ -1,0 +1,7864 @@
+{
+  "source_directory": "D:\\Nono_Veu\\art\\pixelorama\\senu\\motion_v5_sources",
+  "canvas": [
+    384,
+    384
+  ],
+  "pivot": [
+    192,
+    280
+  ],
+  "operations": [
+    "direct connected-component source selection",
+    "one fixed scale per character/view",
+    "translation from common ground root",
+    "horizontal reflection for missing views"
+  ],
+  "forbidden_operations": [
+    "mesh deformation",
+    "pose_transform",
+    "per-frame height normalization",
+    "squash/stretch",
+    "dissolve"
+  ],
+  "variants": {
+    "espada": {
+      "down": {
+        "scale": 0.8761329305135952,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 165.5,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              99.0,
+              177.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  0,
+                  198,
+                  198
+                ],
+                "window": [
+                  0,
+                  0,
+                  218,
+                  236
+                ],
+                "bounds": [
+                  32,
+                  13,
+                  148,
+                  178
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8877,
+                    "bounds": [
+                      32,
+                      13,
+                      148,
+                      178
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  0,
+                  396,
+                  198
+                ],
+                "window": [
+                  178,
+                  0,
+                  416,
+                  236
+                ],
+                "bounds": [
+                  33,
+                  13,
+                  144,
+                  178
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8721,
+                    "bounds": [
+                      53,
+                      13,
+                      164,
+                      178
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  0,
+                  595,
+                  198
+                ],
+                "window": [
+                  376,
+                  0,
+                  615,
+                  236
+                ],
+                "bounds": [
+                  38,
+                  12,
+                  147,
+                  178
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8748,
+                    "bounds": [
+                      58,
+                      12,
+                      167,
+                      178
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  0,
+                  793,
+                  198
+                ],
+                "window": [
+                  575,
+                  0,
+                  813,
+                  236
+                ],
+                "bounds": [
+                  37,
+                  12,
+                  145,
+                  178
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8687,
+                    "bounds": [
+                      57,
+                      12,
+                      165,
+                      178
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  0,
+                  991,
+                  198
+                ],
+                "window": [
+                  773,
+                  0,
+                  1011,
+                  236
+                ],
+                "bounds": [
+                  39,
+                  13,
+                  150,
+                  179
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8942,
+                    "bounds": [
+                      59,
+                      13,
+                      170,
+                      179
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  0,
+                  1190,
+                  198
+                ],
+                "window": [
+                  971,
+                  0,
+                  1210,
+                  236
+                ],
+                "bounds": [
+                  39,
+                  14,
+                  148,
+                  179
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8885,
+                    "bounds": [
+                      59,
+                      14,
+                      168,
+                      179
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  0,
+                  1388,
+                  198
+                ],
+                "window": [
+                  1170,
+                  0,
+                  1408,
+                  236
+                ],
+                "bounds": [
+                  38,
+                  11,
+                  146,
+                  178
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8803,
+                    "bounds": [
+                      58,
+                      11,
+                      166,
+                      178
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  0,
+                  1586,
+                  198
+                ],
+                "window": [
+                  1368,
+                  0,
+                  1586,
+                  236
+                ],
+                "bounds": [
+                  39,
+                  11,
+                  152,
+                  178
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9078,
+                    "bounds": [
+                      59,
+                      11,
+                      172,
+                      178
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              103.0,
+              202.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  0,
+                  198,
+                  198
+                ],
+                "window": [
+                  0,
+                  0,
+                  218,
+                  236
+                ],
+                "bounds": [
+                  19,
+                  48,
+                  158,
+                  201
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9186,
+                    "bounds": [
+                      19,
+                      48,
+                      158,
+                      201
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  0,
+                  396,
+                  198
+                ],
+                "window": [
+                  178,
+                  0,
+                  416,
+                  236
+                ],
+                "bounds": [
+                  20,
+                  48,
+                  148,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8529,
+                    "bounds": [
+                      40,
+                      48,
+                      168,
+                      202
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  0,
+                  595,
+                  198
+                ],
+                "window": [
+                  376,
+                  0,
+                  615,
+                  236
+                ],
+                "bounds": [
+                  17,
+                  47,
+                  146,
+                  193
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8102,
+                    "bounds": [
+                      37,
+                      47,
+                      166,
+                      193
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  0,
+                  793,
+                  198
+                ],
+                "window": [
+                  575,
+                  0,
+                  813,
+                  236
+                ],
+                "bounds": [
+                  23,
+                  45,
+                  146,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9594,
+                    "bounds": [
+                      43,
+                      45,
+                      166,
+                      200
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  0,
+                  991,
+                  198
+                ],
+                "window": [
+                  773,
+                  0,
+                  1011,
+                  236
+                ],
+                "bounds": [
+                  17,
+                  48,
+                  152,
+                  205
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9059,
+                    "bounds": [
+                      37,
+                      48,
+                      172,
+                      205
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  0,
+                  1190,
+                  198
+                ],
+                "window": [
+                  971,
+                  0,
+                  1210,
+                  236
+                ],
+                "bounds": [
+                  21,
+                  49,
+                  150,
+                  204
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8578,
+                    "bounds": [
+                      41,
+                      49,
+                      170,
+                      204
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  0,
+                  1388,
+                  198
+                ],
+                "window": [
+                  1170,
+                  0,
+                  1408,
+                  236
+                ],
+                "bounds": [
+                  14,
+                  46,
+                  143,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8525,
+                    "bounds": [
+                      34,
+                      46,
+                      163,
+                      200
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  0,
+                  1586,
+                  198
+                ],
+                "window": [
+                  1368,
+                  0,
+                  1586,
+                  236
+                ],
+                "bounds": [
+                  27,
+                  43,
+                  142,
+                  193
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9417,
+                    "bounds": [
+                      47,
+                      43,
+                      162,
+                      193
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              220.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  0,
+                  198,
+                  198
+                ],
+                "window": [
+                  0,
+                  0,
+                  218,
+                  236
+                ],
+                "bounds": [
+                  41,
+                  48,
+                  154,
+                  221
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11205,
+                    "bounds": [
+                      41,
+                      48,
+                      154,
+                      221
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  0,
+                  396,
+                  198
+                ],
+                "window": [
+                  178,
+                  0,
+                  416,
+                  236
+                ],
+                "bounds": [
+                  51,
+                  99,
+                  158,
+                  223
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8931,
+                    "bounds": [
+                      71,
+                      99,
+                      178,
+                      223
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  0,
+                  595,
+                  198
+                ],
+                "window": [
+                  376,
+                  0,
+                  615,
+                  236
+                ],
+                "bounds": [
+                  52,
+                  117,
+                  154,
+                  223
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7490,
+                    "bounds": [
+                      72,
+                      117,
+                      174,
+                      223
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  0,
+                  793,
+                  198
+                ],
+                "window": [
+                  575,
+                  0,
+                  813,
+                  236
+                ],
+                "bounds": [
+                  45,
+                  76,
+                  153,
+                  219
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9164,
+                    "bounds": [
+                      65,
+                      76,
+                      173,
+                      219
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  0,
+                  991,
+                  198
+                ],
+                "window": [
+                  773,
+                  0,
+                  1011,
+                  236
+                ],
+                "bounds": [
+                  53,
+                  76,
+                  132,
+                  213
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7854,
+                    "bounds": [
+                      73,
+                      76,
+                      152,
+                      213
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  0,
+                  1190,
+                  198
+                ],
+                "window": [
+                  971,
+                  0,
+                  1210,
+                  236
+                ],
+                "bounds": [
+                  20,
+                  105,
+                  163,
+                  227
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10265,
+                    "bounds": [
+                      40,
+                      105,
+                      183,
+                      227
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  0,
+                  1388,
+                  198
+                ],
+                "window": [
+                  1170,
+                  0,
+                  1408,
+                  236
+                ],
+                "bounds": [
+                  33,
+                  92,
+                  154,
+                  222
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9380,
+                    "bounds": [
+                      53,
+                      92,
+                      174,
+                      222
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  0,
+                  1586,
+                  198
+                ],
+                "window": [
+                  1368,
+                  0,
+                  1586,
+                  236
+                ],
+                "bounds": [
+                  28,
+                  48,
+                  139,
+                  221
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11066,
+                    "bounds": [
+                      48,
+                      48,
+                      159,
+                      221
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "down_right": {
+        "scale": 0.8814589665653495,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 164.5,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              98.0,
+              172.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  198,
+                  198,
+                  397
+                ],
+                "window": [
+                  0,
+                  160,
+                  218,
+                  435
+                ],
+                "bounds": [
+                  29,
+                  8,
+                  158,
+                  173
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9594,
+                    "bounds": [
+                      29,
+                      46,
+                      158,
+                      211
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  198,
+                  396,
+                  397
+                ],
+                "window": [
+                  178,
+                  160,
+                  416,
+                  435
+                ],
+                "bounds": [
+                  27,
+                  8,
+                  151,
+                  173
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8965,
+                    "bounds": [
+                      47,
+                      46,
+                      171,
+                      211
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  198,
+                  595,
+                  397
+                ],
+                "window": [
+                  376,
+                  160,
+                  615,
+                  435
+                ],
+                "bounds": [
+                  32,
+                  8,
+                  158,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9036,
+                    "bounds": [
+                      52,
+                      46,
+                      178,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  198,
+                  793,
+                  397
+                ],
+                "window": [
+                  575,
+                  160,
+                  813,
+                  435
+                ],
+                "bounds": [
+                  36,
+                  7,
+                  154,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8901,
+                    "bounds": [
+                      56,
+                      45,
+                      174,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  198,
+                  991,
+                  397
+                ],
+                "window": [
+                  773,
+                  160,
+                  1011,
+                  435
+                ],
+                "bounds": [
+                  27,
+                  10,
+                  152,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8786,
+                    "bounds": [
+                      47,
+                      48,
+                      172,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  198,
+                  1190,
+                  397
+                ],
+                "window": [
+                  971,
+                  160,
+                  1210,
+                  435
+                ],
+                "bounds": [
+                  36,
+                  10,
+                  161,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9034,
+                    "bounds": [
+                      56,
+                      48,
+                      181,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  198,
+                  1388,
+                  397
+                ],
+                "window": [
+                  1170,
+                  160,
+                  1408,
+                  435
+                ],
+                "bounds": [
+                  40,
+                  7,
+                  148,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8346,
+                    "bounds": [
+                      60,
+                      45,
+                      168,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  198,
+                  1586,
+                  397
+                ],
+                "window": [
+                  1368,
+                  160,
+                  1586,
+                  435
+                ],
+                "bounds": [
+                  31,
+                  8,
+                  162,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9072,
+                    "bounds": [
+                      51,
+                      46,
+                      182,
+                      210
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              112.0,
+              191.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  198,
+                  198,
+                  397
+                ],
+                "window": [
+                  0,
+                  160,
+                  218,
+                  435
+                ],
+                "bounds": [
+                  24,
+                  29,
+                  149,
+                  191
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8520,
+                    "bounds": [
+                      24,
+                      67,
+                      149,
+                      229
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  198,
+                  396,
+                  397
+                ],
+                "window": [
+                  178,
+                  160,
+                  416,
+                  435
+                ],
+                "bounds": [
+                  44,
+                  31,
+                  139,
+                  191
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8158,
+                    "bounds": [
+                      64,
+                      69,
+                      159,
+                      229
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  198,
+                  595,
+                  397
+                ],
+                "window": [
+                  376,
+                  160,
+                  615,
+                  435
+                ],
+                "bounds": [
+                  30,
+                  25,
+                  141,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9018,
+                    "bounds": [
+                      50,
+                      63,
+                      161,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  198,
+                  793,
+                  397
+                ],
+                "window": [
+                  575,
+                  160,
+                  813,
+                  435
+                ],
+                "bounds": [
+                  24,
+                  26,
+                  139,
+                  185
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9560,
+                    "bounds": [
+                      44,
+                      64,
+                      159,
+                      223
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  198,
+                  991,
+                  397
+                ],
+                "window": [
+                  773,
+                  160,
+                  1011,
+                  435
+                ],
+                "bounds": [
+                  28,
+                  30,
+                  145,
+                  193
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8175,
+                    "bounds": [
+                      48,
+                      68,
+                      165,
+                      231
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  198,
+                  1190,
+                  397
+                ],
+                "window": [
+                  971,
+                  160,
+                  1210,
+                  435
+                ],
+                "bounds": [
+                  50,
+                  30,
+                  136,
+                  192
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8000,
+                    "bounds": [
+                      70,
+                      68,
+                      156,
+                      230
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  198,
+                  1388,
+                  397
+                ],
+                "window": [
+                  1170,
+                  160,
+                  1408,
+                  435
+                ],
+                "bounds": [
+                  34,
+                  28,
+                  137,
+                  184
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8715,
+                    "bounds": [
+                      54,
+                      66,
+                      157,
+                      222
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  198,
+                  1586,
+                  397
+                ],
+                "window": [
+                  1368,
+                  160,
+                  1586,
+                  435
+                ],
+                "bounds": [
+                  19,
+                  22,
+                  143,
+                  186
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10193,
+                    "bounds": [
+                      39,
+                      60,
+                      163,
+                      224
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              210.0
+            ],
+            "source_mirror_correction": true,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  198,
+                  198,
+                  397
+                ],
+                "window": [
+                  0,
+                  160,
+                  218,
+                  435
+                ],
+                "bounds": [
+                  38,
+                  47,
+                  181,
+                  211
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10968,
+                    "bounds": [
+                      38,
+                      85,
+                      181,
+                      249
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  198,
+                  396,
+                  397
+                ],
+                "window": [
+                  178,
+                  160,
+                  416,
+                  435
+                ],
+                "bounds": [
+                  36,
+                  90,
+                  187,
+                  213
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9537,
+                    "bounds": [
+                      56,
+                      128,
+                      207,
+                      251
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  198,
+                  595,
+                  397
+                ],
+                "window": [
+                  376,
+                  160,
+                  615,
+                  435
+                ],
+                "bounds": [
+                  68,
+                  107,
+                  171,
+                  217
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8090,
+                    "bounds": [
+                      88,
+                      145,
+                      191,
+                      255
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  198,
+                  793,
+                  397
+                ],
+                "window": [
+                  575,
+                  160,
+                  813,
+                  435
+                ],
+                "bounds": [
+                  65,
+                  71,
+                  153,
+                  211
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8105,
+                    "bounds": [
+                      85,
+                      109,
+                      173,
+                      249
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  198,
+                  991,
+                  397
+                ],
+                "window": [
+                  773,
+                  160,
+                  1011,
+                  435
+                ],
+                "bounds": [
+                  38,
+                  62,
+                  142,
+                  187
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7677,
+                    "bounds": [
+                      58,
+                      100,
+                      162,
+                      225
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  198,
+                  1190,
+                  397
+                ],
+                "window": [
+                  971,
+                  160,
+                  1210,
+                  435
+                ],
+                "bounds": [
+                  36,
+                  105,
+                  179,
+                  223
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8965,
+                    "bounds": [
+                      56,
+                      143,
+                      199,
+                      261
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  198,
+                  1388,
+                  397
+                ],
+                "window": [
+                  1170,
+                  160,
+                  1408,
+                  435
+                ],
+                "bounds": [
+                  42,
+                  88,
+                  176,
+                  219
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9166,
+                    "bounds": [
+                      62,
+                      126,
+                      196,
+                      257
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  198,
+                  1586,
+                  397
+                ],
+                "window": [
+                  1368,
+                  160,
+                  1586,
+                  435
+                ],
+                "bounds": [
+                  51,
+                  46,
+                  161,
+                  211
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8587,
+                    "bounds": [
+                      71,
+                      84,
+                      181,
+                      249
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "right": {
+        "scale": 0.8682634730538922,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 167.0,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              101.0,
+              168.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  397,
+                  198,
+                  595
+                ],
+                "window": [
+                  0,
+                  359,
+                  218,
+                  633
+                ],
+                "bounds": [
+                  22,
+                  0,
+                  164,
+                  167
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10290,
+                    "bounds": [
+                      22,
+                      38,
+                      164,
+                      205
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  397,
+                  396,
+                  595
+                ],
+                "window": [
+                  178,
+                  359,
+                  416,
+                  633
+                ],
+                "bounds": [
+                  18,
+                  3,
+                  160,
+                  167
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10119,
+                    "bounds": [
+                      38,
+                      41,
+                      180,
+                      205
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  397,
+                  595,
+                  595
+                ],
+                "window": [
+                  376,
+                  359,
+                  615,
+                  633
+                ],
+                "bounds": [
+                  21,
+                  2,
+                  157,
+                  171
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9677,
+                    "bounds": [
+                      41,
+                      40,
+                      177,
+                      209
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  397,
+                  793,
+                  595
+                ],
+                "window": [
+                  575,
+                  359,
+                  813,
+                  633
+                ],
+                "bounds": [
+                  24,
+                  0,
+                  158,
+                  171
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9493,
+                    "bounds": [
+                      44,
+                      38,
+                      178,
+                      209
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  397,
+                  991,
+                  595
+                ],
+                "window": [
+                  773,
+                  359,
+                  1011,
+                  633
+                ],
+                "bounds": [
+                  21,
+                  5,
+                  164,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10378,
+                    "bounds": [
+                      41,
+                      43,
+                      184,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  397,
+                  1190,
+                  595
+                ],
+                "window": [
+                  971,
+                  359,
+                  1210,
+                  633
+                ],
+                "bounds": [
+                  29,
+                  6,
+                  165,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9718,
+                    "bounds": [
+                      49,
+                      44,
+                      185,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  397,
+                  1388,
+                  595
+                ],
+                "window": [
+                  1170,
+                  359,
+                  1408,
+                  633
+                ],
+                "bounds": [
+                  29,
+                  5,
+                  165,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9667,
+                    "bounds": [
+                      49,
+                      43,
+                      185,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  397,
+                  1586,
+                  595
+                ],
+                "window": [
+                  1368,
+                  359,
+                  1586,
+                  633
+                ],
+                "bounds": [
+                  26,
+                  3,
+                  164,
+                  169
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9824,
+                    "bounds": [
+                      46,
+                      41,
+                      184,
+                      207
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              117.5,
+              180.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  397,
+                  198,
+                  595
+                ],
+                "window": [
+                  0,
+                  359,
+                  218,
+                  633
+                ],
+                "bounds": [
+                  27,
+                  20,
+                  185,
+                  181
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10200,
+                    "bounds": [
+                      27,
+                      58,
+                      185,
+                      219
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  397,
+                  396,
+                  595
+                ],
+                "window": [
+                  178,
+                  359,
+                  416,
+                  633
+                ],
+                "bounds": [
+                  40,
+                  19,
+                  169,
+                  181
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9259,
+                    "bounds": [
+                      60,
+                      57,
+                      189,
+                      219
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  397,
+                  595,
+                  595
+                ],
+                "window": [
+                  376,
+                  359,
+                  615,
+                  633
+                ],
+                "bounds": [
+                  34,
+                  16,
+                  176,
+                  181
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9366,
+                    "bounds": [
+                      54,
+                      54,
+                      196,
+                      219
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  397,
+                  793,
+                  595
+                ],
+                "window": [
+                  575,
+                  359,
+                  813,
+                  633
+                ],
+                "bounds": [
+                  15,
+                  13,
+                  177,
+                  173
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10864,
+                    "bounds": [
+                      35,
+                      51,
+                      197,
+                      211
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  397,
+                  991,
+                  595
+                ],
+                "window": [
+                  773,
+                  359,
+                  1011,
+                  633
+                ],
+                "bounds": [
+                  30,
+                  19,
+                  177,
+                  182
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9651,
+                    "bounds": [
+                      50,
+                      57,
+                      197,
+                      220
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  397,
+                  1190,
+                  595
+                ],
+                "window": [
+                  971,
+                  359,
+                  1210,
+                  633
+                ],
+                "bounds": [
+                  34,
+                  19,
+                  164,
+                  181
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9428,
+                    "bounds": [
+                      54,
+                      57,
+                      184,
+                      219
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  397,
+                  1388,
+                  595
+                ],
+                "window": [
+                  1170,
+                  359,
+                  1408,
+                  633
+                ],
+                "bounds": [
+                  36,
+                  16,
+                  173,
+                  181
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9869,
+                    "bounds": [
+                      56,
+                      54,
+                      193,
+                      219
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  397,
+                  1586,
+                  595
+                ],
+                "window": [
+                  1368,
+                  359,
+                  1586,
+                  633
+                ],
+                "bounds": [
+                  20,
+                  14,
+                  175,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10610,
+                    "bounds": [
+                      40,
+                      52,
+                      195,
+                      212
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              198.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  397,
+                  198,
+                  595
+                ],
+                "window": [
+                  0,
+                  359,
+                  218,
+                  633
+                ],
+                "bounds": [
+                  44,
+                  39,
+                  159,
+                  199
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8906,
+                    "bounds": [
+                      44,
+                      77,
+                      159,
+                      237
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  397,
+                  396,
+                  595
+                ],
+                "window": [
+                  178,
+                  359,
+                  416,
+                  633
+                ],
+                "bounds": [
+                  31,
+                  81,
+                  169,
+                  199
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8551,
+                    "bounds": [
+                      51,
+                      119,
+                      189,
+                      237
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  397,
+                  595,
+                  595
+                ],
+                "window": [
+                  376,
+                  359,
+                  615,
+                  633
+                ],
+                "bounds": [
+                  60,
+                  99,
+                  173,
+                  199
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7340,
+                    "bounds": [
+                      80,
+                      137,
+                      193,
+                      237
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  397,
+                  793,
+                  595
+                ],
+                "window": [
+                  575,
+                  359,
+                  813,
+                  633
+                ],
+                "bounds": [
+                  63,
+                  76,
+                  171,
+                  195
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7887,
+                    "bounds": [
+                      83,
+                      114,
+                      191,
+                      233
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  397,
+                  991,
+                  595
+                ],
+                "window": [
+                  773,
+                  359,
+                  1011,
+                  633
+                ],
+                "bounds": [
+                  38,
+                  35,
+                  138,
+                  189
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9229,
+                    "bounds": [
+                      58,
+                      73,
+                      158,
+                      227
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  397,
+                  1190,
+                  595
+                ],
+                "window": [
+                  971,
+                  359,
+                  1210,
+                  633
+                ],
+                "bounds": [
+                  30,
+                  103,
+                  190,
+                  198
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8477,
+                    "bounds": [
+                      50,
+                      141,
+                      210,
+                      236
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  397,
+                  1388,
+                  595
+                ],
+                "window": [
+                  1170,
+                  359,
+                  1408,
+                  633
+                ],
+                "bounds": [
+                  39,
+                  75,
+                  164,
+                  207
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8948,
+                    "bounds": [
+                      59,
+                      113,
+                      184,
+                      245
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  397,
+                  1586,
+                  595
+                ],
+                "window": [
+                  1368,
+                  359,
+                  1586,
+                  633
+                ],
+                "bounds": [
+                  69,
+                  38,
+                  166,
+                  199
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8233,
+                    "bounds": [
+                      89,
+                      76,
+                      186,
+                      237
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "up_right": {
+        "scale": 0.847953216374269,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 171.0,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              91.5,
+              172.5
+            ],
+            "source_mirror_correction": true,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  595,
+                  198,
+                  794
+                ],
+                "window": [
+                  0,
+                  557,
+                  218,
+                  832
+                ],
+                "bounds": [
+                  33,
+                  -1,
+                  170,
+                  171
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10418,
+                    "bounds": [
+                      33,
+                      37,
+                      170,
+                      209
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  595,
+                  396,
+                  794
+                ],
+                "window": [
+                  178,
+                  557,
+                  416,
+                  832
+                ],
+                "bounds": [
+                  33,
+                  2,
+                  172,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10399,
+                    "bounds": [
+                      53,
+                      40,
+                      192,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  595,
+                  595,
+                  794
+                ],
+                "window": [
+                  376,
+                  557,
+                  615,
+                  832
+                ],
+                "bounds": [
+                  26,
+                  1,
+                  168,
+                  171
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10018,
+                    "bounds": [
+                      46,
+                      39,
+                      188,
+                      209
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  595,
+                  793,
+                  794
+                ],
+                "window": [
+                  575,
+                  557,
+                  813,
+                  832
+                ],
+                "bounds": [
+                  33,
+                  1,
+                  164,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9790,
+                    "bounds": [
+                      53,
+                      39,
+                      184,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  595,
+                  991,
+                  794
+                ],
+                "window": [
+                  773,
+                  557,
+                  1011,
+                  832
+                ],
+                "bounds": [
+                  22,
+                  6,
+                  174,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11097,
+                    "bounds": [
+                      42,
+                      44,
+                      194,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  595,
+                  1190,
+                  794
+                ],
+                "window": [
+                  971,
+                  557,
+                  1210,
+                  832
+                ],
+                "bounds": [
+                  27,
+                  7,
+                  176,
+                  175
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11620,
+                    "bounds": [
+                      47,
+                      45,
+                      196,
+                      213
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  595,
+                  1388,
+                  794
+                ],
+                "window": [
+                  1170,
+                  557,
+                  1408,
+                  832
+                ],
+                "bounds": [
+                  27,
+                  6,
+                  171,
+                  171
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10562,
+                    "bounds": [
+                      47,
+                      44,
+                      191,
+                      209
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  595,
+                  1586,
+                  794
+                ],
+                "window": [
+                  1368,
+                  557,
+                  1586,
+                  832
+                ],
+                "bounds": [
+                  33,
+                  1,
+                  170,
+                  168
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10106,
+                    "bounds": [
+                      53,
+                      39,
+                      190,
+                      206
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              107.0,
+              174.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  595,
+                  198,
+                  794
+                ],
+                "window": [
+                  0,
+                  557,
+                  218,
+                  832
+                ],
+                "bounds": [
+                  24,
+                  8,
+                  187,
+                  175
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10663,
+                    "bounds": [
+                      24,
+                      46,
+                      187,
+                      213
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  595,
+                  396,
+                  794
+                ],
+                "window": [
+                  178,
+                  557,
+                  416,
+                  832
+                ],
+                "bounds": [
+                  26,
+                  9,
+                  184,
+                  175
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10429,
+                    "bounds": [
+                      46,
+                      47,
+                      204,
+                      213
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  595,
+                  595,
+                  794
+                ],
+                "window": [
+                  376,
+                  557,
+                  615,
+                  832
+                ],
+                "bounds": [
+                  31,
+                  6,
+                  177,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9448,
+                    "bounds": [
+                      51,
+                      44,
+                      197,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  595,
+                  793,
+                  794
+                ],
+                "window": [
+                  575,
+                  557,
+                  813,
+                  832
+                ],
+                "bounds": [
+                  13,
+                  5,
+                  181,
+                  168
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10869,
+                    "bounds": [
+                      33,
+                      43,
+                      201,
+                      206
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  595,
+                  991,
+                  794
+                ],
+                "window": [
+                  773,
+                  557,
+                  1011,
+                  832
+                ],
+                "bounds": [
+                  16,
+                  8,
+                  183,
+                  175
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11466,
+                    "bounds": [
+                      36,
+                      46,
+                      203,
+                      213
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  595,
+                  1190,
+                  794
+                ],
+                "window": [
+                  971,
+                  557,
+                  1210,
+                  832
+                ],
+                "bounds": [
+                  24,
+                  9,
+                  181,
+                  177
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10633,
+                    "bounds": [
+                      44,
+                      47,
+                      201,
+                      215
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  595,
+                  1388,
+                  794
+                ],
+                "window": [
+                  1170,
+                  557,
+                  1408,
+                  832
+                ],
+                "bounds": [
+                  19,
+                  6,
+                  174,
+                  177
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10762,
+                    "bounds": [
+                      39,
+                      44,
+                      194,
+                      215
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  595,
+                  1586,
+                  794
+                ],
+                "window": [
+                  1368,
+                  557,
+                  1586,
+                  832
+                ],
+                "bounds": [
+                  15,
+                  5,
+                  180,
+                  169
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11235,
+                    "bounds": [
+                      35,
+                      43,
+                      200,
+                      207
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              190.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  595,
+                  198,
+                  794
+                ],
+                "window": [
+                  0,
+                  557,
+                  218,
+                  832
+                ],
+                "bounds": [
+                  34,
+                  29,
+                  167,
+                  191
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10745,
+                    "bounds": [
+                      34,
+                      67,
+                      167,
+                      229
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  595,
+                  396,
+                  794
+                ],
+                "window": [
+                  178,
+                  557,
+                  416,
+                  832
+                ],
+                "bounds": [
+                  26,
+                  61,
+                  173,
+                  191
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10178,
+                    "bounds": [
+                      46,
+                      99,
+                      193,
+                      229
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  595,
+                  595,
+                  794
+                ],
+                "window": [
+                  376,
+                  557,
+                  615,
+                  832
+                ],
+                "bounds": [
+                  69,
+                  84,
+                  179,
+                  187
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7396,
+                    "bounds": [
+                      89,
+                      122,
+                      199,
+                      225
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  595,
+                  793,
+                  794
+                ],
+                "window": [
+                  575,
+                  557,
+                  813,
+                  832
+                ],
+                "bounds": [
+                  63,
+                  63,
+                  160,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7590,
+                    "bounds": [
+                      83,
+                      101,
+                      180,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  595,
+                  991,
+                  794
+                ],
+                "window": [
+                  773,
+                  557,
+                  1011,
+                  832
+                ],
+                "bounds": [
+                  48,
+                  35,
+                  143,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9115,
+                    "bounds": [
+                      68,
+                      73,
+                      163,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  595,
+                  1190,
+                  794
+                ],
+                "window": [
+                  971,
+                  557,
+                  1210,
+                  832
+                ],
+                "bounds": [
+                  26,
+                  84,
+                  174,
+                  192
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8839,
+                    "bounds": [
+                      46,
+                      122,
+                      194,
+                      230
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  595,
+                  1388,
+                  794
+                ],
+                "window": [
+                  1170,
+                  557,
+                  1408,
+                  832
+                ],
+                "bounds": [
+                  38,
+                  56,
+                  175,
+                  188
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10069,
+                    "bounds": [
+                      58,
+                      94,
+                      195,
+                      226
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  595,
+                  1586,
+                  794
+                ],
+                "window": [
+                  1368,
+                  557,
+                  1586,
+                  832
+                ],
+                "bounds": [
+                  44,
+                  29,
+                  166,
+                  191
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10563,
+                    "bounds": [
+                      64,
+                      67,
+                      186,
+                      229
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "up": {
+        "scale": 0.8238636363636364,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 176.0,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              98.5,
+              171.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  794,
+                  198,
+                  992
+                ],
+                "window": [
+                  0,
+                  756,
+                  218,
+                  992
+                ],
+                "bounds": [
+                  46,
+                  -4,
+                  163,
+                  168
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9748,
+                    "bounds": [
+                      46,
+                      34,
+                      163,
+                      206
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  794,
+                  396,
+                  992
+                ],
+                "window": [
+                  178,
+                  756,
+                  416,
+                  992
+                ],
+                "bounds": [
+                  49,
+                  -4,
+                  167,
+                  168
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9806,
+                    "bounds": [
+                      69,
+                      34,
+                      187,
+                      206
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  794,
+                  595,
+                  992
+                ],
+                "window": [
+                  376,
+                  756,
+                  615,
+                  992
+                ],
+                "bounds": [
+                  52,
+                  -5,
+                  164,
+                  168
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9442,
+                    "bounds": [
+                      72,
+                      33,
+                      184,
+                      206
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  794,
+                  793,
+                  992
+                ],
+                "window": [
+                  575,
+                  756,
+                  813,
+                  992
+                ],
+                "bounds": [
+                  47,
+                  -5,
+                  163,
+                  168
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9546,
+                    "bounds": [
+                      67,
+                      33,
+                      183,
+                      206
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  794,
+                  991,
+                  992
+                ],
+                "window": [
+                  773,
+                  756,
+                  1011,
+                  992
+                ],
+                "bounds": [
+                  47,
+                  -4,
+                  164,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10138,
+                    "bounds": [
+                      67,
+                      34,
+                      184,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  794,
+                  1190,
+                  992
+                ],
+                "window": [
+                  971,
+                  756,
+                  1210,
+                  992
+                ],
+                "bounds": [
+                  45,
+                  -5,
+                  165,
+                  173
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10051,
+                    "bounds": [
+                      65,
+                      33,
+                      185,
+                      211
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  794,
+                  1388,
+                  992
+                ],
+                "window": [
+                  1170,
+                  756,
+                  1408,
+                  992
+                ],
+                "bounds": [
+                  48,
+                  -5,
+                  165,
+                  168
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9735,
+                    "bounds": [
+                      68,
+                      33,
+                      185,
+                      206
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  794,
+                  1586,
+                  992
+                ],
+                "window": [
+                  1368,
+                  756,
+                  1586,
+                  992
+                ],
+                "bounds": [
+                  44,
+                  -5,
+                  164,
+                  170
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9970,
+                    "bounds": [
+                      64,
+                      33,
+                      184,
+                      208
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              99.0,
+              170.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  794,
+                  198,
+                  992
+                ],
+                "window": [
+                  0,
+                  756,
+                  218,
+                  992
+                ],
+                "bounds": [
+                  44,
+                  -2,
+                  188,
+                  171
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10757,
+                    "bounds": [
+                      44,
+                      36,
+                      188,
+                      209
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  794,
+                  396,
+                  992
+                ],
+                "window": [
+                  178,
+                  756,
+                  416,
+                  992
+                ],
+                "bounds": [
+                  53,
+                  -1,
+                  186,
+                  173
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10433,
+                    "bounds": [
+                      73,
+                      37,
+                      206,
+                      211
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  794,
+                  595,
+                  992
+                ],
+                "window": [
+                  376,
+                  756,
+                  615,
+                  992
+                ],
+                "bounds": [
+                  54,
+                  -2,
+                  188,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10390,
+                    "bounds": [
+                      74,
+                      36,
+                      208,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  794,
+                  793,
+                  992
+                ],
+                "window": [
+                  575,
+                  756,
+                  813,
+                  992
+                ],
+                "bounds": [
+                  31,
+                  -8,
+                  183,
+                  165
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10976,
+                    "bounds": [
+                      51,
+                      30,
+                      203,
+                      203
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  794,
+                  991,
+                  992
+                ],
+                "window": [
+                  773,
+                  756,
+                  1011,
+                  992
+                ],
+                "bounds": [
+                  32,
+                  -2,
+                  183,
+                  171
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11099,
+                    "bounds": [
+                      52,
+                      36,
+                      203,
+                      209
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  794,
+                  1190,
+                  992
+                ],
+                "window": [
+                  971,
+                  756,
+                  1210,
+                  992
+                ],
+                "bounds": [
+                  53,
+                  -2,
+                  184,
+                  173
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10398,
+                    "bounds": [
+                      73,
+                      36,
+                      204,
+                      211
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  794,
+                  1388,
+                  992
+                ],
+                "window": [
+                  1170,
+                  756,
+                  1408,
+                  992
+                ],
+                "bounds": [
+                  43,
+                  -2,
+                  183,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10939,
+                    "bounds": [
+                      63,
+                      36,
+                      203,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  794,
+                  1586,
+                  992
+                ],
+                "window": [
+                  1368,
+                  756,
+                  1586,
+                  992
+                ],
+                "bounds": [
+                  30,
+                  -6,
+                  182,
+                  166
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10475,
+                    "bounds": [
+                      50,
+                      32,
+                      202,
+                      204
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              173.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  794,
+                  198,
+                  992
+                ],
+                "window": [
+                  0,
+                  756,
+                  218,
+                  992
+                ],
+                "bounds": [
+                  45,
+                  6,
+                  153,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11436,
+                    "bounds": [
+                      45,
+                      44,
+                      153,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  794,
+                  396,
+                  992
+                ],
+                "window": [
+                  178,
+                  756,
+                  416,
+                  992
+                ],
+                "bounds": [
+                  36,
+                  48,
+                  168,
+                  170
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9705,
+                    "bounds": [
+                      56,
+                      86,
+                      188,
+                      208
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  794,
+                  595,
+                  992
+                ],
+                "window": [
+                  376,
+                  756,
+                  615,
+                  992
+                ],
+                "bounds": [
+                  62,
+                  67,
+                  165,
+                  165
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7077,
+                    "bounds": [
+                      82,
+                      105,
+                      185,
+                      203
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  794,
+                  793,
+                  992
+                ],
+                "window": [
+                  575,
+                  756,
+                  813,
+                  992
+                ],
+                "bounds": [
+                  57,
+                  24,
+                  156,
+                  168
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8824,
+                    "bounds": [
+                      77,
+                      62,
+                      176,
+                      206
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  794,
+                  991,
+                  992
+                ],
+                "window": [
+                  773,
+                  756,
+                  1011,
+                  992
+                ],
+                "bounds": [
+                  52,
+                  14,
+                  134,
+                  159
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8340,
+                    "bounds": [
+                      72,
+                      52,
+                      154,
+                      197
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  794,
+                  1190,
+                  992
+                ],
+                "window": [
+                  971,
+                  756,
+                  1210,
+                  992
+                ],
+                "bounds": [
+                  17,
+                  62,
+                  167,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9625,
+                    "bounds": [
+                      37,
+                      100,
+                      187,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  794,
+                  1388,
+                  992
+                ],
+                "window": [
+                  1170,
+                  756,
+                  1408,
+                  992
+                ],
+                "bounds": [
+                  27,
+                  46,
+                  173,
+                  168
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9534,
+                    "bounds": [
+                      47,
+                      84,
+                      193,
+                      206
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  794,
+                  1586,
+                  992
+                ],
+                "window": [
+                  1368,
+                  756,
+                  1586,
+                  992
+                ],
+                "bounds": [
+                  52,
+                  6,
+                  157,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11577,
+                    "bounds": [
+                      72,
+                      44,
+                      177,
+                      212
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "frontal_half_cycle": {
+        "directions": [
+          "down",
+          "up"
+        ],
+        "target_frames_zero_based": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "source_frames_zero_based": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "part": "brown neutral trousers and boots below tunic",
+        "operation": "horizontal reflection of drawn leg part around x=192, behind preserved upper body and cape",
+        "native_layer": "Passo oposto / pernas e botas",
+        "torso_weapons_cape_unchanged": true
+      }
+    },
+    "leve": {
+      "down": {
+        "scale": 0.9148264984227129,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 158.5,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              97.0,
+              202.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  0,
+                  198,
+                  198
+                ],
+                "window": [
+                  0,
+                  0,
+                  218,
+                  236
+                ],
+                "bounds": [
+                  56,
+                  43,
+                  146,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8268,
+                    "bounds": [
+                      56,
+                      43,
+                      146,
+                      202
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  0,
+                  396,
+                  198
+                ],
+                "window": [
+                  178,
+                  0,
+                  416,
+                  236
+                ],
+                "bounds": [
+                  54,
+                  44,
+                  146,
+                  201
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8280,
+                    "bounds": [
+                      74,
+                      44,
+                      166,
+                      201
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  0,
+                  595,
+                  198
+                ],
+                "window": [
+                  376,
+                  0,
+                  615,
+                  236
+                ],
+                "bounds": [
+                  55,
+                  43,
+                  145,
+                  201
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8368,
+                    "bounds": [
+                      75,
+                      43,
+                      165,
+                      201
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  0,
+                  793,
+                  198
+                ],
+                "window": [
+                  575,
+                  0,
+                  813,
+                  236
+                ],
+                "bounds": [
+                  53,
+                  42,
+                  141,
+                  195
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8511,
+                    "bounds": [
+                      73,
+                      42,
+                      161,
+                      195
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  0,
+                  991,
+                  198
+                ],
+                "window": [
+                  773,
+                  0,
+                  1011,
+                  236
+                ],
+                "bounds": [
+                  58,
+                  47,
+                  143,
+                  205
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8456,
+                    "bounds": [
+                      78,
+                      47,
+                      163,
+                      205
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  0,
+                  1190,
+                  198
+                ],
+                "window": [
+                  971,
+                  0,
+                  1210,
+                  236
+                ],
+                "bounds": [
+                  58,
+                  45,
+                  144,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8449,
+                    "bounds": [
+                      78,
+                      45,
+                      164,
+                      202
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  0,
+                  1388,
+                  198
+                ],
+                "window": [
+                  1170,
+                  0,
+                  1408,
+                  236
+                ],
+                "bounds": [
+                  55,
+                  45,
+                  143,
+                  201
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8510,
+                    "bounds": [
+                      75,
+                      45,
+                      163,
+                      201
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  0,
+                  1586,
+                  198
+                ],
+                "window": [
+                  1368,
+                  0,
+                  1586,
+                  236
+                ],
+                "bounds": [
+                  55,
+                  43,
+                  140,
+                  196
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8270,
+                    "bounds": [
+                      75,
+                      43,
+                      160,
+                      196
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              97.5,
+              211.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  0,
+                  198,
+                  198
+                ],
+                "window": [
+                  0,
+                  0,
+                  218,
+                  236
+                ],
+                "bounds": [
+                  37,
+                  51,
+                  155,
+                  212
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8921,
+                    "bounds": [
+                      37,
+                      51,
+                      155,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  0,
+                  396,
+                  198
+                ],
+                "window": [
+                  178,
+                  0,
+                  416,
+                  236
+                ],
+                "bounds": [
+                  43,
+                  51,
+                  154,
+                  212
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8926,
+                    "bounds": [
+                      63,
+                      51,
+                      174,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  0,
+                  595,
+                  198
+                ],
+                "window": [
+                  376,
+                  0,
+                  615,
+                  236
+                ],
+                "bounds": [
+                  48,
+                  50,
+                  154,
+                  207
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8525,
+                    "bounds": [
+                      68,
+                      50,
+                      174,
+                      207
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  0,
+                  793,
+                  198
+                ],
+                "window": [
+                  575,
+                  0,
+                  813,
+                  236
+                ],
+                "bounds": [
+                  39,
+                  45,
+                  157,
+                  210
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9832,
+                    "bounds": [
+                      59,
+                      45,
+                      177,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  0,
+                  991,
+                  198
+                ],
+                "window": [
+                  773,
+                  0,
+                  1011,
+                  236
+                ],
+                "bounds": [
+                  44,
+                  51,
+                  152,
+                  212
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9169,
+                    "bounds": [
+                      64,
+                      51,
+                      172,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  0,
+                  1190,
+                  198
+                ],
+                "window": [
+                  971,
+                  0,
+                  1210,
+                  236
+                ],
+                "bounds": [
+                  46,
+                  52,
+                  153,
+                  211
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8651,
+                    "bounds": [
+                      66,
+                      52,
+                      173,
+                      211
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  0,
+                  1388,
+                  198
+                ],
+                "window": [
+                  1170,
+                  0,
+                  1408,
+                  236
+                ],
+                "bounds": [
+                  52,
+                  47,
+                  152,
+                  206
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8429,
+                    "bounds": [
+                      72,
+                      47,
+                      172,
+                      206
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  0,
+                  1586,
+                  198
+                ],
+                "window": [
+                  1368,
+                  0,
+                  1586,
+                  236
+                ],
+                "bounds": [
+                  30,
+                  47,
+                  159,
+                  207
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9642,
+                    "bounds": [
+                      50,
+                      47,
+                      179,
+                      207
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              202.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  0,
+                  198,
+                  198
+                ],
+                "window": [
+                  0,
+                  0,
+                  218,
+                  236
+                ],
+                "bounds": [
+                  38,
+                  42,
+                  188,
+                  203
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 12165,
+                    "bounds": [
+                      38,
+                      42,
+                      188,
+                      203
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  0,
+                  396,
+                  198
+                ],
+                "window": [
+                  178,
+                  0,
+                  416,
+                  236
+                ],
+                "bounds": [
+                  59,
+                  90,
+                  166,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7429,
+                    "bounds": [
+                      79,
+                      90,
+                      186,
+                      200
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  0,
+                  595,
+                  198
+                ],
+                "window": [
+                  376,
+                  0,
+                  615,
+                  236
+                ],
+                "bounds": [
+                  55,
+                  100,
+                  182,
+                  203
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8178,
+                    "bounds": [
+                      75,
+                      100,
+                      202,
+                      203
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  0,
+                  793,
+                  198
+                ],
+                "window": [
+                  575,
+                  0,
+                  813,
+                  236
+                ],
+                "bounds": [
+                  79,
+                  71,
+                  159,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7744,
+                    "bounds": [
+                      99,
+                      71,
+                      179,
+                      202
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  0,
+                  991,
+                  198
+                ],
+                "window": [
+                  773,
+                  0,
+                  1011,
+                  236
+                ],
+                "bounds": [
+                  54,
+                  71,
+                  137,
+                  203
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7078,
+                    "bounds": [
+                      74,
+                      71,
+                      157,
+                      203
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  0,
+                  1190,
+                  198
+                ],
+                "window": [
+                  971,
+                  0,
+                  1210,
+                  236
+                ],
+                "bounds": [
+                  39,
+                  97,
+                  171,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9186,
+                    "bounds": [
+                      59,
+                      97,
+                      191,
+                      202
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  0,
+                  1388,
+                  198
+                ],
+                "window": [
+                  1170,
+                  0,
+                  1408,
+                  236
+                ],
+                "bounds": [
+                  29,
+                  86,
+                  174,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9175,
+                    "bounds": [
+                      49,
+                      86,
+                      194,
+                      202
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  0,
+                  1586,
+                  198
+                ],
+                "window": [
+                  1368,
+                  0,
+                  1586,
+                  236
+                ],
+                "bounds": [
+                  32,
+                  41,
+                  160,
+                  204
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11290,
+                    "bounds": [
+                      52,
+                      41,
+                      180,
+                      204
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "down_right": {
+        "scale": 0.8923076923076924,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 162.5,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              95.5,
+              205.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  198,
+                  198,
+                  397
+                ],
+                "window": [
+                  0,
+                  160,
+                  218,
+                  435
+                ],
+                "bounds": [
+                  42,
+                  43,
+                  161,
+                  206
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9275,
+                    "bounds": [
+                      42,
+                      81,
+                      161,
+                      244
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  198,
+                  396,
+                  397
+                ],
+                "window": [
+                  178,
+                  160,
+                  416,
+                  435
+                ],
+                "bounds": [
+                  42,
+                  43,
+                  152,
+                  206
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8932,
+                    "bounds": [
+                      62,
+                      81,
+                      172,
+                      244
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  198,
+                  595,
+                  397
+                ],
+                "window": [
+                  376,
+                  160,
+                  615,
+                  435
+                ],
+                "bounds": [
+                  40,
+                  42,
+                  145,
+                  204
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8362,
+                    "bounds": [
+                      60,
+                      80,
+                      165,
+                      242
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  198,
+                  793,
+                  397
+                ],
+                "window": [
+                  575,
+                  160,
+                  813,
+                  435
+                ],
+                "bounds": [
+                  41,
+                  42,
+                  139,
+                  197
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8233,
+                    "bounds": [
+                      61,
+                      80,
+                      159,
+                      235
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  198,
+                  991,
+                  397
+                ],
+                "window": [
+                  773,
+                  160,
+                  1011,
+                  435
+                ],
+                "bounds": [
+                  33,
+                  44,
+                  150,
+                  206
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9916,
+                    "bounds": [
+                      53,
+                      82,
+                      170,
+                      244
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  198,
+                  1190,
+                  397
+                ],
+                "window": [
+                  971,
+                  160,
+                  1210,
+                  435
+                ],
+                "bounds": [
+                  36,
+                  44,
+                  150,
+                  205
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9347,
+                    "bounds": [
+                      56,
+                      82,
+                      170,
+                      243
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  198,
+                  1388,
+                  397
+                ],
+                "window": [
+                  1170,
+                  160,
+                  1408,
+                  435
+                ],
+                "bounds": [
+                  39,
+                  42,
+                  144,
+                  205
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8568,
+                    "bounds": [
+                      59,
+                      80,
+                      164,
+                      243
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  198,
+                  1586,
+                  397
+                ],
+                "window": [
+                  1368,
+                  160,
+                  1586,
+                  435
+                ],
+                "bounds": [
+                  40,
+                  43,
+                  148,
+                  205
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8632,
+                    "bounds": [
+                      60,
+                      81,
+                      168,
+                      243
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              107.0,
+              204.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  198,
+                  198,
+                  397
+                ],
+                "window": [
+                  0,
+                  160,
+                  218,
+                  435
+                ],
+                "bounds": [
+                  24,
+                  38,
+                  153,
+                  204
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9555,
+                    "bounds": [
+                      24,
+                      76,
+                      153,
+                      242
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  198,
+                  396,
+                  397
+                ],
+                "window": [
+                  178,
+                  160,
+                  416,
+                  435
+                ],
+                "bounds": [
+                  26,
+                  41,
+                  142,
+                  203
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9258,
+                    "bounds": [
+                      46,
+                      79,
+                      162,
+                      241
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  198,
+                  595,
+                  397
+                ],
+                "window": [
+                  376,
+                  160,
+                  615,
+                  435
+                ],
+                "bounds": [
+                  19,
+                  41,
+                  143,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9950,
+                    "bounds": [
+                      39,
+                      79,
+                      163,
+                      238
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  198,
+                  793,
+                  397
+                ],
+                "window": [
+                  575,
+                  160,
+                  813,
+                  435
+                ],
+                "bounds": [
+                  23,
+                  36,
+                  145,
+                  199
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9543,
+                    "bounds": [
+                      43,
+                      74,
+                      165,
+                      237
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  198,
+                  991,
+                  397
+                ],
+                "window": [
+                  773,
+                  160,
+                  1011,
+                  435
+                ],
+                "bounds": [
+                  22,
+                  44,
+                  148,
+                  207
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9710,
+                    "bounds": [
+                      42,
+                      82,
+                      168,
+                      245
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  198,
+                  1190,
+                  397
+                ],
+                "window": [
+                  971,
+                  160,
+                  1210,
+                  435
+                ],
+                "bounds": [
+                  19,
+                  49,
+                  137,
+                  205
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9281,
+                    "bounds": [
+                      39,
+                      87,
+                      157,
+                      243
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  198,
+                  1388,
+                  397
+                ],
+                "window": [
+                  1170,
+                  160,
+                  1408,
+                  435
+                ],
+                "bounds": [
+                  19,
+                  40,
+                  144,
+                  204
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10002,
+                    "bounds": [
+                      39,
+                      78,
+                      164,
+                      242
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  198,
+                  1586,
+                  397
+                ],
+                "window": [
+                  1368,
+                  160,
+                  1586,
+                  435
+                ],
+                "bounds": [
+                  24,
+                  37,
+                  150,
+                  203
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10341,
+                    "bounds": [
+                      44,
+                      75,
+                      170,
+                      241
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              201.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  198,
+                  198,
+                  397
+                ],
+                "window": [
+                  0,
+                  160,
+                  218,
+                  435
+                ],
+                "bounds": [
+                  43,
+                  41,
+                  183,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11786,
+                    "bounds": [
+                      43,
+                      79,
+                      183,
+                      240
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  198,
+                  396,
+                  397
+                ],
+                "window": [
+                  178,
+                  160,
+                  416,
+                  435
+                ],
+                "bounds": [
+                  51,
+                  79,
+                  169,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7996,
+                    "bounds": [
+                      71,
+                      117,
+                      189,
+                      240
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  198,
+                  595,
+                  397
+                ],
+                "window": [
+                  376,
+                  160,
+                  615,
+                  435
+                ],
+                "bounds": [
+                  62,
+                  103,
+                  185,
+                  203
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8125,
+                    "bounds": [
+                      82,
+                      141,
+                      205,
+                      241
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  198,
+                  793,
+                  397
+                ],
+                "window": [
+                  575,
+                  160,
+                  813,
+                  435
+                ],
+                "bounds": [
+                  61,
+                  51,
+                  166,
+                  198
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9237,
+                    "bounds": [
+                      81,
+                      89,
+                      186,
+                      236
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  198,
+                  991,
+                  397
+                ],
+                "window": [
+                  773,
+                  160,
+                  1011,
+                  435
+                ],
+                "bounds": [
+                  44,
+                  74,
+                  145,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7942,
+                    "bounds": [
+                      64,
+                      112,
+                      165,
+                      238
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  198,
+                  1190,
+                  397
+                ],
+                "window": [
+                  971,
+                  160,
+                  1210,
+                  435
+                ],
+                "bounds": [
+                  28,
+                  105,
+                  157,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7646,
+                    "bounds": [
+                      48,
+                      143,
+                      177,
+                      240
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  198,
+                  1388,
+                  397
+                ],
+                "window": [
+                  1170,
+                  160,
+                  1408,
+                  435
+                ],
+                "bounds": [
+                  29,
+                  72,
+                  178,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10275,
+                    "bounds": [
+                      49,
+                      110,
+                      198,
+                      240
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  198,
+                  1586,
+                  397
+                ],
+                "window": [
+                  1368,
+                  160,
+                  1586,
+                  435
+                ],
+                "bounds": [
+                  41,
+                  43,
+                  154,
+                  203
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9906,
+                    "bounds": [
+                      61,
+                      81,
+                      174,
+                      241
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "right": {
+        "scale": 0.8656716417910447,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 167.5,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              96.5,
+              203.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  397,
+                  198,
+                  595
+                ],
+                "window": [
+                  0,
+                  359,
+                  218,
+                  633
+                ],
+                "bounds": [
+                  33,
+                  37,
+                  143,
+                  205
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9438,
+                    "bounds": [
+                      33,
+                      75,
+                      143,
+                      243
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  397,
+                  396,
+                  595
+                ],
+                "window": [
+                  178,
+                  359,
+                  416,
+                  633
+                ],
+                "bounds": [
+                  34,
+                  37,
+                  137,
+                  204
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9017,
+                    "bounds": [
+                      54,
+                      75,
+                      157,
+                      242
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  397,
+                  595,
+                  595
+                ],
+                "window": [
+                  376,
+                  359,
+                  615,
+                  633
+                ],
+                "bounds": [
+                  38,
+                  34,
+                  142,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8639,
+                    "bounds": [
+                      58,
+                      72,
+                      162,
+                      240
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  397,
+                  793,
+                  595
+                ],
+                "window": [
+                  575,
+                  359,
+                  813,
+                  633
+                ],
+                "bounds": [
+                  38,
+                  34,
+                  147,
+                  201
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8921,
+                    "bounds": [
+                      58,
+                      72,
+                      167,
+                      239
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  397,
+                  991,
+                  595
+                ],
+                "window": [
+                  773,
+                  359,
+                  1011,
+                  633
+                ],
+                "bounds": [
+                  30,
+                  37,
+                  146,
+                  204
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10284,
+                    "bounds": [
+                      50,
+                      75,
+                      166,
+                      242
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  397,
+                  1190,
+                  595
+                ],
+                "window": [
+                  971,
+                  359,
+                  1210,
+                  633
+                ],
+                "bounds": [
+                  29,
+                  37,
+                  149,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9743,
+                    "bounds": [
+                      49,
+                      75,
+                      169,
+                      238
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  397,
+                  1388,
+                  595
+                ],
+                "window": [
+                  1170,
+                  359,
+                  1408,
+                  633
+                ],
+                "bounds": [
+                  32,
+                  37,
+                  148,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9029,
+                    "bounds": [
+                      52,
+                      75,
+                      168,
+                      240
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  397,
+                  1586,
+                  595
+                ],
+                "window": [
+                  1368,
+                  359,
+                  1586,
+                  633
+                ],
+                "bounds": [
+                  36,
+                  37,
+                  147,
+                  199
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9294,
+                    "bounds": [
+                      56,
+                      75,
+                      167,
+                      237
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              117.0,
+              201.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  397,
+                  198,
+                  595
+                ],
+                "window": [
+                  0,
+                  359,
+                  218,
+                  633
+                ],
+                "bounds": [
+                  24,
+                  36,
+                  147,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10365,
+                    "bounds": [
+                      24,
+                      74,
+                      147,
+                      238
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  397,
+                  396,
+                  595
+                ],
+                "window": [
+                  178,
+                  359,
+                  416,
+                  633
+                ],
+                "bounds": [
+                  25,
+                  40,
+                  146,
+                  205
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9778,
+                    "bounds": [
+                      45,
+                      78,
+                      166,
+                      243
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  397,
+                  595,
+                  595
+                ],
+                "window": [
+                  376,
+                  359,
+                  615,
+                  633
+                ],
+                "bounds": [
+                  28,
+                  35,
+                  146,
+                  206
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10205,
+                    "bounds": [
+                      48,
+                      73,
+                      166,
+                      244
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  397,
+                  793,
+                  595
+                ],
+                "window": [
+                  575,
+                  359,
+                  813,
+                  633
+                ],
+                "bounds": [
+                  25,
+                  31,
+                  159,
+                  190
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10346,
+                    "bounds": [
+                      45,
+                      69,
+                      179,
+                      228
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  397,
+                  991,
+                  595
+                ],
+                "window": [
+                  773,
+                  359,
+                  1011,
+                  633
+                ],
+                "bounds": [
+                  18,
+                  40,
+                  150,
+                  205
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10737,
+                    "bounds": [
+                      38,
+                      78,
+                      170,
+                      243
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  397,
+                  1190,
+                  595
+                ],
+                "window": [
+                  971,
+                  359,
+                  1210,
+                  633
+                ],
+                "bounds": [
+                  25,
+                  43,
+                  142,
+                  204
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9279,
+                    "bounds": [
+                      45,
+                      81,
+                      162,
+                      242
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  397,
+                  1388,
+                  595
+                ],
+                "window": [
+                  1170,
+                  359,
+                  1408,
+                  633
+                ],
+                "bounds": [
+                  24,
+                  38,
+                  149,
+                  204
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10405,
+                    "bounds": [
+                      44,
+                      76,
+                      169,
+                      242
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  397,
+                  1586,
+                  595
+                ],
+                "window": [
+                  1368,
+                  359,
+                  1586,
+                  633
+                ],
+                "bounds": [
+                  29,
+                  34,
+                  154,
+                  196
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10323,
+                    "bounds": [
+                      49,
+                      72,
+                      174,
+                      234
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              199.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  397,
+                  198,
+                  595
+                ],
+                "window": [
+                  0,
+                  359,
+                  218,
+                  633
+                ],
+                "bounds": [
+                  56,
+                  35,
+                  158,
+                  201
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9446,
+                    "bounds": [
+                      56,
+                      73,
+                      158,
+                      239
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  397,
+                  396,
+                  595
+                ],
+                "window": [
+                  178,
+                  359,
+                  416,
+                  633
+                ],
+                "bounds": [
+                  38,
+                  71,
+                  161,
+                  195
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8977,
+                    "bounds": [
+                      58,
+                      109,
+                      181,
+                      233
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  397,
+                  595,
+                  595
+                ],
+                "window": [
+                  376,
+                  359,
+                  615,
+                  633
+                ],
+                "bounds": [
+                  62,
+                  103,
+                  174,
+                  195
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 6920,
+                    "bounds": [
+                      82,
+                      141,
+                      194,
+                      233
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  397,
+                  793,
+                  595
+                ],
+                "window": [
+                  575,
+                  359,
+                  813,
+                  633
+                ],
+                "bounds": [
+                  66,
+                  71,
+                  162,
+                  203
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 6963,
+                    "bounds": [
+                      86,
+                      109,
+                      182,
+                      241
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  397,
+                  991,
+                  595
+                ],
+                "window": [
+                  773,
+                  359,
+                  1011,
+                  633
+                ],
+                "bounds": [
+                  45,
+                  58,
+                  145,
+                  195
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8394,
+                    "bounds": [
+                      65,
+                      96,
+                      165,
+                      233
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  397,
+                  1190,
+                  595
+                ],
+                "window": [
+                  971,
+                  359,
+                  1210,
+                  633
+                ],
+                "bounds": [
+                  33,
+                  95,
+                  172,
+                  193
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7867,
+                    "bounds": [
+                      53,
+                      133,
+                      192,
+                      231
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  397,
+                  1388,
+                  595
+                ],
+                "window": [
+                  1170,
+                  359,
+                  1408,
+                  633
+                ],
+                "bounds": [
+                  40,
+                  65,
+                  178,
+                  197
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9346,
+                    "bounds": [
+                      60,
+                      103,
+                      198,
+                      235
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  397,
+                  1586,
+                  595
+                ],
+                "window": [
+                  1368,
+                  359,
+                  1586,
+                  633
+                ],
+                "bounds": [
+                  43,
+                  36,
+                  152,
+                  199
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9358,
+                    "bounds": [
+                      63,
+                      74,
+                      172,
+                      237
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "up_right": {
+        "scale": 0.8841463414634146,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 164.0,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              96.0,
+              197.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  595,
+                  198,
+                  794
+                ],
+                "window": [
+                  0,
+                  557,
+                  218,
+                  832
+                ],
+                "bounds": [
+                  41,
+                  32,
+                  150,
+                  196
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9042,
+                    "bounds": [
+                      41,
+                      70,
+                      150,
+                      234
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  595,
+                  396,
+                  794
+                ],
+                "window": [
+                  178,
+                  557,
+                  416,
+                  832
+                ],
+                "bounds": [
+                  34,
+                  35,
+                  145,
+                  192
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9189,
+                    "bounds": [
+                      54,
+                      73,
+                      165,
+                      230
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  595,
+                  595,
+                  794
+                ],
+                "window": [
+                  376,
+                  557,
+                  615,
+                  832
+                ],
+                "bounds": [
+                  38,
+                  33,
+                  148,
+                  197
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8736,
+                    "bounds": [
+                      58,
+                      71,
+                      168,
+                      235
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  595,
+                  793,
+                  794
+                ],
+                "window": [
+                  575,
+                  557,
+                  813,
+                  832
+                ],
+                "bounds": [
+                  38,
+                  34,
+                  145,
+                  196
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8429,
+                    "bounds": [
+                      58,
+                      72,
+                      165,
+                      234
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  595,
+                  991,
+                  794
+                ],
+                "window": [
+                  773,
+                  557,
+                  1011,
+                  832
+                ],
+                "bounds": [
+                  34,
+                  36,
+                  155,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9506,
+                    "bounds": [
+                      54,
+                      74,
+                      175,
+                      238
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  595,
+                  1190,
+                  794
+                ],
+                "window": [
+                  971,
+                  557,
+                  1210,
+                  832
+                ],
+                "bounds": [
+                  33,
+                  35,
+                  150,
+                  196
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9220,
+                    "bounds": [
+                      53,
+                      73,
+                      170,
+                      234
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  595,
+                  1388,
+                  794
+                ],
+                "window": [
+                  1170,
+                  557,
+                  1408,
+                  832
+                ],
+                "bounds": [
+                  33,
+                  35,
+                  153,
+                  194
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9193,
+                    "bounds": [
+                      53,
+                      73,
+                      173,
+                      232
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  595,
+                  1586,
+                  794
+                ],
+                "window": [
+                  1368,
+                  557,
+                  1586,
+                  832
+                ],
+                "bounds": [
+                  37,
+                  34,
+                  152,
+                  192
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9170,
+                    "bounds": [
+                      57,
+                      72,
+                      172,
+                      230
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              108.0,
+              204.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  595,
+                  198,
+                  794
+                ],
+                "window": [
+                  0,
+                  557,
+                  218,
+                  832
+                ],
+                "bounds": [
+                  24,
+                  37,
+                  156,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10154,
+                    "bounds": [
+                      24,
+                      75,
+                      156,
+                      240
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  595,
+                  396,
+                  794
+                ],
+                "window": [
+                  178,
+                  557,
+                  416,
+                  832
+                ],
+                "bounds": [
+                  26,
+                  42,
+                  148,
+                  208
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9832,
+                    "bounds": [
+                      46,
+                      80,
+                      168,
+                      246
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  595,
+                  595,
+                  794
+                ],
+                "window": [
+                  376,
+                  557,
+                  615,
+                  832
+                ],
+                "bounds": [
+                  25,
+                  43,
+                  149,
+                  211
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9888,
+                    "bounds": [
+                      45,
+                      81,
+                      169,
+                      249
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  595,
+                  793,
+                  794
+                ],
+                "window": [
+                  575,
+                  557,
+                  813,
+                  832
+                ],
+                "bounds": [
+                  24,
+                  37,
+                  147,
+                  201
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9727,
+                    "bounds": [
+                      44,
+                      75,
+                      167,
+                      239
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  595,
+                  991,
+                  794
+                ],
+                "window": [
+                  773,
+                  557,
+                  1011,
+                  832
+                ],
+                "bounds": [
+                  17,
+                  43,
+                  149,
+                  208
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10726,
+                    "bounds": [
+                      37,
+                      81,
+                      169,
+                      246
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  595,
+                  1190,
+                  794
+                ],
+                "window": [
+                  971,
+                  557,
+                  1210,
+                  832
+                ],
+                "bounds": [
+                  22,
+                  45,
+                  154,
+                  208
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10311,
+                    "bounds": [
+                      42,
+                      83,
+                      174,
+                      246
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  595,
+                  1388,
+                  794
+                ],
+                "window": [
+                  1170,
+                  557,
+                  1408,
+                  832
+                ],
+                "bounds": [
+                  21,
+                  40,
+                  149,
+                  209
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 10694,
+                    "bounds": [
+                      41,
+                      78,
+                      169,
+                      247
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  595,
+                  1586,
+                  794
+                ],
+                "window": [
+                  1368,
+                  557,
+                  1586,
+                  832
+                ],
+                "bounds": [
+                  24,
+                  38,
+                  150,
+                  202
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11029,
+                    "bounds": [
+                      44,
+                      76,
+                      170,
+                      240
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              199.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  595,
+                  198,
+                  794
+                ],
+                "window": [
+                  0,
+                  557,
+                  218,
+                  832
+                ],
+                "bounds": [
+                  37,
+                  43,
+                  178,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11307,
+                    "bounds": [
+                      37,
+                      81,
+                      178,
+                      238
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  595,
+                  396,
+                  794
+                ],
+                "window": [
+                  178,
+                  557,
+                  416,
+                  832
+                ],
+                "bounds": [
+                  42,
+                  67,
+                  179,
+                  197
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9734,
+                    "bounds": [
+                      62,
+                      105,
+                      199,
+                      235
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  595,
+                  595,
+                  794
+                ],
+                "window": [
+                  376,
+                  557,
+                  615,
+                  832
+                ],
+                "bounds": [
+                  67,
+                  112,
+                  180,
+                  191
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 5891,
+                    "bounds": [
+                      87,
+                      150,
+                      200,
+                      229
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  595,
+                  793,
+                  794
+                ],
+                "window": [
+                  575,
+                  557,
+                  813,
+                  832
+                ],
+                "bounds": [
+                  61,
+                  66,
+                  168,
+                  201
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8336,
+                    "bounds": [
+                      81,
+                      104,
+                      188,
+                      239
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  595,
+                  991,
+                  794
+                ],
+                "window": [
+                  773,
+                  557,
+                  1011,
+                  832
+                ],
+                "bounds": [
+                  51,
+                  64,
+                  150,
+                  199
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7972,
+                    "bounds": [
+                      71,
+                      102,
+                      170,
+                      237
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  595,
+                  1190,
+                  794
+                ],
+                "window": [
+                  971,
+                  557,
+                  1210,
+                  832
+                ],
+                "bounds": [
+                  40,
+                  104,
+                  165,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7708,
+                    "bounds": [
+                      60,
+                      142,
+                      185,
+                      238
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  595,
+                  1388,
+                  794
+                ],
+                "window": [
+                  1170,
+                  557,
+                  1408,
+                  832
+                ],
+                "bounds": [
+                  30,
+                  67,
+                  165,
+                  197
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9043,
+                    "bounds": [
+                      50,
+                      105,
+                      185,
+                      235
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  595,
+                  1586,
+                  794
+                ],
+                "window": [
+                  1368,
+                  557,
+                  1586,
+                  832
+                ],
+                "bounds": [
+                  38,
+                  43,
+                  169,
+                  200
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11056,
+                    "bounds": [
+                      58,
+                      81,
+                      189,
+                      238
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "up": {
+        "scale": 0.9034267912772586,
+        "scale_reference": "walk contact drawings 1 and 5, reused in run and roll",
+        "reference_height": 160.5,
+        "target_reference_height": 145,
+        "actions": {
+          "walk": {
+            "root": [
+              97.0,
+              174.5
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  794,
+                  198,
+                  992
+                ],
+                "window": [
+                  0,
+                  756,
+                  218,
+                  992
+                ],
+                "bounds": [
+                  46,
+                  15,
+                  148,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8472,
+                    "bounds": [
+                      46,
+                      53,
+                      148,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  794,
+                  396,
+                  992
+                ],
+                "window": [
+                  178,
+                  756,
+                  416,
+                  992
+                ],
+                "bounds": [
+                  47,
+                  15,
+                  148,
+                  175
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8673,
+                    "bounds": [
+                      67,
+                      53,
+                      168,
+                      213
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  794,
+                  595,
+                  992
+                ],
+                "window": [
+                  376,
+                  756,
+                  615,
+                  992
+                ],
+                "bounds": [
+                  47,
+                  15,
+                  148,
+                  172
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8515,
+                    "bounds": [
+                      67,
+                      53,
+                      168,
+                      210
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  794,
+                  793,
+                  992
+                ],
+                "window": [
+                  575,
+                  756,
+                  813,
+                  992
+                ],
+                "bounds": [
+                  47,
+                  15,
+                  145,
+                  173
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8705,
+                    "bounds": [
+                      67,
+                      53,
+                      165,
+                      211
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  794,
+                  991,
+                  992
+                ],
+                "window": [
+                  773,
+                  756,
+                  1011,
+                  992
+                ],
+                "bounds": [
+                  49,
+                  15,
+                  150,
+                  179
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8668,
+                    "bounds": [
+                      69,
+                      53,
+                      170,
+                      217
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  794,
+                  1190,
+                  992
+                ],
+                "window": [
+                  971,
+                  756,
+                  1210,
+                  992
+                ],
+                "bounds": [
+                  47,
+                  15,
+                  149,
+                  174
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8685,
+                    "bounds": [
+                      67,
+                      53,
+                      169,
+                      212
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  794,
+                  1388,
+                  992
+                ],
+                "window": [
+                  1170,
+                  756,
+                  1408,
+                  992
+                ],
+                "bounds": [
+                  47,
+                  14,
+                  148,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8665,
+                    "bounds": [
+                      67,
+                      52,
+                      168,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  794,
+                  1586,
+                  992
+                ],
+                "window": [
+                  1368,
+                  756,
+                  1586,
+                  992
+                ],
+                "bounds": [
+                  47,
+                  14,
+                  147,
+                  170
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8626,
+                    "bounds": [
+                      67,
+                      52,
+                      167,
+                      208
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "run": {
+            "root": [
+              96.5,
+              178.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  794,
+                  198,
+                  992
+                ],
+                "window": [
+                  0,
+                  756,
+                  218,
+                  992
+                ],
+                "bounds": [
+                  41,
+                  27,
+                  160,
+                  179
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8694,
+                    "bounds": [
+                      41,
+                      65,
+                      160,
+                      217
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  794,
+                  396,
+                  992
+                ],
+                "window": [
+                  178,
+                  756,
+                  416,
+                  992
+                ],
+                "bounds": [
+                  34,
+                  28,
+                  154,
+                  180
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8781,
+                    "bounds": [
+                      54,
+                      66,
+                      174,
+                      218
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  794,
+                  595,
+                  992
+                ],
+                "window": [
+                  376,
+                  756,
+                  615,
+                  992
+                ],
+                "bounds": [
+                  37,
+                  30,
+                  159,
+                  179
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8864,
+                    "bounds": [
+                      57,
+                      68,
+                      179,
+                      217
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  794,
+                  793,
+                  992
+                ],
+                "window": [
+                  575,
+                  756,
+                  813,
+                  992
+                ],
+                "bounds": [
+                  47,
+                  27,
+                  172,
+                  179
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8934,
+                    "bounds": [
+                      67,
+                      65,
+                      192,
+                      217
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  794,
+                  991,
+                  992
+                ],
+                "window": [
+                  773,
+                  756,
+                  1011,
+                  992
+                ],
+                "bounds": [
+                  41,
+                  28,
+                  159,
+                  179
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8624,
+                    "bounds": [
+                      61,
+                      66,
+                      179,
+                      217
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  794,
+                  1190,
+                  992
+                ],
+                "window": [
+                  971,
+                  756,
+                  1210,
+                  992
+                ],
+                "bounds": [
+                  40,
+                  30,
+                  156,
+                  177
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8320,
+                    "bounds": [
+                      60,
+                      68,
+                      176,
+                      215
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  794,
+                  1388,
+                  992
+                ],
+                "window": [
+                  1170,
+                  756,
+                  1408,
+                  992
+                ],
+                "bounds": [
+                  39,
+                  28,
+                  156,
+                  178
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8783,
+                    "bounds": [
+                      59,
+                      66,
+                      176,
+                      216
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  794,
+                  1586,
+                  992
+                ],
+                "window": [
+                  1368,
+                  756,
+                  1586,
+                  992
+                ],
+                "bounds": [
+                  43,
+                  25,
+                  159,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8794,
+                    "bounds": [
+                      63,
+                      63,
+                      179,
+                      214
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "dodge": {
+            "root": [
+              99.0,
+              180.0
+            ],
+            "source_mirror_correction": false,
+            "frames": [
+              {
+                "cell": [
+                  0,
+                  794,
+                  198,
+                  992
+                ],
+                "window": [
+                  0,
+                  756,
+                  218,
+                  992
+                ],
+                "bounds": [
+                  35,
+                  28,
+                  189,
+                  181
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11730,
+                    "bounds": [
+                      35,
+                      66,
+                      189,
+                      219
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  198,
+                  794,
+                  396,
+                  992
+                ],
+                "window": [
+                  178,
+                  756,
+                  416,
+                  992
+                ],
+                "bounds": [
+                  42,
+                  51,
+                  183,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9189,
+                    "bounds": [
+                      62,
+                      89,
+                      203,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  396,
+                  794,
+                  595,
+                  992
+                ],
+                "window": [
+                  376,
+                  756,
+                  615,
+                  992
+                ],
+                "bounds": [
+                  61,
+                  84,
+                  186,
+                  167
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7238,
+                    "bounds": [
+                      81,
+                      122,
+                      206,
+                      205
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  595,
+                  794,
+                  793,
+                  992
+                ],
+                "window": [
+                  575,
+                  756,
+                  813,
+                  992
+                ],
+                "bounds": [
+                  69,
+                  50,
+                  153,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 6753,
+                    "bounds": [
+                      89,
+                      88,
+                      173,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  793,
+                  794,
+                  991,
+                  992
+                ],
+                "window": [
+                  773,
+                  756,
+                  1011,
+                  992
+                ],
+                "bounds": [
+                  48,
+                  41,
+                  142,
+                  176
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 8069,
+                    "bounds": [
+                      68,
+                      79,
+                      162,
+                      214
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  991,
+                  794,
+                  1190,
+                  992
+                ],
+                "window": [
+                  971,
+                  756,
+                  1210,
+                  992
+                ],
+                "bounds": [
+                  34,
+                  86,
+                  160,
+                  175
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 7115,
+                    "bounds": [
+                      54,
+                      124,
+                      180,
+                      213
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1190,
+                  794,
+                  1388,
+                  992
+                ],
+                "window": [
+                  1170,
+                  756,
+                  1408,
+                  992
+                ],
+                "bounds": [
+                  30,
+                  49,
+                  183,
+                  180
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 9848,
+                    "bounds": [
+                      50,
+                      87,
+                      203,
+                      218
+                    ]
+                  }
+                ]
+              },
+              {
+                "cell": [
+                  1388,
+                  794,
+                  1586,
+                  992
+                ],
+                "window": [
+                  1368,
+                  756,
+                  1586,
+                  992
+                ],
+                "bounds": [
+                  27,
+                  27,
+                  168,
+                  181
+                ],
+                "retained_components": [
+                  {
+                    "pixels": 11468,
+                    "bounds": [
+                      47,
+                      65,
+                      188,
+                      219
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "frontal_half_cycle": {
+        "directions": [
+          "down",
+          "up"
+        ],
+        "target_frames_zero_based": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "source_frames_zero_based": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "part": "brown neutral trousers and boots below tunic",
+        "operation": "horizontal reflection of drawn leg part around x=192, behind preserved upper body and cape",
+        "native_layer": "Passo oposto / pernas e botas",
+        "torso_weapons_cape_unchanged": true
+      }
+    }
+  }
+}

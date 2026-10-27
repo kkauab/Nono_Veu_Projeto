@@ -1,0 +1,7 @@
+.godot/
+build/
+qa/
+*.blend1
+*.blend2
+*.tmp
+
