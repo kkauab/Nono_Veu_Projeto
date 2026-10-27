@@ -1,6 +1,9 @@
 extends Node2D
 class_name PortLayout
 const Art = preload("res://scripts/world/port_art.gd")
+const WaterLife = preload("res://scripts/world/water_life.gd")
+## Onde o mar é desenhado. Interiores ficam fora dele, sobre fundo próprio.
+const SEA_RECT := Rect2(-4000, -2400, 8000, 6000)
 
 const HALF_TILE := Vector2(32, 16)
 const ROOMS := [
@@ -201,6 +204,10 @@ func _ready() -> void:
 	var sea := HarborWater.new()
 	sea.z_index = -1
 	add_child(sea)
+	var life := WaterLife.new()
+	life.name = "WaterLife"
+	life.layout = self
+	add_child(life)
 	var catalog := tile_catalog()
 	for tile in catalog:
 		tiles[tile] = catalog[tile]["color"]
@@ -356,5 +363,5 @@ class HarborWater:
 
 	func _draw() -> void:
 		# TIME animates the shader without rebuilding the water drawing on the CPU.
-		if not Art.draw_water(self, Rect2(-4000, -2400, 8000, 6000), 0.0):
-			draw_rect(Rect2(-4000, -2400, 8000, 6000), Color("16343d"))
+		if not Art.draw_water(self, SEA_RECT, 0.0):
+			draw_rect(SEA_RECT, Color("16343d"))

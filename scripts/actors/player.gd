@@ -13,6 +13,7 @@ const SENU_FRAME := Vector2(96, 112)
 const SENU_PIVOT := Vector2(48, 94)
 const SENU_SCALE: float = 0.43
 const SuppliedSpriteView = preload("res://scripts/actors/senu_supplied_view.gd")
+const CombatFx = preload("res://scripts/actors/combat_fx.gd")
 
 @export var move_speed: float = 80.0
 @export var sprint_multiplier: float = 1.70
@@ -66,6 +67,7 @@ var _senu_attack_peak: float = 0.19
 var _senu_last_attack_visual: float = 0.0
 var _supplied_view: SuppliedSpriteView = SuppliedSpriteView.new()
 var _event_mouse_world := Vector2.INF
+var _fx: CombatFx = CombatFx.new()
 
 
 func _ready() -> void:
@@ -77,6 +79,8 @@ func _ready() -> void:
 	shape.radius = 6.0
 	collider.shape = shape
 	add_child(collider)
+	_fx.name = "CombatFx"
+	add_child(_fx)
 	health = clampi(health, 0, max_health)
 	stats_changed.emit()
 
@@ -130,6 +134,8 @@ func _physics_process(delta: float) -> void:
 		_hit_delay -= delta
 		if _hit_delay < 0.0:
 			_apply_attack()
+			if _second_hit_delay >= 0.0:
+				_fx.swing("leve", false)
 	if _second_hit_delay >= 0.0:
 		_second_hit_delay -= delta
 		if _second_hit_delay < 0.0:
@@ -222,6 +228,7 @@ func try_attack(heavy: bool = false, use_mouse: bool = false) -> bool:
 	else:
 		if _combo_step == 0:
 			_attack_damage += 5
+	_fx.swing(weapon.category, heavy)
 	stats_changed.emit()
 	return true
 
@@ -234,6 +241,7 @@ func try_dodge() -> bool:
 	_dodge_timer = dodge_duration
 	invulnerability_timer = dodge_invulnerability
 	dodge_cooldown_remaining = dodge_cooldown
+	_fx.dodge()
 	stats_changed.emit()
 	return true
 
@@ -256,6 +264,7 @@ func try_power(use_mouse: bool = false) -> bool:
 	power_cooldown_remaining = _power_cooldowns[weapon_index]
 	facing = _aim_direction(use_mouse)
 	_power_visual = 0.40
+	_fx.power(weapon.power_id)
 	if weapon.power_id == "passo_sombra":
 		_dodge_direction = facing
 		_dodge_timer = dodge_duration * 1.40
@@ -295,6 +304,7 @@ func receive_hit(damage: int, from_position: Vector2) -> bool:
 			_power_cooldowns[weapon_index] = 0.0
 			power_cooldown_remaining = 0.0
 		_power_visual = 0.33
+		_fx.parry(from_position)
 		for enemy: Node in get_tree().get_nodes_in_group("enemies"):
 			if enemy is Node2D and enemy.has_method("receive_hit"):
 				var body: Node2D = enemy as Node2D
@@ -311,6 +321,7 @@ func receive_hit(damage: int, from_position: Vector2) -> bool:
 	_second_hit_delay = -1.0
 	attack_timer = maxf(attack_timer, 0.18)
 	_knockback = (global_position - from_position).normalized() * 88.0
+	_fx.player_hurt(from_position, health <= 0)
 	stats_changed.emit()
 	if health <= 0:
 		dead = true
@@ -389,7 +400,10 @@ func _damage_nearby(amount: int, reach: float, arc: float, direction: Vector2, s
 		if offset.length() <= reach + radius and (offset.length() < 5.0 or direction.dot(offset.normalized()) >= cos(arc * 0.5)):
 			var query := PhysicsRayQueryParameters2D.create(global_position, body.global_position, 1)
 			if get_world_2d().direct_space_state.intersect_ray(query).is_empty():
+				var was_dead := bool(body.get("dead"))
 				body.call("receive_hit", amount, global_position, stagger)
+				if not was_dead:
+					_fx.enemy_hit(body, stagger, bool(body.get("dead")), equipped_weapon().category == "leve")
 
 
 func _draw() -> void:

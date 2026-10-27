@@ -124,3 +124,13 @@ Com Godot 4.7.2, depois da ligação na abertura, também passaram: abertura RPG
 ```powershell
 & $demoGodot --headless --path . --script res://tests/dialogue_babble_test.gd
 ```
+
+## Impacto nos golpes, sons de combate e água viva — 27/10/2026
+
+Gustavo: hitstop, tremor, clarão e faíscas nos golpes; 48 sons sintetizados (golpes, parry, dano, avisos dos inimigos, peixes, mar, moeda); cardumes, saltos e brilhos na água. Detalhes em [COMBATE_IMPACTO_AGUA.md](COMBATE_IMPACTO_AGUA.md).
+
+O novo `tests/combat_fx_test.gd` aprovou **100/100** com Godot 4.7.2 (cinco rodadas seguidas, porque a água é aleatória). Na mesma pasta, com as mudanças das outras sessões, as **29 suítes** de `tests/` passaram com saída 0 e sem erro de script: **1.787 verificações** no total. Entre elas: combate 26/26, percurso 137/137, mundo 125/125, profundidade 134/134, cenário 75/75 e espada v8 118/118. Os testes não ouvem o som; o visual foi conferido em capturas do Godot (`qa/fx_*.png`).
+
+```powershell
+& $demoGodot --headless --path . --script res://tests/combat_fx_test.gd
+```
