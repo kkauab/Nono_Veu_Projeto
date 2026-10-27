@@ -3,7 +3,7 @@ class_name DemoSaveStore
 
 const VERSION := 1
 const CHECKPOINTS := ["hub", "s1", "market_rest", "caravan_rest", "cistern_rest"]
-const OPTIONAL_FLAGS := ["aqueduct", "memory_market", "memory_dock", "seal_bells", "seal_water", "seal_stars", "bells_clue", "water_clue", "stars_clue", "memory_pilgrim", "memory_copper", "opening_seen"]
+const OPTIONAL_FLAGS := ["aqueduct", "memory_market", "memory_dock", "seal_bells", "seal_water", "seal_stars", "bells_clue", "water_clue", "stars_clue", "memory_pilgrim", "memory_copper", "opening_seen", "echo"]
 const WEAPONS := ["e01_khopesh_discipulo", "l01_adagas_reverso"]
 const SKILLS := {"vontade": {"name": "Mão firme", "branch": "Vontade", "cost": 1, "description": "+4 de dano em todos os golpes.", "requires": []}, "materia": {"name": "Fôlego da pedra", "branch": "Matéria", "cost": 1, "description": "+20 de vida máxima.", "requires": []}, "intelecto": {"name": "Memória do éter", "branch": "Intelecto", "cost": 2, "description": "Poder da arma recarrega 20% mais rápido.", "requires": []}}
 var data: Dictionary
@@ -16,7 +16,7 @@ func _init(save_path: String = "user://progress.json") -> void:
 	data = fresh_data()
 
 static func fresh_data() -> Dictionary:
-	return {"version": VERSION, "world_revision": 3, "fragments": 0, "collected": [], "skills": [], "weapons": [WEAPONS[0]], "equipped": WEAPONS[0], "defeated": [], "visited": [], "checkpoint": "hub", "flags": {"shortcut": false, "boss": false, "complete": false, "aqueduct": false, "memory_market": false, "memory_dock": false, "seal_bells": false, "seal_water": false, "seal_stars": false, "bells_clue": false, "water_clue": false, "stars_clue": false, "memory_pilgrim": false, "memory_copper": false, "opening_seen": false}, "puzzles": {"bells": [], "water": 0, "water_sources": [false, false], "stars": [0, 0, 0]}}
+	return {"version": VERSION, "world_revision": 3, "fragments": 0, "collected": [], "skills": [], "weapons": [WEAPONS[0]], "equipped": WEAPONS[0], "defeated": [], "visited": [], "checkpoint": "hub", "flags": {"shortcut": false, "boss": false, "complete": false, "aqueduct": false, "memory_market": false, "memory_dock": false, "seal_bells": false, "seal_water": false, "seal_stars": false, "bells_clue": false, "water_clue": false, "stars_clue": false, "memory_pilgrim": false, "memory_copper": false, "opening_seen": false, "echo": false}, "puzzles": {"bells": [], "water": 0, "water_sources": [false, false], "stars": [0, 0, 0]}}
 
 func load_progress() -> bool:
 	for candidate in [path, path + ".bak"]:

@@ -30,7 +30,10 @@ const ROOMS := [
 	{"id": "copper_dock", "label": "Cais do Cobre", "name": "Cais do Cobre e das Ânforas", "rect": Rect2i(40, 31, 16, 12), "color": Color("75644e"), "theme": "wood"},
 	{"id": "cistern", "label": "Cisterna", "name": "Cisterna das Duas Fontes", "rect": Rect2i(12, 31, 11, 14), "color": Color("5f7266"), "theme": "aqueduct"},
 	{"id": "sluice", "label": "Comportas", "name": "Galeria das Comportas", "rect": Rect2i(0, 31, 11, 14), "color": Color("637266"), "theme": "stone"},
-	{"id": "buried", "label": "Santuário Soterrado", "name": "Santuário Soterrado da Maré", "rect": Rect2i(-12, 32, 11, 13), "color": Color("53615d"), "theme": "crypt"}
+	{"id": "buried", "label": "Santuário Soterrado", "name": "Santuário Soterrado da Maré", "rect": Rect2i(-12, 32, 11, 13), "color": Color("53615d"), "theme": "crypt"},
+	# The echo route is reached only from the Catacombs; its grate faces the sanctuary.
+	{"id": "echo_descent", "label": "Descida do Eco", "name": "Descida do Eco", "rect": Rect2i(-19, 3, 3, 17), "color": Color("4b4f5c"), "theme": "crypt", "generated": false},
+	{"id": "echo_gallery", "label": "Galeria do Eco", "name": "Galeria do Eco", "rect": Rect2i(-19, -4, 13, 7), "color": Color("4f5260"), "theme": "crypt", "generated": false}
 ]
 const ROOM_LINKS := [
 	["hub", "p1"], ["p1", "market"], ["market", "p2"], ["p2", "bridge"],
@@ -42,7 +45,8 @@ const ROOM_LINKS := [
 	["p2", "caravan"], ["caravan", "kilns"], ["kilns", "salt_road"],
 	["salt_road", "beacon"], ["beacon", "oracle"], ["oracle", "reservoir"],
 	["reservoir", "copper_dock"], ["copper_dock", "lower_dock"],
-	["garden", "cistern"], ["cistern", "sluice"], ["sluice", "buried"]
+	["garden", "cistern"], ["cistern", "sluice"], ["sluice", "buried"],
+	["a02", "echo_descent"], ["echo_descent", "echo_gallery"], ["echo_gallery", "hub", "echo"]
 ]
 const CONNECTORS := [
 	{"rect": Rect2i(4, 0, 1, 2), "room": "p1", "theme": "stone", "color": Color("626456")},
@@ -70,7 +74,8 @@ const CONNECTORS := [
 	{"rect": Rect2i(37, 33, 3, 3), "room": "copper_dock", "theme": "wood", "color": Color("77634c")},
 	{"rect": Rect2i(16, 30, 3, 1), "room": "cistern", "theme": "aqueduct", "color": Color("61736b")},
 	{"rect": Rect2i(11, 37, 1, 3), "room": "sluice", "theme": "stone", "color": Color("61736b")},
-	{"rect": Rect2i(-1, 37, 1, 3), "room": "buried", "theme": "crypt", "color": Color("61736b")}
+	{"rect": Rect2i(-1, 37, 1, 3), "room": "buried", "theme": "crypt", "color": Color("61736b")},
+	{"rect": Rect2i(-6, -1, 1, 2), "room": "echo_gallery", "theme": "crypt", "color": Color("4f5260")}
 ]
 ## Broad, level thresholds support both feet of the entrance arches.
 ## They are away from the locked shortcut/boss corridors, preserving their seals.
@@ -95,13 +100,15 @@ const MARKERS := {
 	"sealed_entry": Vector2(3, 23), "nous_archive": Vector2(-1, -33), "nous_kilns": Vector2(69, 7),
 	"nous_beacon": Vector2(85, 13), "nous_reservoir": Vector2(60, 39), "nous_buried": Vector2(-10, 42),
 	"memory_pilgrim": Vector2(30, -17), "memory_copper": Vector2(48, 40),
-	"capture_bells": Vector2(25, -28), "capture_oracle": Vector2(80, 35), "capture_cistern": Vector2(20, 39), "capture_caravan": Vector2(47, 3)
+	"capture_bells": Vector2(25, -28), "capture_oracle": Vector2(80, 35), "capture_cistern": Vector2(20, 39), "capture_caravan": Vector2(47, 3),
+	"alavanca_eco": Vector2(-8, -1), "capture_echo": Vector2(-9, 1)
 }
 const GATES := {
 	"shortcut": {"a": Vector2(-.5, 3.5), "b": Vector2(2.5, 3.5)},
 	"aqueduct": {"a": Vector2(19.5, 19.5), "b": Vector2(21.5, 19.5)},
 	"boss": {"a": Vector2(-12.5, 23.5), "b": Vector2(-12.5, 26.5)},
-	"boss_entry": {"a": Vector2(.5, 20.5), "b": Vector2(.5, 24.5)}
+	"boss_entry": {"a": Vector2(.5, 20.5), "b": Vector2(.5, 24.5)},
+	"echo": {"a": Vector2(-5.5, -1.5), "b": Vector2(-5.5, .5)}
 }
 const ENEMY_SPAWNS := [
 	{"id": "marinheiro_01", "tile": Vector2(11, 1), "boss": false},

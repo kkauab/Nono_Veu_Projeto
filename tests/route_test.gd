@@ -115,12 +115,31 @@ func _run() -> void:
 		await finish()
 		return
 	check(world.store.data["flags"]["complete"], "Limiar registra fim do percurso da demo")
-	for room_id in ["hub", "p1", "market", "p2", "bridge", "p3", "secret", "lower_dock", "garden", "aqueduct", "p4", "b1", "a02"]:
+	print("ROUTE_STAGE Galeria do Eco")
+	var echo_lever := find_item("alavanca_eco")
+	check(echo_lever != null and not world.echo_gate.opened, "Grade do Eco começa fechada")
+	if not await walk_tiles([Vector2(-18, 22), Vector2(-18, 19), Vector2(-18, 3), Vector2(-18, 0), Vector2(-7, -.5)], "Subida pela Galeria do Eco"):
+		await finish()
+		return
+	await drive_to(PortLayout.iso(Vector2(-3, -.5)), 100)
+	check(PortLayout.unproject(world.player.position).x < -5.2, "Grade do Eco fechada segura Senu do lado da galeria")
+	if not await walk_tiles([Vector2(-9, -1)], "Retorno à alavanca do Eco"):
+		await finish()
+		return
+	check(world.activate(echo_lever) and world.echo_gate.opened and world.store.data["flags"]["echo"], "Alavanca ergue a grade pelo lado das Catacumbas")
+	await physics_frame
+	check(world.echo_gate.get_node("Barrier").disabled, "Grade erguida perde a colisão")
+	if not await walk_tiles([Vector2(-6, -.5), markers["hub_spawn"]], "Retorno ao santuário pela grade"):
+		await finish()
+		return
+	check(PortLayout.room_at(world.player.position) == "hub", "Galeria do Eco devolve Senu ao santuário")
+	for room_id in ["hub", "p1", "market", "p2", "bridge", "p3", "secret", "lower_dock", "garden", "aqueduct", "p4", "b1", "a02", "echo_descent", "echo_gallery"]:
 		check(room_id in world.store.data["visited"], "Jornada descobre o setor %s" % room_id)
 	var reload := DemoSaveStore.new(world.store.path)
 	check(reload.load_progress(), "Save real da jornada reabre")
 	check(reload.data["flags"]["shortcut"] and reload.data["flags"]["boss"] and "vontade" in reload.data["skills"], "Mundo/chefe/habilidade persistem depois do percurso")
 	check(reload.data["flags"].get("aqueduct", false), "Segundo atalho permanece aberto no save")
+	check(reload.data["flags"].get("echo", false), "Grade do Eco permanece erguida no save")
 	check(reload.data["equipped"] == DemoSaveStore.WEAPONS[1] and "nous_patio" in reload.data["collected"], "Equipamento e pickup persistem")
 	await finish()
 

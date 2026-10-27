@@ -5,6 +5,7 @@ const Hud = preload("res://scripts/ui/game_hud_v6.gd")
 const Inputs = preload("res://scripts/core/input_bindings.gd")
 const Dressing = preload("res://scripts/world/port_dressing.gd")
 const Opening = preload("res://scripts/ui/opening_cutscene.gd")
+const LEVER_FLAGS := {"alavanca": "shortcut", "alavanca_aqueduct": "aqueduct", "alavanca_eco": "echo"}
 var store: DemoSaveStore
 var player: SenuPlayer
 var actors: Node2D
@@ -13,6 +14,7 @@ var shortcut: PortGate
 var exit_gate: PortGate
 var aqueduct_gate: PortGate
 var boss_entry_gate: PortGate
+var echo_gate: PortGate
 var boss: VeilEnemy
 var nearest: PortInteractable
 var current_room := "hub"
@@ -72,7 +74,7 @@ func _ready() -> void:
 		start_journey()
 	elif not qa_mode:
 		hud.show_overlay("intro")
-	for capture_mode in ["--capture", "--capture-menu", "--capture-tree", "--capture-arena", "--capture-cais", "--capture-market", "--capture-garden", "--capture-map", "--capture-daggers", "--capture-bells", "--capture-oracle", "--capture-cistern", "--capture-caravan"]:
+	for capture_mode in ["--capture", "--capture-menu", "--capture-tree", "--capture-arena", "--capture-cais", "--capture-market", "--capture-garden", "--capture-map", "--capture-daggers", "--capture-bells", "--capture-oracle", "--capture-cistern", "--capture-caravan", "--capture-echo"]:
 		if qa_mode and capture_mode in OS.get_cmdline_user_args():
 			hud.show_overlay("")
 			if capture_mode == "--capture-menu":
@@ -90,7 +92,7 @@ func _ready() -> void:
 				player.reset_at(Layout.iso(Layout.MARKERS["capture_market"]))
 				current_room = Layout.room_at(player.position)
 				camera.reset_smoothing()
-			elif capture_mode in ["--capture-cais", "--capture-market", "--capture-garden", "--capture-bells", "--capture-oracle", "--capture-cistern", "--capture-caravan"]:
+			elif capture_mode in ["--capture-cais", "--capture-market", "--capture-garden", "--capture-bells", "--capture-oracle", "--capture-cistern", "--capture-caravan", "--capture-echo"]:
 				var marker: String = capture_mode.trim_prefix("--").replace("-", "_")
 				player.reset_at(Layout.iso(Layout.MARKERS.get(marker, Layout.MARKERS["alavanca_aqueduct"])))
 				current_room = Layout.room_at(player.position)
@@ -101,6 +103,7 @@ func _ready() -> void:
 						store.data["visited"].append(room_data["id"])
 				store.data["flags"]["shortcut"] = true
 				store.data["flags"]["aqueduct"] = true
+				store.data["flags"]["echo"] = true
 				hud.show_overlay("map")
 			_capture.call_deferred(capture_mode.trim_prefix("--capture"))
 
@@ -148,6 +151,7 @@ func _build_objects() -> void:
 	_add_item("adagas", "daggers", Layout.MARKERS["adagas"], "Encontrar Adagas do Reverso")
 	_add_item("alavanca", "lever", Layout.MARKERS["alavanca"], "Abrir o retorno ao santuário")
 	_add_item("alavanca_aqueduct", "lever", Layout.MARKERS["alavanca_aqueduct"], "Destravar o aqueduto do mercado")
+	_add_item("alavanca_eco", "lever", Layout.MARKERS["alavanca_eco"], "Erguer a grade do santuário")
 	_add_item("selo", "gate", Layout.MARKERS["selo"], "Examinar o selo das Catacumbas")
 	_add_item("memory_market", "memory", Layout.MARKERS["memory_market"], "Ler o registro do mercador")
 	_add_item("memory_dock", "memory", Layout.MARKERS["memory_dock"], "Ler a memória do barqueiro")
@@ -167,6 +171,7 @@ func _build_objects() -> void:
 	aqueduct_gate = _make_gate("aqueduct", "aqueduct")
 	exit_gate = _make_gate("boss", "boss")
 	boss_entry_gate = _make_gate("boss_entry", "boss")
+	echo_gate = _make_gate("echo", "echo")
 	refresh_seals()
 
 func _make_gate(gate_id: String, flag: String) -> PortGate:
@@ -184,7 +189,7 @@ func _make_gate(gate_id: String, flag: String) -> PortGate:
 func _add_item(id: String, kind: String, tile: Vector2, label: String) -> void:
 	if id in store.data["collected"] and kind != "cache":
 		return
-	if (id == "alavanca" and store.data["flags"]["shortcut"]) or (id == "alavanca_aqueduct" and store.data["flags"].get("aqueduct", false)):
+	if LEVER_FLAGS.has(id) and store.data["flags"].get(LEVER_FLAGS[id], false):
 		return
 	var item := PortInteractable.new()
 	item.item_id = id
@@ -222,7 +227,7 @@ func _physics_process(_delta: float) -> void:
 		if room == "a02" and not store.data["flags"]["complete"]:
 			store.data["flags"]["complete"] = true
 			_save()
-			hud.show_dialog("O eco se abre", "O Porteiro caiu. Além deste limiar, as vozes das Catacumbas esperam por Senu.\n\nVocê concluiu o percurso desta primeira demonstração. A02 ainda é uma área de teste. Volte pelo portão da guarita e reencontre o santuário.")
+			hud.show_dialog("O eco se abre", "O Porteiro caiu. Além deste limiar, as vozes das Catacumbas esperam por Senu.\n\nNesta demonstração, as Catacumbas ainda são uma área de teste. Ao norte, uma galeria estreita sobe na direção do santuário.")
 	nearest = null
 	var distance := 43.0
 	for item in get_tree().get_nodes_in_group("interactables"):
@@ -264,15 +269,15 @@ func activate(item: PortInteractable) -> bool:
 			_save()
 			hud.toast("Adagas do Reverso encontradas · [Tab] trocar arma")
 		"lever":
-			var is_aqueduct := item.item_id == "alavanca_aqueduct"
-			store.data["flags"]["aqueduct" if is_aqueduct else "shortcut"] = true
-			if is_aqueduct:
-				aqueduct_gate.open()
-			else:
-				shortcut.open()
+			var flag: String = LEVER_FLAGS[item.item_id]
+			store.data["flags"][flag] = true
+			{"shortcut": shortcut, "aqueduct": aqueduct_gate, "echo": echo_gate}[flag].open()
 			item.active = false
 			_save()
-			hud.toast("Aqueduto aberto · o jardim agora se liga ao mercado." if is_aqueduct else "O portão cedeu. O caminho de volta sempre esteve aqui.")
+			if flag == "echo":
+				hud.show_dialog("A grade do Eco", "A grade cede. Do outro lado está o Santuário da Primeira Palavra, onde a jornada começou.\n\nAs vozes das Catacumbas e o santuário agora estão a poucos passos um do outro.")
+			else:
+				hud.toast("Aqueduto aberto · o jardim agora se liga ao mercado." if flag == "aqueduct" else "O portão cedeu. O caminho de volta sempre esteve aqui.")
 		"memory":
 			store.data["flags"][item.item_id] = true
 			_save()
@@ -489,7 +494,9 @@ func _save() -> bool:
 
 func objective() -> String:
 	if store.data["flags"]["complete"]:
-		return "Reencontre o santuário pelo atalho."
+		if store.data["flags"].get("echo", false):
+			return "Grade do Eco aberta · explore o porto ou volte às Catacumbas."
+		return "Suba pela Galeria do Eco e erga a grade do santuário."
 	if store.data["flags"]["boss"]:
 		return "Atravesse o limiar das Catacumbas."
 	if seals_found() == 3:

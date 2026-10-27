@@ -21,7 +21,7 @@ Conferido à mão: todos os conectores ligam as salas certas, nenhuma sala se so
 |---|---|---|---|---|
 | 1 | **Alta** | `port_demo.gd:425`, `save_store.gd:21-44` | **Selo do Céu pode travar depois de recarregar o jogo.** O altar compara `puzzles["stars"] == [1, 3, 2]`. O JSON devolve números como `float`, e a comparação de arrays do Godot também compara o tipo: `[1.0, 3, 2]` é diferente de `[1, 3, 2]`. Se o jogador acertar um obelisco, sair do jogo e voltar, o altar recusa o alinhamento correto até ele girar aquele obelisco quatro vezes. Como o selo é obrigatório, isso bloqueia o chefe. O `world_v6_test.gd` resolve o puzzle numa sessão só e não pega o caso. **Confirmado no Godot 4.7.2:** salvar `[1, 3, 2]` e recarregar devolve `[1.0, 3.0, 2.0]`, e o altar responde falso. | **Corrigido:** o altar converte as posições para `int` antes de comparar. A conversão no carregamento do save foi descartada, porque o `progression_test` compara o save recarregado com a versão em float. Teste: `tests/puzzle_reload_test.gd`. |
 | 2 | Média | `port_demo.gd:386` e `:391` | **Erro dos sinos nunca aparece.** Ao tocar fora de ordem, o jogo mostra "A harmonia se desfaz. Recomece pela Lua." e na mesma hora o substitui por "Sinos: 0 de 3 notas", porque o `toast` do HUD guarda só a última mensagem. **Confirmado no Godot 4.7.2:** depois de tocar a Aurora primeiro, a mensagem na tela é "Sinos: 0 de 3 notas reconhecidas." | **Corrigido:** um único aviso por toque. Errar com a Lua agora diz que a sequência recomeçou com 1 de 3; antes, a mensagem "Recomece pela Lua" levava o jogador a repetir o mesmo erro. Teste: `tests/puzzle_reload_test.gd`. |
-| 3 | Baixa | `port_demo.gd:487` | Depois de entrar nas Catacumbas, o objetivo manda "reencontrar o santuário pelo atalho", mesmo que a alavanca da guarita não tenha sido puxada. | Se o atalho estiver fechado, pedir para abrir a alavanca da guarita. |
+| 3 | Baixa | `port_demo.gd:487` | Depois de entrar nas Catacumbas, o objetivo manda "reencontrar o santuário pelo atalho", mesmo que a alavanca da guarita não tenha sido puxada. | **Resolvido com a Galeria do Eco:** depois das Catacumbas, o objetivo manda subir pela galeria e erguer a grade do santuário. |
 | 4 | Baixa | `port_layout.gd:54` | O corredor do atalho, com 14 pisos, conta como sala `hub`; o HUD mostra "Santuário da Primeira Palavra" durante todo o corredor. | Dar ao corredor um nome próprio ou contá-lo como guarita na metade sul. |
 | 5 | Baixa | `port_demo.gd:280`, `:282`, `:295` | Os textos terminam com "— Memória fictícia do Porto" e "Inscrição fictícia", na tela do jogo. O GDD só pede que as falas não sejam citações históricas (linhas 116 e 1110). | Retirar os rótulos da tela. |
 
@@ -76,13 +76,25 @@ Ordem de prioridade do GDD (linha 1063): jogabilidade, mapa e atalhos, save, com
 5. **O caminho de Faium.** O Portão das Caravanas já existe. Uma caravana parada "até alguém mapear o oásis" vira um portão visível e fechado para a ligação A01 → A04 no futuro.
 6. **Conciliar a chegada.** Senu conhece o Santuário, mas chega por mar e não sabe se ele ainda resiste à Inversão. Isso é ajuste de fala na abertura, que é da zona Interface: combinar com quem a assumir.
 
+## Galeria do Eco (feita em 27/10/2026)
+
+É o atalho C03 do GDD (linha 315): uma grade aberta **pelo lado das Catacumbas** que devolve o jogador ao santuário. Cumpre o princípio das linhas 1216-1218: ver um portão trancado, esquecê-lo e voltar por trás dele.
+
+- **No mapa:** duas salas novas no mar vazio, a Descida do Eco `(-19, 3, 3, 17)` e a Galeria do Eco `(-19, -4, 13, 7)`, mais duas aberturas: a borda oeste do Santuário (com a grade, em `x = -5,5`) e a borda norte das Catacumbas. Os 27 setores anteriores não mudaram de lugar nem de tamanho.
+- **No jogo:** a grade fica visível e fechada desde o início. Depois do Porteiro, o jogador sobe pela descida, ergue a grade pela alavanca e sai no Santuário.
+- **Decoração:** as salas novas têm `"generated": false` em `ROOMS`; o gerador de distritos as ignora e os objetos ficam na lista manual de `port_dressing.gd`, fora da linha de caminhada.
+- **Save:** marca nova `echo`, falsa nos saves novos e acrescentada aos antigos ao carregar.
+- **Alavancas:** `port_demo.gd` passou a ligar alavanca, marca e portão por `LEVER_FLAGS`, em vez de um caso especial por alavanca.
+- **Testes:** `route_test` percorre fisicamente Catacumbas → descida → galeria, confirma que a grade fechada segura Senu, ergue a grade e volta ao santuário (137/137). `world_v6_test` confirma que, com a grade fechada, a galeria e as Catacumbas não são alcançáveis a partir do santuário (125/125).
+- **Captura:** `-- --qa --capture-echo` grava `qa/porto_demo-echo.png`.
+
 ## Ordem sugerida
 
 1. ~~Bugs 1 e 2~~: corrigidos em 27/10/2026, só em `port_demo.gd`.
 2. Separar conteúdo e puzzles do `port_demo.gd`, em acordo com o Kauã.
 3. Identidade visual dos distritos.
 4. História: o pescador e o irmão, o Porteiro e a trilha de Iri.
-5. Novas ligações: caminho de Faium e atalho das Catacumbas.
+5. Novas ligações: caminho de Faium. O atalho das Catacumbas já existe: é a Galeria do Eco.
 
 ## Ferramentas
 

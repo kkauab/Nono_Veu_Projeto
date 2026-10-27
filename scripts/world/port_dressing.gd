@@ -54,7 +54,14 @@ const PROPS := [
 	["pillar", Vector2(-23, 22), "74837c", true], ["statue", Vector2(-22, 28), "71847c", true],
 	["reeds", Vector2(22.5, 9), "51695d", false], ["torch", Vector2(20, 10), "a29b79", false],
 	["torch", Vector2(21, 17), "a29b79", false], ["wall", Vector2(-.35, 8), "65786e", false],
-	["wall", Vector2(2.35, 13), "65786e", false]
+	["wall", Vector2(2.35, 13), "65786e", false],
+	# Echo gallery: the walking line runs from the descent along rows -1 and 0 to the grate.
+	["pillar", Vector2(-18, -3), "6d6f7b", true], ["pillar", Vector2(-8, -3), "6d6f7b", true],
+	["pillar", Vector2(-8, 2), "6d6f7b", true], ["statue", Vector2(-13, -3), "7a7c88", true],
+	["wall", Vector2(-16, -3.65), "5f6170", false], ["wall", Vector2(-10, -3.65), "5f6170", false],
+	["torch", Vector2(-15, -3), "a29b79", false], ["torch", Vector2(-11, -3), "a29b79", false],
+	["rubble", Vector2(-12, 2), "6d6f7b", false],
+	["torch", Vector2(-19, 8), "a29b79", false], ["torch", Vector2(-17, 14), "a29b79", false]
 ]
 
 static func populate(parent: Node2D) -> void:
@@ -94,6 +101,8 @@ static func _district_prop(parent: Node2D, kind: String, tile: Vector2, color: C
 
 static func _populate_districts(parent: Node2D) -> void:
 	for room in PortLayout.ROOMS.slice(13):
+		if not room.get("generated", true):
+			continue
 		var rect: Rect2i = room["rect"]
 		var origin := Vector2(rect.position)
 		var size := Vector2(rect.size)

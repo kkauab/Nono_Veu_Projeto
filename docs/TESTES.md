@@ -72,3 +72,7 @@ Correções da zona Mundo (Gustavo) em `port_demo.gd`: o altar das estrelas acei
 ```powershell
 & $demoGodot --headless --path . --script res://tests/puzzle_reload_test.gd -- --qa
 ```
+
+## Galeria do Eco — 27/10/2026
+
+Novo atalho da zona Mundo (Gustavo): das Catacumbas ao santuário, por uma grade erguida pelo lado de trás. Com Godot 4.7.2: percurso **137/137**, agora com a subida física pela galeria, o bloqueio da grade fechada e o retorno ao santuário; mundo **125/125**, incluindo a garantia de que a galeria e as Catacumbas não são alcançadas pelo santuário antes da hora. Também aprovados: progressão **111/111**, migração **32/32**, puzzles **8/8**, navegação **8/8**, fundações **5/5**, cenário **65/65**, HUD **19/19** e abertura **23/23**. Capturas da galeria e do mapa com 29 setores conferidas em `qa/porto_demo-echo.png` e `qa/porto_demo-map.png`.
