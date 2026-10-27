@@ -1,0 +1,779 @@
+{
+  "version": 15,
+  "canvas": [
+    160,
+    192
+  ],
+  "atlas_size": [
+    800,
+    768
+  ],
+  "columns": 5,
+  "rows": 4,
+  "frames": 20,
+  "expressions": [
+    "neutral",
+    "concerned",
+    "sad",
+    "resolute"
+  ],
+  "poses": [
+    "rest",
+    "speech_small",
+    "speech_open",
+    "half_blink",
+    "closed_blink"
+  ],
+  "index": "expression*5 + pose",
+  "source_type": "new complete generated portrait cels; no facial patch painting or recombination",
+  "face_rects": {
+    "senu": [
+      77,
+      35,
+      70,
+      67
+    ],
+    "fisherman": [
+      35,
+      35,
+      75,
+      70
+    ]
+  },
+  "textures": {
+    "senu": "res://assets/ui/dialogue_v15/senu.png",
+    "fisherman": "res://assets/ui/dialogue_v15/fisherman.png"
+  },
+  "registration": {
+    "senu": [
+      {
+        "index": 0,
+        "expression": "neutral",
+        "pose": "rest",
+        "source": "senu_generated.png",
+        "source_rect": [
+          0,
+          0,
+          256,
+          307
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          0,
+          1
+        ]
+      },
+      {
+        "index": 1,
+        "expression": "neutral",
+        "pose": "speech_small",
+        "source": "senu_generated.png",
+        "source_rect": [
+          256,
+          0,
+          512,
+          307
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          9,
+          1
+        ]
+      },
+      {
+        "index": 2,
+        "expression": "neutral",
+        "pose": "speech_open",
+        "source": "senu_generated.png",
+        "source_rect": [
+          512,
+          0,
+          768,
+          307
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          15,
+          1
+        ]
+      },
+      {
+        "index": 3,
+        "expression": "neutral",
+        "pose": "half_blink",
+        "source": "senu_half_generated.png",
+        "source_rect": [
+          768,
+          0,
+          1024,
+          307
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          20,
+          0
+        ]
+      },
+      {
+        "index": 4,
+        "expression": "neutral",
+        "pose": "closed_blink",
+        "source": "senu_generated.png",
+        "source_rect": [
+          1024,
+          0,
+          1280,
+          307
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          20,
+          1
+        ]
+      },
+      {
+        "index": 5,
+        "expression": "concerned",
+        "pose": "rest",
+        "source": "senu_generated.png",
+        "source_rect": [
+          0,
+          307,
+          256,
+          614
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          2,
+          8
+        ]
+      },
+      {
+        "index": 6,
+        "expression": "concerned",
+        "pose": "speech_small",
+        "source": "senu_generated.png",
+        "source_rect": [
+          256,
+          307,
+          512,
+          614
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          9,
+          8
+        ]
+      },
+      {
+        "index": 7,
+        "expression": "concerned",
+        "pose": "speech_open",
+        "source": "senu_generated.png",
+        "source_rect": [
+          512,
+          307,
+          768,
+          614
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          14,
+          8
+        ]
+      },
+      {
+        "index": 8,
+        "expression": "concerned",
+        "pose": "half_blink",
+        "source": "senu_half_generated.png",
+        "source_rect": [
+          768,
+          307,
+          1024,
+          614
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          19,
+          7
+        ]
+      },
+      {
+        "index": 9,
+        "expression": "concerned",
+        "pose": "closed_blink",
+        "source": "senu_generated.png",
+        "source_rect": [
+          1024,
+          307,
+          1280,
+          614
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          20,
+          8
+        ]
+      },
+      {
+        "index": 10,
+        "expression": "sad",
+        "pose": "rest",
+        "source": "senu_generated.png",
+        "source_rect": [
+          0,
+          614,
+          256,
+          922
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          -1,
+          14
+        ]
+      },
+      {
+        "index": 11,
+        "expression": "sad",
+        "pose": "speech_small",
+        "source": "senu_generated.png",
+        "source_rect": [
+          256,
+          614,
+          512,
+          922
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          8,
+          14
+        ]
+      },
+      {
+        "index": 12,
+        "expression": "sad",
+        "pose": "speech_open",
+        "source": "senu_generated.png",
+        "source_rect": [
+          512,
+          614,
+          768,
+          922
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          14,
+          14
+        ]
+      },
+      {
+        "index": 13,
+        "expression": "sad",
+        "pose": "half_blink",
+        "source": "senu_half_generated.png",
+        "source_rect": [
+          768,
+          614,
+          1024,
+          922
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          20,
+          13
+        ]
+      },
+      {
+        "index": 14,
+        "expression": "sad",
+        "pose": "closed_blink",
+        "source": "senu_generated.png",
+        "source_rect": [
+          1024,
+          614,
+          1280,
+          922
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          22,
+          13
+        ]
+      },
+      {
+        "index": 15,
+        "expression": "resolute",
+        "pose": "rest",
+        "source": "senu_generated.png",
+        "source_rect": [
+          0,
+          922,
+          256,
+          1229
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          1,
+          14
+        ]
+      },
+      {
+        "index": 16,
+        "expression": "resolute",
+        "pose": "speech_small",
+        "source": "senu_generated.png",
+        "source_rect": [
+          256,
+          922,
+          512,
+          1229
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          7,
+          14
+        ]
+      },
+      {
+        "index": 17,
+        "expression": "resolute",
+        "pose": "speech_open",
+        "source": "senu_generated.png",
+        "source_rect": [
+          512,
+          922,
+          768,
+          1229
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          13,
+          14
+        ]
+      },
+      {
+        "index": 18,
+        "expression": "resolute",
+        "pose": "half_blink",
+        "source": "senu_half_generated.png",
+        "source_rect": [
+          768,
+          922,
+          1024,
+          1229
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          18,
+          14
+        ]
+      },
+      {
+        "index": 19,
+        "expression": "resolute",
+        "pose": "closed_blink",
+        "source": "senu_generated.png",
+        "source_rect": [
+          1024,
+          922,
+          1280,
+          1229
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          20,
+          14
+        ]
+      }
+    ],
+    "fisherman": [
+      {
+        "index": 0,
+        "expression": "neutral",
+        "pose": "rest",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          0,
+          0,
+          256,
+          307
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          0,
+          8
+        ]
+      },
+      {
+        "index": 1,
+        "expression": "neutral",
+        "pose": "speech_small",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          256,
+          0,
+          512,
+          307
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          9,
+          8
+        ]
+      },
+      {
+        "index": 2,
+        "expression": "neutral",
+        "pose": "speech_open",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          512,
+          0,
+          768,
+          307
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          19,
+          8
+        ]
+      },
+      {
+        "index": 3,
+        "expression": "neutral",
+        "pose": "half_blink",
+        "source": "fisherman_half_four_generated.png",
+        "source_rect": [
+          0,
+          0,
+          572,
+          687
+        ],
+        "sheet_scale": 0.2794759825327511,
+        "whole_cel_translation": [
+          27,
+          8
+        ]
+      },
+      {
+        "index": 4,
+        "expression": "neutral",
+        "pose": "closed_blink",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          1024,
+          0,
+          1280,
+          307
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          37,
+          8
+        ]
+      },
+      {
+        "index": 5,
+        "expression": "concerned",
+        "pose": "rest",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          0,
+          307,
+          256,
+          614
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          -1,
+          10
+        ]
+      },
+      {
+        "index": 6,
+        "expression": "concerned",
+        "pose": "speech_small",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          256,
+          307,
+          512,
+          614
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          9,
+          10
+        ]
+      },
+      {
+        "index": 7,
+        "expression": "concerned",
+        "pose": "speech_open",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          512,
+          307,
+          768,
+          614
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          18,
+          10
+        ]
+      },
+      {
+        "index": 8,
+        "expression": "concerned",
+        "pose": "half_blink",
+        "source": "fisherman_half_four_generated.png",
+        "source_rect": [
+          572,
+          0,
+          1145,
+          687
+        ],
+        "sheet_scale": 0.2794759825327511,
+        "whole_cel_translation": [
+          27,
+          10
+        ]
+      },
+      {
+        "index": 9,
+        "expression": "concerned",
+        "pose": "closed_blink",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          1024,
+          307,
+          1280,
+          614
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          37,
+          10
+        ]
+      },
+      {
+        "index": 10,
+        "expression": "sad",
+        "pose": "rest",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          0,
+          614,
+          256,
+          922
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          0,
+          13
+        ]
+      },
+      {
+        "index": 11,
+        "expression": "sad",
+        "pose": "speech_small",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          256,
+          614,
+          512,
+          922
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          9,
+          13
+        ]
+      },
+      {
+        "index": 12,
+        "expression": "sad",
+        "pose": "speech_open",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          512,
+          614,
+          768,
+          922
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          19,
+          13
+        ]
+      },
+      {
+        "index": 13,
+        "expression": "sad",
+        "pose": "half_blink",
+        "source": "fisherman_half_four_generated.png",
+        "source_rect": [
+          0,
+          687,
+          572,
+          1374
+        ],
+        "sheet_scale": 0.2794759825327511,
+        "whole_cel_translation": [
+          27,
+          13
+        ]
+      },
+      {
+        "index": 14,
+        "expression": "sad",
+        "pose": "closed_blink",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          1024,
+          614,
+          1280,
+          922
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          38,
+          13
+        ]
+      },
+      {
+        "index": 15,
+        "expression": "resolute",
+        "pose": "rest",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          0,
+          922,
+          256,
+          1229
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          1,
+          14
+        ]
+      },
+      {
+        "index": 16,
+        "expression": "resolute",
+        "pose": "speech_small",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          256,
+          922,
+          512,
+          1229
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          10,
+          14
+        ]
+      },
+      {
+        "index": 17,
+        "expression": "resolute",
+        "pose": "speech_open",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          512,
+          922,
+          768,
+          1229
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          19,
+          14
+        ]
+      },
+      {
+        "index": 18,
+        "expression": "resolute",
+        "pose": "half_blink",
+        "source": "fisherman_half_four_generated.png",
+        "source_rect": [
+          572,
+          687,
+          1145,
+          1374
+        ],
+        "sheet_scale": 0.2794759825327511,
+        "whole_cel_translation": [
+          28,
+          14
+        ]
+      },
+      {
+        "index": 19,
+        "expression": "resolute",
+        "pose": "closed_blink",
+        "source": "fisherman_generated.png",
+        "source_rect": [
+          1024,
+          922,
+          1280,
+          1229
+        ],
+        "sheet_scale": 0.625,
+        "whole_cel_translation": [
+          38,
+          14
+        ]
+      }
+    ]
+  },
+  "native_cel_sha256": {
+    "senu": [
+      "e8c218f314e277daa4ab7dc8aa5de6a98d13aae341ab88484c2c3c3c5d3295ef",
+      "5cc873dbc2ea228e4a9cde9a85aa5ed9869627615b8294fc58613e6cfe6e2795",
+      "d91d3b115739e1ce81b57279577cdde3c5def0a912fbe41339f7a793f85e8428",
+      "cee54ee4ffa9b6dec6c118ac82a252a90487bf0d55b15401ca4a3f192a2cfbbb",
+      "cba723f8146ec00053cbb0864e4d12480d21717abc080e8b1c8c5ba84440276a",
+      "0cd42fdd0fdb8663c70417e5e790c752d4e7157164182ae67f8956832b5444ea",
+      "0a36f8ce69f11b62e8a17fbab97ab1ff18e7a4b90c0490c8a60c0ecaefabc948",
+      "a33339e3a5b1cf0c5b7399604c2d3b6ee76eb8183672d408dae05853a17803c6",
+      "0a50ea49cbb3402ba8bea63156e06c9ee1850d40876c7d99afd6148e1f52c138",
+      "a05b71992eeac76d1d4263d548928cfb4c95e9278250751f5d1440432aa2b229",
+      "370873abafe5ddf8ec62303649bcf148fda63cc13018bb6d6603e952d4a9d6df",
+      "1c5faad70b23d80eff52d78734c413eb95b8f57c5a9c23670ad3481fab325db4",
+      "738567efc9ba88d1186d7c9671a82911273a96e1fcfe8a0a60566741c0bbac52",
+      "60aca5386536ae62735719f411a43ec98257d8c376d08c6ce935da67256a5865",
+      "cb382e36be18116ad02f8b88817d429dc0843b4631c4653e9c188221cc35e4e6",
+      "f34bea1ae385d798ba5116606acfb250c50e31acfcea4abeec7784a73bb2537d",
+      "d8ac91d501644a72bde3e4fdd04e7ddf2bbbbc1854fefc2a5276d714f94f9ced",
+      "bb4d9cace22440ec5b81dea10fde1baec1aa195c58776a946622574db42d34e0",
+      "d5f8d0b5d02a69fbd51ccc4bf242d969426d14fd2330f0cb8c5f12f22b1c23da",
+      "0bd7d4ef9303491571092363401ee3099fb91909d5bc50542feb406bd61f23d2"
+    ],
+    "fisherman": [
+      "bbdfd30d905f150446e124daa86015b44a6cd83ba056d659ee0f23c95851f150",
+      "b2ed583d71901ebf55b1965b457779eafdb8c6a5325882d05c1c88388499e7fe",
+      "841868ae510885b63720b5fd34e77833b388bfde2a84a2aaa1cc35f3bcef36c9",
+      "a6a110c0e24e2c9bb7be6509d054be98d13c2aefc9b0308c79f41a22273c413f",
+      "162f59f82cea2ba0738532cb1cb43873159b9ba4b15da90e4cc40cf43c7cf33c",
+      "8df55804d3c3fe7f7b400199b6b693773579e2ed3ad77bd1f753ecdb99ac4308",
+      "bc52d256275dd19840d36d180a1d86bec76798e4987f0006915e010feed0f0e6",
+      "427fcd859f1c06491575c6425cc99b6b454fc3d5ea2baba8e8b27e1d1838e204",
+      "b9dd33ce0740c7063310cc5ce434afa01088c531e822c7b91cc41fed88739ae7",
+      "56427e91558abdf7944a49d595d59f977f01987e54b6464760bf1b203fd1193d",
+      "a149fd63b5a798b9911e9b05cba5e3ca8a86928e8949d04b497e33f9559745bf",
+      "2ee951fe959d82021f395601ecf5fa5c8b6cc8191204f8d3f2e7dd31bd246d48",
+      "2bd41a97f8362825a5bb881369f5bdf17c809fb6cf31e6fd2055eecb5656ae0f",
+      "3a7a3a76e21a1abdd60e18e7239859dd52691dccf3f4130fa3a3d1ece5fea9c4",
+      "e60562aeaf9825ffc23c5133d115b2b2fa0bc081b698d3221d774f3df4caae5f",
+      "3b24496f35f09491386e2468706bf652b58bf749b320ef5f6b549a7a3c433467",
+      "95050ec400d5156675556beeaa3aa54b4ff5b7e32a6fcb5d90da5d5f69fd4846",
+      "d168a213a21822ff62e3cdce1a55b9dd4c94311a7bf34a27f1e8130c0b9ead57",
+      "f240be51b0bd8438f5e61de6e53a3dd03d18b21044720fa1459211898d3be3b4",
+      "d4b982466101f9f66c3a37c500f8ddd09f7bf20ffbdc146ae89a4fdfc515d2e8"
+    ]
+  }
+}

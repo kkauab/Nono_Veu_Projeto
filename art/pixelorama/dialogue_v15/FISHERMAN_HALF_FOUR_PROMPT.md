@@ -1,0 +1,5 @@
+# Meia piscada: quatro bustos completos finais
+
+Modo: edição integrada da imagem completa. A apresentação2×2 preserva as proporções do busto original; somente os quatro resultados completos são selecionados para a pose3.
+
+Edit this exact FOUR COMPLETE PORTRAIT CEL sheet,2columns×2rows, same512x614proportion and SAMEbust sizes,camera,cropsandcostume. This is the intermediate blink pose: OPEN ALL4CHARACTERS' EYES so a dark pupil/iris is visibly drawn below a slightlydroopedupperlid. THE EYES MUST BE PARTIALLY OPEN, NOT CLOSED. Retain orbital shadows, skinvolume, eyebrows, expression and allfaceproportions. Keep mouths relaxedclosed. Top-leftneutral,top-rightconcerned,bottom-leftsad,bottom-rightresolute. The aim is clearly visible iris, like a calm drowsy eye; not a singleclosedline. Draw4coherent COMPLETEbusts matching these exactly, no facepatches. Nothingelsechanges: keepheadwrap,greymoustache/beard,ochretunic/netstrap,bodywidth,height,shouldersidentical. Preserveoriginalpixelclustersandpalette. Truealpha outside busts, no newgutter, labels, border or text. No whitening strip/no erasing face.
