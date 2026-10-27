@@ -3,8 +3,12 @@ class_name DemoSaveStore
 
 const VERSION := 1
 const CHECKPOINTS := ["hub", "s1", "market_rest", "caravan_rest", "cistern_rest"]
-const OPTIONAL_FLAGS := ["aqueduct", "memory_market", "memory_dock", "seal_bells", "seal_water", "seal_stars", "bells_clue", "water_clue", "stars_clue", "memory_pilgrim", "memory_copper", "opening_seen"]
+const OPTIONAL_FLAGS := ["aqueduct", "memory_market", "memory_dock", "seal_bells", "seal_water", "seal_stars", "bells_clue", "water_clue", "stars_clue", "memory_pilgrim", "memory_copper", "opening_seen", "echo"]
 const WEAPONS := ["e01_khopesh_discipulo", "l01_adagas_reverso"]
+## Contadores da economia de combate (scripts/economy/economy.gd): XP e óbolos.
+const COUNTERS := ["xp", "coins"]
+## Compras e cargas das lojas (scripts/economy/shop_catalog.gd).
+const ShopCatalog = preload("res://scripts/economy/shop_catalog.gd")
 const SKILLS := {"vontade": {"name": "Mão firme", "branch": "Vontade", "cost": 1, "description": "+4 de dano em todos os golpes.", "requires": []}, "materia": {"name": "Fôlego da pedra", "branch": "Matéria", "cost": 1, "description": "+20 de vida máxima.", "requires": []}, "intelecto": {"name": "Memória do éter", "branch": "Intelecto", "cost": 2, "description": "Poder da arma recarrega 20% mais rápido.", "requires": []}}
 var data: Dictionary
 var path: String
@@ -16,7 +20,7 @@ func _init(save_path: String = "user://progress.json") -> void:
 	data = fresh_data()
 
 static func fresh_data() -> Dictionary:
-	return {"version": VERSION, "world_revision": 3, "fragments": 0, "collected": [], "skills": [], "weapons": [WEAPONS[0]], "equipped": WEAPONS[0], "defeated": [], "visited": [], "checkpoint": "hub", "flags": {"shortcut": false, "boss": false, "complete": false, "aqueduct": false, "memory_market": false, "memory_dock": false, "seal_bells": false, "seal_water": false, "seal_stars": false, "bells_clue": false, "water_clue": false, "stars_clue": false, "memory_pilgrim": false, "memory_copper": false, "opening_seen": false}, "puzzles": {"bells": [], "water": 0, "water_sources": [false, false], "stars": [0, 0, 0]}}
+	return {"version": VERSION, "world_revision": 3, "fragments": 0, "collected": [], "skills": [], "weapons": [WEAPONS[0]], "equipped": WEAPONS[0], "defeated": [], "visited": [], "checkpoint": "hub", "flags": {"shortcut": false, "boss": false, "complete": false, "aqueduct": false, "memory_market": false, "memory_dock": false, "seal_bells": false, "seal_water": false, "seal_stars": false, "bells_clue": false, "water_clue": false, "stars_clue": false, "memory_pilgrim": false, "memory_copper": false, "opening_seen": false, "echo": false}, "puzzles": {"bells": [], "water": 0, "water_sources": [false, false], "stars": [0, 0, 0]}, "xp": 0, "coins": 0, "purchases": {}, "items": {}}
 
 func load_progress() -> bool:
 	for candidate in [path, path + ".bak"]:
@@ -39,6 +43,14 @@ func load_progress() -> bool:
 			data["puzzles"] = {"bells": [], "water": 0, "water_sources": [false, false], "stars": [0, 0, 0]}
 		if not data["puzzles"].has("water_sources"):
 			data["puzzles"]["water_sources"] = [false, false]
+		# Saves anteriores à economia de combate começam sem XP nem óbolos.
+		for counter in COUNTERS:
+			if not data.has(counter):
+				data[counter] = 0
+		# E sem compras nas lojas das casas.
+		for shelf in ["purchases", "items"]:
+			if not data.has(shelf):
+				data[shelf] = {}
 		data["world_revision"] = 3.0
 		loaded_existing = true
 		return true
@@ -61,6 +73,13 @@ func _valid(value: Variant) -> bool:
 	if not (value.get("fragments") is float or value.get("fragments") is int):
 		return false
 	if float(value["fragments"]) < 0 or float(value["fragments"]) > 9999:
+		return false
+	for counter in COUNTERS:
+		if value.has(counter):
+			var amount: Variant = value[counter]
+			if not (amount is float or amount is int) or float(amount) != floorf(float(amount)) or amount < 0 or amount > 999999:
+				return false
+	if (value.has("purchases") or value.has("items")) and not ShopCatalog.valid_state(value.get("purchases", {}), value.get("items", {})):
 		return false
 	if value.get("checkpoint") not in CHECKPOINTS or value.get("equipped") not in WEAPONS:
 		return false

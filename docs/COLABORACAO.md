@@ -49,7 +49,7 @@ Cada zona tem um responsável. Só o responsável edita os arquivos da zona; o o
 |---|---|
 | 1. Inimigos | **Kauã** (em andamento) |
 | 2. Senu e combate | livre |
-| 3. Mundo, mapa e puzzles | livre |
+| 3. Mundo, mapa e puzzles | **Gustavo** (desde 27/10/2026) |
 | 4. Interface, menu e abertura | livre |
 
 ### 1. Inimigos
@@ -81,7 +81,7 @@ Cada zona tem um responsável. Só o responsável edita os arquivos da zona; o o
 - `art/pixelorama/port_v6/`, `art/pixelorama/port_v7/port_pixel_v7.pxo` e as fontes de cenário em `port_v7/sources/`
 - `tools/pixelorama/build_port_*`, `export_port_pixel_v7.ps1`, `import_port_art_v6.gd`
 - `tests/route_test.gd`, `navigation_v6_test.gd`, `foundation_navigation_v8_test.gd`, `world_v6_test.gd`, `scene_support_v8_test.gd`
-- `docs/MAPA_A01_*.md`, `docs/CENARIO_APOIOS_V8.md`, `docs/O_NONO_VEU_MAPA_MESTRE.*`
+- `docs/MAPA_A01_*.md`, `docs/MUNDO_*.md`, `docs/CENARIO_APOIOS_V8.md`, `docs/O_NONO_VEU_MAPA_MESTRE.*`
 - `ABRIR_MAPA_PIXELORAMA.cmd`
 
 ### 4. Interface, menu e abertura
