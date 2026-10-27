@@ -2,6 +2,7 @@ extends RefCounted
 
 # A arquitetura fica fora dos eixos de circulação. Props sólidos são pequenos
 # elementos de cenário; fachadas e barcos ocupam a margem não caminhável.
+# Ruínas ficam sobre a pedra, na borda norte da sala: sobre a água elas flutuavam.
 const PROPS := [
 	["pillar", Vector2(-5, -4), "97917b", true], ["pillar", Vector2(-5, 2), "868b7c", true],
 	["pillar", Vector2(3, -4), "97917b", true], ["pillar", Vector2(3, 2), "868b7c", true],
@@ -25,11 +26,11 @@ const PROPS := [
 	["torch", Vector2(34, -1), "a29b79", false], ["pillar", Vector2(29, 7), "858675", true],
 	["bollard", Vector2(31, 11), "797b65", true], ["torch", Vector2(34, 13), "a29b79", false],
 	["bollard", Vector2(34, 16), "797b65", true], ["boat", Vector2(37, 13), "86775b", false],
-	["wall", Vector2(29.5, 16), "6f7c70", false], ["arch", Vector2(32.5, 19), "9b9278", false],
+	["wall", Vector2(27, 18.85), "6f7c70", false], ["arch", Vector2(32.5, 19), "9b9278", false],
 	["pillar", Vector2(25, 20), "878c75", true], ["pillar", Vector2(37, 20), "878c75", true],
 	["statue", Vector2(34, 23), "8d957d", true], ["rubble", Vector2(28, 26), "7f8b78", false],
 	["palm", Vector2(25, 28), "556f5a", true], ["torch", Vector2(37, 28), "a29b79", false],
-	["wall", Vector2(39.5, 20.5), "737e70", false], ["reeds", Vector2(31, 24), "51695d", false],
+	["wall", Vector2(42, 21.85), "737e70", false], ["reeds", Vector2(31, 24), "51695d", false],
 	["arch", Vector2(39, 25), "8f8e78", false], ["pillar", Vector2(40, 23), "878c75", true],
 	["pillar", Vector2(45, 23), "878c75", true], ["statue", Vector2(44, 25), "87918a", true],
 	["torch", Vector2(40, 28), "a29b79", false], ["wall", Vector2(43, 30.5), "626f6b", false],
@@ -46,11 +47,11 @@ const PROPS := [
 	["statue", Vector2(5, 18), "9d9a7d", true], ["torch", Vector2(6, 20), "a29b79", false],
 	["warehouse", Vector2(9, 18.5), "69796d", true], ["arch", Vector2(1, 23), "969077", false],
 	["crate", Vector2(10, 22), "806343", true], ["barrel", Vector2(3, 26), "806343", true],
-	["pillar", Vector2(-11, 18), "94917d", true], ["pillar", Vector2(-1, 18), "94917d", true],
+	["pillar", Vector2(-11, 18), "94917d", true], ["pillar", Vector2(-2, 18), "94917d", true],
 	["pillar", Vector2(-11, 29), "94917d", true], ["pillar", Vector2(-1, 29), "94917d", true],
-	["wall", Vector2(-6, 14.5), "727f74", false], ["statue", Vector2(-6, 17), "a09a7a", true],
+	["wall", Vector2(-6, 15.85), "727f74", false], ["statue", Vector2(-6, 17), "a09a7a", true],
 	["torch", Vector2(-10, 24), "a29b79", false], ["torch", Vector2(-2, 24), "a29b79", false],
-	["arch", Vector2(-14, 25), "767f7a", false], ["wall", Vector2(-21, 19), "5c6d6b", false],
+	["arch", Vector2(-14, 25), "767f7a", false], ["wall", Vector2(-22.5, 19.85), "5c6d6b", false],
 	["pillar", Vector2(-23, 22), "74837c", true], ["statue", Vector2(-22, 28), "71847c", true],
 	["reeds", Vector2(22.5, 9), "51695d", false], ["torch", Vector2(20, 10), "a29b79", false],
 	["torch", Vector2(21, 17), "a29b79", false], ["wall", Vector2(-.35, 8), "65786e", false],
@@ -132,7 +133,7 @@ static func _populate_districts(parent: Node2D) -> void:
 		if room["id"] == "copper_dock":
 			_district_prop(parent, "boat", origin + Vector2(6, size.y + 2), Color("998060"))
 		if room["id"] == "beacon":
-			_district_prop(parent, "lighthouse", Vector2(85, 24), stone)
+			_district_prop(parent, "lighthouse", Vector2(85, 24), stone, true)
 		elif room["id"] == "archive":
 			_district_prop(parent, "temple", Vector2(5, -34.5), stone, true)
 		elif room["id"] == "bellcourt":

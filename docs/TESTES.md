@@ -76,3 +76,15 @@ Correções da zona Mundo (Gustavo) em `port_demo.gd`: o altar das estrelas acei
 ## Galeria do Eco — 27/10/2026
 
 Novo atalho da zona Mundo (Gustavo): das Catacumbas ao santuário, por uma grade erguida pelo lado de trás. Com Godot 4.7.2: percurso **137/137**, agora com a subida física pela galeria, o bloqueio da grade fechada e o retorno ao santuário; mundo **125/125**, incluindo a garantia de que a galeria e as Catacumbas não são alcançadas pelo santuário antes da hora. Também aprovados: progressão **111/111**, migração **32/32**, puzzles **8/8**, navegação **8/8**, fundações **5/5**, cenário **65/65**, HUD **19/19** e abertura **23/23**. Capturas da galeria e do mapa com 29 setores conferidas em `qa/porto_demo-echo.png` e `qa/porto_demo-map.png`.
+
+## Profundidade de portões e prédios — 27/10/2026
+
+Achado jogando: Senu era desenhado atrás da grade do Eco e de armazéns, arcos, barracas, templo e farol, e esses objetos ficavam transparentes, como fantasmas. Correção só na zona Mundo (`port_gate.gd`, `world_prop.gd`, `port_art.gd` e `port_dressing.gd`): os objetos largos são desenhados em fatias de profundidade, e a barraca, o armazém e o farol ganharam base sólida do tamanho do desenho. Quatro muros que flutuavam sobre a água e um pilar dentro de um buraco d'água foram para a borda de pedra mais próxima.
+
+O novo `tests/depth_sort_test.gd` aprovou **134/134**. Ele verifica os 5 portões dos dois lados e as 30 fachadas por todas as faces viradas para a câmera; o teste exige as fatias, então falha no código anterior. Com Godot 4.7.2, já com o merge da `main` que trouxe os retratos de diálogo do Kauã, as 25 suítes passaram, entre elas: percurso **137/137**, mundo **125/125**, cenário **75/75** (eram 65; entraram as barracas e o farol), progressão **111/111**, migração **32/32**, diálogo com retratos **196/196** e inimigos (movimento **28/28**, equilíbrio **56/56**, desempenho **6/6**). As capturas de antes e depois foram conferidas.
+
+Observação: depois de um merge que traz um `class_name` novo, rode `--editor --import --quit` uma vez. Sem isso, o cache de classes do Godot fica velho e os testes da abertura falham com "Could not find type".
+
+```powershell
+& $demoGodot --headless --path . --script res://tests/depth_sort_test.gd -- --qa
+```
