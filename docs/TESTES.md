@@ -88,3 +88,20 @@ Observação: depois de um merge que traz um `class_name` novo, rode `--editor -
 ```powershell
 & $demoGodot --headless --path . --script res://tests/depth_sort_test.gd -- --qa
 ```
+
+## Trilha de Iri e o pescador — 27/10/2026
+
+Conteúdo opcional da zona Mundo (Gustavo; detalhes em `docs/MUNDO_EXPANSAO.md`): quatro marcas de Iri que abrem um relicário no Santuário, e a missão de Hori e Sabu, do Cais ao Embarcadouro Velho. O novo `tests/side_story_test.gd` aprovou **55/55**. Ele verifica:
+
+- as 7 posições: piso, espaço livre de objetos sólidos e de outras interações, e salas certas;
+- o relicário fechado sem as quatro marcas;
+- a contagem das marcas, sem contar duas vezes;
+- cada passo da missão, incluindo o nome que só volta depois do Porteiro;
+- as recompensas, sem repetição;
+- o estado depois de reabrir o save.
+
+As capturas dos personagens, das marcas e do relicário foram conferidas.
+
+```powershell
+& $demoGodot --headless --path . --script res://tests/side_story_test.gd -- --qa
+```

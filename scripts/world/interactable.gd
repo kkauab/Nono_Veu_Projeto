@@ -10,7 +10,11 @@ var opened := false
 var highlighted := false
 var time := 0.0
 var puzzle_value := 0
+## Look of an "npc": "fisher" or "brother", both drawn from Kauã's fisherman sheet.
+var figure := ""
 var _draw_tick := 0.0
+const FISHERMAN_SHEET := "res://assets/cinematics/rpg_v12/fisherman.png"
+static var _fisherman: Texture2D
 
 func _ready() -> void:
 	add_to_group("interactables")
@@ -35,14 +39,14 @@ func _contact_shadow(width: float) -> void:
 	draw_rect(Rect2(-width, -1, width * 2, 2), Color(.01, .025, .03, .24))
 
 func _draw() -> void:
-	if not active and kind not in ["cache", "bell", "valve", "water_altar", "dial", "stars_altar", "boss_lock"]:
+	if not active and kind not in ["cache", "bell", "valve", "water_altar", "dial", "stars_altar", "boss_lock", "iri_relic"]:
 		return
 	var gold := Color("dcc28c")
 	var teal := Color("8ac5b2")
-	if opened and kind in ["bell", "valve", "water_altar", "dial", "stars_altar", "boss_lock"]:
+	if opened and kind in ["bell", "valve", "water_altar", "dial", "stars_altar", "boss_lock", "iri_mark"]:
 		gold = teal
 	var bob := roundf(sin(time * 2.4) * 2.0)
-	_contact_shadow(12 if kind != "nous" else 5)
+	_contact_shadow({"nous": 5, "npc": 8}.get(kind, 12))
 	if highlighted:
 		draw_set_transform(Vector2.ZERO, 0, Vector2(1, .5))
 		draw_arc(Vector2.ZERO, 23, 0, TAU, 24, gold, 1)
@@ -122,3 +126,45 @@ func _draw() -> void:
 			else:
 				draw_arc(Vector2(0, -23), 6, 0, TAU, 20, gold, 1)
 				draw_line(Vector2(0, -32), Vector2(0, -14), gold, 1)
+		"npc":
+			_draw_figure()
+		"iri_mark":
+			# A low stele with Hermes' sign: circle, staff and two wings.
+			draw_colored_polygon(PackedVector2Array([Vector2(-9, 1), Vector2(-9, -18), Vector2(-5, -24), Vector2(5, -24), Vector2(9, -18), Vector2(9, 1)]), Color("66766f"))
+			draw_colored_polygon(PackedVector2Array([Vector2(1, 1), Vector2(1, -24), Vector2(5, -24), Vector2(9, -18), Vector2(9, 1)]), Color("55635d"))
+			if not opened:
+				draw_circle(Vector2(0, -14), 9 + bob * .5, Color(.86, .76, .55, .08))
+			draw_arc(Vector2(0, -18), 2.5, 0, TAU, 10, gold, 1)
+			draw_line(Vector2(0, -15), Vector2(0, -5), gold, 1)
+			draw_line(Vector2(-5, -13), Vector2(-1, -11), gold, 1)
+			draw_line(Vector2(5, -13), Vector2(1, -11), gold, 1)
+		"iri_relic":
+			# Iri's cedar box: one socket lights for each mark found on the trail.
+			draw_colored_polygon(PackedVector2Array([Vector2(-13, -2), Vector2(0, 5), Vector2(14, -2), Vector2(14, -13), Vector2(0, -6), Vector2(-13, -13)]), Color("6d5a44"))
+			draw_colored_polygon(PackedVector2Array([Vector2(0, 5), Vector2(14, -2), Vector2(14, -13), Vector2(0, -6)]), Color("5a4a38"))
+			if opened:
+				draw_colored_polygon(PackedVector2Array([Vector2(-13, -13), Vector2(-12, -25), Vector2(1, -19), Vector2(0, -6)]), Color("8a7155"))
+				draw_line(Vector2(-6, -12), Vector2(5, -10), teal, 1)
+			else:
+				draw_colored_polygon(PackedVector2Array([Vector2(-13, -13), Vector2(0, -20), Vector2(14, -13), Vector2(0, -6)]), Color("8a7155"))
+				draw_arc(Vector2(0, -13), 2.5, 0, TAU, 10, gold, 1)
+				for socket in range(4):
+					var spot := Vector2(0, -13) + Vector2(7, 0).rotated(socket * PI / 2) * Vector2(1, .5)
+					draw_circle(spot, 1.5, teal if socket < puzzle_value else Color("3b3a33"))
+
+func _draw_figure() -> void:
+	if _fisherman == null and ResourceLoader.exists(FISHERMAN_SHEET):
+		_fisherman = load(FISHERMAN_SHEET) as Texture2D
+	# Sheet poses: 0 idle, 5 talk, 6 listen. Sabu repeats the knot gesture until
+	# he remembers; a faded tint marks the forgotten.
+	var frame := 5 if highlighted else (6 if fmod(time, 3.2) > 2.4 else 0)
+	var tint := Color.WHITE
+	if figure == "brother":
+		frame = 5 if fmod(time, 1.4) < .7 else 6
+		tint = Color.WHITE if opened else Color("a9b3bd")
+	if _fisherman == null:
+		draw_rect(Rect2(-6, -38, 12, 38), Color("7d6a52") * tint)
+		return
+	draw_set_transform(Vector2.ZERO, 0, Vector2(-1 if figure == "brother" else 1, 1))
+	draw_texture_rect_region(_fisherman, Rect2(-64, -112, 128, 128), Rect2(frame % 4 * 128, frame / 4 * 128, 128, 128), tint)
+	draw_set_transform(Vector2.ZERO)

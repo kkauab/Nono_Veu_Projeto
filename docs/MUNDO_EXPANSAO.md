@@ -90,12 +90,26 @@ Ordem de prioridade do GDD (linha 1063): jogabilidade, mapa e atalhos, save, com
 - **Testes:** `route_test` percorre fisicamente Catacumbas → descida → galeria, confirma que a grade fechada segura Senu, ergue a grade e volta ao santuário (137/137). `world_v6_test` confirma que, com a grade fechada, a galeria e as Catacumbas não são alcançáveis a partir do santuário (125/125).
 - **Captura:** `-- --qa --capture-echo` grava `qa/porto_demo-echo.png`.
 
+## Trilha de Iri e o pescador (feitos em 27/10/2026)
+
+Conteúdo opcional, pedido para o porto "ter mais coisa para fazer". Nenhum setor mudou. A lógica e os textos ficam em `scripts/world/port_story.gd`, na zona Mundo. O `port_demo.gd` ganhou só três ganchos: o `preload`, `Story.build(self)` em `_build_objects()` e um caso em `activate()`.
+
+- **Trilha de Iri:** quatro estelas com o sinal de Hermes, no Arquivo `(10, -31)`, no Observatório `(85; 30,5)`, no Santuário Soterrado `(-4; 35,5)` e na Guarita `(5; 27,5)`, lidas em qualquer ordem. Cada uma traz um recado de Iri para Senu, sobre a mão que reescreve os nomes, o céu que ninguém copia, a primeira lição e o caminho de volta, sem revelar a culpa de Iri (A08/A11). As quatro abrem o **relicário de Iri** no Santuário `(1; -3,5)`: o cordão de contas do mestre, um recado de que ele desceu às Catacumbas e +3 Fragmentos de Nous.
+- **O pescador e o irmão:** o pescador da abertura, agora chamado **Hori**, fica no Cais `(12,6; 1,6)`. O irmão, **Sabu**, enrola cordas no Embarcadouro Velho `(27; 32,5)`, com cores apagadas.
+  - **Passos:** Hori pede ajuda; Senu acha Sabu; Hori entrega o nó que o irmão lhe ensinou; Sabu reconhece o nó, mas o nome só volta depois do Porteiro; Hori recompensa com +2 Fragmentos de Nous.
+  - **Depois:** Sabu passa a ficar no cais ao lado do irmão. Antes de alguém perguntar por ele, as falas de Sabu mudam a cada selo desperto.
+  - **Arte:** os dois usam o sprite do pescador do Kauã (`assets/cinematics/rpg_v12/fisherman.png`); Sabu aparece espelhado e com outra cor.
+- **Save sem migração:** o progresso fica em `collected`, com os ids `iri_mark_*`, `iri_relic` e `fisher_*`, e as recompensas usam `collect(id, n)`. Saves antigos abrem sem mudança, e o `save_store.gd` não foi tocado.
+- **Diálogos:** usam `hud.show_dialog`. O aviso de missão também aparece na última linha do diálogo, porque o toast do HUD expira enquanto o diálogo pausa o jogo. Os retratos de diálogo do Kauã podem entrar depois, se a zona Interface quiser.
+- **Tipo `npc`:** desenha uma figura (`figure`) a partir de folhas de sprite. A sessão de lojas combinou reaproveitar esse tipo para os lojistas.
+- **Teste:** `tests/side_story_test.gd` cobre as posições (piso, espaço livre e salas certas), cada passo das duas histórias, as recompensas sem repetição e o estado depois de reabrir o save.
+
 ## Ordem sugerida
 
 1. ~~Bugs 1 e 2~~: corrigidos em 27/10/2026, só em `port_demo.gd`.
 2. Separar conteúdo e puzzles do `port_demo.gd`, em acordo com o Kauã.
 3. Identidade visual dos distritos.
-4. História: o pescador e o irmão, o Porteiro e a trilha de Iri.
+4. História: ~~o pescador e o irmão~~ e ~~a trilha de Iri~~, feitos em 27/10/2026. Falta o Porteiro (Sala dos Nomes).
 5. Novas ligações: caminho de Faium. O atalho das Catacumbas já existe: é a Galeria do Eco.
 
 ## Ferramentas

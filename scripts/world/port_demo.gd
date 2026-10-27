@@ -6,6 +6,7 @@ const Inputs = preload("res://scripts/core/input_bindings.gd")
 const Dressing = preload("res://scripts/world/port_dressing.gd")
 const Opening = preload("res://scripts/ui/opening_cutscene.gd")
 const LEVER_FLAGS := {"alavanca": "shortcut", "alavanca_aqueduct": "aqueduct", "alavanca_eco": "echo"}
+const Story = preload("res://scripts/world/port_story.gd")
 var store: DemoSaveStore
 var player: SenuPlayer
 var actors: Node2D
@@ -172,6 +173,7 @@ func _build_objects() -> void:
 	exit_gate = _make_gate("boss", "boss")
 	boss_entry_gate = _make_gate("boss_entry", "boss")
 	echo_gate = _make_gate("echo", "echo")
+	Story.build(self)
 	refresh_seals()
 
 func _make_gate(gate_id: String, flag: String) -> PortGate:
@@ -247,6 +249,8 @@ func activate(item: PortInteractable) -> bool:
 	if not is_instance_valid(item) or not item.active or player.position.distance_to(item.position) > 44:
 		return false
 	match item.kind:
+		"iri_mark", "iri_relic", "npc":
+			return Story.activate(self, item)
 		"clue", "bell", "valve", "water_altar", "dial", "stars_altar", "boss_lock":
 			return _activate_puzzle(item)
 		"shrine":
