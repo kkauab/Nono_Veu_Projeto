@@ -20,7 +20,9 @@ const BANKS := {
 	"water_plop": [preload("res://assets/audio/sfx/water_plop_01.wav"), preload("res://assets/audio/sfx/water_plop_02.wav"), preload("res://assets/audio/sfx/water_plop_03.wav"), preload("res://assets/audio/sfx/water_plop_04.wav")],
 	"water_bubble": [preload("res://assets/audio/sfx/water_bubble_01.wav"), preload("res://assets/audio/sfx/water_bubble_02.wav"), preload("res://assets/audio/sfx/water_bubble_03.wav")],
 	"water_loop": [preload("res://assets/audio/sfx/water_loop.wav")],
-	"pickup_coin": [preload("res://assets/audio/sfx/pickup_coin_01.wav"), preload("res://assets/audio/sfx/pickup_coin_02.wav"), preload("res://assets/audio/sfx/pickup_coin_03.wav")]
+	"pickup_coin": [preload("res://assets/audio/sfx/pickup_coin_01.wav"), preload("res://assets/audio/sfx/pickup_coin_02.wav"), preload("res://assets/audio/sfx/pickup_coin_03.wav")],
+	"door_open": [preload("res://assets/audio/sfx/door_open_01.wav"), preload("res://assets/audio/sfx/door_open_02.wav")],
+	"chest_open": [preload("res://assets/audio/sfx/chest_open_01.wav"), preload("res://assets/audio/sfx/chest_open_02.wav")]
 }
 
 const BUS := {
@@ -42,7 +44,9 @@ const BUS := {
 	"water_plop": "Ambiente",
 	"water_bubble": "Ambiente",
 	"water_loop": "Ambiente",
-	"pickup_coin": "SFX"
+	"pickup_coin": "SFX",
+	"door_open": "SFX",
+	"chest_open": "SFX"
 }
 
 const VOLUME_DB := {
@@ -64,5 +68,7 @@ const VOLUME_DB := {
 	"water_plop": -11.0,
 	"water_bubble": -20.0,
 	"water_loop": -16.0,
-	"pickup_coin": -8.0
+	"pickup_coin": -8.0,
+	"door_open": -8.0,
+	"chest_open": -7.0
 }

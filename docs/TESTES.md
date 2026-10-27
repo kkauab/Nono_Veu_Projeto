@@ -147,6 +147,8 @@ O novo `tests/combat_fx_test.gd` aprovou **100/100** com Godot 4.7.2 (cinco roda
 & $demoGodot --headless --path . --script res://tests/combat_fx_test.gd
 ```
 
+Depois, para as casas: os bancos `door_open` e `chest_open` (4 sons novos, 52 no total) e a regra de que fora do mar desenhado (`PortLayout.SEA_RECT`) não há água nem som do mar. `combat_fx_test.gd` passou a **108/108**. Com os sons ligados, os testes das casas e lojas seguiram verdes: casas 54/54, arte dos interiores 13/13, têmperas 37/37 e méritos 47/47; mundo 125/125.
+
 ## Casas, fase 1: Casa da Guarda — 27/10/2026
 
 Gustavo: porta diante do armazém da Guarita do Retorno, escurecimento, Casa da Guarda (sala 6 × 5 além do mar, em x ≥ 4400 px) com baú de 30 óbolos e bilhete. Código em `scripts/world/house_catalog.gd`, `house_interior.gd` e `houses.gd`, com 3 ganchos curtos em `port_demo.gd` e 2 no HUD. Plano em [MUNDO_CASAS_LOJAS.md](MUNDO_CASAS_LOJAS.md).

@@ -23,7 +23,7 @@ Gustavo pediu mais sensação de impacto nas lutas, sons (o jogo não tinha nenh
 
 ## Sons
 
-48 arquivos em `assets/audio/sfx/`, sintetizados por `tools/audio/build_combat_sfx.py` (só biblioteca padrão do Python; sem gravação, sem serviço externo e sem licença de terceiros). O script também gera `scripts/audio/sfx_banks.gd`. Rodar de novo reescreve arquivos idênticos.
+52 arquivos em `assets/audio/sfx/`, sintetizados por `tools/audio/build_combat_sfx.py` (só biblioteca padrão do Python; sem gravação, sem serviço externo e sem licença de terceiros). O script também gera `scripts/audio/sfx_banks.gd`. Rodar de novo reescreve arquivos idênticos.
 
 ```powershell
 A:\Ferramentas\python315\python.exe tools/audio/build_combat_sfx.py
@@ -37,7 +37,7 @@ VeilSfx.play(self, "pickup_coin")                        # sem posição
 ```
 
 - Vozes posicionais ficam na viewport do mundo, que passa a ser a ouvinte 2D (`audio_listener_enable_2d`), então o som tem pan e distância em relação à câmera.
-- Buses criados em tempo de execução, se ainda não existirem: `SFX` (com limitador), `Ambiente` e `Vozes`, todos enviando para `Master`. O balbucio dos diálogos usa `Vozes`; as moedas de `loot_drop.gd` usam `pickup_coin`.
+- Buses criados em tempo de execução, se ainda não existirem: `SFX` (com limitador), `Ambiente` e `Vozes`, todos enviando para `Master`. O balbucio dos diálogos usa `Vozes`; as moedas de `loot_drop.gd` usam `pickup_coin`; as casas (`houses.gd`) usam `door_open` (rangido de dobradiça e trinco) e `chest_open` (estalo da tampa e baque).
 - Volume e bus de cada banco ficam em `sfx_banks.gd` (gerado). Para ajustar, mude a tabela `recipes()` do script Python e gere de novo.
 
 ## Água viva
@@ -52,6 +52,7 @@ VeilSfx.play(self, "pickup_coin")                        # sem posição
 - **Ritmo:** dois ciclos lentos e desencontrados (47 s e 19 s) alternam água agitada e calma.
 - **Lótus e troncos:** fixos no mapa, à deriva perto das margens; lótus perto de jardins, aquedutos e mosaicos; troncos perto dos cais.
 - **Som do mar:** laço de 8 s (`water_loop`, com bloco `smpl` para o Godot importar em laço) no bus `Ambiente`. O volume acompanha quanto da tela é água: mais alto no cais, quase mudo nas criptas.
+- **Interiores:** fora de `PortLayout.SEA_RECT` (o retângulo onde o mar é desenhado) tudo conta como terra seca. As casas, em x ≥ 4400, não têm peixes e o mar fica mudo lá dentro.
 
 ## Arquivos
 
@@ -61,13 +62,13 @@ VeilSfx.play(self, "pickup_coin")                        # sem posição
 | `scripts/actors/player.gd` | ganchos (9 linhas) |
 | `scripts/audio/sfx.gd`, `scripts/audio/sfx_banks.gd` | novos (o segundo é gerado) |
 | `scripts/world/water_life.gd` | novo |
-| `scripts/world/port_layout.gd` | 5 linhas no `_ready` |
+| `scripts/world/port_layout.gd` | 5 linhas no `_ready` e a constante `SEA_RECT` |
 | `tools/audio/build_combat_sfx.py`, `assets/audio/sfx/` | novos |
 | `tests/combat_fx_test.gd` | novo |
 
 ## Verificação
 
-`tests/combat_fx_test.gd` (100 verificações) cobre bancos e buses, o laço do mar, hitstop e restauração do tempo, clarão, faíscas, som do impacto, corpo caído sem efeito, golpe final mais longo, hitstop desligável, parry, dano em Senu, liberação da cena no meio do congelamento, aviso sonoro da preparação do inimigo e, na água: nada sobre piso ou pedra, lótus só na água, cardumes, saltos, brilhos e anéis, fuga dos peixes e volume do mar menor longe da água.
+`tests/combat_fx_test.gd` (108 verificações) cobre bancos e buses (inclusive porta e baú), o laço do mar, hitstop e restauração do tempo, clarão, faíscas, som do impacto, corpo caído sem efeito, golpe final mais longo, hitstop desligável, parry, dano em Senu, liberação da cena no meio do congelamento, aviso sonoro da preparação do inimigo e, na água: nada sobre piso ou pedra, lótus só na água, cardumes, saltos, brilhos e anéis, fuga dos peixes, volume do mar menor longe da água e interiores sem água e sem som do mar.
 
 ```powershell
 & $demoGodot --headless --path . --script res://tests/combat_fx_test.gd

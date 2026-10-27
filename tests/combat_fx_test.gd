@@ -36,7 +36,7 @@ func _check_sounds() -> void:
 		var streams: Array = Banks.BANKS[bank]
 		check(not streams.is_empty() and streams.all(func(stream): return stream is AudioStream), "Banco %s carrega todos os sons" % bank)
 		check(Banks.BUS.has(bank) and Banks.VOLUME_DB.has(bank), "Banco %s tem bus e volume" % bank)
-	for bank in ["swing_sword", "swing_dagger", "swing_heavy", "swing_enemy", "hit_light", "hit_heavy", "hit_kill", "parry", "hurt", "death", "dodge", "enemy_windup", "water_splash", "water_plop", "water_loop", "pickup_coin"]:
+	for bank in ["swing_sword", "swing_dagger", "swing_heavy", "swing_enemy", "hit_light", "hit_heavy", "hit_kill", "parry", "hurt", "death", "dodge", "enemy_windup", "water_splash", "water_plop", "water_loop", "pickup_coin", "door_open", "chest_open"]:
 		check(Sfx.has_bank(bank), "Existe o banco " + bank)
 	Sfx.ensure_buses()
 	Sfx.ensure_buses()
@@ -204,6 +204,10 @@ func _check_water() -> void:
 	var open_sea: float = life._water_coverage(Rect2(camera.position - Vector2(320, 180), Vector2(640, 360)))
 	var plaza: float = life._water_coverage(Rect2(PortLayout.iso(Vector2(36, 26)) - Vector2(120, 70), Vector2(240, 140)))
 	check(open_sea > plaza, "O som do mar diminui longe da água (%.2f > %.2f)" % [open_sea, plaza])
+	# Interiores das casas ficam fora do mar desenhado, sobre fundo próprio.
+	var interior := Vector2(5000, 2300)
+	check(not PortLayout.SEA_RECT.has_point(interior) and not life.is_open_water(interior), "Dentro das casas não há água")
+	check(life._water_coverage(Rect2(interior - Vector2(320, 180), Vector2(640, 360))) == 0.0, "Dentro das casas o mar fica mudo")
 	stage.queue_free()
 	await process_frame
 
