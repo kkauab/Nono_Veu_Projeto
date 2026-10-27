@@ -15,18 +15,51 @@ var _visibility_tick := 0.0
 var _flame_tick := 0.0
 var _opacity := 1.0
 var _collision_radius := 0.0
+var _ground_line := PackedFloat32Array()
+var _art_bottom := PackedFloat32Array()
+
+## Facades wider than an actor are cut into columns, each sorted at the floor line
+## of its own art: Senu beside a warehouse wall or under an arch is no longer drawn
+## behind the whole building.
+const SLICED := ["warehouse", "temple", "arch", "stall", "lighthouse"]
+const SLICE_WIDTH := 4
+## Senu's sprite rises about 40 px above his feet.
+const ACTOR_HEIGHT := 42.0
+
+class ArtColumns extends Node2D:
+	var prop: PortProp
+	var from := 0
+	var to := 0
+	## Lowest painted pixel of these columns; a lintel stays above Senu's head.
+	var lowest := 0.0
+
+	func _draw() -> void:
+		prop.draw_columns(self, from, to)
+
+class GroundShadow extends Node2D:
+	var prop: PortProp
+
+	func _draw() -> void:
+		prop.draw_ground(self)
 
 func foundation_polygons() -> Array[PackedVector2Array]:
 	# Ground-plane silhouettes follow the painted bases, not the tall facade.
 	var result: Array[PackedVector2Array] = []
 	if kind == "warehouse":
-		result.append(PackedVector2Array([Vector2(-48, -23), Vector2(-6, -2), Vector2(49, -24), Vector2(7, -45)]))
+		# The painted crates in front of the tower belong to the solid base.
+		result.append(PackedVector2Array([Vector2(-48, -23), Vector2(-8, -3), Vector2(20, 0), Vector2(50, -12), Vector2(49, -24), Vector2(7, -45)]))
+	elif kind == "stall":
+		# The four poles, not just the counter: Senu no longer walks under the awning.
+		result.append(PackedVector2Array([Vector2(-27, -14), Vector2(13, -1), Vector2(29, -12), Vector2(-11, -25)]))
 	elif kind == "temple":
 		result.append(PackedVector2Array([Vector2(-34, -15), Vector2(0, -1), Vector2(35, -17), Vector2(1, -34)]))
 	elif kind == "arch":
 		# The passage remains empty; each upright has its own small footprint.
 		result.append(PackedVector2Array([Vector2(-27, -21), Vector2(-18, -25), Vector2(-9, -21), Vector2(-18, -17)]))
 		result.append(PackedVector2Array([Vector2(3, -7), Vector2(14, -12), Vector2(25, -7), Vector2(14, -2)]))
+	elif kind == "lighthouse":
+		# Tower plinth, the fallen blocks around it and the ground under its banner.
+		result.append(PackedVector2Array([Vector2(-43, -20), Vector2(-36, -8), Vector2(-27, -3), Vector2(-3, -1), Vector2(24, -3), Vector2(33, -7), Vector2(40, -13), Vector2(0, -34)]))
 	if mirror:
 		for index in range(result.size()):
 			var reflected := PackedVector2Array()
@@ -87,6 +120,71 @@ func _ready() -> void:
 	if extent != Vector2.ZERO:
 		_height = extent.y
 		_width = extent.x * .45
+	if kind in SLICED:
+		_slice_art()
+
+func _slice_art() -> void:
+	_ground_line = Art.ground_line(kind)
+	_art_bottom = Art.art_bottom(kind)
+	if _ground_line.is_empty():
+		return
+	y_sort_enabled = true
+	var shadow := GroundShadow.new()
+	shadow.prop = self
+	# The contact shadow lies on the floor, under everyone standing beside it.
+	shadow.z_index = -1
+	add_child(shadow)
+	var column := 0
+	while column < _ground_line.size():
+		if is_nan(_ground_line[column]):
+			column += 1
+			continue
+		var end := column
+		var front := -INF
+		var lowest := -INF
+		while end < _ground_line.size() and end < column + SLICE_WIDTH and _same_slice(column, end):
+			front = maxf(front, _ground_line[end])
+			lowest = maxf(lowest, _art_bottom[end])
+			end += 1
+		var slice := ArtColumns.new()
+		slice.prop = self
+		slice.from = column - 96
+		slice.to = end - 96
+		slice.lowest = lowest
+		# Whole pixels keep the columns of one facade seamless.
+		slice.position = Vector2(-slice.to if mirror else slice.from, roundf(front))
+		add_child(slice)
+		column = end
+	queue_redraw()
+
+func _same_slice(first: int, column: int) -> bool:
+	# Columns that touch the floor and overhangs never share a slice, and neither
+	# do columns whose painted bottoms are far apart, like an arch's pier and lintel.
+	if is_nan(_ground_line[column]):
+		return false
+	var first_overhangs := _ground_line[first] != _art_bottom[first]
+	var overhangs := _ground_line[column] != _art_bottom[column]
+	return overhangs == first_overhangs and absf(_art_bottom[column] - _art_bottom[first]) <= 6
+
+func draw_columns(canvas: CanvasItem, from: int, to: int) -> void:
+	canvas.draw_set_transform(-canvas.position, 0, Vector2(-1 if mirror else 1, 1))
+	Art.draw_prop_columns(canvas, kind, from, to)
+
+func draw_ground(canvas: CanvasItem) -> void:
+	var foundations := foundation_polygons()
+	for polygon in foundations:
+		canvas.draw_colored_polygon(polygon, Color(.015, .025, .03, .28))
+	if foundations.is_empty():
+		_shadow(canvas, 17 if kind not in ["boat", "stall"] else 45, 7)
+
+func _hides(offset: Vector2) -> bool:
+	if _ground_line.is_empty():
+		return offset.y < 5 and offset.y > -_height and absf(offset.x) < _width
+	# A sliced facade fades only where its art is really drawn over Senu.
+	var column := int(roundf(-offset.x if mirror else offset.x)) + 96
+	if column < 0 or column >= _ground_line.size() or is_nan(_ground_line[column]):
+		return false
+	return offset.y < _ground_line[column] and offset.y - ACTOR_HEIGHT < _art_bottom[column] and offset.y > -_height
 
 func _process(delta: float) -> void:
 	_time += delta
@@ -97,8 +195,7 @@ func _process(delta: float) -> void:
 			_hero = get_tree().get_first_node_in_group("player") as Node2D
 		_opacity = 1.0
 		if is_instance_valid(_hero):
-			var offset := _hero.global_position - global_position
-			if offset.y < 5 and offset.y > -_height and absf(offset.x) < _width:
+			if _hides(_hero.global_position - global_position):
 				_opacity = .45
 	modulate.a = move_toward(modulate.a, _opacity, delta * 5)
 	_flame_tick += delta
@@ -109,14 +206,13 @@ func _process(delta: float) -> void:
 func _poly(points: Array, color: Color) -> void:
 	draw_colored_polygon(PackedVector2Array(points), color)
 
-func _shadow(w: float, d: float) -> void:
+func _shadow(canvas: CanvasItem, w: float, d: float) -> void:
 	# A narrow contact shadow meets the object's feet, on the same pixel grid
 	# as the sprites. Large offset circles made small props appear to float.
 	var half_width := floorf(w * .8)
 	var half_depth := maxf(2, floorf(d * .65))
-	draw_rect(Rect2(-half_width + 3, -half_depth, half_width * 2 - 6, half_depth * 2), Color(.015, .025, .03, .20))
-	draw_rect(Rect2(-half_width, -half_depth + 2, half_width * 2, maxf(2, half_depth * 2 - 4)), Color(.015, .025, .03, .20))
-	draw_set_transform(Vector2.ZERO, 0, Vector2(-1 if mirror else 1, 1))
+	canvas.draw_rect(Rect2(-half_width + 3, -half_depth, half_width * 2 - 6, half_depth * 2), Color(.015, .025, .03, .20))
+	canvas.draw_rect(Rect2(-half_width, -half_depth + 2, half_width * 2, maxf(2, half_depth * 2 - 4)), Color(.015, .025, .03, .20))
 
 func _box(w: float, d: float, h: float, color: Color, origin: Vector2 = Vector2.ZERO) -> void:
 	_poly([origin + Vector2(-w, -h), origin + Vector2(0, d - h), origin + Vector2(0, d), origin + Vector2(-w, 0)], color.darkened(.20))
@@ -124,13 +220,10 @@ func _box(w: float, d: float, h: float, color: Color, origin: Vector2 = Vector2.
 	_poly([origin + Vector2(-w, -h), origin + Vector2(0, -d - h), origin + Vector2(w, -h), origin + Vector2(0, d - h)], color)
 
 func _draw() -> void:
-	var foundations := foundation_polygons()
-	if not foundations.is_empty():
-		for polygon in foundations:
-			draw_colored_polygon(polygon, Color(.015, .025, .03, .28))
-		draw_set_transform(Vector2.ZERO, 0, Vector2(-1 if mirror else 1, 1))
-	else:
-		_shadow(17 if kind not in ["boat", "stall"] else 45, 7)
+	if not _ground_line.is_empty():
+		return
+	draw_ground(self)
+	draw_set_transform(Vector2.ZERO, 0, Vector2(-1 if mirror else 1, 1))
 	if kind == "barrel":
 		# The cargo cel includes a wooden barrel; use the native pixel art rather
 		# than an unshaded procedural cylinder among the painted objects.

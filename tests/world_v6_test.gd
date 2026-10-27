@@ -33,13 +33,14 @@ func _run() -> void:
 	catalog = PortLayout.tile_catalog()
 	print("WORLD_V6_LAYOUT rooms=", PortLayout.ROOMS.size(), " tiles=", catalog.size(), " enemies=", PortLayout.ENEMY_SPAWNS.size())
 	check(world.store.path.begins_with("user://qa/"), "New world test never uses the real save")
-	check(PortLayout.ROOMS.size() == 27 and catalog.size() >= 4000, "Expanded port has 27 districts and at least 4000 floor cells")
+	check(PortLayout.ROOMS.size() == 29 and catalog.size() >= 4000, "Expanded port has 27 districts, the echo route and at least 4000 floor cells")
 	check(PortLayout.ENEMY_SPAWNS.size() == 38 and get_nodes_in_group("enemies").size() == 38, "Thirty-seven regular enemies and one boss spawn")
 	for enemy in get_nodes_in_group("enemies"):
 		enemy.queue_free()
 	await physics_frame
 	var reachable := flood(Vector2i(PortLayout.MARKERS["hub_spawn"]))
 	check(not reachable.has(Vector2i(-6, 23)), "Closed three-seal door has no bypass into the arena")
+	check(not reachable.has(Vector2i(-12, 0)) and not reachable.has(Vector2i(-20, 25)), "Closed echo grate keeps its gallery and the Catacombs behind it")
 	for spawn in PortLayout.ENEMY_SPAWNS:
 		check(catalog.has(Vector2i(spawn["tile"])), "Enemy starts on valid ground: " + spawn["id"])
 	var all_regular_reachable := true
@@ -153,6 +154,7 @@ func blocked(a: Vector2i, b: Vector2i) -> bool:
 	if not world.aqueduct_gate.opened and mini(a.y, b.y) == 19 and maxi(a.y, b.y) == 20 and a.x in range(20, 22): return true
 	if not world.boss_entry_gate.opened and mini(a.x, b.x) == 0 and maxi(a.x, b.x) == 1 and a.y in range(21, 25): return true
 	if not world.exit_gate.opened and mini(a.x, b.x) == -13 and maxi(a.x, b.x) == -12 and a.y in range(24, 27): return true
+	if not world.echo_gate.opened and mini(a.x, b.x) == -6 and maxi(a.x, b.x) == -5 and a.y in range(-1, 1): return true
 	return false
 
 func flood(start: Vector2i, ignore_gates: bool = false) -> Dictionary:
@@ -171,7 +173,7 @@ func walk_to(tile: Vector2) -> bool:
 	if "--logic-only" in OS.get_cmdline_user_args():
 		world.player.position = PortLayout.iso(tile)
 		return true
-	var signature := "%s/%s/%s/%s" % [world.shortcut.opened, world.aqueduct_gate.opened, world.boss_entry_gate.opened, world.exit_gate.opened]
+	var signature := "%s/%s/%s/%s/%s" % [world.shortcut.opened, world.aqueduct_gate.opened, world.boss_entry_gate.opened, world.exit_gate.opened, world.echo_gate.opened]
 	if navigation == null or signature != navigation_signature:
 		navigation_signature = signature
 		navigation = AStar2D.new()
