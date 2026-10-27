@@ -105,3 +105,22 @@ As capturas dos personagens, das marcas e do relicário foram conferidas.
 ```powershell
 & $demoGodot --headless --path . --script res://tests/side_story_test.gd -- --qa
 ```
+
+## Balbucio dos diálogos — 27/10/2026
+
+Sons de fala sintetizados para o diálogo com retratos (Gustavo; detalhes em `docs/AUDIO_BALBUCIO.md`). O novo `tests/dialogue_babble_test.gd` aprovou **49/49**. Ele verifica:
+
+- os 32 bancos (2 personagens × 4 expressões × 4 categorias);
+- o ritmo de fala;
+- que só o falante soa;
+- que o texto revelado com Enter não muda o som;
+- que avançar a fala silencia;
+- a sílaba final, que sobe só nas perguntas, nas 24 falas aprovadas;
+- a ligação na abertura com o jogo pausado;
+- o bus `Vozes`, único e ligado ao `Master`.
+
+Com Godot 4.7.2, depois da ligação na abertura, também passaram: abertura RPG **64/64**, fluxo da abertura **23/23** e diálogo com retratos **196/196**. O teste não ouve o som. Uma prévia mixada a partir das sílabas que o jogo escolhe foi conferida por volume e espectrograma, mas não substitui ouvir no jogo.
+
+```powershell
+& $demoGodot --headless --path . --script res://tests/dialogue_babble_test.gd
+```

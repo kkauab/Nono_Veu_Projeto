@@ -16,6 +16,7 @@ const QUAY_EDGE := Vector2(175,243)
 const LANDING := Vector2(209,214)
 const Conversation = preload("res://resources/dialogue/opening_fisherman.gd")
 const PortraitDialogue = preload("res://scripts/ui/portrait_dialogue.gd")
+const DialogueBabble = preload("res://scripts/audio/dialogue_babble.gd")
 static var DIALOGUES: Array = Conversation.legacy_lines()
 static var DIALOGUE_COUNT: int = DIALOGUES.size()
 static var DIALOGUE_CUES: Array[float] = _make_dialogue_cues()
@@ -47,6 +48,7 @@ var _stage: ArrivalStage
 var _hero: SenuPlayer
 var _camera: Camera2D
 var _dialogue_view: VeilPortraitDialogue
+var _babble: VeilDialogueBabble
 var _factor := 1.0
 var _offset := Vector2.ZERO
 var _last_size := Vector2.ZERO
@@ -260,6 +262,11 @@ func _ready() -> void:
 	# One clock owns both the story and the facial/typewriter animation.
 	_dialogue_view.set_process(false)
 	_dialogue_view.advance_requested.connect(advance_dialogue)
+	# Babble follows the speaker's mouth. As a child it processes after this node ticks the view.
+	_babble = DialogueBabble.new()
+	_babble.name = "DialogueBabble"
+	_babble.dialogue = _dialogue_view
+	add_child(_babble)
 	_geometry()
 	visible = false
 
