@@ -14,20 +14,17 @@ const BOAT_STANDING := Vector2(5,-25)
 const BOAT_BOARDING := Vector2(25,-24)
 const QUAY_EDGE := Vector2(175,243)
 const LANDING := Vector2(209,214)
-const DIALOGUES := [
-	["PESCADOR", "Porto dos Esquecidos. Alexandria já foi melhor.\nDesembarcou sozinho? Está procurando alguém?"],
-	["SENU", "Iri, meu mestre. Nossa ordem foi atacada e ele sumiu.\nDisseram que o viram neste cais."],
-	["PESCADOR", "Vi um homem com um livro embrulhado.\nPerguntou pelo Santuário da Primeira Palavra."],
-	["SENU", "Pode ser ele. Iri nunca largava os livros.\nVocê viu para onde esse homem foi?"],
-	["PESCADOR", "Pelo cais de pedra. Eu levaria uma luz.\nDesde a Inversão, meu irmão nem lembra meu nome."],
-	["SENU", "Sinto muito pelo seu irmão.\nSe eu achar Iri, volto. Talvez ele saiba o que fazer."]
-]
+const Conversation = preload("res://resources/dialogue/opening_fisherman.gd")
+const PortraitDialogue = preload("res://scripts/ui/portrait_dialogue.gd")
+static var DIALOGUES: Array = Conversation.legacy_lines()
 static var DIALOGUE_COUNT: int = DIALOGUES.size()
 static var DIALOGUE_CUES: Array[float] = _make_dialogue_cues()
 
 static func _make_dialogue_cues() -> Array[float]:
 	var result: Array[float] = []
-	for index in range(DIALOGUE_COUNT): result.append(4.0 + index*.3)
+	for index in range(DIALOGUE_COUNT):
+		# The fisherman first receives the rope; Senu only disembarks after it.
+		result.append(1.8 if index==0 else 4.0+(index-1)*.3)
 	return result
 var elapsed := 0.0
 var active := false
@@ -49,6 +46,7 @@ var _view: SubViewport
 var _stage: ArrivalStage
 var _hero: SenuPlayer
 var _camera: Camera2D
+var _dialogue_view: VeilPortraitDialogue
 var _factor := 1.0
 var _offset := Vector2.ZERO
 var _last_size := Vector2.ZERO
@@ -79,6 +77,7 @@ class ArrivalStage extends Node2D:
 	var npc_distance := 0.0
 	var npc_speaking := false
 	var npc_farewell := false
+	var npc_working := false
 	var story_time := 0.0
 	var water: ArrivalWater
 
@@ -114,6 +113,15 @@ class ArrivalStage extends Node2D:
 			draw_arc(Vector2.ZERO,radius,0,TAU,16,Color("b99660"),1)
 		draw_set_transform(Vector2.ZERO)
 		draw_line(at+Vector2(6,0),at+Vector2(12+variation*3,3),Color("8b704a"),1)
+	func fishing_net(at: Vector2) -> void:
+		# A distinct work surface gives the fisherman a reason to stay at this quay.
+		draw_colored_polygon(PackedVector2Array([at+Vector2(-14,0),at+Vector2(1,-7),at+Vector2(16,1),at+Vector2(0,9)]),Color("344d48"))
+		for strand in range(6):
+			var offset := Vector2(strand*5-13,strand*2.5-6)
+			draw_line(at+offset,at+offset+Vector2(-14,7),Color("93896b"),1)
+			var cross := Vector2(strand*5-13,7-strand*2.5)
+			draw_line(at+cross,at+cross+Vector2(14,7),Color("7a7b61"),1)
+		rope_coil(at+Vector2(17,6),0)
 	func distant_shore() -> void:
 		# New low-contrast silhouettes establish a town beyond this small quay.
 		draw_colored_polygon(PackedVector2Array([Vector2(-50,59),Vector2(0,43),Vector2(186,38),Vector2(227,47),Vector2(194,58)]),Color("294247"))
@@ -163,6 +171,7 @@ class ArrivalStage extends Node2D:
 			previous_post = post
 		rope_coil(Vector2(312,175),0)
 		rope_coil(Vector2(390,190),1)
+		fishing_net(Vector2(271,200))
 		# Dedicated mooring and gangplank; no objects from the gameplay map.
 		var bank := QUAY_EDGE
 		var deck := boat_position+BOAT_BOARDING
@@ -178,8 +187,13 @@ class ArrivalStage extends Node2D:
 			draw_line(point,point+Vector2(17-wake*3,-1),Color(.43,.65,.62,.32-wake*.07),1)
 		boat_part(2+int(clock*3)%2,boat_position)
 		boat_part(0,boat_position)
+		var mooring_post := QUAY_EDGE+Vector2(8,-2)
+		draw_rect(Rect2(mooring_post+Vector2(-2,-12),Vector2(5,13)),Color("614c34"))
+		draw_rect(Rect2(mooring_post+Vector2(-3,-13),Vector2(7,3)),Color("b29866"))
 		if story_time>1.7:
-			draw_line(boat_position+Vector2(39,-15),QUAY_EDGE+Vector2(8,7),Color("b89a65"),1)
+			var held_rope := npc_position+Vector2(-5,-17) if story_time<1.81 else mooring_post+Vector2(0,-9)
+			draw_line(boat_position+Vector2(39,-15),held_rope,Color("b89a65"),1)
+			draw_line(held_rope,mooring_post+Vector2(1,-6),Color("9f8557"),1)
 		prop(7,Vector2(470,177))
 		for lamp: Vector2 in [Vector2(333,200),Vector2(485,215),Vector2(118,176)]:
 			prop(6,lamp)
@@ -189,6 +203,7 @@ class ArrivalStage extends Node2D:
 		if not npc_moving:
 			if npc_speaking: frame = 5 if int(clock*2)%4<2 else 0
 			elif npc_farewell: frame = 7
+			elif npc_working: frame = 5 if int(clock*1.5)%2==0 else 6
 		draw_rect(Rect2(npc_position+Vector2(-9,-2),Vector2(18,4)),Color(.02,.04,.04,.35))
 		if fisherman != null:
 			draw_set_transform(npc_position.round(),0,Vector2(npc_facing,1))
@@ -239,11 +254,17 @@ func _ready() -> void:
 	_camera = Camera2D.new()
 	_camera.position = Vector2(320,180)
 	_stage.add_child(_camera)
+	_dialogue_view = PortraitDialogue.new()
+	_dialogue_view.name = "PortraitDialogue"
+	add_child(_dialogue_view)
+	# One clock owns both the story and the facial/typewriter animation.
+	_dialogue_view.set_process(false)
+	_dialogue_view.advance_requested.connect(advance_dialogue)
 	_geometry()
 	visible = false
 
 func resources_ready() -> bool:
-	return is_instance_valid(_stage) and _stage.atlas != null and _stage.fisherman != null and _stage.boat != null
+	return is_instance_valid(_stage) and _stage.atlas != null and _stage.fisherman != null and _stage.boat != null and is_instance_valid(_dialogue_view) and _dialogue_view.resources_ready()
 func begin() -> void:
 	elapsed = 0
 	hold_elapsed = 0
@@ -255,6 +276,7 @@ func begin() -> void:
 	dialogue_index = -1
 	dialogue_visible_characters = 0
 	_dialogue_clock = 0
+	_dialogue_view.clear()
 	_dialogue_ack.resize(DIALOGUE_COUNT)
 	_dialogue_ack.fill(false)
 	active = true
@@ -267,6 +289,8 @@ func seek(seconds: float) -> void:
 	_animation_clock = elapsed
 	dialogue_active = false
 	_dialogue_clock = 0
+	_dialogue_view.clear()
+	dialogue_visible_characters = 0
 	_dialogue_ack.resize(DIALOGUE_COUNT)
 	for index in range(DIALOGUE_COUNT): _dialogue_ack[index] = elapsed>DIALOGUE_CUES[index]
 	_update_scene()
@@ -283,18 +307,16 @@ func _process(delta: float) -> void:
 	if not active: return
 	if size!=_last_size: _geometry()
 	_animation_clock += delta
+	_dialogue_view.tick(delta)
 	if dialogue_active:
 		_dialogue_clock += delta
-		dialogue_visible_characters = mini(_dialogue_text().length(),int(_dialogue_clock/.02))
+		dialogue_visible_characters = _dialogue_view.visible_characters
 	else:
 		var next := minf(DURATION,elapsed+delta)
 		for index in range(DIALOGUE_COUNT):
 			if not _dialogue_ack[index] and elapsed<=DIALOGUE_CUES[index] and next>=DIALOGUE_CUES[index]:
 				next = DIALOGUE_CUES[index]
-				dialogue_index = index
-				dialogue_active = true
-				_dialogue_clock = 0
-				dialogue_visible_characters = 0
+				_begin_dialogue(index)
 				break
 		elapsed = next
 	if _require_release and not _space_down and not Input.is_physical_key_pressed(KEY_SPACE): _require_release = false
@@ -306,17 +328,27 @@ func _process(delta: float) -> void:
 	if hold_elapsed>=HOLD_TO_SKIP or elapsed>=DURATION: _finish()
 func _dialogue_text() -> String:
 	return str(DIALOGUES[dialogue_index][1]) if dialogue_index>=0 else ""
+func _begin_dialogue(index: int) -> void:
+	dialogue_index = index
+	dialogue_active = true
+	_dialogue_clock = 0
+	dialogue_visible_characters = 0
+	var line: Dictionary = Conversation.LINES[index]
+	_dialogue_view.begin_line(str(line["speaker"]),str(line["text"]),str(line["expression"]),str(line["listener_expression"]),float(Conversation.DELIVERY_SECONDS[index]))
 func advance_dialogue() -> void:
 	if not active or not dialogue_active: return
 	var length := _dialogue_text().length()
-	if dialogue_visible_characters<length:
-		_dialogue_clock = length*.02
-		dialogue_visible_characters = length
+	if not _dialogue_view.is_revealed():
+		_dialogue_view.reveal_all()
+		dialogue_visible_characters = _dialogue_view.visible_characters
 	else:
+		_dialogue_view.stop_talking()
 		_dialogue_ack[dialogue_index] = true
 		dialogue_active = false
 		elapsed = DIALOGUE_CUES[dialogue_index]+.001
-		if dialogue_index==DIALOGUE_COUNT-1: elapsed = 12.0
+		if dialogue_index==DIALOGUE_COUNT-1:
+			_dialogue_view.clear()
+			elapsed = 12.0
 	_update_scene()
 	queue_redraw()
 func _input(event: InputEvent) -> void:
@@ -331,7 +363,8 @@ func _input(event: InputEvent) -> void:
 		elif code in [KEY_ENTER,KEY_KP_ENTER,KEY_E] and event.pressed and not event.echo:
 			advance_dialogue()
 		get_viewport().set_input_as_handled()
-	elif event is InputEventMouseButton: get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and not dialogue_active:
+		get_viewport().set_input_as_handled()
 func _notification(what: int) -> void:
 	if what in [NOTIFICATION_WM_WINDOW_FOCUS_OUT,NOTIFICATION_APPLICATION_FOCUS_OUT]:
 		_has_focus = false
@@ -346,6 +379,7 @@ func _finish() -> void:
 	visible = false
 	_space_down = false
 	hold_elapsed = 0
+	_dialogue_view.clear()
 	finished.emit()
 func _update_scene() -> void:
 	if not is_instance_valid(_stage): return
@@ -379,6 +413,7 @@ func _update_scene() -> void:
 			remaining -= lengths[segment]
 	elif elapsed>=3.8:
 		at = landing
+	if dialogue_active and dialogue_index==0: velocity = Vector2.ZERO
 	if elapsed>=12:
 		var destination := Vector2(447,226)
 		var walk := clampf((elapsed-12)/6.5,0,1)
@@ -392,20 +427,30 @@ func _update_scene() -> void:
 	_hero._supplied_view.sample(_hero)
 	_hero._supplied_view.gait_phase = fposmod(distance/28,1)
 	_hero.queue_redraw()
-	var npc_approach := clampf((elapsed-2.8),0,1)
-	_stage.npc_position = Vector2(274,181).lerp(Vector2(254,191),npc_approach)
+	var npc_start := Vector2(254,191)
+	var npc_mooring := Vector2(184,238)
+	var npc_approach := clampf((elapsed-.5)/1.3,0,1)
+	var npc_back := clampf((elapsed-1.9)/2,0,1)
+	_stage.npc_position = npc_start.lerp(npc_mooring,npc_approach)
 	_stage.npc_moving = npc_approach>0 and npc_approach<1
-	_stage.npc_distance = Vector2(274,181).distance_to(Vector2(254,191))*npc_approach
-	_stage.npc_speaking = dialogue_active and str(DIALOGUES[dialogue_index][0])=="PESCADOR"
+	_stage.npc_distance = npc_start.distance_to(npc_mooring)*npc_approach
+	if elapsed>=1.9:
+		_stage.npc_position = npc_mooring.lerp(npc_start,npc_back)
+		_stage.npc_moving = npc_back<1
+		_stage.npc_distance += npc_mooring.distance_to(npc_start)*npc_back
+	_stage.npc_speaking = dialogue_active and str(DIALOGUES[dialogue_index][0])=="PESCADOR" and _dialogue_view.is_speaking
 	_stage.npc_farewell = elapsed>=12 and elapsed<13
-	_stage.npc_facing = -1
+	_stage.npc_working = elapsed>=16
+	_stage.npc_facing = 1 if _stage.npc_moving and npc_back>0 else -1
 	if elapsed>=13:
 		var returning := clampf((elapsed-13)/3,0,1)
-		_stage.npc_position = Vector2(254,191).lerp(Vector2(183,237),returning)
+		_stage.npc_position = npc_start.lerp(Vector2(263,205),returning)
 		_stage.npc_moving = returning<1
-		_stage.npc_distance = Vector2(254,191).distance_to(Vector2(183,237))*returning
-		_stage.npc_facing = -1
-	_camera.position = Vector2(320+36*smoothstep(12,18.5,elapsed),180).round()
+		_stage.npc_distance = npc_start.distance_to(Vector2(263,205))*returning
+		_stage.npc_facing = 1
+	# Keep both actors visible above the dialogue panel and between the busts.
+	var dialogue_camera := Vector2(320,180).lerp(Vector2(270,212),smoothstep(.6,1.8,elapsed))
+	_camera.position = dialogue_camera.lerp(Vector2(356,198),smoothstep(12,18.5,elapsed)).round()
 	_stage.queue_redraw()
 func _text(value: String, at: Vector2, point_size: int, color: Color, serif: bool=false) -> void:
 	draw_set_transform(Vector2.ZERO)
@@ -421,19 +466,8 @@ func _draw() -> void:
 	if hold_elapsed>0:
 		draw_rect(Rect2(750,49,489,4),Color("324641"))
 		draw_rect(Rect2(750,49,489*clampf(hold_elapsed/HOLD_TO_SKIP,0,1),4),Color("e6c889"))
-	if dialogue_active:
-		var rect := Rect2(52,548,1176,144)
-		draw_rect(rect,Color(.025,.065,.075,.98))
-		draw_rect(rect,Color("b79b61"),false,2)
-		draw_rect(rect.grow(-6),Color("485d53"),false,1)
-		_text(str(DIALOGUES[dialogue_index][0]),Vector2(78,580),19,Color("e5c68b"))
-		var shown := _dialogue_text().left(dialogue_visible_characters).split("\n")
-		for index in range(shown.size()): _text(shown[index],Vector2(78,614+index*28),22,Color("f0ead7"))
-		_text("Enter / E: continuar · Espaço por 3 s: pular" if dialogue_visible_characters>=_dialogue_text().length() else "Enter / E: mostrar fala · Espaço por 3 s: pular",Vector2(844,674),15,Color("aebfb0"))
-		for index in range(DIALOGUE_COUNT):
-			draw_rect(Rect2(78+index*12,669,5,5),Color("e5c68b") if index<=dialogue_index else Color("40564e"))
-	elif elapsed>=18.5:
-		var title := "Rumo ao Santuário da Primeira Palavra"
+	if elapsed>=18.5:
+		var title := "Uma pista entre os armazéns"
 		var width := _font.get_string_size(title,HORIZONTAL_ALIGNMENT_LEFT,-1,22).x
 		draw_rect(Rect2(640-width*.5-20,590,width+40,48),Color(.025,.06,.075,.88))
 		_text(title,Vector2(640-width*.5,622),22,Color("e8d7ae"))

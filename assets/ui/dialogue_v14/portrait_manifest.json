@@ -1,0 +1,48 @@
+{
+  "version": 14,
+  "canvas": [
+    160,
+    192
+  ],
+  "atlas_size": [
+    960,
+    1152
+  ],
+  "columns": 6,
+  "rows": 6,
+  "frames": 36,
+  "expressions": [
+    "neutral",
+    "concerned",
+    "sad",
+    "resolute"
+  ],
+  "eye_states": [
+    "open",
+    "half",
+    "closed"
+  ],
+  "mouth_states": [
+    "closed",
+    "small",
+    "open"
+  ],
+  "index": "expression*9 + eye*3 + mouth",
+  "layers": [
+    "Busto e vestes",
+    "Sobrancelhas e expressão",
+    "Olho próximo",
+    "Olho distante",
+    "Boca",
+    "Lenço"
+  ],
+  "textures": {
+    "senu": "res://assets/ui/dialogue_v14/senu.png",
+    "fisherman": "res://assets/ui/dialogue_v14/fisherman.png"
+  },
+  "directions": {
+    "senu": "right",
+    "fisherman": "left"
+  },
+  "provenance": "Existing native Senu portrait, mirrored toward dialogue centre; new fisherman generated with built-in image tool. Eye, brow and mouth pixels authored at native resolution in six editable Pixelorama layers. Final PNG exported by installed Pixelorama."
+}

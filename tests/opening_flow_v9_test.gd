@@ -59,17 +59,17 @@ func _run() -> void:
 	var initial_clock: float = world._opening_player.elapsed
 	await create_timer(.2).timeout
 	check(world._opening_player.elapsed > initial_clock and world.player.position == initial_position, "The film animates while the real player stays still")
-	world._opening_player.call("seek", 4.0)
+	world._opening_player.call("seek", Opening.DIALOGUE_CUES[0])
 	await process_frame
 	await process_frame
 	check(world._opening_player.dialogue_active and world._opening_player.dialogue_index == 0, "The arrival pauses for the first readable RPG dialogue")
 	key(KEY_ENTER, true)
 	key(KEY_ENTER, false)
 	await process_frame
-	check(world._opening_player.dialogue_active and world._opening_player.dialogue_index == 0 and world._opening_player.dialogue_visible_characters > 50, "First Enter reveals the current line without closing it")
+	check(world._opening_player.dialogue_active and world._opening_player.dialogue_index == 0 and world._opening_player.dialogue_visible_characters == world._opening_player._dialogue_text().length(), "First Enter reveals the current line without closing it")
 	key(KEY_E, true)
 	key(KEY_E, false)
-	await create_timer(.35).timeout
+	await create_timer(Opening.DIALOGUE_CUES[1]-Opening.DIALOGUE_CUES[0]+.15).timeout
 	check(world._opening_player.dialogue_active and world._opening_player.dialogue_index == 1, "E advances to Senu's reply after the revealed line")
 	key(KEY_ESCAPE, true)
 	await create_timer(.1).timeout
@@ -105,7 +105,9 @@ func _run() -> void:
 	for frame in range(4): await process_frame
 	world = current_scene
 	check(world.opening_active and paused and not world.store.data["flags"]["opening_seen"], "Starting another new game always shows the opening again")
-	world._opening_player.call("seek", 4.0)
+	world._opening_player.set_process(false)
+	world._opening_player.call("seek", Opening.DIALOGUE_CUES[0]-.01)
+	world._opening_player._process(.02)
 	await process_frame
 	await process_frame
 	for line in range(Opening.DIALOGUE_COUNT):
@@ -114,9 +116,12 @@ func _run() -> void:
 		await process_frame
 		key(KEY_ENTER, true)
 		key(KEY_ENTER, false)
-		await create_timer(.35).timeout
+		await process_frame
+		if line<Opening.DIALOGUE_COUNT-1:
+			world._opening_player._process(Opening.DIALOGUE_CUES[line+1]-world._opening_player.elapsed+.01)
 	check(not world._opening_player.dialogue_active and world._opening_player.dialogue_index == Opening.DIALOGUE_COUNT-1 and world._opening_player.elapsed >= 12, "Every dialogue leads to the final walk instead of skipping gameplay context")
 	world._opening_player.call("seek", Opening.DURATION - .04)
+	world._opening_player._process(.05)
 	await create_timer(.15).timeout
 	check(not world.opening_active and not paused and world.hud.overlay == "", "Natural end of the full timeline also enters the game")
 	print("OPENING FLOW V9 CHECKS: ", checks, " passed=", checks - failures.size(), " failures=", failures)
