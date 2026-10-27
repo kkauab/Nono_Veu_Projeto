@@ -88,6 +88,13 @@ func _run() -> void:
 		await finish()
 		return
 	check(world.activate(find_item("s1")) and world.store.data["checkpoint"] == "s1", "Checkpoint registra santuário válido")
+	# O descanso agora recria encontros. Esta suíte isola somente a navegação;
+	# enemy_respawn_test verifica o renascimento e combat_test verifica os golpes.
+	await process_frame
+	for enemy in get_nodes_in_group("enemies"):
+		if enemy.is_boss: enemy.set_physics_process(false)
+		else: enemy.queue_free()
+	await physics_frame
 	check(await walk_to(markers["alavanca"]), "Alavanca alcançável pelo lado de trás")
 	check(world.activate(find_item("alavanca")), "Alavanca abre atalho")
 	await physics_frame

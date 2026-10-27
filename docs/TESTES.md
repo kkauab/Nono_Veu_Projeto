@@ -1,5 +1,36 @@
 # Verificações do protótipo
 
+## Inimigos renovados nos salvamentos manuais — 27/10/2026
+
+Meditar em qualquer um dos cinco santuários agora salva o checkpoint, recarrega os frascos, restaura Senu e renova todos os inimigos comuns. Os vivos recuperam posição, vida e estado; os mortos e os já removidos são recriados uma única vez. O chefe derrotado permanece ausente. `Salvar e sair` grava o novo ciclo para o próximo carregamento. Autosaves de combate, loot, compras e exploração mantêm as derrotas do ciclo atual.
+
+`tests/enemy_respawn_test.gd -- --qa`: **58/58**, saída 0, sem erros ou avisos. Cobre corpos recentes, removidos e com exclusão enfileirada; inimigos feridos ou atacando; descanso repetido; população sem duplicatas; XP e óbolos exatos por vida; preservação do loot anterior; autosaves sem renascimento; cancelamento de golpes e projéteis; chefe permanente; recarga do snapshot; falha de gravação sem alterar derrotas, checkpoint, frascos ou atores. As coletas únicas, habilidades e estados dos puzzles permanecem salvos.
+
+Regressões aprovadas: progressão **123/123**, economia de loot **43/43**, loja da Merit **47/47**, puzzles e mundo **125/125**, percurso **137/137**. As duas suítes de navegação voltam a isolar o combate depois da meditação, pois o descanso agora recria corretamente os encontros. Todos os testes usam slots próprios em `user://qa/`.
+
+## Árvore das Emanações ampliada — 27/10/2026
+
+Treze habilidades compráveis, três trilhas, três híbridos e Convergência. Os IDs das três habilidades anteriores permanecem válidos. Testes com Godot 4.7.2, usando somente slots `user://qa/`:
+
+| Suíte | Resultado | O que verifica |
+|---|---:|---|
+| `skill_catalog_test.gd` | 47/47 | Dependências, compras recusadas sem débito, saves antigos, custo total 28 e rota final de 20 dos 22 Nous. |
+| `skill_combat_test.gd` | 44/44 | Combo, ascendente, contra-ataque, redução de dano, projétil, reflexão, perfuração e esquiva que respeita paredes. |
+| `skill_world_test.gd -- --qa` | 63/63 | Aplicação das compras no mundo, atributos sem acumular, sandálias, percepção, salvamento e rota final com orçamento real. |
+| `skill_tree_ui_test.gd` | 406/406 | Treze nós selecionáveis, compra explícita, dependências, foco e textos dentro da janela em 720p/1080p. |
+| `progression_test.gd -- --qa` | 123/123 | Progressão, backup, eventos do mundo, morte/retorno e compras persistentes. |
+| `save_migration_test.gd -- --qa` | 32/32 | Continuidade das jornadas anteriores. |
+| `shop_forge_tent_test.gd -- --qa` | 37/37 | Bônus por arma, vida e esquiva das lojas em conjunto com o recálculo das habilidades. |
+| `shop_merit_test.gd -- --qa` | 47/47 | Cura, cargas e compras da Merit. |
+| `hud_v6_test.gd` | 19/19 | Demais menus e navegação do HUD. |
+| `combat_test.gd` | 26/26 | Combate base e duas armas. |
+| `combat_fx_test.gd` | 108/108 | Efeitos de combate existentes. |
+| `senu_v5_movement_test.gd -- --physics-only` | 16/16 | Movimentação e esquiva base. |
+
+Importação completa pelo editor e inicialização gráfica da cena principal aprovadas. Captura real do jogo: `qa/porto_demo-tree.png`; capturas de detalhe da UI: `qa/skill_tree_720p.png` e `qa/skill_tree_1080p.png`. Nenhum erro de script ou teste falhou na versão final. Algumas suítes ainda emitem os avisos preexistentes de recursos retidos ao encerrar o processo de QA.
+
+Durante a integração foi corrigida uma regressão: configurar a lista de habilidades emitia um aviso de mudança de equipamento cedo demais, sobrescrevendo a arma salva antes de equipá-la. A configuração agora apenas reconstrói a lista; os eventos de equipamento continuam emitidos pelas ações reais. O teste da Forja confirma a restauração correta do bônus das Adagas.
+
 ## Primeira demonstração — 24/10/2026
 
 Godot 4.7.2.stable.official.ed1daf0bf; Blender 5.2.3 LTS. Verificações realizadas durante a preparação da entrega de 24/10/2026.

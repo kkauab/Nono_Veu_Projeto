@@ -103,6 +103,11 @@ func _run() -> void:
 		await finish()
 		return
 	check(world.store.data["checkpoint"] == "cistern_rest", "Southern expedition has its own persistent checkpoint")
+	# Keep this puzzle/navigation fixture free of combat after the new rest cycle.
+	await process_frame
+	for enemy in get_nodes_in_group("enemies"):
+		enemy.queue_free()
+	await physics_frame
 	print("WORLD_V6_STAGE far eastern beacon and observatory")
 	if not await use_item("stars_clue"):
 		await finish()

@@ -7,6 +7,7 @@ const Dressing = preload("res://scripts/world/port_dressing.gd")
 const Opening = preload("res://scripts/ui/opening_cutscene.gd")
 const LEVER_FLAGS := {"alavanca": "shortcut", "alavanca_aqueduct": "aqueduct", "alavanca_eco": "echo"}
 const Story = preload("res://scripts/world/port_story.gd")
+const Skills = preload("res://scripts/progression/skill_catalog.gd")
 var store: DemoSaveStore
 var player: SenuPlayer
 var actors: Node2D
@@ -29,6 +30,8 @@ var world_stage: Node2D
 var opening_active := false
 var _opening_player: Control
 var _opening_layer: CanvasLayer
+var _perception_tick := 0.0
+var _enemy_renewal_pending := false
 
 func _ready() -> void:
 	Inputs.install()
@@ -145,7 +148,7 @@ func world_to_ui(point: Vector2) -> Vector2:
 func _build_objects() -> void:
 	Dressing.populate(actors)
 	for id in checkpoints:
-		_add_item(id, "shrine", Layout.MARKERS[id], "Meditar · restaurar e salvar")
+		_add_item(id, "shrine", Layout.MARKERS[id], "Meditar · salvar e renovar inimigos")
 	_add_item("inscricao", "inscription", Layout.MARKERS["inscricao"], "Ler a inscrição de Iri")
 	for id in ["nous_cais", "nous_patio", "nous_arena", "nous_market", "nous_garden", "nous_dock", "nous_aqueduct", "nous_archive", "nous_kilns", "nous_beacon", "nous_reservoir", "nous_buried"]:
 		_add_item(id, "nous", Layout.MARKERS[id], "Recolher Fragmento de Nous")
@@ -223,6 +226,10 @@ func _spawn_enemy(id: String, tile: Vector2, is_boss: bool = false, archetype: S
 func _physics_process(_delta: float) -> void:
 	if player == null or hud == null or respawning:
 		return
+	_perception_tick -= _delta
+	if _perception_tick <= 0.0:
+		_perception_tick = .25
+		_update_skill_perception()
 	# Dentro de uma casa, Layout.room_at responderia "p1" para qualquer tile; o setor
 	# continua sendo o distrito da porta, já visitado.
 	var room := current_room if Houses.inside(self) else Layout.room_at(player.position)
@@ -263,11 +270,7 @@ func activate(item: PortInteractable) -> bool:
 		"clue", "bell", "valve", "water_altar", "dial", "stars_altar", "boss_lock":
 			return _activate_puzzle(item)
 		"shrine":
-			store.data["checkpoint"] = item.item_id
-			player.heal_full()
-			Shop.refill(store.data)
-			if _save():
-				hud.toast("Memória ancorada · vida restaurada · progresso salvo")
+			return _rest_at_shrine(item)
 		"nous":
 			if not store.collect(item.item_id):
 				return false
@@ -315,6 +318,59 @@ func activate(item: PortInteractable) -> bool:
 		"gate":
 			hud.toast("O selo se desfez. Siga até as Catacumbas." if store.data["flags"]["boss"] else "O Porteiro Sem Nome sustenta este selo.")
 	return true
+
+func _rest_at_shrine(item: PortInteractable) -> bool:
+	if _enemy_renewal_pending:
+		return false
+	var previous_checkpoint: String = store.data["checkpoint"]
+	var previous_items: Dictionary = store.data["items"].duplicate(true)
+	store.data["checkpoint"] = item.item_id
+	Shop.refill(store.data)
+	if not _save_enemy_cycle():
+		store.data["checkpoint"] = previous_checkpoint
+		store.data["items"] = previous_items
+		return false
+	# Cancel pending strikes before the renewed enemies enter the world.
+	player.reset_at(player.global_position)
+	for projectile in get_tree().get_nodes_in_group("mercury_projectiles"):
+		if projectile.get_parent() == actors:
+			projectile.set_physics_process(false)
+			projectile.queue_free()
+	_enemy_renewal_pending = true
+	_renew_enemies.call_deferred()
+	hud.toast("Memória ancorada · vida restaurada · inimigos renovados · progresso salvo")
+	return true
+
+## Explicit rest/exit saves begin a fresh encounter cycle. Routine autosaves
+## deliberately keep defeated IDs, otherwise every kill would revive its target.
+func _save_enemy_cycle() -> bool:
+	var previous: Array = store.data["defeated"].duplicate()
+	var ordinary_ids := {}
+	for spawn in Layout.ENEMY_SPAWNS:
+		if not spawn.get("boss", false):
+			ordinary_ids[spawn["id"]] = true
+	store.data["defeated"] = previous.filter(func(id): return not ordinary_ids.has(id))
+	if _save():
+		return true
+	store.data["defeated"] = previous
+	return false
+
+func _renew_enemies() -> void:
+	var present := {}
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if not enemy is VeilEnemy or enemy.get_parent() != actors:
+			continue
+		if enemy.dead or enemy.is_queued_for_deletion() or (enemy.is_boss and store.data["flags"]["boss"]) or present.has(enemy.enemy_id):
+			# queue_free cannot be cancelled by reset_enemy; replace the body.
+			actors.remove_child(enemy)
+			enemy.queue_free()
+			continue
+		present[enemy.enemy_id] = true
+		enemy.reset_enemy()
+	for spawn in Layout.ENEMY_SPAWNS:
+		if not present.has(spawn["id"]):
+			_spawn_enemy(spawn["id"], spawn["tile"], spawn.get("boss", false), spawn.get("archetype", "guard"))
+	_enemy_renewal_pending = false
 
 func seals_found() -> int:
 	var count := 0
@@ -463,15 +519,29 @@ func buy_skill(id: String) -> bool:
 
 func _apply_upgrades(restore_health: bool) -> void:
 	var previous_max: int = player.max_health
-	player.max_health = (120 if "materia" in store.data["skills"] else 100) + Economy.health_bonus(Economy.level(store.data)) + Shop.health_bonus(store.data)
+	var effects := Skills.effects(store.data["skills"])
+	player.configure_skills(store.data["skills"])
+	player.max_health = 100 + int(effects["health_bonus"]) + Economy.health_bonus(Economy.level(store.data)) + Shop.health_bonus(store.data)
 	# O dano das lojas depende da arma salva como equipada (_stats_changed a atualiza).
-	player.damage_bonus = (4 if "vontade" in store.data["skills"] else 0) + Economy.damage_bonus(Economy.level(store.data)) + Shop.damage_bonus(store.data, str(store.data["equipped"]))
-	player.power_cooldown_scale = .8 if "intelecto" in store.data["skills"] else 1.0
+	player.damage_bonus = int(effects["damage_bonus"]) + Economy.damage_bonus(Economy.level(store.data)) + Shop.damage_bonus(store.data, str(store.data["equipped"]))
+	player.power_cooldown_scale = float(effects["power_cooldown_scale"])
 	_apply_shop_dodge()
+	_update_skill_perception()
 	if restore_health:
 		player.heal_full()
 	else:
 		player.health = mini(player.max_health, player.health + maxi(0, player.max_health - previous_max))
+
+func _update_skill_perception() -> void:
+	var enabled := player.has_skill("olho_escriba")
+	for item in get_tree().get_nodes_in_group("interactables"):
+		if not item is PortInteractable:
+			continue
+		var optional: bool = item.kind in ["nous", "daggers", "cache", "memory", "iri_mark", "iri_relic"]
+		var unread: bool = not bool(store.data["flags"].get(item.item_id, false))
+		var offset: Vector2 = item.global_position - player.global_position
+		var nearby := Vector2(offset.x, offset.y / SenuPlayer.ISO_Y).length() <= 220.0
+		item.perceived = enabled and optional and item.active and not item.opened and unread and nearby
 
 func _stats_changed() -> void:
 	var equipped: String = player.equipped_weapon().id
@@ -584,7 +654,7 @@ func begin_new_journey() -> void:
 	get_tree().reload_current_scene()
 
 func save_and_quit() -> void:
-	if _save():
+	if _save_enemy_cycle():
 		get_tree().quit()
 
 func _notification(what: int) -> void:
@@ -607,7 +677,7 @@ const Loot = preload("res://scripts/world/loot_drop.gd")
 var _loot_save_pending := false
 
 func _drop_loot(id: String, is_boss: bool, enemy: VeilEnemy) -> void:
-	# Um inimigo já registrado como vencido não paga duas vezes.
+	# Cada vida paga uma vez. Descansar inicia outro ciclo dos inimigos comuns.
 	if id in store.data["defeated"] or not is_instance_valid(enemy):
 		return
 	var reward := Economy.reward_for(id, enemy.archetype, is_boss)
@@ -676,11 +746,16 @@ func buy_item(id: String) -> bool:
 
 ## A esquiva das Sandálias parte do valor original de Senu, guardado na primeira vez.
 var _base_dodge_cooldown := -1.0
+var _base_dodge_invulnerability := -1.0
 
 func _apply_shop_dodge() -> void:
 	if _base_dodge_cooldown < 0:
 		_base_dodge_cooldown = player.dodge_cooldown
-	player.dodge_cooldown = _base_dodge_cooldown * Shop.dodge_scale(store.data)
+	if _base_dodge_invulnerability < 0:
+		_base_dodge_invulnerability = player.dodge_invulnerability
+	var effects := Skills.effects(store.data["skills"])
+	player.dodge_cooldown = _base_dodge_cooldown * Shop.dodge_scale(store.data) * float(effects["dodge_cooldown_scale"])
+	player.dodge_invulnerability = _base_dodge_invulnerability + float(effects["dodge_iframe_bonus"])
 
 func use_balm() -> bool:
 	if player.dead or not player.controls_enabled or Time.get_ticks_msec() - _last_balm_ms < BALM_INTERVAL_MS:

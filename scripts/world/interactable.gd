@@ -8,6 +8,7 @@ var label := ""
 var active := true
 var opened := false
 var highlighted := false
+var perceived := false
 var time := 0.0
 var puzzle_value := 0
 ## Look of an "npc": "fisher" or "brother", both drawn from Kauã's fisherman sheet.
@@ -47,6 +48,14 @@ func _draw() -> void:
 		gold = teal
 	var bob := roundf(sin(time * 2.4) * 2.0)
 	_contact_shadow({"nous": 5, "npc": 8}.get(kind, 12))
+	if perceived:
+		# Percepção marca o objeto, sem resolver ou abrir o segredo.
+		var gleam := Color("e8cd91")
+		gleam.a = .65 + .2 * sin(time * 2.0)
+		var center := Vector2(0, -42 + bob)
+		var eye := PackedVector2Array([center + Vector2(-6, 0), center + Vector2(0, -3), center + Vector2(6, 0), center + Vector2(0, 3), center + Vector2(-6, 0)])
+		draw_polyline(eye, gleam, 1.0)
+		draw_rect(Rect2(center - Vector2.ONE, Vector2.ONE * 2), gleam)
 	if highlighted:
 		draw_set_transform(Vector2.ZERO, 0, Vector2(1, .5))
 		draw_arc(Vector2.ZERO, 23, 0, TAU, 24, gold, 1)

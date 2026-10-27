@@ -9,7 +9,8 @@ const WEAPONS := ["e01_khopesh_discipulo", "l01_adagas_reverso"]
 const COUNTERS := ["xp", "coins"]
 ## Compras e cargas das lojas (scripts/economy/shop_catalog.gd).
 const ShopCatalog = preload("res://scripts/economy/shop_catalog.gd")
-const SKILLS := {"vontade": {"name": "Mão firme", "branch": "Vontade", "cost": 1, "description": "+4 de dano em todos os golpes.", "requires": []}, "materia": {"name": "Fôlego da pedra", "branch": "Matéria", "cost": 1, "description": "+20 de vida máxima.", "requires": []}, "intelecto": {"name": "Memória do éter", "branch": "Intelecto", "cost": 2, "description": "Poder da arma recarrega 20% mais rápido.", "requires": []}}
+const SkillCatalog = preload("res://scripts/progression/skill_catalog.gd")
+const SKILLS := SkillCatalog.NODES
 var data: Dictionary
 var path: String
 var loaded_existing := false
@@ -85,9 +86,8 @@ func _valid(value: Variant) -> bool:
 		return false
 	if not WEAPONS[0] in value["weapons"] or not value["equipped"] in value["weapons"]:
 		return false
-	for skill in value["skills"]:
-		if not SKILLS.has(skill):
-			return false
+	if not SkillCatalog.valid_owned(value["skills"]):
+		return false
 	for flag in ["shortcut", "boss", "complete"]:
 		if not value["flags"].get(flag) is bool:
 			return false
@@ -168,14 +168,9 @@ func collect(id: String, amount: int = 1) -> bool:
 	return true
 
 func purchase(skill_id: String) -> bool:
-	if not SKILLS.has(skill_id) or skill_id in data["skills"]:
+	if SkillCatalog.blocker(data, skill_id) != "":
 		return false
 	var definition: Dictionary = SKILLS[skill_id]
-	if data["fragments"] < definition["cost"]:
-		return false
-	for required in definition["requires"]:
-		if required not in data["skills"]:
-			return false
 	data["fragments"] -= definition["cost"]
 	data["skills"].append(skill_id)
 	return true

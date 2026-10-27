@@ -14,6 +14,7 @@ const SENU_PIVOT := Vector2(48, 94)
 const SENU_SCALE: float = 0.43
 const SuppliedSpriteView = preload("res://scripts/actors/senu_supplied_view.gd")
 const CombatFx = preload("res://scripts/actors/combat_fx.gd")
+const MercurySeal = preload("res://scripts/actors/mercury_projectile.gd")
 
 @export var move_speed: float = 80.0
 @export var sprint_multiplier: float = 1.70
@@ -41,6 +42,9 @@ var parry_timer: float = 0.0
 var invulnerability_timer: float = 0.0
 var dead: bool = false
 var is_sprinting: bool = false
+## Runtime configuration only; the save/catalog remains the source of ownership.
+var learned_skills: Array = []
+var seal_cooldown_remaining: float = 0.0
 
 var _dodge_timer: float = 0.0
 var _dodge_direction: Vector2 = Vector2.RIGHT
@@ -68,6 +72,12 @@ var _senu_last_attack_visual: float = 0.0
 var _supplied_view: SuppliedSpriteView = SuppliedSpriteView.new()
 var _event_mouse_world := Vector2.INF
 var _fx: CombatFx = CombatFx.new()
+var _counter_timer: float = 0.0
+var _counter_attack_bonus: int = 0
+var _ascending_visual: float = 0.0
+var _seal_cast_visual: float = 0.0
+var _last_seal_display: int = 0
+var _phase_mask_backup: int = -1
 
 
 func _ready() -> void:
@@ -97,6 +107,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		try_attack(true, mouse_aim)
 	elif event.is_action_pressed("weapon_power"):
 		try_power(mouse_aim)
+	elif InputMap.has_action("cast_seal") and event.is_action_pressed("cast_seal"):
+		try_seal(mouse_aim)
 	elif event.is_action_pressed("dodge"):
 		try_dodge()
 	elif event.is_action_pressed("parry"):
@@ -119,6 +131,10 @@ func _physics_process(delta: float) -> void:
 	_hurt_visual = maxf(0.0, _hurt_visual - delta)
 	_riposte_timer = maxf(0.0, _riposte_timer - delta)
 	_combo_timer = maxf(0.0, _combo_timer - delta)
+	_counter_timer = maxf(0.0, _counter_timer - delta)
+	_ascending_visual = maxf(0.0, _ascending_visual - delta)
+	_seal_cast_visual = maxf(0.0, _seal_cast_visual - delta)
+	seal_cooldown_remaining = maxf(0.0, seal_cooldown_remaining - delta)
 	for i: int in range(_power_cooldowns.size()):
 		_power_cooldowns[i] = maxf(0.0, _power_cooldowns[i] - delta)
 	power_cooldown_remaining = _power_cooldowns[weapon_index]
@@ -126,7 +142,12 @@ func _physics_process(delta: float) -> void:
 	if display_cooldown != _last_cooldown_display:
 		_last_cooldown_display = display_cooldown
 		stats_changed.emit()
+	var seal_display: int = ceili(seal_cooldown_remaining)
+	if seal_display != _last_seal_display:
+		_last_seal_display = seal_display
+		stats_changed.emit()
 	if dead:
+		_restore_phase_collision()
 		velocity = Vector2.ZERO
 		queue_redraw()
 		return
@@ -169,11 +190,32 @@ func _physics_process(delta: float) -> void:
 	_knockback = _knockback.move_toward(Vector2.ZERO, 700.0 * delta)
 	velocity += _knockback
 	move_and_slide()
+	if _dodge_timer <= 0.0:
+		_restore_phase_collision()
 	queue_redraw()
 
 
 func equipped_weapon() -> WeaponDefinition:
 	return weapons[weapon_index]
+
+
+func configure_skills(skills: Array) -> void:
+	# Copy ownership rather than retaining the save's mutable Array. Effects are
+	# derived from IDs, so applying the same configuration never stacks bonuses.
+	var normalized: Array = []
+	for id: Variant in skills:
+		if id is String and id not in normalized:
+			normalized.append(id)
+	learned_skills = normalized
+	if not has_skill("contra_ataque_agil"):
+		_counter_timer = 0.0
+		_counter_attack_bonus = 0
+	if not has_skill("esquiva_eterea"):
+		_restore_phase_collision()
+
+
+func has_skill(id: String) -> bool:
+	return id in learned_skills
 
 
 func equip_weapon(index: int) -> bool:
@@ -190,6 +232,7 @@ func equip_weapon(index: int) -> bool:
 	_combo_step = 0
 	_combo_timer = 0.0
 	_riposte_timer = 0.0
+	_counter_attack_bonus = 0
 	power_cooldown_remaining = _power_cooldowns[weapon_index]
 	stats_changed.emit()
 	queue_redraw()
@@ -202,11 +245,13 @@ func try_attack(heavy: bool = false, use_mouse: bool = false) -> bool:
 	var weapon: WeaponDefinition = equipped_weapon()
 	_attack_direction = _aim_direction(use_mouse)
 	facing = _attack_direction
-	if _combo_timer <= 0.0:
+	if _combo_timer <= 0.0 or (heavy and has_skill("ritmo_lamina")):
 		_combo_step = 0
-	_combo_step = (_combo_step + 1) % 3
-	_combo_timer = 0.82
+	if not heavy or not has_skill("ritmo_lamina"):
+		_combo_step = (_combo_step + 1) % 3
+	_combo_timer = 1.15 if has_skill("ritmo_lamina") and not heavy else 0.82
 	_attack_damage = weapon.damage + damage_bonus
+	_counter_attack_bonus = 0
 	_attack_range = weapon.range_px
 	_attack_arc = deg_to_rad(weapon.arc_degrees)
 	_attack_stagger = heavy or _combo_step == 0
@@ -223,11 +268,24 @@ func try_attack(heavy: bool = false, use_mouse: bool = false) -> bool:
 		attack_timer *= 1.75
 		_hit_delay = 0.24
 		_attack_visual = 0.36
+		if has_skill("lamina_ascendente") and weapon.id == KHOPESH.id:
+			_attack_damage += 20
+			_attack_range += 14.0
+			_ascending_visual = 0.46
+			combat_feedback.emit("LÂMINA ASCENDENTE", Color("f2d58f"))
 	elif weapon.category == "leve":
 		_second_hit_delay = 0.17
 	else:
 		if _combo_step == 0:
 			_attack_damage += 5
+	if not heavy:
+		if has_skill("ritmo_lamina") and _combo_step == 0:
+			_attack_damage += 8
+		if has_skill("contra_ataque_agil") and _counter_timer > 0.0:
+			_counter_attack_bonus = 12
+			_attack_damage += _counter_attack_bonus
+			_counter_timer = 0.0
+			combat_feedback.emit("CONTRA-ATAQUE ÁGIL", Color("f0d5a2"))
 	_fx.swing(weapon.category, heavy)
 	stats_changed.emit()
 	return true
@@ -241,6 +299,7 @@ func try_dodge() -> bool:
 	_dodge_timer = dodge_duration
 	invulnerability_timer = dodge_invulnerability
 	dodge_cooldown_remaining = dodge_cooldown
+	_begin_phase_dodge()
 	_fx.dodge()
 	stats_changed.emit()
 	return true
@@ -270,6 +329,7 @@ func try_power(use_mouse: bool = false) -> bool:
 		_dodge_timer = dodge_duration * 1.40
 		invulnerability_timer = shadow_invulnerability
 		_shadow_finish = true
+		_begin_phase_dodge()
 		_damage_nearby(12 + damage_bonus, 33.0, TAU, facing, false)
 		combat_feedback.emit("PASSO DE SOMBRA", Color("aaa9f0"))
 	else:
@@ -292,6 +352,53 @@ func try_power(use_mouse: bool = false) -> bool:
 	return true
 
 
+func try_seal(use_mouse: bool = false) -> bool:
+	if not has_skill("selo_mercurio") or not _can_act() or seal_cooldown_remaining > 0.0:
+		return false
+	facing = _aim_direction(use_mouse)
+	seal_cooldown_remaining = 6.0 if has_skill("convergencia_nous") else 8.0
+	attack_timer = 0.28
+	_counter_attack_bonus = 0
+	_seal_cast_visual = 0.38
+	_spawn_mercury(facing, 32, 3 if has_skill("convergencia_nous") else 1)
+	combat_feedback.emit("SELO DE MERCÚRIO", Color("e5d6a0"))
+	stats_changed.emit()
+	return true
+
+
+func _spawn_mercury(direction: Vector2, damage: int, max_targets: int) -> Node2D:
+	var projectile: Node2D = MercurySeal.new()
+	projectile.direction = direction.normalized() if direction.length_squared() > 0.01 else facing
+	projectile.damage = damage
+	projectile.max_targets = max_targets
+	projectile.originator = self
+	projectile.struck.connect(_on_mercury_hit)
+	# Starting at the feet avoids spawning on the far side of a nearby wall.
+	get_parent().add_child(projectile)
+	projectile.global_position = global_position
+	projectile.shot_origin = global_position
+	return projectile
+
+
+func _on_mercury_hit(enemy: Node2D, was_killed: bool) -> void:
+	_fx.enemy_hit(enemy, false, was_killed, false)
+
+
+func _begin_phase_dodge() -> void:
+	if not has_skill("esquiva_eterea") or _phase_mask_backup >= 0:
+		return
+	_phase_mask_backup = collision_mask
+	# The environment bit stays enabled; only enemy bodies can be crossed.
+	set_collision_mask_value(3, false)
+
+
+func _restore_phase_collision() -> void:
+	if _phase_mask_backup < 0:
+		return
+	collision_mask = _phase_mask_backup
+	_phase_mask_backup = -1
+
+
 func receive_hit(damage: int, from_position: Vector2) -> bool:
 	if dead or invulnerability_timer > 0.0:
 		return false
@@ -300,6 +407,9 @@ func receive_hit(damage: int, from_position: Vector2) -> bool:
 		parry_timer = 0.0
 		invulnerability_timer = 0.34
 		_riposte_timer = 2.80
+		if has_skill("contra_ataque_agil"):
+			dodge_cooldown_remaining = 0.0
+			_counter_timer = 2.80
 		if equipped_weapon().category == "espada":
 			_power_cooldowns[weapon_index] = 0.0
 			power_cooldown_remaining = 0.0
@@ -310,15 +420,21 @@ func receive_hit(damage: int, from_position: Vector2) -> bool:
 				var body: Node2D = enemy as Node2D
 				if _metric(body.global_position - from_position).length() < 20.0:
 					body.call("receive_hit", 5, global_position, true)
+		if has_skill("reflexo_palavra"):
+			_spawn_mercury(_metric(from_position - global_position), 24, 1)
 		combat_feedback.emit("APARADO · Q PARA RIPOSTA", Color("ffe7a3"))
 		stats_changed.emit()
 		return false
-	health = maxi(0, health - damage)
+	var received_damage: int = maxi(0, damage)
+	if has_skill("pele_alabastro") and received_damage > 0:
+		received_damage = maxi(1, roundi(float(received_damage) * 0.85))
+	health = maxi(0, health - received_damage)
 	invulnerability_timer = 0.58
 	_hurt_visual = 0.22
 	parry_timer = 0.0
 	_hit_delay = -1.0
 	_second_hit_delay = -1.0
+	_counter_attack_bonus = 0
 	attack_timer = maxf(attack_timer, 0.18)
 	_knockback = (global_position - from_position).normalized() * 88.0
 	_fx.player_hurt(from_position, health <= 0)
@@ -328,6 +444,7 @@ func receive_hit(damage: int, from_position: Vector2) -> bool:
 		velocity = Vector2.ZERO
 		_dodge_timer = 0.0
 		_shadow_finish = false
+		_restore_phase_collision()
 		died.emit()
 	return true
 
@@ -360,6 +477,12 @@ func reset_at(spawn_position: Vector2) -> void:
 	dodge_cooldown_remaining = 0.0
 	parry_cooldown_remaining = 0.0
 	invulnerability_timer = 0.65
+	seal_cooldown_remaining = 0.0
+	_counter_timer = 0.0
+	_counter_attack_bonus = 0
+	_ascending_visual = 0.0
+	_seal_cast_visual = 0.0
+	_restore_phase_collision()
 	stats_changed.emit()
 
 
@@ -386,6 +509,10 @@ func _metric(vector: Vector2) -> Vector2:
 
 func _apply_attack() -> void:
 	_damage_nearby(_attack_damage, _attack_range, _attack_arc, _attack_direction, _attack_stagger)
+	# The agile counter rewards one contact, not both cuts of a dagger attack.
+	if _counter_attack_bonus > 0:
+		_attack_damage -= _counter_attack_bonus
+		_counter_attack_bonus = 0
 
 
 func _damage_nearby(amount: int, reach: float, arc: float, direction: Vector2, stagger: bool) -> void:
@@ -409,6 +536,7 @@ func _damage_nearby(amount: int, reach: float, arc: float, direction: Vector2, s
 func _draw() -> void:
 	var weapon: WeaponDefinition = equipped_weapon()
 	if _supplied_view.draw(self):
+		_draw_skill_fx()
 		return
 	var fade: float = 0.50 if dead else 1.0
 	var direction: int = posmod(roundi((PI * .5 - facing.angle()) / (PI * .25)), 8)
@@ -454,6 +582,34 @@ func _draw() -> void:
 		_draw_sweep(facing, 24.0 + (0.4 - _power_visual) * 55.0, TAU, power_color, 1.0)
 	if invulnerability_timer > 0.0 and fmod(_time, 0.16) < 0.065:
 		draw_circle(Vector2(0, -20), 3.0, Color(1, 0.94, 0.76, 0.75))
+	_draw_skill_fx()
+
+
+func _draw_skill_fx() -> void:
+	if _ascending_visual > 0.0:
+		var progress: float = 1.0 - _ascending_visual / 0.46
+		var tint := Color(0.96, 0.80, 0.46, minf(1.0, _ascending_visual * 3.0))
+		var origin := Vector2(facing.x * 6.0, -9.0 + facing.y * 4.0)
+		var slash := PackedVector2Array()
+		for i: int in range(8):
+			var t: float = float(i) / 7.0
+			slash.append(origin + Vector2(facing.x * (t * 25.0 + progress * 12.0), -sin(t * PI * 0.75) * 35.0 - progress * 10.0))
+		draw_polyline(slash, tint, 2.0, false)
+		for i: int in range(4):
+			var spark := slash[mini(7, i * 2)] + Vector2(float(i * 3 - 4), -progress * 12.0)
+			draw_rect(Rect2(spark.floor(), Vector2(2, 2)), tint)
+	if _seal_cast_visual > 0.0:
+		var radius: float = 7.0 + (0.38 - _seal_cast_visual) * 26.0
+		var tint := Color(0.90, 0.83, 0.56, _seal_cast_visual * 2.3)
+		var ring := PackedVector2Array()
+		for i: int in range(9):
+			var angle: float = TAU * float(i) / 8.0
+			ring.append(Vector2(cos(angle) * radius, sin(angle) * radius * ISO_Y - 13.0))
+		draw_polyline(ring, tint, 1.0, false)
+	if _phase_mask_backup >= 0 and _dodge_timer > 0.0:
+		for i: int in range(3):
+			var offset := -Vector2(_dodge_direction.x, _dodge_direction.y * ISO_Y) * float(7 + i * 7)
+			draw_rect(Rect2((offset + Vector2(-2, -11)).floor(), Vector2(3, 3)), Color(0.66, 0.63, 0.92, 0.42 - float(i) * 0.10))
 
 
 func _draw_senu_body(source: Rect2, offset: Vector2, tint: Color) -> void:

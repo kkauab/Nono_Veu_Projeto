@@ -10,7 +10,7 @@ Protótipo jogável do **Porto dos Esquecidos**, em Godot 4.7.2 e GDScript. A ve
 
 Se já testou a demo anterior, feche a janela antiga e abra novamente **JOGAR.cmd**. Para explorar a expansão desde o início, escolha **Nova jornada** no menu e confirme. O progresso anterior é arquivado antes do recomeço; **Retomar jornada** mantém suas coletas, armas, habilidades e chefe já derrotado.
 
-Os atalhos procuram `Godot_v4.7.2-stable_win64.exe` em Downloads. Em outro computador, importe `project.godot` diretamente no Godot 4.7 ou ajuste o caminho dos atalhos. A primeira abertura importa as imagens automaticamente; a pasta do projeto precisa permitir gravação.
+Os atalhos procuram `Godot_v4.7.2-stable_win64.exe` em Downloads. Em outro computador, importe `project.godot` diretamente no Godot 4.7 ou ajuste o caminho dos atalhos. **JOGAR.cmd** prepara imagens e sons pelo importador do Godot antes de abrir a partida, inclusive após um pull que traga recursos novos. Essa etapa pode demorar alguns segundos e registra o resultado em `qa/startup_import.log`. A pasta do projeto precisa permitir gravação.
 
 ## O que já funciona
 
@@ -19,10 +19,11 @@ Os atalhos procuram `Godot_v4.7.2-stable_win64.exe` em Downloads. Em outro compu
 - Khopesh do Discípulo e Adagas do Reverso, com golpes e poderes diferentes. As adagas são encontradas no pátio.
 - Vinte e sete setores conectados, incluindo arquivo, praça dos sinos, caravanas, farol, observatório, reservatório e cisterna. Três selos obrigatórios: sinos em ordem, distribuição da água e alinhamento das estrelas; pistas e estado parcial persistem.
 - Dois atalhos físicos abertos pelo lado distante: retorno ao santuário e aqueduto entre jardim e mercado.
-- Fragmentos de Nous, relicário opcional, registros e três melhorias. As Adagas ficam na alcova; cinco pontos de meditação permitem retomar a exploração.
+- Fragmentos de Nous e [Árvore das Emanações com 13 habilidades](docs/ARVORE_EMANACOES.md): Vontade, Matéria, Intelecto, três híbridos e Convergência. Compras exigem pontos e os nós anteriores; jornadas antigas mantêm suas habilidades. As Adagas ficam na alcova; cinco pontos de meditação permitem retomar a exploração.
 - Mapa espacial que revela os setores visitados e acompanha a posição de Senu. Há pontos de meditação no hub, mercado e guarita.
 - Senu usa o mesmo corpo nas duas armas, passos e corrida com poses distintas, rolagem e cortes reais da espada. Cenário, capa e retrato agora seguem uma direção em pixels: terreno 64×32, arquitetura em escala 1:1, água de oito quadros e sombras de contato. Objetos altos ficam transparentes quando encobrem o herói.
 - Checkpoints, restauração de vida, morte/retorno e salvamento automático com backup.
+- Meditar e salvar em um santuário faz os inimigos comuns reaparecerem nos locais iniciais, com vida cheia. Salvar e sair também os renova para a próxima partida. O chefe vencido permanece derrotado; os novos encontros rendem XP e óbolos novamente.
 - Derrotar o Porteiro Sem Nome abre a passagem para um pequeno limiar de teste das Catacumbas do Eco.
 
 ## Controles
@@ -35,6 +36,7 @@ Os atalhos procuram `Godot_v4.7.2-stable_win64.exe` em Downloads. Em outro compu
 | Esquivar | Espaço |
 | Parry | K ou botão direito do mouse |
 | Poder da arma | Q |
+| Selo de Mercúrio, após aprender | C |
 | Interagir / recolher / meditar | E |
 | Trocar arma encontrada | Tab |
 | Árvore das Emanações | T |
@@ -43,9 +45,13 @@ Os atalhos procuram `Godot_v4.7.2-stable_win64.exe` em Downloads. Em outro compu
 
 Pelo teclado, Senu ataca na última direção de movimento; ataques pelos botões do mouse miram o cursor. O poder do Khopesh é a Riposta Hermética, que ganha uma versão mais forte por um breve período após um parry bem-sucedido. O poder das Adagas é um avanço evasivo com impacto ao final. O jogo pausa ao abrir menus.
 
+Na árvore (**T**), selecione um nó para ler o efeito, o custo e os requisitos; use **Aprender** para comprar. O Porto oferece **22 Nous únicos**; o caminho até Convergência custa **20**, enquanto todos os nós juntos custam **28**. Explore e escolha sua especialização. As habilidades compráveis são opcionais para os três puzzles e para alcançar o chefe.
+
 ## Progresso salvo
 
 O progresso é gravado na pasta de dados do usuário, em `%APPDATA%\nono_veu_demo\progress.json`, com backup `.bak`. Coletas, melhorias, armas, arma equipada, chefes derrotados, atalho e checkpoint persistem. Fragmentos não são perdidos ao morrer. Ao reabrir a demo, Senu retorna ao último santuário com vida restaurada; a posição exata de saída não é usada como ponto de respawn.
+
+Os salvamentos manuais de descanso e de saída iniciam um novo ciclo dos inimigos comuns. Os autosaves durante coletas, puzzles, compras e combates guardam o estado do ciclo atual. Descansar preserva os selos, atalhos, missões, habilidades, Fragmentos de Nous já recolhidos e itens únicos.
 
 Os testes usam arquivos próprios em `user://qa/` e não alteram o progresso real.
 
