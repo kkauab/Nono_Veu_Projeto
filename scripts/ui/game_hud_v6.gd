@@ -65,6 +65,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_menu_clock += delta
 	message_time = maxf(0, message_time - delta)
+	_loot_time = maxf(0, _loot_time - delta)
 	if size != _last_size:
 		_geometry()
 		if overlay != "": _build_controls()
@@ -189,10 +190,10 @@ func _build_controls() -> void:
 			var commands := [["WASD / setas", "Andar"], ["Shift + movimento", "Correr"], ["Espaço", "Rolar / esquivar"],
 				["J / mouse esquerdo", "Ataque leve"], ["F", "Ataque forte"], ["K / mouse direito", "Aparar"],
 				["Q", "Poder da arma"], ["Tab", "Trocar arma encontrada"], ["E", "Interagir / recolher"],
-				["T", "Árvore das Emanações"], ["M", "Mapa"], ["Esc", "Pausa / voltar"]]
+				["T", "Árvore das Emanações"], ["M", "Mapa"], ["Esc", "Pausa / voltar"], ["R", "Usar bálsamo"]]
 			for index in range(commands.size()):
-				var column := index / 6
-				var row := index % 6
+				var column := index / 7
+				var row := index % 7
 				_label(commands[index][0], Rect2(100 + column * 404, 154 + row * 42, 196, 30), 16, GOLD)
 				_label(commands[index][1], Rect2(290 + column * 404, 154 + row * 42, 196, 30), 16, IVORY)
 			_back_button()
@@ -212,6 +213,9 @@ func _build_controls() -> void:
 			_back_button()
 		"dialog":
 			_scroll_text(dialog_body, Rect2(100, 156, 760, 250), 19)
+			_back_button()
+		"shop":
+			ShopPanel.build(self, game)
 			_back_button()
 	if not _buttons.is_empty():
 		for button in _buttons:
@@ -366,18 +370,31 @@ func _draw() -> void:
 func _draw_gameplay() -> void:
 	var hero = game.player
 	_frame(Rect2(11, 10, 938, 520), false)
-	_frame(Rect2(22, 22, 330, 76), true, .94)
-	_sun(Vector2(62, 60), 20)
+	var data: Dictionary = game.store.data
+	_frame(Rect2(22, 22, 360, 82), true, .94)
+	_sun(Vector2(62, 62), 20)
 	_text("SENU / DISCÍPULO", Vector2(101, 45), 15, GOLD)
-	draw_rect(Rect2(101, 55, 229, 9), Color("2d423c"))
-	draw_rect(Rect2(101, 55, 229 * clampf(float(hero.health) / maxf(1, hero.max_health), 0, 1), 9), Color("9bc9ae"))
-	_text("%d / %d" % [hero.health, hero.max_health], Vector2(101, 86), 16, IVORY)
-	_diamond(Vector2(232, 80), 4)
-	_text("%d NOUS" % game.store.data["fragments"], Vector2(246, 86), 15, GOLD)
+	_text("NV %d" % Economy.level(data), Vector2(322, 45), 14, IVORY)
+	draw_rect(Rect2(101, 53, 259, 9), Color("2d423c"))
+	draw_rect(Rect2(101, 53, 259 * clampf(float(hero.health) / maxf(1, hero.max_health), 0, 1), 9), Color("9bc9ae"))
+	# Barra fina de XP: o que já foi juntado dentro do nível atual.
+	var progress := Economy.level_progress(Economy.xp(data))
+	draw_rect(Rect2(101, 65, 259, 4), Color("22343a"))
+	draw_rect(Rect2(101, 65, 259 * clampf(float(progress.x) / maxf(1, progress.y), 0, 1), 4), LOOT_XP)
+	_text("%d / %d" % [hero.health, hero.max_health], Vector2(101, 92), 16, IVORY)
+	draw_circle(Vector2(200, 86), 5, LOOT_COIN.darkened(.35))
+	draw_circle(Vector2(200, 86), 3.5, LOOT_COIN)
+	_text("%d" % Economy.coins(data), Vector2(210, 92), 15, LOOT_COIN)
+	_diamond(Vector2(266, 86), 4)
+	_text("%d NOUS" % data["fragments"], Vector2(280, 92), 15, GOLD)
+	if _loot_time > 0 and overlay == "": _draw_loot_ticker()
+	_draw_balm()
 	_frame(Rect2(615, 22, 323, 112), true, .96)
 	var area := "Porto dos Esquecidos"
 	for room in PortLayout.ROOMS:
 		if room["id"] == game.current_room: area = room["name"]
+	var house_id := str(game.get("inside_house"))
+	if HouseCatalog.HOUSES.has(house_id): area = HouseCatalog.HOUSES[house_id]["name"]
 	_text_block(area, Vector2(634, 48), 240, 19, 21, IVORY, true)
 	if game.has_method("seals_found"):
 		_diamond(Vector2(884, 42), 4)
@@ -442,7 +459,7 @@ func _draw_modal() -> void:
 	_frame(Rect2(51, 44, 858, 451), true, .96)
 	_sun(Vector2(480, 44), 22, .65)
 	_sun(Vector2(480, 495), 22, .65)
-	var titles := {"pause": "Uma pausa entre os véus", "tree": "Árvore das Emanações", "map": "Memórias do Porto", "inventory": "Inventário da travessia", "controls": "Controles", "settings": "Configurações", "dialog": dialog_title, "new_journey": "Uma nova travessia"}
+	var titles := {"pause": "Uma pausa entre os véus", "tree": "Árvore das Emanações", "map": "Memórias do Porto", "inventory": "Inventário da travessia", "controls": "Controles", "settings": "Configurações", "dialog": dialog_title, "new_journey": "Uma nova travessia", "shop": dialog_title}
 	_fit_text(titles.get(overlay, "O Nono Véu"), Vector2(83, 101), 780, 34, IVORY, true)
 	draw_line(Vector2(84, 118), Vector2(414 if overlay == "pause" else 875, 118), GOLD.darkened(.28), 1)
 	_diamond(Vector2(249 if overlay == "pause" else 480, 118), 4)
@@ -470,6 +487,7 @@ func _draw_modal() -> void:
 			for index in range(2): _frame(Rect2(86 + index * 404, 166, 384, 205), true, .7)
 		"controls": _text("Pelo teclado, os golpes seguem a última direção. Com o mouse, miram o cursor.", Vector2(99, 425), 13, MUTED)
 		"new_journey": _text("Sua travessia anterior ficará arquivada neste computador.", Vector2(112, 329), 14, GOLD)
+		"shop": ShopPanel.draw(self, game)
 
 func _cover(texture: Texture2D, rect: Rect2) -> void:
 	var texture_size := texture.get_size()
@@ -512,7 +530,7 @@ func _inventory_controls() -> void:
 					game.call("_save")
 				_build_controls(), "diamond", "", true)
 			button.disabled = game.player.weapon_index == index
-	_label("%d Fragmentos de Nous   ·   %d emanações recordadas" % [game.store.data["fragments"], game.store.data["skills"].size()], Rect2(104, 397, 740, 30), 17, GOLD)
+	_label("%d Fragmentos de Nous   ·   %d emanações recordadas   ·   nível %d   ·   %d %s" % [game.store.data["fragments"], game.store.data["skills"].size(), Economy.level(game.store.data), Economy.coins(game.store.data), Economy.CURRENCY], Rect2(104, 397, 740, 30), 17, GOLD)
 
 func _map_legend() -> void:
 	var scroll := ScrollContainer.new()
@@ -538,9 +556,17 @@ func _map_legend() -> void:
 func _draw_map() -> void:
 	var chart := Rect2(80, 159, 583, 271)
 	var revealed: Array[Dictionary] = []
-	var bounds := Rect2(game.player.position - Vector2.ONE, Vector2.ONE * 2)
+	var hero_position := _map_hero()
+	var bounds := Rect2(hero_position - Vector2.ONE, Vector2.ONE * 2)
+	# Com o Mapa das rotas de Adiam, os setores ainda não visitados viram contornos.
+	var hinted: Array[Dictionary] = []
+	var routes := ShopCatalog.reveals_map(game.store.data)
 	for room in PortLayout.ROOMS:
-		if room["id"] not in game.store.data["visited"]: continue
+		if room["id"] not in game.store.data["visited"]:
+			if routes and room["id"] not in ShopCatalog.MAP_HIDDEN:
+				hinted.append(room)
+				for corner in _map_room_corners(room["rect"]): bounds = bounds.expand(corner)
+			continue
 		revealed.append(room)
 		for corner in _map_room_corners(room["rect"]): bounds = bounds.expand(corner)
 	draw_rect(chart, Color("0d2027"))
@@ -550,6 +576,11 @@ func _draw_map() -> void:
 		return
 	var scale_factor := minf((chart.size.x - 32) / maxf(bounds.size.x, 1), (chart.size.y - 32) / maxf(bounds.size.y, 1))
 	var origin := chart.get_center() - bounds.get_center() * scale_factor
+	for room in hinted:
+		var sketch := PackedVector2Array()
+		for corner in _map_room_corners(room["rect"]): sketch.append(origin + corner * scale_factor)
+		sketch.append(sketch[0])
+		draw_polyline(sketch, MUTED.darkened(.45), 1)
 	var centers: Dictionary = {}
 	for room in revealed:
 		var rect: Rect2i = room["rect"]
@@ -571,7 +602,7 @@ func _draw_map() -> void:
 		var center: Vector2 = centers[room["id"]]
 		draw_circle(center, 9, Color("0c242a"))
 		_text(str(number), center + Vector2(-4 if number < 10 else -7, 4), 11, GOLD if current else IVORY)
-	var hero_marker: Vector2 = origin + game.player.position * scale_factor
+	var hero_marker: Vector2 = origin + hero_position * scale_factor
 	_diamond(hero_marker, 5, Color("b9efd8"), true)
 	_text("◆ Senu · ouro: área atual · role a legenda", Vector2(84, 440), 13, MUTED)
 
@@ -607,3 +638,64 @@ func _toggle_fullscreen() -> void:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if fullscreen else DisplayServer.WINDOW_MODE_FULLSCREEN)
 		_write_preferences()
 	_build_controls()
+
+# Economia de combate (Gustavo, 27/10/2026): XP, nível e óbolos no painel de Senu.
+const Economy = preload("res://scripts/economy/economy.gd")
+const LOOT_XP := Color("8fd6c2")
+const LOOT_COIN := Color("d9a35c")
+var _loot_xp := 0
+var _loot_coins := 0
+var _loot_time := 0.0
+
+## Chamado por port_demo.collect_loot; as coletas seguidas se somam numa linha só.
+func loot_gained(kind: String, amount: int) -> void:
+	if _loot_time <= 0:
+		_loot_xp = 0
+		_loot_coins = 0
+	if kind == "xp": _loot_xp += amount
+	else: _loot_coins += amount
+	_loot_time = 2.4
+
+func _draw_loot_ticker() -> void:
+	var fade := clampf(_loot_time / .6, 0, 1)
+	var x := 101.0
+	if _loot_xp > 0:
+		var gained := "+%d XP" % _loot_xp
+		_text(gained, Vector2(x, 125), 14, Color(LOOT_XP, fade))
+		x += font.get_string_size(gained, HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x + 18
+	if _loot_coins > 0:
+		_text("+%d %s" % [_loot_coins, Economy.CURRENCY], Vector2(x, 125), 14, Color(LOOT_COIN, fade))
+
+# Casas (Gustavo, 27/10/2026): nome da casa no painel e Senu na porta, no mapa.
+const HouseCatalog = preload("res://scripts/world/house_catalog.gd")
+
+func _map_hero() -> Vector2:
+	return game.call("map_position") if game.has_method("map_position") else game.player.position
+
+# Loja e bálsamo (Gustavo, 27/10/2026): painel em scripts/ui/shop_panel.gd.
+const ShopPanel = preload("res://scripts/ui/shop_panel.gd")
+const ShopCatalog = preload("res://scripts/economy/shop_catalog.gd")
+var shop_id := ""
+var shop_greeting := ""
+
+## Abre a loja de um lojista; Esc e "Voltar" devolvem ao jogo.
+func show_shop(title: String, id: String, greeting: String) -> void:
+	dialog_title = title
+	shop_id = id
+	shop_greeting = greeting
+	_return_overlay = ""
+	show_overlay("shop")
+
+## Cargas de bálsamo acima do painel da arma, só depois do primeiro jarro.
+func _draw_balm() -> void:
+	var room := ShopCatalog.capacity(game.store.data, "balsamo")
+	if room <= 0: return
+	var full := ShopCatalog.charges(game.store.data, "balsamo")
+	_frame(Rect2(24, 404, 46 + room * 18, 38), true, .94)
+	for slot in range(room):
+		var center := Vector2(44 + slot * 18, 426)
+		var tint := Color("b47a4a") if slot < full else Color("2b3a38")
+		draw_circle(center, 6, tint.darkened(.35))
+		draw_circle(center, 4.5, tint)
+		draw_rect(Rect2(center + Vector2(-2, -11), Vector2(4, 5)), tint.darkened(.2))
+	_text("R", Vector2(38 + room * 18, 431), 15, IVORY)

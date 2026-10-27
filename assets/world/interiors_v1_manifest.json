@@ -1,0 +1,183 @@
+{
+	"canvas": [
+		128,
+		144
+	],
+	"columns": 8,
+	"frames": 30,
+	"pivot": [
+		64,
+		112
+	],
+	"pixel_art": true,
+	"source": "res://art/pixelorama/interiors_v1/interiors_v1.pxo",
+	"sprites": {
+		"adiam": {
+			"fps": 4.0,
+			"frames": [
+				6,
+				7,
+				8
+			],
+			"sequence": [
+				0,
+				0,
+				1,
+				1,
+				0,
+				0,
+				1,
+				1,
+				0,
+				2
+			]
+		},
+		"amphora": {
+			"frames": [
+				24
+			]
+		},
+		"anvil": {
+			"frames": [
+				20
+			]
+		},
+		"barrel": {
+			"frames": [
+				27
+			]
+		},
+		"bed": {
+			"frames": [
+				25
+			]
+		},
+		"chest_closed": {
+			"frames": [
+				28
+			]
+		},
+		"chest_open": {
+			"frames": [
+				29
+			]
+		},
+		"coal": {
+			"fps": 3.0,
+			"frames": [
+				12,
+				13
+			],
+			"sequence": [
+				0,
+				1
+			]
+		},
+		"cords": {
+			"frames": [
+				18
+			]
+		},
+		"counter": {
+			"frames": [
+				14
+			]
+		},
+		"easel": {
+			"frames": [
+				22
+			]
+		},
+		"furnace": {
+			"fps": 8.0,
+			"frames": [
+				9,
+				10,
+				11
+			],
+			"sequence": [
+				0,
+				1,
+				2,
+				1
+			]
+		},
+		"merit": {
+			"fps": 4.0,
+			"frames": [
+				0,
+				1,
+				2
+			],
+			"sequence": [
+				0,
+				0,
+				1,
+				1,
+				0,
+				0,
+				1,
+				1,
+				0,
+				2
+			]
+		},
+		"nakht": {
+			"fps": 4.0,
+			"frames": [
+				3,
+				4,
+				5
+			],
+			"sequence": [
+				0,
+				0,
+				1,
+				1,
+				0,
+				0,
+				1,
+				1,
+				0,
+				2
+			]
+		},
+		"rack": {
+			"frames": [
+				17
+			]
+		},
+		"saddle": {
+			"frames": [
+				23
+			]
+		},
+		"shelf_a": {
+			"frames": [
+				15
+			]
+		},
+		"shelf_b": {
+			"frames": [
+				16
+			]
+		},
+		"table": {
+			"frames": [
+				26
+			]
+		},
+		"trade_chest": {
+			"frames": [
+				19
+			]
+		},
+		"tub": {
+			"frames": [
+				21
+			]
+		}
+	},
+	"texture": "res://assets/world/interiors_v1.png",
+	"version": 1
+}

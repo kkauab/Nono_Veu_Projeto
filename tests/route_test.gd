@@ -96,8 +96,10 @@ func _run() -> void:
 		await finish()
 		return
 	var balance_before: int = int(world.store.data["fragments"])
+	# O XP recolhido no caminho já pode ter somado dano de nível; a compra soma +4.
+	var damage_before: int = world.player.damage_bonus
 	check(world.buy_skill("vontade"), "Compra de habilidade com o Nous encontrado")
-	check(world.player.damage_bonus == 4 and world.store.data["fragments"] == balance_before - 1, "Compra aplica melhoria e debita moeda")
+	check(world.player.damage_bonus == damage_before + 4 and world.store.data["fragments"] == balance_before - 1, "Compra aplica melhoria e debita moeda")
 	print("ROUTE_STAGE arena e Catacumbas")
 	if not await walk_tiles([Vector2(1, 2), Vector2(1, 4), Vector2(1, 14), Vector2(2, 16), Vector2(2, 17), Vector2(3, 18), markers["s1"]], "Retorno à guarita"):
 		await finish()

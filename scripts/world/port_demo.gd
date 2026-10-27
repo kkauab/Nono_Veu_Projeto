@@ -174,6 +174,7 @@ func _build_objects() -> void:
 	boss_entry_gate = _make_gate("boss_entry", "boss")
 	echo_gate = _make_gate("echo", "echo")
 	Story.build(self)
+	Houses.build(self)
 	refresh_seals()
 
 func _make_gate(gate_id: String, flag: String) -> PortGate:
@@ -212,6 +213,8 @@ func _spawn_enemy(id: String, tile: Vector2, is_boss: bool = false, archetype: S
 	enemy.archetype = archetype
 	enemy.target = player
 	enemy.position = Layout.iso(tile)
+	# Antes de _on_enemy_defeated, que registra o inimigo como vencido e salva.
+	enemy.defeated.connect(_drop_loot.bind(enemy))
 	enemy.defeated.connect(_on_enemy_defeated)
 	actors.add_child(enemy)
 	if is_boss:
@@ -220,7 +223,9 @@ func _spawn_enemy(id: String, tile: Vector2, is_boss: bool = false, archetype: S
 func _physics_process(_delta: float) -> void:
 	if player == null or hud == null or respawning:
 		return
-	var room := Layout.room_at(player.position)
+	# Dentro de uma casa, Layout.room_at responderia "p1" para qualquer tile; o setor
+	# continua sendo o distrito da porta, já visitado.
+	var room := current_room if Houses.inside(self) else Layout.room_at(player.position)
 	if room != current_room or room not in store.data["visited"]:
 		current_room = room
 		if room not in store.data["visited"]:
@@ -244,6 +249,8 @@ func _physics_process(_delta: float) -> void:
 		nearest.highlighted = true
 	if Input.is_action_just_pressed("interact") and nearest != null:
 		activate(nearest)
+	if Input.is_action_just_pressed("use_item"):
+		use_balm()
 
 func activate(item: PortInteractable) -> bool:
 	if not is_instance_valid(item) or not item.active or player.position.distance_to(item.position) > 44:
@@ -251,11 +258,14 @@ func activate(item: PortInteractable) -> bool:
 	match item.kind:
 		"iri_mark", "iri_relic", "npc":
 			return Story.activate(self, item)
+		"door", "house_chest", "house_note", "shopkeeper":
+			return Houses.activate(self, item)
 		"clue", "bell", "valve", "water_altar", "dial", "stars_altar", "boss_lock":
 			return _activate_puzzle(item)
 		"shrine":
 			store.data["checkpoint"] = item.item_id
 			player.heal_full()
+			Shop.refill(store.data)
 			if _save():
 				hud.toast("Memória ancorada · vida restaurada · progresso salvo")
 		"nous":
@@ -453,9 +463,11 @@ func buy_skill(id: String) -> bool:
 
 func _apply_upgrades(restore_health: bool) -> void:
 	var previous_max: int = player.max_health
-	player.max_health = 120 if "materia" in store.data["skills"] else 100
-	player.damage_bonus = 4 if "vontade" in store.data["skills"] else 0
+	player.max_health = (120 if "materia" in store.data["skills"] else 100) + Economy.health_bonus(Economy.level(store.data)) + Shop.health_bonus(store.data)
+	# O dano das lojas depende da arma salva como equipada (_stats_changed a atualiza).
+	player.damage_bonus = (4 if "vontade" in store.data["skills"] else 0) + Economy.damage_bonus(Economy.level(store.data)) + Shop.damage_bonus(store.data, str(store.data["equipped"]))
 	player.power_cooldown_scale = .8 if "intelecto" in store.data["skills"] else 1.0
+	_apply_shop_dodge()
 	if restore_health:
 		player.heal_full()
 	else:
@@ -465,6 +477,8 @@ func _stats_changed() -> void:
 	var equipped: String = player.equipped_weapon().id
 	if equipped != store.data["equipped"]:
 		store.data["equipped"] = equipped
+		# As têmperas da Forja valem só para a arma na mão.
+		_apply_upgrades(false)
 		_save()
 
 func _feedback(message: String, color: Color) -> void:
@@ -585,3 +599,105 @@ func _capture(suffix: String = "") -> void:
 	get_viewport().get_texture().get_image().save_png(path)
 	print("CAPTURE_SAVED ", ProjectSettings.globalize_path(path))
 	get_tree().quit()
+
+# Economia de combate (Gustavo, 27/10/2026): inimigos deixam XP e óbolos.
+# As regras ficam em scripts/economy/economy.gd e as moedas em loot_drop.gd.
+const Economy = preload("res://scripts/economy/economy.gd")
+const Loot = preload("res://scripts/world/loot_drop.gd")
+var _loot_save_pending := false
+
+func _drop_loot(id: String, is_boss: bool, enemy: VeilEnemy) -> void:
+	# Um inimigo já registrado como vencido não paga duas vezes.
+	if id in store.data["defeated"] or not is_instance_valid(enemy):
+		return
+	var reward := Economy.reward_for(id, enemy.archetype, is_boss)
+	for piece in Economy.xp_pieces(reward["xp"]):
+		_spawn_loot("xp", piece, enemy.position)
+	for piece in Economy.coin_pieces(reward["coins"]):
+		_spawn_loot("coin", piece, enemy.position)
+
+func _spawn_loot(kind: String, value: int, at: Vector2) -> void:
+	var drop := Loot.new()
+	drop.kind = kind
+	drop.value = value
+	drop.target = player
+	drop.collector = collect_loot
+	drop.position = at
+	# O inimigo morre dentro do passo de física do golpe de Senu.
+	actors.add_child.call_deferred(drop)
+
+func collect_loot(kind: String, value: int) -> void:
+	if kind == "xp":
+		var levels := Economy.grant_xp(store.data, value)
+		if levels > 0:
+			_apply_upgrades(false)
+			hud.toast("NÍVEL %d · vida máxima %d · dano +%d" % [Economy.level(store.data), player.max_health, Economy.damage_bonus(Economy.level(store.data))], Color("e2c693"), 4)
+	else:
+		Economy.add_coins(store.data, value)
+	if hud.has_method("loot_gained"):
+		hud.loot_gained(kind, value)
+	_save_soon()
+
+func _save_soon() -> void:
+	# Várias moedas chegam juntas: um salvamento só, logo depois da última.
+	if _loot_save_pending:
+		return
+	_loot_save_pending = true
+	# Conectado, e não com await: se a cena for recarregada antes, a ligação cai junto.
+	get_tree().create_timer(1.0).timeout.connect(_flush_loot_save)
+
+func _flush_loot_save() -> void:
+	_loot_save_pending = false
+	_save()
+
+# Casas (Gustavo, 27/10/2026): portas, interiores e baús em scripts/world/houses.gd.
+const Houses = preload("res://scripts/world/houses.gd")
+## Id da casa onde Senu está, ou "" no Porto.
+var inside_house := ""
+## Verdadeiro durante o escurecimento de uma porta.
+var house_busy := false
+
+## Posição de Senu no mapa do HUD: dentro de uma casa, a porta de fora.
+func map_position() -> Vector2:
+	return Houses.map_position(self)
+
+# Lojas e bálsamo (Gustavo, 27/10/2026): regras em scripts/economy/shop_catalog.gd.
+const Shop = preload("res://scripts/economy/shop_catalog.gd")
+const BALM_INTERVAL_MS := 600
+var _last_balm_ms := -BALM_INTERVAL_MS
+
+func buy_item(id: String) -> bool:
+	if not Shop.purchase(store.data, id):
+		return false
+	_apply_upgrades(false)
+	Houses.sound(player, "pickup_coin", player.global_position)
+	_save()
+	return true
+
+## A esquiva das Sandálias parte do valor original de Senu, guardado na primeira vez.
+var _base_dodge_cooldown := -1.0
+
+func _apply_shop_dodge() -> void:
+	if _base_dodge_cooldown < 0:
+		_base_dodge_cooldown = player.dodge_cooldown
+	player.dodge_cooldown = _base_dodge_cooldown * Shop.dodge_scale(store.data)
+
+func use_balm() -> bool:
+	if player.dead or not player.controls_enabled or Time.get_ticks_msec() - _last_balm_ms < BALM_INTERVAL_MS:
+		return false
+	var capacity := Shop.capacity(store.data, "balsamo")
+	if capacity <= 0:
+		hud.toast("Sem jarros de bálsamo · o Empório de Merit fica no Armazém das Vozes.", Color("d9ad8a"))
+		return false
+	if player.health >= player.max_health:
+		hud.toast("A vida já está cheia.", Color("d8c9a8"), 1.6)
+		return false
+	if not Shop.spend_charge(store.data, "balsamo"):
+		hud.toast("Bálsamo esgotado · medite num santuário para recarregar.", Color("d9ad8a"))
+		return false
+	_last_balm_ms = Time.get_ticks_msec()
+	var healed := mini(player.max_health - player.health, Shop.balm_heal(store.data))
+	player.health += healed
+	hud.toast("Bálsamo · +%d de vida · %d/%d" % [healed, Shop.charges(store.data, "balsamo"), capacity], Color("9bc9ae"), 1.8)
+	_save_soon()
+	return true
