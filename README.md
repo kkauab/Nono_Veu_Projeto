@@ -6,7 +6,7 @@ Protótipo jogável do **Porto dos Esquecidos**, em Godot 4.7.2 e GDScript. A ve
 
 1. Abra **JOGAR.cmd** para jogar usando o Godot já baixado neste computador.
 2. Abra **ABRIR_NO_GODOT.cmd** para editar. Outra opção é importar `project.godot` no Godot e pressionar **F5**.
-3. No menu, escolha **Nova jornada** ou **Retomar jornada**. Toda nova jornada começa pela abertura encenada no cais: **Enter / E** revela e avança as falas; mantenha **Espaço por 3 segundos contínuos** para pular.
+3. No menu, escolha **Nova jornada** ou **Retomar jornada**. Toda nova jornada começa pela abertura encenada no cais, com a conversa aprovada e retratos pixelados animados: **Enter / E ou clique na caixa** revela e avança as falas; mantenha **Espaço por 3 segundos contínuos** para pular.
 
 Se já testou a demo anterior, feche a janela antiga e abra novamente **JOGAR.cmd**. Para explorar a expansão desde o início, escolha **Nova jornada** no menu e confirme. O progresso anterior é arquivado antes do recomeço; **Retomar jornada** mantém suas coletas, armas, habilidades e chefe já derrotado.
 
@@ -62,7 +62,8 @@ Abra **ABRIR_SENU_PIXELORAMA.cmd** para o corpo comum em `art/pixelorama/senu/se
 - **ABRIR_RETRATO_PIXELORAMA.cmd** / **EXPORTAR_RETRATO.cmd**: retrato animado em `art/pixelorama/menu_v8/senu_menu_idle_v8.pxo`, com 12 cels de olhos/faixa separados.
 - **EXPORTAR_MAPA.cmd**: exporta os três projetos pelo Pixelorama instalado e importa no Godot. Feche a partida antiga e reabra **JOGAR.cmd** para recarregar.
 - **ABRIR_ABERTURA_PIXELORAMA.cmd** / **EXPORTAR_ABERTURA.cmd**: atlas original do cais da abertura em `art/pixelorama/opening_rpg_v11/intro_atlas.pxo`.
-- **ABRIR_PESCADOR_PIXELORAMA.cmd** e **ABRIR_BARCO_PIXELORAMA.cmd**: novos personagens e casco da chegada. **EXPORTAR_ABERTURA.cmd** exporta os três projetos da cena e importa no Godot.
+- **ABRIR_PESCADOR_PIXELORAMA.cmd** e **ABRIR_BARCO_PIXELORAMA.cmd**: personagem e casco da chegada. **EXPORTAR_ABERTURA.cmd** exporta os projetos da cena e os retratos, depois importa no Godot.
+- **ABRIR_SENU_DIALOGO_PIXELORAMA.cmd** e **ABRIR_PESCADOR_DIALOGO_PIXELORAMA.cmd**: novas folhas de bustos de diálogo, com 20 poses completas por personagem, expressões, boca e piscadas. A atuação tem ritmo próprio, separado da digitação. **EXPORTAR_RETRATOS_DIALOGO.cmd** exporta os dois; a exportação completa da abertura também os inclui.
 - **ABRIR_INIMIGOS_PIXELORAMA.cmd** / **EXPORTAR_INIMIGOS.cmd**: sentinelas, com 64 poses em `art/pixelorama/enemies_v12/port_enemies_v12.pxo`; cada tipo tem oito passos e cinco fases de ataque.
 
 As imagens de base foram criadas com a ferramenta integrada ImageGen; o terreno e a água foram preparados como cels em baixa resolução, e os PNGs finais foram exportados pelo Pixelorama 1.2.3. Os projetos nativos são editáveis. Não houve desenho manual pela interface do aplicativo. Fontes e prompts estão em `art/pixelorama/port_v7/`.
@@ -78,3 +79,6 @@ Consulte [docs/DECISOES.md](docs/DECISOES.md), [docs/PROGRESSO.md](docs/PROGRESS
 Histórico de critérios e medições v7: [docs/VISUAL_E_DESEMPENHO_V7.md](docs/VISUAL_E_DESEMPENHO_V7.md). Prompts e fontes de arte: [art/pixelorama/port_v7/ART_PROMPTS.md](art/pixelorama/port_v7/ART_PROMPTS.md).
 
 Revisão atual de legibilidade, menus animados, proporções, resistência, apoios e abertura de RPG: [docs/REFINAMENTO_V8.md](docs/REFINAMENTO_V8.md).
+
+Sistema reutilizável de diálogo com retratos novos, digitação e atuação natural independente: [docs/SISTEMA_DIALOGO_RETRATOS.md](docs/SISTEMA_DIALOGO_RETRATOS.md).
+
