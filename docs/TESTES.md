@@ -64,3 +64,11 @@ $demoGodot = "$env:USERPROFILE\Downloads\Godot_v4.7.2-stable_win64_console.exe"
 O teste de percurso imobiliza a IA do chefe e remove os inimigos comuns por aplicação de dano para isolar navegação; a derrota do chefe nesse teste também é provocada por dano de teste. A lógica de combate é verificada separadamente. Isso não substitui uma partida humana nem valida o balanceamento final.
 
 Os três nós atuais derivam da base e não possuem dependências entre si; um caso de pré-requisito ausente ainda não existe para ser exercitado. Não foram testados gamepad, campanha completa, arte definitiva ou executável independente. Os modelos de exportação do Godot não foram encontrados nem instalados nesta etapa.
+
+## Mundo: puzzles depois de reabrir o jogo — 27/10/2026
+
+Correções da zona Mundo (Gustavo) em `port_demo.gd`: o altar das estrelas aceita um alinhamento feito antes de fechar e reabrir o jogo, e um toque fora de ordem nos sinos mostra o próprio aviso. O novo `tests/puzzle_reload_test.gd` aprovou **8/8**; sem as correções, falha nos três casos dos bugs. Com Godot 4.7.2: percurso **121/121**, mundo **124/124**, progressão **111/111**, migração **32/32** e abertura **23/23**. Detalhes em `docs/MUNDO_EXPANSAO.md`.
+
+```powershell
+& $demoGodot --headless --path . --script res://tests/puzzle_reload_test.gd -- --qa
+```

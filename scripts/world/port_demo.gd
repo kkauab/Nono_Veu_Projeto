@@ -377,18 +377,22 @@ func _activate_puzzle(item: PortInteractable) -> bool:
 			var sequence: Array = puzzles["bells"]
 			if sequence.size() >= order.size():
 				sequence.clear()
+			var broken: bool = note != order[sequence.size()]
+			if broken:
+				sequence.clear()
 			if note == order[sequence.size()]:
 				sequence.append(note)
-			else:
-				sequence.clear()
-				if note == "moon":
-					sequence.append(note)
-				hud.toast("A harmonia se desfaz. Recomece pela Lua.", Color("d9ad8a"))
 			if sequence.size() == 3:
 				return _award_seal("seal_bells", "A lembrança da Voz")
 			refresh_seals()
 			_save()
-			hud.toast("Sinos: %d de 3 notas reconhecidas." % sequence.size())
+			# Only one toast is visible, so the warning replaces the progress line.
+			if broken and sequence.is_empty():
+				hud.toast("A harmonia se desfaz. Recomece pela Lua.", Color("d9ad8a"))
+			elif broken:
+				hud.toast("A harmonia se desfaz. A Lua recomeça a sequência · 1 de 3 notas.", Color("d9ad8a"))
+			else:
+				hud.toast("Sinos: %d de 3 notas reconhecidas." % sequence.size())
 		"valve":
 			var sources: Array = puzzles["water_sources"]
 			if id == "valve_reset":
@@ -422,7 +426,8 @@ func _activate_puzzle(item: PortInteractable) -> bool:
 			_save()
 			hud.toast(item.label)
 		"stars_altar":
-			if puzzles["stars"] == [1, 3, 2]:
+			# A reopened save brings the positions back from JSON as floats.
+			if puzzles["stars"].map(func(value): return int(value)) == [1, 3, 2]:
 				return _award_seal("seal_stars", "A lembrança do Céu")
 			hud.show_dialog("O céu ainda não responde", "Os três obeliscos não formam a orientação gravada no Farol.\n\nCada toque gira apenas um deles. As posições atuais ficam salvas; você pode corrigir qualquer orientação sem recomeçar a exploração.")
 			return false
