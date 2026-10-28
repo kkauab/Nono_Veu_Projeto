@@ -1,0 +1,157 @@
+{
+	"canvas": [
+		128,
+		144
+	],
+	"columns": 8,
+	"frames": 27,
+	"pivot": [
+		64,
+		112
+	],
+	"pixel_art": true,
+	"source": "res://art/pixelorama/sea_v1/isle_v1.pxo",
+	"sprites": {
+		"acacia": {
+			"frames": [
+				0
+			]
+		},
+		"altar_closed": {
+			"frames": [
+				11
+			]
+		},
+		"altar_open": {
+			"frames": [
+				12
+			]
+		},
+		"amphora": {
+			"frames": [
+				14
+			]
+		},
+		"ankhet": {
+			"fps": 4.0,
+			"frames": [
+				18,
+				19,
+				20
+			],
+			"sequence": [
+				0,
+				0,
+				1,
+				1,
+				0,
+				0,
+				1,
+				1,
+				0,
+				2
+			]
+		},
+		"brazier_off": {
+			"frames": [
+				10
+			]
+		},
+		"brazier_on": {
+			"fps": 8.0,
+			"frames": [
+				15,
+				16,
+				17
+			],
+			"sequence": [
+				0,
+				1,
+				2,
+				1
+			]
+		},
+		"bush_a": {
+			"frames": [
+				2
+			]
+		},
+		"bush_b": {
+			"frames": [
+				3
+			]
+		},
+		"column_broken": {
+			"frames": [
+				9
+			]
+		},
+		"driftwood": {
+			"frames": [
+				8
+			]
+		},
+		"heron": {
+			"fps": 2.0,
+			"frames": [
+				21,
+				22,
+				23,
+				24
+			],
+			"sequence": [
+				0,
+				0,
+				0,
+				1,
+				1,
+				0,
+				0,
+				2,
+				0,
+				3,
+				3,
+				0
+			]
+		},
+		"heron_fly": {
+			"fps": 6.0,
+			"frames": [
+				25,
+				26
+			]
+		},
+		"net": {
+			"frames": [
+				13
+			]
+		},
+		"reeds": {
+			"frames": [
+				7
+			]
+		},
+		"rock_a": {
+			"frames": [
+				4
+			]
+		},
+		"rock_b": {
+			"frames": [
+				5
+			]
+		},
+		"sea_rock": {
+			"frames": [
+				6
+			]
+		},
+		"sycamore": {
+			"frames": [
+				1
+			]
+		}
+	},
+	"texture": "res://assets/world/isle_v1.png",
+	"version": 1
+}

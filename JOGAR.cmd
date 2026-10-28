@@ -1,12 +1,15 @@
 @echo off
 setlocal
 set "GAME_GODOT=%USERPROFILE%\Downloads\Godot_v4.7.2-stable_win64.exe"
+rem No PC do Gustavo o Godot fica em A:\Ferramentas\godot, nao em Downloads.
+if not exist "%GAME_GODOT%" set "GAME_GODOT=A:\Ferramentas\godot\Godot_v4.7.2-stable_win64.exe"
 if not exist "%GAME_GODOT%" (
-  echo Godot nao encontrado em Downloads. Abra project.godot no Godot 4 e pressione F6 na cena main, ou F5 para jogar.
+  echo Godot nao encontrado em Downloads nem em A:\Ferramentas\godot. Abra project.godot no Godot 4 e pressione F6 na cena main, ou F5 para jogar.
   pause
   exit /b 1
 )
 set "GAME_GODOT_IMPORT=%USERPROFILE%\Downloads\Godot_v4.7.2-stable_win64_console.exe"
+if not exist "%GAME_GODOT_IMPORT%" set "GAME_GODOT_IMPORT=A:\Ferramentas\godot\Godot_v4.7.2-stable_win64_console.exe"
 if not exist "%GAME_GODOT_IMPORT%" set "GAME_GODOT_IMPORT=%GAME_GODOT%"
 if not exist "%~dp0qa" mkdir "%~dp0qa"
 echo Preparando os arquivos do jogo. Aguarde...

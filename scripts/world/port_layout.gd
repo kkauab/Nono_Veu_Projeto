@@ -2,6 +2,7 @@ extends Node2D
 class_name PortLayout
 const Art = preload("res://scripts/world/port_art.gd")
 const WaterLife = preload("res://scripts/world/water_life.gd")
+const IsleLayout = preload("res://scripts/world/isle_layout.gd")
 ## Onde o mar é desenhado. Interiores ficam fora dele, sobre fundo próprio.
 const SEA_RECT := Rect2(-4000, -2400, 8000, 6000)
 
@@ -36,7 +37,11 @@ const ROOMS := [
 	{"id": "buried", "label": "Santuário Soterrado", "name": "Santuário Soterrado da Maré", "rect": Rect2i(-12, 32, 11, 13), "color": Color("53615d"), "theme": "crypt"},
 	# The echo route is reached only from the Catacombs; its grate faces the sanctuary.
 	{"id": "echo_descent", "label": "Descida do Eco", "name": "Descida do Eco", "rect": Rect2i(-19, 3, 3, 17), "color": Color("4b4f5c"), "theme": "crypt", "generated": false},
-	{"id": "echo_gallery", "label": "Galeria do Eco", "name": "Galeria do Eco", "rect": Rect2i(-19, -4, 13, 7), "color": Color("4f5260"), "theme": "crypt", "generated": false}
+	{"id": "echo_gallery", "label": "Galeria do Eco", "name": "Galeria do Eco", "rect": Rect2i(-19, -4, 13, 7), "color": Color("4f5260"), "theme": "crypt", "generated": false},
+	# Só se chega de barco (sea.gd). O chão segue a costa de isle_layout.gd, não o
+	# retângulo; "outline" é o contorno desenhado no mapa.
+	{"id": "isle", "label": "Ilha do Bennu", "name": "Ilha do Bennu", "rect": Rect2i(35, 59, 22, 19), "color": Color("5e6b4f"), "theme": "garden", "generated": false, "shape": "isle",
+		"outline": [Vector2(57.2, 70.0), Vector2(55.8, 72.7), Vector2(53.2, 74.5), Vector2(50.9, 76.2), Vector2(48.1, 77.2), Vector2(45.0, 77.2), Vector2(41.8, 77.5), Vector2(37.9, 77.4), Vector2(35.2, 75.4), Vector2(35.4, 72.4), Vector2(36.2, 70.0), Vector2(35.8, 67.7), Vector2(36.2, 65.1), Vector2(38.5, 63.2), Vector2(41.6, 62.0), Vector2(44.0, 61.4), Vector2(44.0, 58.6), Vector2(46.0, 58.6), Vector2(46.0, 61.4), Vector2(48.3, 62.2), Vector2(50.3, 64.5), Vector2(52.2, 66.0), Vector2(55.3, 67.4)]}
 ]
 const ROOM_LINKS := [
 	["hub", "p1"], ["p1", "market"], ["market", "p2"], ["p2", "bridge"],
@@ -49,7 +54,8 @@ const ROOM_LINKS := [
 	["salt_road", "beacon"], ["beacon", "oracle"], ["oracle", "reservoir"],
 	["reservoir", "copper_dock"], ["copper_dock", "lower_dock"],
 	["garden", "cistern"], ["cistern", "sluice"], ["sluice", "buried"],
-	["a02", "echo_descent"], ["echo_descent", "echo_gallery"], ["echo_gallery", "hub", "echo"]
+	["a02", "echo_descent"], ["echo_descent", "echo_gallery"], ["echo_gallery", "hub", "echo"],
+	["lower_dock", "isle", "sea_route"]
 ]
 const CONNECTORS := [
 	{"rect": Rect2i(4, 0, 1, 2), "room": "p1", "theme": "stone", "color": Color("626456")},
@@ -151,7 +157,11 @@ const ENEMY_SPAWNS := [
 	{"id": "comporta_02", "tile": Vector2(8, 42), "archetype": "lancer"},
 	{"id": "soterrado_01", "tile": Vector2(-8, 34), "archetype": "keeper"},
 	{"id": "soterrado_02", "tile": Vector2(-3, 42), "archetype": "guard"},
-	{"id": "cais_patrol", "tile": Vector2(30, 33), "archetype": "guard"}
+	{"id": "cais_patrol", "tile": Vector2(30, 33), "archetype": "guard"},
+	# Ilha do Bennu: os três Esquecidos da missão de Ankhet (isle_story.gd).
+	{"id": "esquecido_ilha_01", "tile": Vector2(39, 70.5), "archetype": "runner"},
+	{"id": "esquecido_ilha_02", "tile": Vector2(48, 73), "archetype": "guard"},
+	{"id": "esquecido_ilha_03", "tile": Vector2(49, 67.5), "archetype": "lancer"}
 ]
 const MAIN_ROUTE_WAYPOINTS := [
 	Vector2(-1, -1), Vector2(3, 0), Vector2(6, 0), Vector2(11, 0), Vector2(16, 0),
@@ -189,6 +199,8 @@ static func room_at(point: Vector2) -> String:
 static func tile_catalog() -> Dictionary:
 	var catalog: Dictionary = {}
 	for region in ROOMS + CONNECTORS + LANDINGS:
+		if region.has("shape"):
+			continue
 		var rect: Rect2i = region["rect"]
 		for x in range(rect.position.x, rect.end.x):
 			for y in range(rect.position.y, rect.end.y):
@@ -197,6 +209,9 @@ static func tile_catalog() -> Dictionary:
 		for x in range(hole.position.x, hole.end.x):
 			for y in range(hole.position.y, hole.end.y):
 				catalog.erase(Vector2i(x, y))
+	var isle := IsleLayout.tiles()
+	for tile in isle:
+		catalog[tile] = {"color": IsleLayout.COLORS[isle[tile]], "theme": isle[tile]}
 	return catalog
 
 func _ready() -> void:

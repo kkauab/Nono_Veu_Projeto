@@ -1,0 +1,434 @@
+{
+	"canvas": [
+		96,
+		80
+	],
+	"columns": 10,
+	"frames": 160,
+	"pivot": [
+		48,
+		54
+	],
+	"pixel_art": true,
+	"source": "res://art/pixelorama/sea_v1/boat_v1.pxo",
+	"sprites": {
+		"boat_00": {
+			"frames": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_01": {
+			"frames": [
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_02": {
+			"frames": [
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_03": {
+			"frames": [
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_04": {
+			"frames": [
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_05": {
+			"frames": [
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_06": {
+			"frames": [
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_07": {
+			"frames": [
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_08": {
+			"frames": [
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_09": {
+			"frames": [
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_10": {
+			"frames": [
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_11": {
+			"frames": [
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_12": {
+			"frames": [
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_13": {
+			"frames": [
+				130,
+				131,
+				132,
+				133,
+				134,
+				135,
+				136,
+				137,
+				138,
+				139
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_14": {
+			"frames": [
+				140,
+				141,
+				142,
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		},
+		"boat_15": {
+			"frames": [
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159
+			],
+			"poses": [
+				"parado",
+				"puxada 0",
+				"puxada 1",
+				"puxada 2",
+				"puxada 3",
+				"volta 4",
+				"volta 5",
+				"volta 6",
+				"volta 7",
+				"vazio"
+			]
+		}
+	},
+	"texture": "res://assets/world/boat_v1.png",
+	"version": 1
+}

@@ -7,6 +7,7 @@ const Dressing = preload("res://scripts/world/port_dressing.gd")
 const Opening = preload("res://scripts/ui/opening_cutscene.gd")
 const LEVER_FLAGS := {"alavanca": "shortcut", "alavanca_aqueduct": "aqueduct", "alavanca_eco": "echo"}
 const Story = preload("res://scripts/world/port_story.gd")
+const Life = preload("res://scripts/world/port_life.gd")
 const Skills = preload("res://scripts/progression/skill_catalog.gd")
 var store: DemoSaveStore
 var player: SenuPlayer
@@ -178,6 +179,10 @@ func _build_objects() -> void:
 	echo_gate = _make_gate("echo", "echo")
 	Story.build(self)
 	Houses.build(self)
+	Life.build(self)
+	# Barco de Sabu e Ilha do Bennu (Gustavo, 27/10/2026; docs/MUNDO_BARCO_ILHA.md).
+	Isle.build(self)
+	Sea.build(self)
 	refresh_seals()
 
 func _make_gate(gate_id: String, flag: String) -> PortGate:
@@ -230,6 +235,9 @@ func _physics_process(_delta: float) -> void:
 	if _perception_tick <= 0.0:
 		_perception_tick = .25
 		_update_skill_perception()
+	# No barco (ou saltando para ele), o mar cuida do quadro: atracar e as ânforas.
+	if Sea.update(self, _delta):
+		return
 	# Dentro de uma casa, Layout.room_at responderia "p1" para qualquer tile; o setor
 	# continua sendo o distrito da porta, já visitado.
 	var room := current_room if Houses.inside(self) else Layout.room_at(player.position)
@@ -263,10 +271,16 @@ func activate(item: PortInteractable) -> bool:
 	if not is_instance_valid(item) or not item.active or player.position.distance_to(item.position) > 44:
 		return false
 	match item.kind:
+		"townsfolk", "vendor":
+			return Life.activate(self, item)
 		"iri_mark", "iri_relic", "npc":
 			return Story.activate(self, item)
 		"door", "house_chest", "house_note", "shopkeeper":
 			return Houses.activate(self, item)
+		"boat_moor":
+			return Sea.activate(self, item)
+		"isle_npc", "isle_brazier", "isle_altar", "isle_net":
+			return Isle.activate(self, item)
 		"clue", "bell", "valve", "water_altar", "dial", "stars_altar", "boss_lock":
 			return _activate_puzzle(item)
 		"shrine":
@@ -569,6 +583,7 @@ func _on_player_died() -> void:
 	hud.toast("A memória persiste. Retorne à última palavra.", Color("dfb5b0"), 2)
 	await get_tree().create_timer(1.5).timeout
 	player.reset_at(Layout.iso(checkpoints[store.data["checkpoint"]]))
+	Sea.respawn(self)
 	var camera: Camera2D = player.get_node("IsometricCamera")
 	camera.reset_smoothing()
 	respawning = false
@@ -608,6 +623,14 @@ func _resume_journey() -> void:
 
 func _play_opening() -> void:
 	if opening_active: return
+	# Rodar o jogo sem o editor depois de uma atualização deixa o cache de classes
+	# (.godot) velho, e a abertura pode não compilar: segue sem ela em vez de
+	# esconder o mundo e travar numa tela preta. JOGAR.cmd reimporta nesses casos.
+	var opening_script: Script = Opening
+	if not opening_script.can_instantiate():
+		push_error("A abertura não pôde ser carregada; reimporte o projeto (JOGAR.cmd faz isso).")
+		_resume_journey()
+		return
 	opening_active = true
 	player.controls_enabled = false
 	hud.set_process_unhandled_input(false)
@@ -776,3 +799,13 @@ func use_balm() -> bool:
 	hud.toast("Bálsamo · +%d de vida · %d/%d" % [healed, Shop.charges(store.data, "balsamo"), capacity], Color("9bc9ae"), 1.8)
 	_save_soon()
 	return true
+
+# --- Barco de Sabu e Ilha do Bennu (Gustavo, 27/10/2026; docs/MUNDO_BARCO_ILHA.md) ---
+const Sea = preload("res://scripts/world/sea.gd")
+const Isle = preload("res://scripts/world/isle.gd")
+## O barco (sea_boat.gd) e o píer onde ele está amarrado ("sabu" ou "bennu").
+var boat: CharacterBody2D
+var boat_dock := "sabu"
+## Senu está remando; sea_busy cobre o salto entre o píer e o barco.
+var at_sea := false
+var sea_busy := false

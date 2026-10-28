@@ -14,14 +14,21 @@ var _width := 20.0
 var _visibility_tick := 0.0
 var _flame_tick := 0.0
 var _opacity := 1.0
-var _collision_radius := 0.0
+## Painted footprints, measured once: enemy navigation asks about them often.
+var _foundations: Array[PackedVector2Array] = []
 var _ground_line := PackedFloat32Array()
 var _art_bottom := PackedFloat32Array()
+var _blocks := false
+## Contact shade: the footprint grown by a couple of pixels, so a rim of shadow
+## meets the base instead of a patch under the pivot, in front of the object.
+var _ground_shade: Array[PackedVector2Array] = []
 
 ## Facades wider than an actor are cut into columns, each sorted at the floor line
 ## of its own art: Senu beside a warehouse wall or under an arch is no longer drawn
 ## behind the whole building.
-const SLICED := ["warehouse", "temple", "arch", "stall", "lighthouse"]
+const SLICED := ["warehouse", "temple", "arch", "stall", "lighthouse", "wall", "stairs"]
+## Reeds sway over the water's edge and boats float: neither has a footprint.
+const PASSABLE := ["reeds", "boat"]
 const SLICE_WIDTH := 4
 ## Senu's sprite rises about 40 px above his feet.
 const ACTOR_HEIGHT := 42.0
@@ -60,6 +67,19 @@ func foundation_polygons() -> Array[PackedVector2Array]:
 	elif kind == "lighthouse":
 		# Tower plinth, the fallen blocks around it and the ground under its banner.
 		result.append(PackedVector2Array([Vector2(-43, -20), Vector2(-36, -8), Vector2(-27, -3), Vector2(-3, -1), Vector2(24, -3), Vector2(33, -7), Vector2(40, -13), Vector2(0, -34)]))
+	elif kind == "bollard":
+		# Drawn by code around the pivot, like the rubble below.
+		result.append(PackedVector2Array([Vector2(-8, 0), Vector2(0, -5), Vector2(8, 0), Vector2(0, 5)]))
+	elif kind == "rubble":
+		result.append(PackedVector2Array([Vector2(-13, 0), Vector2(-9, -9), Vector2(-1, -13), Vector2(9, -5), Vector2(15, 1), Vector2(0, 6)]))
+	elif kind not in PASSABLE:
+		# Pillars, statues, braziers, cargo, palms, ruined walls and stairs stand on
+		# the base painted behind their pivot. A circle on the pivot left Senu walking
+		# into the back half of each object and stopping short of its front.
+		var base := Art.footprint("crate" if kind == "barrel" else kind)
+		if kind == "barrel":
+			for index in range(base.size()): base[index] *= .72
+		if not base.is_empty(): result.append(base)
 	if mirror:
 		for index in range(result.size()):
 			var reflected := PackedVector2Array()
@@ -68,44 +88,30 @@ func foundation_polygons() -> Array[PackedVector2Array]:
 	return result
 
 func blocks_ground_point(point: Vector2, clearance: float = 0.0) -> bool:
+	if not _blocks: return false
 	var local := to_local(point)
-	var polygons := foundation_polygons()
-	if not polygons.is_empty():
-		for polygon in polygons:
-			if Geometry2D.is_point_in_polygon(local, polygon): return true
-			for edge in range(polygon.size()):
-				if local.distance_to(Geometry2D.get_closest_point_to_segment(local, polygon[edge], polygon[(edge + 1) % polygon.size()])) < clearance: return true
-		return false
-	return solid and _collision_radius > 0.0 and local.length() < _collision_radius + clearance
+	for polygon in _foundations:
+		if Geometry2D.is_point_in_polygon(local, polygon): return true
+		for edge in range(polygon.size()):
+			if local.distance_to(Geometry2D.get_closest_point_to_segment(local, polygon[edge], polygon[(edge + 1) % polygon.size()])) < clearance: return true
+	return false
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_visibility_tick = fposmod(position.x * .003 + position.y * .005, .12)
 	_flame_tick = fposmod(position.x * .005 + position.y * .003, .1)
-	var radius := 0.0
-	match kind:
-		"pillar": radius = 9.0
-		"crate", "barrel", "bollard": radius = 8.0
-		"statue": radius = 11.0
-		"palm": radius = 7.0
-		"stall": radius = 14.0
-	_collision_radius = radius
-	var foundations := foundation_polygons()
-	if (solid and (radius > 0 or not foundations.is_empty())) or kind == "arch":
+	_foundations = foundation_polygons()
+	for polygon in _foundations:
+		_ground_shade.append_array(Geometry2D.offset_polygon(polygon, 2.0))
+	if (solid or kind == "arch") and not _foundations.is_empty():
+		_blocks = true
 		var body := StaticBody2D.new()
 		body.collision_layer = 1
 		body.collision_mask = 6
-		if not foundations.is_empty():
-			for polygon in foundations:
-				var collider := CollisionShape2D.new()
-				var shape := ConvexPolygonShape2D.new()
-				shape.points = polygon
-				collider.shape = shape
-				body.add_child(collider)
-		else:
+		for polygon in _foundations:
 			var collider := CollisionShape2D.new()
-			var shape := CircleShape2D.new()
-			shape.radius = radius
+			var shape := ConvexPolygonShape2D.new()
+			shape.points = polygon
 			collider.shape = shape
 			body.add_child(collider)
 		add_child(body)
@@ -171,10 +177,9 @@ func draw_columns(canvas: CanvasItem, from: int, to: int) -> void:
 	Art.draw_prop_columns(canvas, kind, from, to)
 
 func draw_ground(canvas: CanvasItem) -> void:
-	var foundations := foundation_polygons()
-	for polygon in foundations:
+	for polygon in _ground_shade:
 		canvas.draw_colored_polygon(polygon, Color(.015, .025, .03, .28))
-	if foundations.is_empty():
+	if _ground_shade.is_empty():
 		_shadow(canvas, 17 if kind not in ["boat", "stall"] else 45, 7)
 
 func _hides(offset: Vector2) -> bool:

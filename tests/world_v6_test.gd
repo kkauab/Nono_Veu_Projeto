@@ -33,8 +33,8 @@ func _run() -> void:
 	catalog = PortLayout.tile_catalog()
 	print("WORLD_V6_LAYOUT rooms=", PortLayout.ROOMS.size(), " tiles=", catalog.size(), " enemies=", PortLayout.ENEMY_SPAWNS.size())
 	check(world.store.path.begins_with("user://qa/"), "New world test never uses the real save")
-	check(PortLayout.ROOMS.size() == 29 and catalog.size() >= 4000, "Expanded port has 27 districts, the echo route and at least 4000 floor cells")
-	check(PortLayout.ENEMY_SPAWNS.size() == 38 and get_nodes_in_group("enemies").size() == 38, "Thirty-seven regular enemies and one boss spawn")
+	check(PortLayout.ROOMS.size() == 30 and catalog.size() >= 4000, "Expanded port has 27 districts, the echo route, the Bennu island and at least 4000 floor cells")
+	check(PortLayout.ENEMY_SPAWNS.size() == 41 and get_nodes_in_group("enemies").size() == 41, "Forty regular enemies (three on the island) and one boss spawn")
 	for enemy in get_nodes_in_group("enemies"):
 		enemy.queue_free()
 	await physics_frame
@@ -43,12 +43,14 @@ func _run() -> void:
 	check(not reachable.has(Vector2i(-12, 0)) and not reachable.has(Vector2i(-20, 25)), "Closed echo grate keeps its gallery and the Catacombs behind it")
 	for spawn in PortLayout.ENEMY_SPAWNS:
 		check(catalog.has(Vector2i(spawn["tile"])), "Enemy starts on valid ground: " + spawn["id"])
+	var island: Dictionary = PortLayout.IsleLayout.tiles()
 	var all_regular_reachable := true
 	for spawn in PortLayout.ENEMY_SPAWNS:
-		if not spawn.get("boss", false) and not reachable.has(Vector2i(spawn["tile"])):
+		# A Ilha do Bennu só se alcança de barco (boat_test.gd cobre a travessia).
+		if not spawn.get("boss", false) and not island.has(Vector2i(spawn["tile"])) and not reachable.has(Vector2i(spawn["tile"])):
 			all_regular_reachable = false
 	check(all_regular_reachable, "All regular encounters can be reached before entering the boss arena")
-	check(flood(Vector2i(PortLayout.MARKERS["hub_spawn"]), true).size() == catalog.size(), "Every floor cell belongs to the connected explored port once gates are open")
+	check(flood(Vector2i(PortLayout.MARKERS["hub_spawn"]), true).size() == catalog.size() - island.size(), "Every floor cell outside the island belongs to the connected explored port once gates are open")
 	for id in ["bells_clue", "bell_moon", "bell_sun", "bell_star", "water_clue", "valve_two", "valve_three", "valve_drain", "valve_reset", "water_altar", "stars_clue", "star_sun", "star_moon", "star_eye", "stars_altar", "caravan_rest", "cistern_rest"]:
 		check(reachable.has(Vector2i(PortLayout.MARKERS[id])), "Exploration mechanism is reachable before the boss: " + id)
 	check(not world.boss_entry_gate.opened and world.seals_found() == 0, "Fresh journey starts with no seals and a closed boss entrance")
@@ -145,7 +147,8 @@ func use_item(id: String, expect_success: bool = true) -> bool:
 	if object == null:
 		check(false, "Interaction exists: " + id)
 		return false
-	if not await walk_to(PortLayout.unproject(object.position)):
+	# Stands are solid: the player walks up to the front of the object.
+	if not await walk_to(PortLayout.unproject(object.position + Vector2(0, 13))):
 		check(false, "Physical route reaches: " + id)
 		return false
 	var accepted: bool = world.activate(object)
@@ -185,7 +188,8 @@ func walk_to(tile: Vector2) -> bool:
 		navigation_ids.clear()
 		var occupied: Dictionary = {}
 		for prop in world.actors.get_children():
-			if not prop is PortProp or (not prop.solid and prop.kind != "arch"):
+			# Solid props and the stands of puzzles and shrines; the rest answers false.
+			if not prop.has_method("blocks_ground_point"):
 				continue
 			var at := PortLayout.unproject(prop.position)
 			for x in range(floori(at.x) - 2, ceili(at.x) + 3):
