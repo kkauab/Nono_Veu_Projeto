@@ -229,3 +229,52 @@ Achado: `Start-Process` do PowerShell 5.1 não põe aspas nos argumentos. Na pas
 ```powershell
 & $demoGodot --headless --path . --script res://tests/interiors_art_test.gd
 ```
+
+## Tela preta em "Nova jornada" — 27/10/2026
+
+Gustavo (relato de quem jogou pelo `JOGAR.cmd`): o menu abria, mas "Nova jornada" deixava a tela preta. Reproduzido num clone com o cache de classes do Godot desatualizado (`.godot/global_script_class_cache.cfg` sem a `VeilDialogueBabble` de hoje). A abertura não compilava (`Could not find type "VeilDialogueBabble"`), e `_play_opening` já tinha escondido o mundo e o HUD. Rodado direto, sem o editor, o Godot não atualiza esse cache nem as importações; o clone limpo, sem `.godot`, nem chega ao menu.
+
+Correções:
+- `JOGAR.cmd`: fica a versão do Kauã (commit `78bd2a9`), que roda `--headless --editor --import --quit` antes de toda partida e grava o resultado em `qa/startup_import.log`. Ao juntar a `main` na `gustavo/dev`, ganhou só a busca dos dois executáveis do Godot (normal e console) também em `A:\Ferramentas\godot`, onde eles ficam no PC do Gustavo. A primeira versão do Gustavo, que só reimportava quando o commit mudava, foi descartada.
+- `port_demo.gd`: se o script da abertura não compila, o jogo segue sem ela, com erro no log, em vez de travar. Conferido no clone: com o cache estragado, o jogo vai ao Santuário.
+
+Depois da junção, uma cópia do `JOGAR.cmd` que não abre o jogo achou o Godot em `A:\Ferramentas`, importou em 11 s, e o cache passou a ter a nova `MercuryProjectile`. Com a `main` e essas mudanças juntas passaram:
+- abertura: fluxo **23/23** e RPG **64/64**;
+- casas e lojas: casas **54/54**, arte dos interiores **13/13**, Empório **47/47**, Forja e Tenda **37/37**;
+- inimigos e habilidades: loot **43/43**, renascimento **58/58**, habilidades no mundo **63/63**, árvore na interface **406/406**;
+- base: HUD **19/19**, migração **32/32**, progressão **123/123** e percurso **137/137**.
+
+## Barco de Sabu e Ilha do Bennu — 27/10/2026
+
+Pedido do Gustavo: navegação, um barco com animações e uma ilha para explorar, com missões. O plano e os arquivos estão em [MUNDO_BARCO_ILHA.md](MUNDO_BARCO_ILHA.md). Godot 4.7.2, slots `user://qa/`:
+
+| Suíte | Resultado | O que verifica |
+|---|---:|---|
+| `boat_test.gd -- --qa` | 56/56 | Píeres em terra e amarrações na água, embarque com salto, remada com inércia e curva, câmera e esteira, costa sólida, ânfora paga uma vez, travessia remando até o píer do Bennu (~7 s), atracação, e o barco voltando ao píer do lado do último santuário. |
+| `isle_test.gd -- --qa` | 58/58 | 273 tiles de chão, todos alcançáveis a pé a partir do píer e separados do porto pela água; vegetação sobre a terra sem tampar as peças; garças na água; Ankhet e os 3 Esquecidos (a vitória sobrevive ao renascimento), as três chamas na ordem, o altar com a Pena do Bennu, a rede de Hori, o save que volta a carregar e o contorno da ilha no mapa. |
+
+Capturas com janela (`--capture-boat`, `--capture-isle`): `qa/barco_pier.png`, `qa/barco_remando.png`, `qa/barco_ilha.png`, `qa/ilha_bennu.png` e `qa/ilha_mapa.png`. Na janela recém-aberta, a suavização da câmera passava do ponto depois de um teleporte; o teste agora chama `reset_smoothing()`, como o jogo já faz.
+
+Regressões com tudo junto:
+- todas passaram: ilha **58/58**, barco **56/56**, histórias do porto **55/55**, casas **54/54**, Empório **47/47**, Forja e Tenda **37/37**, loot **43/43**, renascimento **58/58**, catálogo de habilidades **47/47**, habilidades no mundo **63/63**, HUD **19/19**, progressão **123/123**, migração **32/32**, fluxo da abertura **23/23**, navegação **8/8**, chão do mapa **1488/1488**, mundo **128/128** e percurso **138/138**.
+- No meio do trabalho, o mundo e o percurso chegaram a falhar no altar das estrelas e no santuário s1, que ganharam colisão no trabalho da sessão do Mundo. Ela ajustou o caminho dos testes até a frente desses objetos.
+
+Correções feitas durante o trabalho:
+- a flag `sea_route` entrou no save novo, porque o carregamento completa as flags opcionais e a ida e a volta deixavam de bater;
+- o HUD lê `at_sea` sem `bool(null)`.
+
+## Fluidez do mar e navios ancorados — 27/10/2026
+
+Medido com o jogo em janela, num monitor de 165 Hz, remando em linha reta. Antes: 60 quadros por segundo com o limite ligado por padrão, cada quadro durando 2 ou 3 atualizações da tela, alternando. Depois: 165 quadros e 165 passos de física (um por quadro desenhado); a tela rola 0 ou 1 px por quadro, em ritmo regular, e o barco fica parado no centro. Detalhes em [MUNDO_BARCO_ILHA.md](MUNDO_BARCO_ILHA.md), seção "Fluidez".
+
+`boat_test.gd -- --qa`: **62/62**. Novos itens:
+- a física segue o monitor sem o limite (165 → 165, 144 → 144, 59,94 → 60);
+- o limite, monitores desconhecidos e monitores muito rápidos ficam entre 60 e 240;
+- o limite vem desligado;
+- todo navio ancorado recebe a linha d'água e os anéis;
+- a quilha é a reta pelo meio do casco, não pelas pontas;
+- a folha tem 8 quadros de remada, todos vistos ao remar.
+
+Capturas de antes e depois no Cais dos Esquecidos: o casco agora entra na água, com espuma, e a sombra de chão sumiu.
+
+Regressões: ilha **58/58**, HUD **19/19**, mundo **128/128** e efeitos de combate **108/108**. Nenhum código de movimento conta passos de física sem usar o tempo.

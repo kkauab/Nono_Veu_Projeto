@@ -10,6 +10,7 @@ const TITLE_IMAGE := "res://assets/ui/port_title_v7.png"
 const PORTRAIT_IMAGE := "res://assets/ui/senu_portrait_v7.png"
 const PORTRAIT_IDLE_IMAGE := "res://assets/ui/senu_menu_idle_v8.png"
 const SkillCatalog = preload("res://scripts/progression/skill_catalog.gd")
+const FramePacing = preload("res://scripts/core/frame_pacing.gd")
 const SKILL_POINTS := {
 	"vontade": Vector2(145, 392), "materia": Vector2(325, 392), "intelecto": Vector2(505, 392),
 	"ritmo_lamina": Vector2(145, 326), "passo_etereo": Vector2(325, 326), "selo_mercurio": Vector2(505, 326),
@@ -48,7 +49,8 @@ var _redraw_tick := 0.0
 var _weapon_icons: Dictionary = {}
 var _next_asset_check := 0.0
 var _hint_controls := false
-var _limit_fps := true
+## Desligado por padrão: o jogo segue a taxa do monitor (scripts/core/frame_pacing.gd).
+var _limit_fps := false
 var _buttons: Array[Button] = []
 var _selected_skill := "vontade"
 var _skill_nodes: Dictionary = {}
@@ -213,7 +215,7 @@ func _build_controls() -> void:
 			_button("Tela cheia: " + ("ativada" if fullscreen else "desativada"), Rect2(112, 163, 660, 47), _toggle_fullscreen, "settings")
 			_button("Limite de 60 quadros: " + ("ativado" if _limit_fps else "desativado"), Rect2(112, 223, 660, 47), func():
 				_limit_fps = not _limit_fps
-				if DisplayServer.get_name() != "headless": Engine.max_fps = 60 if _limit_fps else 0
+				FramePacing.apply(_limit_fps)
 				_write_preferences()
 				_build_controls(), "settings")
 			_button("Lembrete de comandos: " + ("visível" if _hint_controls else "oculto"), Rect2(112, 283, 660, 47), func():
@@ -518,6 +520,8 @@ func _draw_gameplay() -> void:
 		if room["id"] == game.current_room: area = room["name"]
 	var house_id := str(game.get("inside_house"))
 	if HouseCatalog.HOUSES.has(house_id): area = HouseCatalog.HOUSES[house_id]["name"]
+	# No barco de Sabu (scripts/world/sea.gd), entre o porto e a Ilha do Bennu.
+	if game.get("at_sea") == true: area = "Baía das Garças"
 	_text_block(area, Vector2(634, 48), 240, 19, 21, IVORY, true)
 	if game.has_method("seals_found"):
 		_diamond(Vector2(884, 42), 4)
@@ -688,10 +692,10 @@ func _draw_map() -> void:
 		if room["id"] not in game.store.data["visited"]:
 			if routes and room["id"] not in ShopCatalog.MAP_HIDDEN:
 				hinted.append(room)
-				for corner in _map_room_corners(room["rect"]): bounds = bounds.expand(corner)
+				for corner in _map_room_shape(room): bounds = bounds.expand(corner)
 			continue
 		revealed.append(room)
-		for corner in _map_room_corners(room["rect"]): bounds = bounds.expand(corner)
+		for corner in _map_room_shape(room): bounds = bounds.expand(corner)
 	draw_rect(chart, Color("0d2027"))
 	draw_rect(chart, GOLD.darkened(.67), false, 1)
 	if revealed.is_empty():
@@ -701,7 +705,7 @@ func _draw_map() -> void:
 	var origin := chart.get_center() - bounds.get_center() * scale_factor
 	for room in hinted:
 		var sketch := PackedVector2Array()
-		for corner in _map_room_corners(room["rect"]): sketch.append(origin + corner * scale_factor)
+		for corner in _map_room_shape(room): sketch.append(origin + corner * scale_factor)
 		sketch.append(sketch[0])
 		draw_polyline(sketch, MUTED.darkened(.45), 1)
 	var centers: Dictionary = {}
@@ -717,7 +721,7 @@ func _draw_map() -> void:
 	for room in revealed:
 		number += 1
 		var outline := PackedVector2Array()
-		for corner in _map_room_corners(room["rect"]): outline.append(origin + corner * scale_factor)
+		for corner in _map_room_shape(room): outline.append(origin + corner * scale_factor)
 		var current: bool = room["id"] == game.current_room
 		draw_colored_polygon(outline, Color("496754") if current else Color("294244"))
 		outline.append(outline[0])
@@ -728,6 +732,14 @@ func _draw_map() -> void:
 	var hero_marker: Vector2 = origin + hero_position * scale_factor
 	_diamond(hero_marker, 5, Color("b9efd8"), true)
 	_text("◆ Senu · ouro: área atual · role a legenda", Vector2(84, 440), 13, MUTED)
+
+## O contorno de uma sala no mapa: o retângulo, ou o desenho próprio ("outline")
+## de salas como a Ilha do Bennu, que segue a costa.
+func _map_room_shape(room: Dictionary) -> PackedVector2Array:
+	if not room.has("outline"): return _map_room_corners(room["rect"])
+	var shape := PackedVector2Array()
+	for point in room["outline"]: shape.append(PortLayout.iso(point))
+	return shape
 
 func _map_room_corners(rect: Rect2i) -> PackedVector2Array:
 	var start := Vector2(rect.position) - Vector2(.5, .5)
@@ -741,16 +753,18 @@ func _read_preferences() -> void:
 	var config := ConfigFile.new()
 	if config.load(_preferences_path()) == OK:
 		_hint_controls = bool(config.get_value("interface", "control_hints", false))
-		_limit_fps = bool(config.get_value("display", "limit_fps", true))
+		# Chave nova: a antiga ("limit_fps") era gravada ligada junto com as outras
+		# preferências, sem o jogador escolher, e prendia monitores rápidos em 60.
+		_limit_fps = bool(config.get_value("display", "limit_fps_60", false))
+	FramePacing.apply(_limit_fps)
 	if DisplayServer.get_name() != "headless":
-		Engine.max_fps = 60 if _limit_fps else 0
 		if config.has_section_key("display", "fullscreen"):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if bool(config.get_value("display", "fullscreen", false)) else DisplayServer.WINDOW_MODE_WINDOWED)
 
 func _write_preferences() -> void:
 	var config := ConfigFile.new()
 	config.set_value("interface", "control_hints", _hint_controls)
-	config.set_value("display", "limit_fps", _limit_fps)
+	config.set_value("display", "limit_fps_60", _limit_fps)
 	config.set_value("display", "fullscreen", DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_preferences_path().get_base_dir()))
 	config.save(_preferences_path())
