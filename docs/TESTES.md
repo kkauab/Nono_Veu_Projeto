@@ -1,5 +1,36 @@
 # Verificações do protótipo
 
+## Inimigos renovados nos salvamentos manuais — 27/10/2026
+
+Meditar em qualquer um dos cinco santuários agora salva o checkpoint, recarrega os frascos, restaura Senu e renova todos os inimigos comuns. Os vivos recuperam posição, vida e estado; os mortos e os já removidos são recriados uma única vez. O chefe derrotado permanece ausente. `Salvar e sair` grava o novo ciclo para o próximo carregamento. Autosaves de combate, loot, compras e exploração mantêm as derrotas do ciclo atual.
+
+`tests/enemy_respawn_test.gd -- --qa`: **58/58**, saída 0, sem erros ou avisos. Cobre corpos recentes, removidos e com exclusão enfileirada; inimigos feridos ou atacando; descanso repetido; população sem duplicatas; XP e óbolos exatos por vida; preservação do loot anterior; autosaves sem renascimento; cancelamento de golpes e projéteis; chefe permanente; recarga do snapshot; falha de gravação sem alterar derrotas, checkpoint, frascos ou atores. As coletas únicas, habilidades e estados dos puzzles permanecem salvos.
+
+Regressões aprovadas: progressão **123/123**, economia de loot **43/43**, loja da Merit **47/47**, puzzles e mundo **125/125**, percurso **137/137**. As duas suítes de navegação voltam a isolar o combate depois da meditação, pois o descanso agora recria corretamente os encontros. Todos os testes usam slots próprios em `user://qa/`.
+
+## Árvore das Emanações ampliada — 27/10/2026
+
+Treze habilidades compráveis, três trilhas, três híbridos e Convergência. Os IDs das três habilidades anteriores permanecem válidos. Testes com Godot 4.7.2, usando somente slots `user://qa/`:
+
+| Suíte | Resultado | O que verifica |
+|---|---:|---|
+| `skill_catalog_test.gd` | 47/47 | Dependências, compras recusadas sem débito, saves antigos, custo total 28 e rota final de 20 dos 22 Nous. |
+| `skill_combat_test.gd` | 44/44 | Combo, ascendente, contra-ataque, redução de dano, projétil, reflexão, perfuração e esquiva que respeita paredes. |
+| `skill_world_test.gd -- --qa` | 63/63 | Aplicação das compras no mundo, atributos sem acumular, sandálias, percepção, salvamento e rota final com orçamento real. |
+| `skill_tree_ui_test.gd` | 406/406 | Treze nós selecionáveis, compra explícita, dependências, foco e textos dentro da janela em 720p/1080p. |
+| `progression_test.gd -- --qa` | 123/123 | Progressão, backup, eventos do mundo, morte/retorno e compras persistentes. |
+| `save_migration_test.gd -- --qa` | 32/32 | Continuidade das jornadas anteriores. |
+| `shop_forge_tent_test.gd -- --qa` | 37/37 | Bônus por arma, vida e esquiva das lojas em conjunto com o recálculo das habilidades. |
+| `shop_merit_test.gd -- --qa` | 47/47 | Cura, cargas e compras da Merit. |
+| `hud_v6_test.gd` | 19/19 | Demais menus e navegação do HUD. |
+| `combat_test.gd` | 26/26 | Combate base e duas armas. |
+| `combat_fx_test.gd` | 108/108 | Efeitos de combate existentes. |
+| `senu_v5_movement_test.gd -- --physics-only` | 16/16 | Movimentação e esquiva base. |
+
+Importação completa pelo editor e inicialização gráfica da cena principal aprovadas. Captura real do jogo: `qa/porto_demo-tree.png`; capturas de detalhe da UI: `qa/skill_tree_720p.png` e `qa/skill_tree_1080p.png`. Nenhum erro de script ou teste falhou na versão final. Algumas suítes ainda emitem os avisos preexistentes de recursos retidos ao encerrar o processo de QA.
+
+Durante a integração foi corrigida uma regressão: configurar a lista de habilidades emitia um aviso de mudança de equipamento cedo demais, sobrescrevendo a arma salva antes de equipá-la. A configuração agora apenas reconstrói a lista; os eventos de equipamento continuam emitidos pelas ações reais. O teste da Forja confirma a restauração correta do bônus das Adagas.
+
 ## Primeira demonstração — 24/10/2026
 
 Godot 4.7.2.stable.official.ed1daf0bf; Blender 5.2.3 LTS. Verificações realizadas durante a preparação da entrega de 24/10/2026.
@@ -197,4 +228,94 @@ Achado: `Start-Process` do PowerShell 5.1 não põe aspas nos argumentos. Na pas
 
 ```powershell
 & $demoGodot --headless --path . --script res://tests/interiors_art_test.gd
+```
+
+## Tela preta em "Nova jornada" — 27/10/2026
+
+Gustavo (relato de quem jogou pelo `JOGAR.cmd`): o menu abria, mas "Nova jornada" deixava a tela preta. Reproduzido num clone com o cache de classes do Godot desatualizado (`.godot/global_script_class_cache.cfg` sem a `VeilDialogueBabble` de hoje). A abertura não compilava (`Could not find type "VeilDialogueBabble"`), e `_play_opening` já tinha escondido o mundo e o HUD. Rodado direto, sem o editor, o Godot não atualiza esse cache nem as importações; o clone limpo, sem `.godot`, nem chega ao menu.
+
+Correções:
+- `JOGAR.cmd`: fica a versão do Kauã (commit `78bd2a9`), que roda `--headless --editor --import --quit` antes de toda partida e grava o resultado em `qa/startup_import.log`. Ao juntar a `main` na `gustavo/dev`, ganhou só a busca dos dois executáveis do Godot (normal e console) também em `A:\Ferramentas\godot`, onde eles ficam no PC do Gustavo. A primeira versão do Gustavo, que só reimportava quando o commit mudava, foi descartada.
+- `port_demo.gd`: se o script da abertura não compila, o jogo segue sem ela, com erro no log, em vez de travar. Conferido no clone: com o cache estragado, o jogo vai ao Santuário.
+
+Depois da junção, uma cópia do `JOGAR.cmd` que não abre o jogo achou o Godot em `A:\Ferramentas`, importou em 11 s, e o cache passou a ter a nova `MercuryProjectile`. Com a `main` e essas mudanças juntas passaram:
+- abertura: fluxo **23/23** e RPG **64/64**;
+- casas e lojas: casas **54/54**, arte dos interiores **13/13**, Empório **47/47**, Forja e Tenda **37/37**;
+- inimigos e habilidades: loot **43/43**, renascimento **58/58**, habilidades no mundo **63/63**, árvore na interface **406/406**;
+- base: HUD **19/19**, migração **32/32**, progressão **123/123** e percurso **137/137**.
+
+## Barco de Sabu e Ilha do Bennu — 27/10/2026
+
+Pedido do Gustavo: navegação, um barco com animações e uma ilha para explorar, com missões. O plano e os arquivos estão em [MUNDO_BARCO_ILHA.md](MUNDO_BARCO_ILHA.md). Godot 4.7.2, slots `user://qa/`:
+
+| Suíte | Resultado | O que verifica |
+|---|---:|---|
+| `boat_test.gd -- --qa` | 56/56 | Píeres em terra e amarrações na água, embarque com salto, remada com inércia e curva, câmera e esteira, costa sólida, ânfora paga uma vez, travessia remando até o píer do Bennu (~7 s), atracação, e o barco voltando ao píer do lado do último santuário. |
+| `isle_test.gd -- --qa` | 58/58 | 273 tiles de chão, todos alcançáveis a pé a partir do píer e separados do porto pela água; vegetação sobre a terra sem tampar as peças; garças na água; Ankhet e os 3 Esquecidos (a vitória sobrevive ao renascimento), as três chamas na ordem, o altar com a Pena do Bennu, a rede de Hori, o save que volta a carregar e o contorno da ilha no mapa. |
+
+Capturas com janela (`--capture-boat`, `--capture-isle`): `qa/barco_pier.png`, `qa/barco_remando.png`, `qa/barco_ilha.png`, `qa/ilha_bennu.png` e `qa/ilha_mapa.png`. Na janela recém-aberta, a suavização da câmera passava do ponto depois de um teleporte; o teste agora chama `reset_smoothing()`, como o jogo já faz.
+
+Regressões com tudo junto:
+- todas passaram: ilha **58/58**, barco **56/56**, histórias do porto **55/55**, casas **54/54**, Empório **47/47**, Forja e Tenda **37/37**, loot **43/43**, renascimento **58/58**, catálogo de habilidades **47/47**, habilidades no mundo **63/63**, HUD **19/19**, progressão **123/123**, migração **32/32**, fluxo da abertura **23/23**, navegação **8/8**, chão do mapa **1488/1488**, mundo **128/128** e percurso **138/138**.
+- No meio do trabalho, o mundo e o percurso chegaram a falhar no altar das estrelas e no santuário s1, que ganharam colisão no trabalho da sessão do Mundo. Ela ajustou o caminho dos testes até a frente desses objetos.
+
+Correções feitas durante o trabalho:
+- a flag `sea_route` entrou no save novo, porque o carregamento completa as flags opcionais e a ida e a volta deixavam de bater;
+- o HUD lê `at_sea` sem `bool(null)`.
+
+## Colisão, chão e passagens das construções — 27/10/2026
+
+Achado jogando: Senu atravessava muros, braseiros e os objetos dos puzzles; pilares e caixotes o deixavam entrar pela metade de trás; algumas peças pareciam flutuar; e o gerador de bairros punha construções na boca das passagens. Correção da zona Mundo (`port_art.gd`, `world_prop.gd`, `interactable.gd` e `port_dressing.gd`; detalhes nos bugs 8 e 9 de `docs/MUNDO_EXPANSAO.md`). A base de cada desenho é medida na arte e vira colisão e sombra; só juncos e barcos são atravessáveis; o gerador valida chão, sobreposição, marcadores e bocas de passagem antes de pôr cada peça.
+
+O novo `tests/map_ground_test.gd` aprovou **1488/1488**. Ele anda pelo Porto inteiro com o corpo de 6 px do Senu, num reticulado de 1/4 de tile, com todos os portões abertos. Confere que:
+- toda peça e todo objeto interativo sólido tem a base inteira sobre a pedra e a colisão cobre a base pintada, sem parede invisível na frente;
+- nenhuma base encosta em outra;
+- as peças geradas ficam fora da boca das passagens;
+- toda sala é alcançável, cada passagem tem pelo menos 45% livre, a rota principal passa e dá para parar na frente de cada objeto interativo;
+- nenhum trecho de chão livre fica isolado.
+
+O que nem sem cenário se alcança a pé (interiores das casas e a ilha, só por mar) fica fora da cobrança. O teste pega de volta um muro sobre a água, uma sobreposição e muros sem colisão.
+
+Dois testes de percurso foram ajustados, porque mandavam o Senu pisar no ponto exato de objetos que agora são sólidos. No `route_test`, o Senu contorna o santuário da Guarita e para na frente dele. No `world_v6_test`, o `use_item` vai até a frente do objeto, e o mapa de caminhos do teste desvia dos objetos sólidos.
+
+Resultados: percurso **138/138**, mundo **128/128**, cenário **529/529**, profundidade **260/260** e história paralela **55/55**. As 41 suítes passaram com Godot 4.7.2, já com o barco e a ilha da sessão de XP na pasta.
+
+```powershell
+& $demoGodot --headless --path . --script res://tests/map_ground_test.gd -- --qa
+```
+
+## Fluidez do mar e navios ancorados — 27/10/2026
+
+Medido com o jogo em janela, num monitor de 165 Hz, remando em linha reta. Antes: 60 quadros por segundo com o limite ligado por padrão, cada quadro durando 2 ou 3 atualizações da tela, alternando. Depois: 165 quadros e 165 passos de física (um por quadro desenhado); a tela rola 0 ou 1 px por quadro, em ritmo regular, e o barco fica parado no centro. Detalhes em [MUNDO_BARCO_ILHA.md](MUNDO_BARCO_ILHA.md), seção "Fluidez".
+
+`boat_test.gd -- --qa`: **62/62**. Novos itens:
+- a física segue o monitor sem o limite (165 → 165, 144 → 144, 59,94 → 60);
+- o limite, monitores desconhecidos e monitores muito rápidos ficam entre 60 e 240;
+- o limite vem desligado;
+- todo navio ancorado recebe a linha d'água e os anéis;
+- a quilha é a reta pelo meio do casco, não pelas pontas;
+- a folha tem 8 quadros de remada, todos vistos ao remar.
+
+Capturas de antes e depois no Cais dos Esquecidos: o casco agora entra na água, com espuma, e a sombra de chão sumiu.
+
+Regressões: ilha **58/58**, HUD **19/19**, mundo **128/128** e efeitos de combate **108/108**. Nenhum código de movimento conta passos de física sem usar o tempo.
+
+## A vida no Porto — 27/10/2026
+
+Moradores, bancadas e navios mercantes (zona Mundo; detalhes em `docs/MUNDO_VIDA.md`). O novo `tests/port_life_test.gd` aprovou **250/250**. Confere que:
+- cada bancada tem vendedor junto da barraca;
+- toda parada de rotina fica em chão livre e fora da boca das passagens;
+- o caminho entre paradas passa longe do cenário;
+- quem compra para ao alcance do vendedor;
+- em 4 minutos simulados cada morador cumpre a rotina inteira, inclusive os estivadores, que esperam o navio;
+- os dois navios fazem o ciclo completo (chegar, atracar na vaga, recuar quando é o caso, partir e voltar), só pela água e com a proa para a frente;
+- comprar cobra o preço e cura, e não cobra com a vida cheia ou sem óbolos;
+- falar abre o diálogo e avança a fala;
+- o Senu esbarra nos moradores, a espada não os acerta, e o morador dá um passo para o lado quando o Senu encosta;
+- longe do Senu, a rotina pausa.
+
+Os testes de percurso (`route_test` **138/138** e `world_v6_test` **128/128**) passam com os moradores andando. O `map_ground_test` (**1489/1489**) deixou de cobrar "parar na frente" de quem anda. As 42 suítes passaram com Godot 4.7.2.
+
+```powershell
+& $demoGodot --headless --path . --time-scale 4 --script res://tests/port_life_test.gd -- --qa
 ```

@@ -32,6 +32,7 @@ const FISHER_TILE := Vector2(12.6, 1.6)
 const BROTHER_DOCK_TILE := Vector2(27, 32.5)
 const BROTHER_HOME_TILE := Vector2(13.6, 1.2)
 const FISHER_REWARD := 2
+const IsleStory = preload("res://scripts/world/isle_story.gd")
 
 static func build(game) -> void:
 	for id in MARKS:
@@ -107,6 +108,9 @@ static func _open_relic(game) -> bool:
 	return true
 
 static func _talk_to_fisher(game) -> bool:
+	# Com a rede achada na Ilha do Bennu, Hori fala dela primeiro.
+	if IsleStory.return_net(game):
+		return true
 	if not _has(game, "fisher_met"):
 		_advance(game, "fisher_met")
 		_say(game, "O pescador do cais", "PESCADOR — Você voltou. Achou seu mestre?\n\nSENU — Ainda não. Mas sigo o rastro dele.\n\nPESCADOR — Eu sou Hori. Não disse meu nome naquela manhã… hoje parece importante dizer. Meu irmão, Sabu, não voltou ao cais. Um carregador viu um homem enrolando cordas sozinho no Embarcadouro Velho, ao sul do Pátio das Memórias. Se for ele…\n\nSENU — Vou procurá-lo.", "Missão: procure Sabu, o irmão de Hori, no Embarcadouro Velho.")
@@ -129,7 +133,7 @@ static func _talk_to_fisher(game) -> bool:
 
 static func _talk_to_brother(game) -> bool:
 	if _has(game, "fisher_done"):
-		game.hud.show_dialog("Sabu", "SABU — Hori diz que fui eu que ensinei esse nó. Eu digo que foi ele. Vamos discutir isso pelo resto da vida.")
+		game.hud.show_dialog("Sabu", "SABU — Hori diz que fui eu que ensinei esse nó. Eu digo que foi ele. Vamos discutir isso pelo resto da vida." + ("\n\nSABU — Vi o meu barco atravessar a baía. Rema melhor do que eu remava. Cuide dele." if _has(game, "boat_sailed") else ""))
 	elif _has(game, "fisher_named"):
 		game.hud.show_dialog("Sabu", "SABU — Vá na frente e diga a ele. Eu conheço o caminho até o cais. Sempre conheci.")
 	elif _has(game, "fisher_knot"):

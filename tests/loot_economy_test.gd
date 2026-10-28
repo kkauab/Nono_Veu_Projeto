@@ -147,7 +147,7 @@ func _test_world() -> void:
 	world.call("_drop_loot", "marinheiro_01", false, dummy)
 	dummy.free()
 	await process_frame
-	_check(get_nodes_in_group("loot").is_empty(), "a defeated enemy never pays twice")
+	_check(get_nodes_in_group("loot").is_empty(), "a defeated enemy never pays twice within the same rest cycle")
 	await create_timer(1.3).timeout
 	var on_disk: DemoSaveStore = SaveStore.new(store.path)
 	_check(on_disk.load_progress() and Economy.coins(on_disk.data) == reward["coins"], "coins are saved shortly after the pickup")

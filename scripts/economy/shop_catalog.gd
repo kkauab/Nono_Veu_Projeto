@@ -16,7 +16,9 @@ const ITEMS := {
 	# Tenda de Adiam: exploração e corpo.
 	"mapa_rotas": {"name": "Mapa das rotas", "description": "O mapa passa a mostrar o contorno dos setores ainda não visitados.", "price": 30, "limit": 1, "requires": []},
 	"amuleto_cornalina": {"name": "Amuleto de cornalina", "description": "+10 de vida máxima.", "price": 70, "limit": 1, "requires": [], "health": 10},
-	"sandalias_caravana": {"name": "Sandálias de caravana", "description": "A esquiva recarrega 15% mais rápido.", "price": 55, "limit": 1, "requires": [], "dodge_scale": .85}
+	"sandalias_caravana": {"name": "Sandálias de caravana", "description": "A esquiva recarrega 15% mais rápido.", "price": 55, "limit": 1, "requires": [], "dodge_scale": .85},
+	# Não se vende: vem do altar da Ilha do Bennu (isle_story.gd), por `grant`.
+	"pena_bennu": {"name": "Pena do Bennu", "description": "Mais uma carga de bálsamo (tecla R), que volta cheia nos santuários.", "price": 0, "limit": 1, "requires": [], "charge_bonus": "balsamo"}
 }
 const SHOPS := {
 	"merit": ["jarro_balsamo", "mirra"],
@@ -65,8 +67,25 @@ static func purchase(data: Dictionary, id: String) -> bool:
 			_set_charges(data, charge, charges(data, charge) + 1)
 	return true
 
+## Entrega um item sem cobrar (recompensa de missão), com a carga que ele traz.
+static func grant(data: Dictionary, id: String) -> bool:
+	if not ITEMS.has(id) or owned(data, id) >= int(ITEMS[id]["limit"]):
+		return false
+	if not data.get("purchases") is Dictionary:
+		data["purchases"] = {}
+	data["purchases"][id] = owned(data, id) + 1
+	var charge := str(ITEMS[id].get("charge_bonus", ""))
+	if CHARGES.has(charge):
+		_set_charges(data, charge, charges(data, charge) + 1)
+	return true
+
+## Jarros comprados mais os itens que somam uma carga (a Pena do Bennu).
 static func capacity(data: Dictionary, charge: String) -> int:
-	return owned(data, CHARGES.get(charge, ""))
+	var total := owned(data, CHARGES.get(charge, ""))
+	for id in ITEMS:
+		if str(ITEMS[id].get("charge_bonus", "")) == charge:
+			total += owned(data, id)
+	return total
 
 static func charges(data: Dictionary, charge: String) -> int:
 	return int((data.get("items", {}) as Dictionary).get(charge, 0))
@@ -125,8 +144,7 @@ static func valid_state(purchases: Variant, items: Variant) -> bool:
 	for charge in items:
 		if not CHARGES.has(charge) or not _whole(items[charge]) or items[charge] < 0:
 			return false
-		var limit := int(purchases.get(CHARGES[charge], 0))
-		if items[charge] > limit:
+		if items[charge] > capacity({"purchases": purchases}, charge):
 			return false
 	return true
 

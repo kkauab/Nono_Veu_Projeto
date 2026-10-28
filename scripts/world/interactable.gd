@@ -8,6 +8,7 @@ var label := ""
 var active := true
 var opened := false
 var highlighted := false
+var perceived := false
 var time := 0.0
 var puzzle_value := 0
 ## Look of an "npc": "fisher" or "brother", both drawn from Kauã's fisherman sheet.
@@ -15,11 +16,60 @@ var figure := ""
 var _draw_tick := 0.0
 const FISHERMAN_SHEET := "res://assets/cinematics/rpg_v12/fisherman.png"
 static var _fisherman: Texture2D
+## Kinds drawn on a painted stand, with the frame and scale `_draw` uses. They are
+## solid like the rest of the scenery; pickups, levers, seals and doors stay passable.
+const STANDS := {"shrine": ["pillar", .58], "inscription": ["pillar", .44], "memory": ["pillar", .44], "clue": ["pillar", .44], "cache": ["crate", .72], "valve": ["wall", .61], "water_altar": ["wall", .61], "dial": ["pillar", .62], "stars_altar": ["pillar", .62], "boss_lock": ["pillar", .62]}
+var _footprint := PackedVector2Array()
+var _ground_shade: Array[PackedVector2Array] = []
 
 func _ready() -> void:
 	add_to_group("interactables")
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_draw_tick = fposmod(position.x * .013 + position.y * .007, .1)
+	_footprint = footprint()
+	if _footprint.is_empty():
+		return
+	_ground_shade = Geometry2D.offset_polygon(_footprint, 2.0)
+	var body := StaticBody2D.new()
+	body.collision_layer = 1
+	body.collision_mask = 6
+	var collider := CollisionShape2D.new()
+	var shape := ConvexPolygonShape2D.new()
+	shape.points = _footprint
+	collider.shape = shape
+	body.add_child(collider)
+	add_child(body)
+	add_to_group("world_obstacles")
+
+## Ground under the object, behind its pivot like every painted base.
+func footprint() -> PackedVector2Array:
+	var base := PackedVector2Array()
+	match kind:
+		"bell":
+			# Both feet of the small arch the bell hangs from, as one convex outline.
+			base = Geometry2D.convex_hull(PackedVector2Array([Vector2(-27, -21), Vector2(-18, -25), Vector2(25, -7), Vector2(14, -2), Vector2(-18, -17)]))
+			base.remove_at(base.size() - 1)
+			for index in range(base.size()): base[index] *= .49
+		"iri_relic":
+			base = PackedVector2Array([Vector2(-13, -2), Vector2(0, -9), Vector2(14, -2), Vector2(0, 5)])
+		"iri_mark":
+			base = PackedVector2Array([Vector2(-9, 0), Vector2(0, -4), Vector2(9, 0), Vector2(0, 4)])
+		"npc":
+			base = PackedVector2Array([Vector2(-6, 0), Vector2(0, -3), Vector2(6, 0), Vector2(0, 3)])
+		_:
+			if STANDS.has(kind):
+				base = Art.footprint(STANDS[kind][0])
+				for index in range(base.size()): base[index] *= STANDS[kind][1]
+	return base
+
+## Same contract as PortProp, for the enemies' navigation graph.
+func blocks_ground_point(point: Vector2, clearance: float = 0.0) -> bool:
+	if _footprint.is_empty(): return false
+	var local := to_local(point)
+	if Geometry2D.is_point_in_polygon(local, _footprint): return true
+	for edge in range(_footprint.size()):
+		if local.distance_to(Geometry2D.get_closest_point_to_segment(local, _footprint[edge], _footprint[(edge + 1) % _footprint.size()])) < clearance: return true
+	return false
 
 func _process(delta: float) -> void:
 	time += delta
@@ -46,7 +96,18 @@ func _draw() -> void:
 	if opened and kind in ["bell", "valve", "water_altar", "dial", "stars_altar", "boss_lock", "iri_mark"]:
 		gold = teal
 	var bob := roundf(sin(time * 2.4) * 2.0)
-	_contact_shadow({"nous": 5, "npc": 8}.get(kind, 12))
+	if _ground_shade.is_empty():
+		_contact_shadow({"nous": 5, "npc": 8}.get(kind, 12))
+	for polygon in _ground_shade:
+		draw_colored_polygon(polygon, Color(.01, .025, .03, .24))
+	if perceived:
+		# Percepção marca o objeto, sem resolver ou abrir o segredo.
+		var gleam := Color("e8cd91")
+		gleam.a = .65 + .2 * sin(time * 2.0)
+		var center := Vector2(0, -42 + bob)
+		var eye := PackedVector2Array([center + Vector2(-6, 0), center + Vector2(0, -3), center + Vector2(6, 0), center + Vector2(0, 3), center + Vector2(-6, 0)])
+		draw_polyline(eye, gleam, 1.0)
+		draw_rect(Rect2(center - Vector2.ONE, Vector2.ONE * 2), gleam)
 	if highlighted:
 		draw_set_transform(Vector2.ZERO, 0, Vector2(1, .5))
 		draw_arc(Vector2.ZERO, 23, 0, TAU, 24, gold, 1)

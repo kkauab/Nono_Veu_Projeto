@@ -9,6 +9,22 @@ const MUTED := Color("a3b6ad")
 const TITLE_IMAGE := "res://assets/ui/port_title_v7.png"
 const PORTRAIT_IMAGE := "res://assets/ui/senu_portrait_v7.png"
 const PORTRAIT_IDLE_IMAGE := "res://assets/ui/senu_menu_idle_v8.png"
+const SkillCatalog = preload("res://scripts/progression/skill_catalog.gd")
+const FramePacing = preload("res://scripts/core/frame_pacing.gd")
+const SKILL_POINTS := {
+	"vontade": Vector2(145, 392), "materia": Vector2(325, 392), "intelecto": Vector2(505, 392),
+	"ritmo_lamina": Vector2(145, 326), "passo_etereo": Vector2(325, 326), "selo_mercurio": Vector2(505, 326),
+	"lamina_ascendente": Vector2(100, 269), "pele_alabastro": Vector2(325, 269), "olho_escriba": Vector2(550, 269),
+	"contra_ataque_agil": Vector2(210, 218), "reflexo_palavra": Vector2(325, 218), "esquiva_eterea": Vector2(440, 218),
+	"convergencia_nous": Vector2(325, 164)
+}
+const SKILL_CODES := {
+	"vontade": "V1", "materia": "M1", "intelecto": "I1",
+	"ritmo_lamina": "V2", "passo_etereo": "M2", "selo_mercurio": "I2",
+	"lamina_ascendente": "V3", "pele_alabastro": "M3", "olho_escriba": "I3",
+	"contra_ataque_agil": "VM", "reflexo_palavra": "VI", "esquiva_eterea": "MI",
+	"convergencia_nous": "N"
+}
 var game: Node2D
 var overlay := ""
 var message := ""
@@ -33,8 +49,13 @@ var _redraw_tick := 0.0
 var _weapon_icons: Dictionary = {}
 var _next_asset_check := 0.0
 var _hint_controls := false
-var _limit_fps := true
+## Desligado por padrão: o jogo segue a taxa do monitor (scripts/core/frame_pacing.gd).
+var _limit_fps := false
 var _buttons: Array[Button] = []
+var _selected_skill := "vontade"
+var _skill_nodes: Dictionary = {}
+var _skill_details: Array[Control] = []
+var _skill_learn: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -135,6 +156,9 @@ func _back() -> void:
 
 func _build_controls() -> void:
 	_buttons.clear()
+	_skill_nodes.clear()
+	_skill_details.clear()
+	_skill_learn = null
 	for child in get_children():
 		if child == _title_backdrop: continue
 		remove_child(child)
@@ -167,18 +191,7 @@ func _build_controls() -> void:
 				var option: Array = options[index]
 				_button(option[0], Rect2(79, 142 + index * 44, 327, 40), option[3], option[1], option[2])
 		"tree":
-			var index := 0
-			for id in DemoSaveStore.SKILLS:
-				var definition: Dictionary = DemoSaveStore.SKILLS[id]
-				var learned: bool = id in game.store.data["skills"]
-				var available: bool = game.store.data["fragments"] >= definition["cost"]
-				var skill_id: String = id
-				_label(definition["description"], Rect2(98 + index * 270, 256, 210, 75), 18, MUTED)
-				var button := _button("Aprendido" if learned else "Desbloquear · %d Nous" % definition["cost"], Rect2(91 + index * 270, 354, 238, 42), func():
-					game.buy_skill(skill_id)
-					_build_controls(), "tree", "", true)
-				button.disabled = learned or not available
-				index += 1
+			_build_skill_tree()
 			_back_button()
 		"map":
 			_map_legend()
@@ -190,7 +203,7 @@ func _build_controls() -> void:
 			var commands := [["WASD / setas", "Andar"], ["Shift + movimento", "Correr"], ["Espaço", "Rolar / esquivar"],
 				["J / mouse esquerdo", "Ataque leve"], ["F", "Ataque forte"], ["K / mouse direito", "Aparar"],
 				["Q", "Poder da arma"], ["Tab", "Trocar arma encontrada"], ["E", "Interagir / recolher"],
-				["T", "Árvore das Emanações"], ["M", "Mapa"], ["Esc", "Pausa / voltar"], ["R", "Usar bálsamo"]]
+				["T", "Árvore das Emanações"], ["M", "Mapa"], ["Esc", "Pausa / voltar"], ["R", "Usar bálsamo"], ["C", "Selo de Mercúrio¹"]]
 			for index in range(commands.size()):
 				var column := index / 7
 				var row := index % 7
@@ -202,7 +215,7 @@ func _build_controls() -> void:
 			_button("Tela cheia: " + ("ativada" if fullscreen else "desativada"), Rect2(112, 163, 660, 47), _toggle_fullscreen, "settings")
 			_button("Limite de 60 quadros: " + ("ativado" if _limit_fps else "desativado"), Rect2(112, 223, 660, 47), func():
 				_limit_fps = not _limit_fps
-				if DisplayServer.get_name() != "headless": Engine.max_fps = 60 if _limit_fps else 0
+				FramePacing.apply(_limit_fps)
 				_write_preferences()
 				_build_controls(), "settings")
 			_button("Lembrete de comandos: " + ("visível" if _hint_controls else "oculto"), Rect2(112, 283, 660, 47), func():
@@ -217,7 +230,9 @@ func _build_controls() -> void:
 		"shop":
 			ShopPanel.build(self, game)
 			_back_button()
-	if not _buttons.is_empty():
+	if overlay == "tree" and _skill_nodes.has(_selected_skill):
+		_focus_button.call_deferred(_skill_nodes[_selected_skill])
+	elif not _buttons.is_empty():
 		for button in _buttons:
 			if not button.disabled:
 				_focus_button.call_deferred(button)
@@ -226,6 +241,116 @@ func _build_controls() -> void:
 func _focus_button(button: Button) -> void:
 	if is_instance_valid(button) and button.is_inside_tree() and button.get_parent() == self:
 		button.grab_focus()
+
+func _build_skill_tree() -> void:
+	if not SkillCatalog.NODES.has(_selected_skill): _selected_skill = SkillCatalog.ORDER[0]
+	for id in SkillCatalog.ORDER:
+		var skill_id: String = id
+		var point: Vector2 = SKILL_POINTS[id]
+		var node := _button(SKILL_CODES[id], Rect2(point - Vector2(19, 19), Vector2(38, 38)), func(): _select_skill(skill_id), "", "", true)
+		node.name = "Skill_" + id
+		node.add_theme_font_override("font", font)
+		node.add_theme_font_size_override("font_size", maxi(14, roundi(14 * _factor)))
+		node.add_theme_color_override("font_color", IVORY)
+		for style_name in ["normal", "hover", "pressed", "focus"]:
+			node.add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
+		var definition: Dictionary = SkillCatalog.NODES[id]
+		node.tooltip_text = "%s · %d Nous\n%s" % [definition["name"], definition["cost"], definition["description"]]
+		node.focus_entered.connect(func(): _select_skill(skill_id))
+		node.mouse_entered.connect(func(): _select_skill(skill_id))
+		_skill_nodes[id] = node
+	_skill_learn = _button("Aprender", Rect2(615, 416, 248, 34), _learn_selected_skill, "", "", true)
+	_skill_learn.name = "SkillLearn"
+	# The next selection is geometric, rather than dictionary or purchase order.
+	# Tab still visits every node, the learn button, and the return button.
+	for id in SkillCatalog.ORDER:
+		var node: Button = _skill_nodes[id]
+		for direction in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
+			var closest := ""
+			var best_score := INF
+			for other in SkillCatalog.ORDER:
+				if other == id: continue
+				var offset: Vector2 = SKILL_POINTS[other] - SKILL_POINTS[id]
+				if offset.normalized().dot(direction) < .45: continue
+				var score := offset.length() / pow(offset.normalized().dot(direction), 2)
+				if score < best_score:
+					best_score = score
+					closest = other
+			if closest.is_empty(): continue
+			var property: String = {Vector2.UP: "focus_neighbor_top", Vector2.RIGHT: "focus_neighbor_right", Vector2.DOWN: "focus_neighbor_bottom", Vector2.LEFT: "focus_neighbor_left"}[direction]
+			node.set(property, node.get_path_to(_skill_nodes[closest]))
+	_update_skill_details()
+
+func _select_skill(id: String) -> void:
+	if id == _selected_skill and not _skill_details.is_empty(): return
+	_selected_skill = id
+	_update_skill_details()
+	queue_redraw()
+
+func _update_skill_details() -> void:
+	if overlay != "tree" or game == null or _skill_learn == null: return
+	for old in _skill_details:
+		if not is_instance_valid(old): continue
+		remove_child(old)
+		old.queue_free()
+	_skill_details.clear()
+	var definition: Dictionary = SkillCatalog.NODES[_selected_skill]
+	var owned: Array = game.store.data["skills"]
+	_skill_detail_label(str(definition["branch"]).to_upper(), Rect2(616, 160, 246, 22), 13, GOLD)
+	_skill_detail_label(definition["name"], Rect2(616, 184, 246, 52), 21, IVORY, true)
+	var learned := _selected_skill in owned
+	_skill_detail_label("APRENDIDA" if learned else "Custo: %d Fragmentos de Nous" % definition["cost"], Rect2(616, 238, 246, 22), 15, GOLD if learned else IVORY)
+	_skill_detail_label(definition["description"], Rect2(616, 267, 246, 69), 15, IVORY)
+	var required: Array = definition["requires"]
+	_skill_detail_label("SEM PRÉ-REQUISITOS" if required.is_empty() else "REQUER", Rect2(616, 338, 246, 20), 12, MUTED)
+	for index in range(required.size()):
+		var id: String = required[index]
+		var unlocked := id in owned
+		_skill_detail_label(("✓ " if unlocked else "◇ ") + str(SkillCatalog.NODES[id]["name"]), Rect2(616, 357 + index * 18, 246, 20), 13, GOLD if unlocked else MUTED)
+	var reason := SkillCatalog.blocker(game.store.data, _selected_skill)
+	_skill_learn.disabled = not reason.is_empty()
+	_skill_learn.text = "Aprendida" if learned else ("Aprender · %d Nous" % definition["cost"] if reason.is_empty() else ("Pré-requisitos pendentes" if not SkillCatalog.requires_met(owned, _selected_skill) else "Nous insuficiente"))
+	_skill_learn.tooltip_text = reason
+
+func _skill_detail_label(text: String, rect: Rect2, point_size: int, color: Color, serif: bool = false) -> void:
+	_skill_details.append(_label(text, rect, point_size, color, serif))
+
+func _learn_selected_skill() -> void:
+	if not SkillCatalog.blocker(game.store.data, _selected_skill).is_empty(): return
+	if game.buy_skill(_selected_skill):
+		_build_controls()
+		queue_redraw()
+
+func _draw_skill_tree() -> void:
+	var owned: Array = game.store.data["skills"]
+	_text("%d Fragmentos de Nous" % game.store.data["fragments"], Vector2(85, 145), 16, GOLD)
+	_text("%d / %d recordadas" % [owned.size(), SkillCatalog.ORDER.size()], Vector2(428, 145), 13, MUTED)
+	_frame(Rect2(600, 150, 279, 312), true, .98)
+	for id in SkillCatalog.ORDER:
+		var point: Vector2 = SKILL_POINTS[id]
+		for prerequisite in SkillCatalog.NODES[id]["requires"]:
+			var from: Vector2 = SKILL_POINTS[prerequisite]
+			var direction := (point - from).normalized()
+			var color := GOLD if id in owned else (Color("729e9a") if prerequisite in owned else Color("384c4c"))
+			draw_line(from + direction * 22, point - direction * 22, Color(color, .8), 1.5)
+	for id in SkillCatalog.ORDER:
+		var point: Vector2 = SKILL_POINTS[id]
+		var learned: bool = id in owned
+		var available := SkillCatalog.blocker(game.store.data, id).is_empty()
+		var border := GOLD if learned else (Color("8fc6b1") if available else Color("58696a"))
+		draw_circle(point, 19, Color("243a38") if learned else Color("102329"))
+		draw_arc(point, 19, 0, TAU, 32, border, 1.5)
+		if learned: _diamond(point + Vector2(0, -19), 3, GOLD, true)
+		if id == _selected_skill:
+			draw_arc(point, 24, 0, TAU, 32, IVORY, 1.3)
+			_diamond(point + Vector2(-29, 0), 3, IVORY, true)
+		_text(str(SkillCatalog.NODES[id]["cost"]), point + Vector2(24, 17), 12, border)
+	for index in range(3):
+		_text(["VONTADE", "MATÉRIA", "INTELECTO"][index], Vector2(113 + index * 180, 427), 13, GOLD)
+	for index in range(3):
+		draw_circle(Vector2(90 + index * 97, 447), 3, [GOLD, Color("8fc6b1"), Color("58696a")][index])
+		_text(["Aprendida", "Disponível", "Bloqueada"][index], Vector2(99 + index * 97, 451), 12, MUTED)
+	_text("Selecione um nó · Tab / setas para navegar", Vector2(86, 472), 12, MUTED)
 
 func _back_button() -> void:
 	_button("Voltar · Esc", Rect2(373, 445, 214, 35), _back, "back", "", true)
@@ -395,6 +520,8 @@ func _draw_gameplay() -> void:
 		if room["id"] == game.current_room: area = room["name"]
 	var house_id := str(game.get("inside_house"))
 	if HouseCatalog.HOUSES.has(house_id): area = HouseCatalog.HOUSES[house_id]["name"]
+	# No barco de Sabu (scripts/world/sea.gd), entre o porto e a Ilha do Bennu.
+	if game.get("at_sea") == true: area = "Baía das Garças"
 	_text_block(area, Vector2(634, 48), 240, 19, 21, IVORY, true)
 	if game.has_method("seals_found"):
 		_diamond(Vector2(884, 42), 4)
@@ -409,8 +536,14 @@ func _draw_gameplay() -> void:
 	draw_rect(Rect2(35, 459, 50, 50), GOLD.darkened(.4), false, 1)
 	if _weapon_icons.has(weapon.category): draw_texture_rect(_weapon_icons[weapon.category], Rect2(39, 463, 42, 42), false)
 	_fit_text(weapon.display_name, Vector2(97, 476), 203, 17, IVORY)
-	_text("ADAGAS" if weapon.category == "leve" else "ESPADA", Vector2(97, 500), 13, GOLD)
-	_text("Q · pronto" if hero.power_cooldown_remaining <= 0 else "Q · %.1f s" % hero.power_cooldown_remaining, Vector2(214, 500), 14, IVORY)
+	if "selo_mercurio" in data["skills"]:
+		_text("Q · pronto" if hero.power_cooldown_remaining <= 0 else "Q · %.1f s" % hero.power_cooldown_remaining, Vector2(97, 500), 13, IVORY)
+		var seal_value: Variant = hero.get("seal_cooldown_remaining")
+		var seal_cooldown := float(seal_value) if seal_value != null else 0.0
+		_text("C · pronto" if seal_cooldown <= 0 else "C · %.1f s" % seal_cooldown, Vector2(214, 500), 13, GOLD)
+	else:
+		_text("ADAGAS" if weapon.category == "leve" else "ESPADA", Vector2(97, 500), 13, GOLD)
+		_text("Q · pronto" if hero.power_cooldown_remaining <= 0 else "Q · %.1f s" % hero.power_cooldown_remaining, Vector2(214, 500), 14, IVORY)
 	if _hint_controls: _text("WASD mover · Shift correr · Espaço rolar · J/F atacar · E interagir", Vector2(333, 512), 14, IVORY)
 	if game.nearest != null and is_instance_valid(game.nearest) and not game.respawning and overlay == "": _draw_interaction()
 	if is_instance_valid(game.boss) and game.boss.health > 0 and hero.position.distance_to(game.boss.position) < 240 and overlay == "":
@@ -472,20 +605,14 @@ func _draw_modal() -> void:
 			_fit_text(_selection_title, Vector2(466, 432), 380, 20, GOLD)
 			_fit_text(_selection_description, Vector2(466, 458), 380, 15, MUTED)
 		"tree":
-			_text("%d Fragmentos de Nous · escolha o que recordar" % game.store.data["fragments"], Vector2(85, 145), 14, GOLD)
-			for index in range(DemoSaveStore.SKILLS.size()):
-				var definition: Dictionary = DemoSaveStore.SKILLS[DemoSaveStore.SKILLS.keys()[index]]
-				var x := 81 + index * 270
-				_frame(Rect2(x, 174, 258, 234), true, .65)
-				_text(definition["branch"].to_upper(), Vector2(x + 18, 201), 12, GOLD)
-				_fit_text(definition["name"], Vector2(x + 18, 236), 221, 21, IVORY, true)
+			_draw_skill_tree()
 		"map":
 			_text("Lugares recordados, caminhos descobertos e selos da travessia.", Vector2(84, 143), 12, MUTED)
 			_draw_map()
 		"inventory":
 			_text("O que foi encontrado permanece na memória.", Vector2(84, 143), 13, MUTED)
 			for index in range(2): _frame(Rect2(86 + index * 404, 166, 384, 205), true, .7)
-		"controls": _text("Pelo teclado, os golpes seguem a última direção. Com o mouse, miram o cursor.", Vector2(99, 425), 13, MUTED)
+		"controls": _text("O mouse mira o cursor. ¹ Selo de Mercúrio: aprenda na Árvore das Emanações.", Vector2(99, 143), 12, MUTED)
 		"new_journey": _text("Sua travessia anterior ficará arquivada neste computador.", Vector2(112, 329), 14, GOLD)
 		"shop": ShopPanel.draw(self, game)
 
@@ -565,10 +692,10 @@ func _draw_map() -> void:
 		if room["id"] not in game.store.data["visited"]:
 			if routes and room["id"] not in ShopCatalog.MAP_HIDDEN:
 				hinted.append(room)
-				for corner in _map_room_corners(room["rect"]): bounds = bounds.expand(corner)
+				for corner in _map_room_shape(room): bounds = bounds.expand(corner)
 			continue
 		revealed.append(room)
-		for corner in _map_room_corners(room["rect"]): bounds = bounds.expand(corner)
+		for corner in _map_room_shape(room): bounds = bounds.expand(corner)
 	draw_rect(chart, Color("0d2027"))
 	draw_rect(chart, GOLD.darkened(.67), false, 1)
 	if revealed.is_empty():
@@ -578,7 +705,7 @@ func _draw_map() -> void:
 	var origin := chart.get_center() - bounds.get_center() * scale_factor
 	for room in hinted:
 		var sketch := PackedVector2Array()
-		for corner in _map_room_corners(room["rect"]): sketch.append(origin + corner * scale_factor)
+		for corner in _map_room_shape(room): sketch.append(origin + corner * scale_factor)
 		sketch.append(sketch[0])
 		draw_polyline(sketch, MUTED.darkened(.45), 1)
 	var centers: Dictionary = {}
@@ -594,7 +721,7 @@ func _draw_map() -> void:
 	for room in revealed:
 		number += 1
 		var outline := PackedVector2Array()
-		for corner in _map_room_corners(room["rect"]): outline.append(origin + corner * scale_factor)
+		for corner in _map_room_shape(room): outline.append(origin + corner * scale_factor)
 		var current: bool = room["id"] == game.current_room
 		draw_colored_polygon(outline, Color("496754") if current else Color("294244"))
 		outline.append(outline[0])
@@ -605,6 +732,14 @@ func _draw_map() -> void:
 	var hero_marker: Vector2 = origin + hero_position * scale_factor
 	_diamond(hero_marker, 5, Color("b9efd8"), true)
 	_text("◆ Senu · ouro: área atual · role a legenda", Vector2(84, 440), 13, MUTED)
+
+## O contorno de uma sala no mapa: o retângulo, ou o desenho próprio ("outline")
+## de salas como a Ilha do Bennu, que segue a costa.
+func _map_room_shape(room: Dictionary) -> PackedVector2Array:
+	if not room.has("outline"): return _map_room_corners(room["rect"])
+	var shape := PackedVector2Array()
+	for point in room["outline"]: shape.append(PortLayout.iso(point))
+	return shape
 
 func _map_room_corners(rect: Rect2i) -> PackedVector2Array:
 	var start := Vector2(rect.position) - Vector2(.5, .5)
@@ -618,16 +753,18 @@ func _read_preferences() -> void:
 	var config := ConfigFile.new()
 	if config.load(_preferences_path()) == OK:
 		_hint_controls = bool(config.get_value("interface", "control_hints", false))
-		_limit_fps = bool(config.get_value("display", "limit_fps", true))
+		# Chave nova: a antiga ("limit_fps") era gravada ligada junto com as outras
+		# preferências, sem o jogador escolher, e prendia monitores rápidos em 60.
+		_limit_fps = bool(config.get_value("display", "limit_fps_60", false))
+	FramePacing.apply(_limit_fps)
 	if DisplayServer.get_name() != "headless":
-		Engine.max_fps = 60 if _limit_fps else 0
 		if config.has_section_key("display", "fullscreen"):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if bool(config.get_value("display", "fullscreen", false)) else DisplayServer.WINDOW_MODE_WINDOWED)
 
 func _write_preferences() -> void:
 	var config := ConfigFile.new()
 	config.set_value("interface", "control_hints", _hint_controls)
-	config.set_value("display", "limit_fps", _limit_fps)
+	config.set_value("display", "limit_fps_60", _limit_fps)
 	config.set_value("display", "fullscreen", DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_preferences_path().get_base_dir()))
 	config.save(_preferences_path())

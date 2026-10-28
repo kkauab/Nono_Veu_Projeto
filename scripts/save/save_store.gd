@@ -2,14 +2,17 @@ extends RefCounted
 class_name DemoSaveStore
 
 const VERSION := 1
-const CHECKPOINTS := ["hub", "s1", "market_rest", "caravan_rest", "cistern_rest"]
-const OPTIONAL_FLAGS := ["aqueduct", "memory_market", "memory_dock", "seal_bells", "seal_water", "seal_stars", "bells_clue", "water_clue", "stars_clue", "memory_pilgrim", "memory_copper", "opening_seen", "echo"]
+## "isle_rest" é a estela da Ilha do Bennu (scripts/world/isle.gd).
+const CHECKPOINTS := ["hub", "s1", "market_rest", "caravan_rest", "cistern_rest", "isle_rest"]
+## "sea_route": a rota de barco até a ilha já aparece no mapa.
+const OPTIONAL_FLAGS := ["aqueduct", "memory_market", "memory_dock", "seal_bells", "seal_water", "seal_stars", "bells_clue", "water_clue", "stars_clue", "memory_pilgrim", "memory_copper", "opening_seen", "echo", "sea_route"]
 const WEAPONS := ["e01_khopesh_discipulo", "l01_adagas_reverso"]
 ## Contadores da economia de combate (scripts/economy/economy.gd): XP e óbolos.
 const COUNTERS := ["xp", "coins"]
 ## Compras e cargas das lojas (scripts/economy/shop_catalog.gd).
 const ShopCatalog = preload("res://scripts/economy/shop_catalog.gd")
-const SKILLS := {"vontade": {"name": "Mão firme", "branch": "Vontade", "cost": 1, "description": "+4 de dano em todos os golpes.", "requires": []}, "materia": {"name": "Fôlego da pedra", "branch": "Matéria", "cost": 1, "description": "+20 de vida máxima.", "requires": []}, "intelecto": {"name": "Memória do éter", "branch": "Intelecto", "cost": 2, "description": "Poder da arma recarrega 20% mais rápido.", "requires": []}}
+const SkillCatalog = preload("res://scripts/progression/skill_catalog.gd")
+const SKILLS := SkillCatalog.NODES
 var data: Dictionary
 var path: String
 var loaded_existing := false
@@ -20,7 +23,7 @@ func _init(save_path: String = "user://progress.json") -> void:
 	data = fresh_data()
 
 static func fresh_data() -> Dictionary:
-	return {"version": VERSION, "world_revision": 3, "fragments": 0, "collected": [], "skills": [], "weapons": [WEAPONS[0]], "equipped": WEAPONS[0], "defeated": [], "visited": [], "checkpoint": "hub", "flags": {"shortcut": false, "boss": false, "complete": false, "aqueduct": false, "memory_market": false, "memory_dock": false, "seal_bells": false, "seal_water": false, "seal_stars": false, "bells_clue": false, "water_clue": false, "stars_clue": false, "memory_pilgrim": false, "memory_copper": false, "opening_seen": false, "echo": false}, "puzzles": {"bells": [], "water": 0, "water_sources": [false, false], "stars": [0, 0, 0]}, "xp": 0, "coins": 0, "purchases": {}, "items": {}}
+	return {"version": VERSION, "world_revision": 3, "fragments": 0, "collected": [], "skills": [], "weapons": [WEAPONS[0]], "equipped": WEAPONS[0], "defeated": [], "visited": [], "checkpoint": "hub", "flags": {"shortcut": false, "boss": false, "complete": false, "aqueduct": false, "memory_market": false, "memory_dock": false, "seal_bells": false, "seal_water": false, "seal_stars": false, "bells_clue": false, "water_clue": false, "stars_clue": false, "memory_pilgrim": false, "memory_copper": false, "opening_seen": false, "echo": false, "sea_route": false}, "puzzles": {"bells": [], "water": 0, "water_sources": [false, false], "stars": [0, 0, 0]}, "xp": 0, "coins": 0, "purchases": {}, "items": {}}
 
 func load_progress() -> bool:
 	for candidate in [path, path + ".bak"]:
@@ -85,9 +88,8 @@ func _valid(value: Variant) -> bool:
 		return false
 	if not WEAPONS[0] in value["weapons"] or not value["equipped"] in value["weapons"]:
 		return false
-	for skill in value["skills"]:
-		if not SKILLS.has(skill):
-			return false
+	if not SkillCatalog.valid_owned(value["skills"]):
+		return false
 	for flag in ["shortcut", "boss", "complete"]:
 		if not value["flags"].get(flag) is bool:
 			return false
@@ -168,14 +170,9 @@ func collect(id: String, amount: int = 1) -> bool:
 	return true
 
 func purchase(skill_id: String) -> bool:
-	if not SKILLS.has(skill_id) or skill_id in data["skills"]:
+	if SkillCatalog.blocker(data, skill_id) != "":
 		return false
 	var definition: Dictionary = SKILLS[skill_id]
-	if data["fragments"] < definition["cost"]:
-		return false
-	for required in definition["requires"]:
-		if required not in data["skills"]:
-			return false
 	data["fragments"] -= definition["cost"]
 	data["skills"].append(skill_id)
 	return true

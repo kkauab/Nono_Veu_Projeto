@@ -82,7 +82,9 @@ func _test_roundtrip_and_backup() -> void:
 	for skill_id: String in SaveStore.SKILLS:
 		var definition: Dictionary = SaveStore.SKILLS[skill_id]
 		_check(definition["requires"] is Array, "skill prerequisite list is explicit: " + skill_id)
-	print("NOTE all current demo skills are root nodes (requires=[]); no configured dependent skill exists to exercise a missing-prerequisite purchase")
+	var before_dependency: Dictionary = store.data.duplicate(true)
+	_check(not store.purchase("convergencia_nous"), "dependent skill rejects missing prerequisite branches")
+	_check(store.data == before_dependency, "missing prerequisite rejection preserves the entire saved state")
 
 
 func _test_invalid_schema() -> void:

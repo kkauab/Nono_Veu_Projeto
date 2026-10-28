@@ -88,6 +88,13 @@ func _run() -> void:
 		await finish()
 		return
 	check(world.activate(find_item("s1")) and world.store.data["checkpoint"] == "s1", "Checkpoint registra santuário válido")
+	# O descanso agora recria encontros. Esta suíte isola somente a navegação;
+	# enemy_respawn_test verifica o renascimento e combat_test verifica os golpes.
+	await process_frame
+	for enemy in get_nodes_in_group("enemies"):
+		if enemy.is_boss: enemy.set_physics_process(false)
+		else: enemy.queue_free()
+	await physics_frame
 	check(await walk_to(markers["alavanca"]), "Alavanca alcançável pelo lado de trás")
 	check(world.activate(find_item("alavanca")), "Alavanca abre atalho")
 	await physics_frame
@@ -101,7 +108,8 @@ func _run() -> void:
 	check(world.buy_skill("vontade"), "Compra de habilidade com o Nous encontrado")
 	check(world.player.damage_bonus == damage_before + 4 and world.store.data["fragments"] == balance_before - 1, "Compra aplica melhoria e debita moeda")
 	print("ROUTE_STAGE arena e Catacumbas")
-	if not await walk_tiles([Vector2(1, 2), Vector2(1, 4), Vector2(1, 14), Vector2(2, 16), Vector2(2, 17), Vector2(3, 18), markers["s1"]], "Retorno à guarita"):
+	# O santuário é sólido: Senu o contorna pela esquerda e para na frente dele.
+	if not await walk_tiles([Vector2(1, 2), Vector2(1, 4), Vector2(1, 14), Vector2(2, 16), Vector2(2, 17), Vector2(3, 18), Vector2(6.2, 20.6), markers["s1"] + Vector2(.4, .4)], "Retorno à guarita"):
 		await finish()
 		return
 	if not await follow_main(markers["selo"]):
