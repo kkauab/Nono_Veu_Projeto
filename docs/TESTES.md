@@ -299,3 +299,23 @@ Medido com o jogo em janela, num monitor de 165 Hz, remando em linha reta. Antes
 Capturas de antes e depois no Cais dos Esquecidos: o casco agora entra na água, com espuma, e a sombra de chão sumiu.
 
 Regressões: ilha **58/58**, HUD **19/19**, mundo **128/128** e efeitos de combate **108/108**. Nenhum código de movimento conta passos de física sem usar o tempo.
+
+## A vida no Porto — 27/10/2026
+
+Moradores, bancadas e navios mercantes (zona Mundo; detalhes em `docs/MUNDO_VIDA.md`). O novo `tests/port_life_test.gd` aprovou **250/250**. Confere que:
+- cada bancada tem vendedor junto da barraca;
+- toda parada de rotina fica em chão livre e fora da boca das passagens;
+- o caminho entre paradas passa longe do cenário;
+- quem compra para ao alcance do vendedor;
+- em 4 minutos simulados cada morador cumpre a rotina inteira, inclusive os estivadores, que esperam o navio;
+- os dois navios fazem o ciclo completo (chegar, atracar na vaga, recuar quando é o caso, partir e voltar), só pela água e com a proa para a frente;
+- comprar cobra o preço e cura, e não cobra com a vida cheia ou sem óbolos;
+- falar abre o diálogo e avança a fala;
+- o Senu esbarra nos moradores, a espada não os acerta, e o morador dá um passo para o lado quando o Senu encosta;
+- longe do Senu, a rotina pausa.
+
+Os testes de percurso (`route_test` **138/138** e `world_v6_test` **128/128**) passam com os moradores andando. O `map_ground_test` (**1489/1489**) deixou de cobrar "parar na frente" de quem anda. As 42 suítes passaram com Godot 4.7.2.
+
+```powershell
+& $demoGodot --headless --path . --time-scale 4 --script res://tests/port_life_test.gd -- --qa
+```

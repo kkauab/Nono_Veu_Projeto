@@ -7,6 +7,7 @@ const Dressing = preload("res://scripts/world/port_dressing.gd")
 const Opening = preload("res://scripts/ui/opening_cutscene.gd")
 const LEVER_FLAGS := {"alavanca": "shortcut", "alavanca_aqueduct": "aqueduct", "alavanca_eco": "echo"}
 const Story = preload("res://scripts/world/port_story.gd")
+const Life = preload("res://scripts/world/port_life.gd")
 const Skills = preload("res://scripts/progression/skill_catalog.gd")
 var store: DemoSaveStore
 var player: SenuPlayer
@@ -178,6 +179,7 @@ func _build_objects() -> void:
 	echo_gate = _make_gate("echo", "echo")
 	Story.build(self)
 	Houses.build(self)
+	Life.build(self)
 	# Barco de Sabu e Ilha do Bennu (Gustavo, 27/10/2026; docs/MUNDO_BARCO_ILHA.md).
 	Isle.build(self)
 	Sea.build(self)
@@ -269,6 +271,8 @@ func activate(item: PortInteractable) -> bool:
 	if not is_instance_valid(item) or not item.active or player.position.distance_to(item.position) > 44:
 		return false
 	match item.kind:
+		"townsfolk", "vendor":
+			return Life.activate(self, item)
 		"iri_mark", "iri_relic", "npc":
 			return Story.activate(self, item)
 		"door", "house_chest", "house_note", "shopkeeper":

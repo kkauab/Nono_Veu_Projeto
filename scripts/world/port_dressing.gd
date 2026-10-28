@@ -35,10 +35,10 @@ const PROPS := [
 	["arch", Vector2(39, 25), "8f8e78"], ["pillar", Vector2(40, 23), "878c75"],
 	["pillar", Vector2(45, 23), "878c75"], ["statue", Vector2(44, 25), "87918a"],
 	["torch", Vector2(40, 28), "a29b79"],
-	["boat", Vector2(29, 38), "86775b"], ["boat", Vector2(38, 39), "86775b"],
+	["boat", Vector2(38, 39), "86775b"],
 	["bollard", Vector2(25, 32), "797b65"], ["bollard", Vector2(34, 32), "797b65"],
 	["barrel", Vector2(28, 34), "806343"], ["crate", Vector2(32, 34), "806343"],
-	["torch", Vector2(30.4, 35.35), "a29b79"], ["reeds", Vector2(24, 37), "51695d"],
+	["torch", Vector2(35.3, 31.4), "a29b79"], ["reeds", Vector2(24, 37), "51695d"],
 	["palm", Vector2(12, 21), "556f5a"], ["palm", Vector2(12, 29), "556f5a"],
 	["palm", Vector2(18, 28), "556f5a"], ["palm", Vector2(21, 21), "556f5a"],
 	["reeds", Vector2(15, 23), "51695d"], ["reeds", Vector2(20, 27), "51695d"],
@@ -213,5 +213,3 @@ static func _populate_districts(parent: Node2D, site: Dictionary) -> void:
 			_district_prop(parent, site, "rubble", origin + Vector2(size.x - 3, size.y - 3), stone)
 		if room["id"] in ["pilgrim", "caravan", "salt_road"]:
 			_district_prop(parent, site, "palm", origin + Vector2(1, 7), Color("647b60"))
-		if room["id"] == "copper_dock":
-			_district_prop(parent, site, "boat", origin + Vector2(6, size.y + 2), Color("998060"))
