@@ -147,7 +147,8 @@ func use_item(id: String, expect_success: bool = true) -> bool:
 	if object == null:
 		check(false, "Interaction exists: " + id)
 		return false
-	if not await walk_to(PortLayout.unproject(object.position)):
+	# Stands are solid: the player walks up to the front of the object.
+	if not await walk_to(PortLayout.unproject(object.position + Vector2(0, 13))):
 		check(false, "Physical route reaches: " + id)
 		return false
 	var accepted: bool = world.activate(object)
@@ -187,7 +188,8 @@ func walk_to(tile: Vector2) -> bool:
 		navigation_ids.clear()
 		var occupied: Dictionary = {}
 		for prop in world.actors.get_children():
-			if not prop is PortProp or (not prop.solid and prop.kind != "arch"):
+			# Solid props and the stands of puzzles and shrines; the rest answers false.
+			if not prop.has_method("blocks_ground_point"):
 				continue
 			var at := PortLayout.unproject(prop.position)
 			for x in range(floori(at.x) - 2, ceili(at.x) + 3):

@@ -263,6 +263,27 @@ Correções feitas durante o trabalho:
 - a flag `sea_route` entrou no save novo, porque o carregamento completa as flags opcionais e a ida e a volta deixavam de bater;
 - o HUD lê `at_sea` sem `bool(null)`.
 
+## Colisão, chão e passagens das construções — 27/10/2026
+
+Achado jogando: Senu atravessava muros, braseiros e os objetos dos puzzles; pilares e caixotes o deixavam entrar pela metade de trás; algumas peças pareciam flutuar; e o gerador de bairros punha construções na boca das passagens. Correção da zona Mundo (`port_art.gd`, `world_prop.gd`, `interactable.gd` e `port_dressing.gd`; detalhes nos bugs 8 e 9 de `docs/MUNDO_EXPANSAO.md`). A base de cada desenho é medida na arte e vira colisão e sombra; só juncos e barcos são atravessáveis; o gerador valida chão, sobreposição, marcadores e bocas de passagem antes de pôr cada peça.
+
+O novo `tests/map_ground_test.gd` aprovou **1488/1488**. Ele anda pelo Porto inteiro com o corpo de 6 px do Senu, num reticulado de 1/4 de tile, com todos os portões abertos. Confere que:
+- toda peça e todo objeto interativo sólido tem a base inteira sobre a pedra e a colisão cobre a base pintada, sem parede invisível na frente;
+- nenhuma base encosta em outra;
+- as peças geradas ficam fora da boca das passagens;
+- toda sala é alcançável, cada passagem tem pelo menos 45% livre, a rota principal passa e dá para parar na frente de cada objeto interativo;
+- nenhum trecho de chão livre fica isolado.
+
+O que nem sem cenário se alcança a pé (interiores das casas e a ilha, só por mar) fica fora da cobrança. O teste pega de volta um muro sobre a água, uma sobreposição e muros sem colisão.
+
+Dois testes de percurso foram ajustados, porque mandavam o Senu pisar no ponto exato de objetos que agora são sólidos. No `route_test`, o Senu contorna o santuário da Guarita e para na frente dele. No `world_v6_test`, o `use_item` vai até a frente do objeto, e o mapa de caminhos do teste desvia dos objetos sólidos.
+
+Resultados: percurso **138/138**, mundo **128/128**, cenário **529/529**, profundidade **260/260** e história paralela **55/55**. As 41 suítes passaram com Godot 4.7.2, já com o barco e a ilha da sessão de XP na pasta.
+
+```powershell
+& $demoGodot --headless --path . --script res://tests/map_ground_test.gd -- --qa
+```
+
 ## Fluidez do mar e navios ancorados — 27/10/2026
 
 Medido com o jogo em janela, num monitor de 165 Hz, remando em linha reta. Antes: 60 quadros por segundo com o limite ligado por padrão, cada quadro durando 2 ou 3 atualizações da tela, alternando. Depois: 165 quadros e 165 passos de física (um por quadro desenhado); a tela rola 0 ou 1 px por quadro, em ritmo regular, e o barco fica parado no centro. Detalhes em [MUNDO_BARCO_ILHA.md](MUNDO_BARCO_ILHA.md), seção "Fluidez".

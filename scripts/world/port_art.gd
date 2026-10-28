@@ -7,6 +7,7 @@ static var _loaded := false
 static var _water_material: ShaderMaterial
 static var _ground_lines: Dictionary = {}
 static var _art_bottoms: Dictionary = {}
+static var _footprints: Dictionary = {}
 const CELL := 192
 const COLUMNS := 4
 const THEMES := ["stone", "sand", "wood", "mosaic", "garden", "crypt", "aqueduct", "arena"]
@@ -77,6 +78,40 @@ static func ground_line(kind: String) -> PackedFloat32Array:
 static func art_bottom(kind: String) -> PackedFloat32Array:
 	return _measured(kind, _art_bottoms)
 
+## Ground-plane silhouette of a prop frame, in the same space as draw_prop. The
+## pivot is the front corner of the base, so the base lies behind it. Built from
+## the floor-touching columns around the lowest pixel (a palm's trunk, not its
+## leaves) and closed by the hidden back corner: left + right - front.
+static func footprint(kind: String) -> PackedVector2Array:
+	var bottom := art_bottom(kind)
+	if bottom.is_empty(): return PackedVector2Array()
+	var frame := int(_entry(kind)["frame"])
+	# Packed arrays are shared: callers scale their own copy, never the cached one.
+	if _footprints.has(frame): return _footprints[frame].duplicate()
+	var lowest := -1
+	for x in range(CELL):
+		if _touches_floor(bottom, x) and (lowest < 0 or bottom[x] > bottom[lowest]): lowest = x
+	var first := lowest
+	var last := lowest
+	while first > 0 and _touches_floor(bottom, first - 1): first -= 1
+	while last < CELL - 1 and _touches_floor(bottom, last + 1): last += 1
+	var contour := PackedVector2Array()
+	var front := Vector2(0, -INF)
+	for x in range(first, last + 1):
+		# Bottom edge of the lowest pixel of each column.
+		var point := Vector2(x - 95.5, bottom[x] + 1)
+		contour.append(point)
+		if point.y > front.y: front = point
+	contour.append(contour[0] + contour[contour.size() - 1] - front)
+	var hull := Geometry2D.convex_hull(contour)
+	hull.remove_at(hull.size() - 1)
+	_footprints[frame] = hull
+	return hull.duplicate()
+
+static func _touches_floor(bottom: PackedFloat32Array, x: int) -> bool:
+	# Isometric bases rise half a pixel per pixel away from the pivot.
+	return not is_nan(bottom[x]) and bottom[x] >= -absf(x - 96) * .5 - 18
+
 static func _measured(kind: String, table: Dictionary) -> PackedFloat32Array:
 	_ensure()
 	var entry := _entry(kind)
@@ -104,8 +139,7 @@ static func _measure_bottom(image: Image, cell: Vector2i) -> PackedFloat32Array:
 static func _ground_from(bottom: PackedFloat32Array) -> PackedFloat32Array:
 	var grounded: Array[int] = []
 	for x in range(CELL):
-		# Isometric bases rise half a pixel per pixel away from the pivot.
-		if not is_nan(bottom[x]) and bottom[x] >= -absf(x - 96) * .5 - 18: grounded.append(x)
+		if _touches_floor(bottom, x): grounded.append(x)
 	var line := bottom.duplicate()
 	for x in range(CELL):
 		if is_nan(bottom[x]) or grounded.has(x): continue
