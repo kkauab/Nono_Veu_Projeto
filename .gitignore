@@ -5,3 +5,5 @@ qa/
 *.blend2
 *.tmp
 
+# Local secrets written by `elevenlabs onboard`
+/.env.local
