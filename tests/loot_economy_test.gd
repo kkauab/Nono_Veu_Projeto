@@ -149,8 +149,14 @@ func _test_world() -> void:
 	await process_frame
 	_check(get_nodes_in_group("loot").is_empty(), "a defeated enemy never pays twice within the same rest cycle")
 	await create_timer(1.3).timeout
+	_check(not FileAccess.file_exists(store.path), "coins are not autosaved after the pickup timer")
+	var tower: PortInteractable
+	for item in get_nodes_in_group("interactables"):
+		if item.get_parent() == world.actors and item.item_id == "hub": tower = item
+	player.position = tower.position
+	_check(world.activate(tower), "the tower anchors collected coins")
 	var on_disk: DemoSaveStore = SaveStore.new(store.path)
-	_check(on_disk.load_progress() and Economy.coins(on_disk.data) == reward["coins"], "coins are saved shortly after the pickup")
+	_check(on_disk.load_progress() and Economy.coins(on_disk.data) == reward["coins"], "coins are saved by the tower")
 	var needed := Economy.xp_to_next(1) - Economy.xp(store.data)
 	world.call("collect_loot", "xp", needed)
 	_check(Economy.level(store.data) == 2 and player.max_health == base_health + Economy.HEALTH_PER_LEVEL, "level 2 raises Senu's max health")

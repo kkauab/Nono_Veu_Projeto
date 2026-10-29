@@ -10,8 +10,9 @@ const Layout = preload("res://scripts/world/port_layout.gd")
 const Economy = preload("res://scripts/economy/economy.gd")
 const Sfx = preload("res://scripts/audio/sfx.gd")
 const InteriorArt = preload("res://scripts/world/interior_art.gd")
+const Quests = preload("res://scripts/world/port_quests.gd")
 const FADE := .22
-const KINDS := ["door", "house_chest", "house_note", "shopkeeper"]
+const KINDS := ["door", "house_chest", "house_note", "shopkeeper", "questgiver"]
 const CAMERA_OFFSET := Vector2(0, -20)
 
 
@@ -19,6 +20,7 @@ const CAMERA_OFFSET := Vector2(0, -20)
 class HouseFixture extends PortInteractable:
 	var house_id := ""
 	var leads_inside := false
+	var marker_offset := Vector2.ZERO
 
 	func _draw() -> void:
 		var gold := Color("dcc28c")
@@ -27,13 +29,20 @@ class HouseFixture extends PortInteractable:
 			draw_arc(Vector2.ZERO, 21, 0, TAU, 24, gold, 1)
 			draw_set_transform(Vector2.ZERO)
 		match kind:
+			"shopkeeper", "questgiver":
+				if puzzle_value in [1, 2]:
+					var at := marker_offset + Vector2(0, -49 + roundf(sin(time * 2.0)))
+					draw_rect(Rect2(at - Vector2(3, 6), Vector2(6, 15)), Color("14252c"))
+					draw_rect(Rect2(at - Vector2(1, 4), Vector2(2, 7)), gold)
+					draw_rect(Rect2(at + Vector2(-1, 5), Vector2(2, 2)), Color("8fc6b1") if puzzle_value == 2 else gold)
 			"door":
 				# Uma soleira de pedra gasta; brilha quando Senu está perto.
 				draw_colored_polygon(PackedVector2Array([Vector2(-12, 0), Vector2(0, 6), Vector2(12, 0), Vector2(0, -6)]), Color(.55, .5, .38, .55))
 				if highlighted:
 					draw_colored_polygon(PackedVector2Array([Vector2(-8, 0), Vector2(0, 4), Vector2(8, 0), Vector2(0, -4)]), Color(.96, .85, .58, .35 + sin(time * 4.0) * .1))
 			"house_chest":
-				draw_rect(Rect2(-12, -2, 24, 4), Color(.01, .025, .03, .28))
+				for polygon in Geometry2D.offset_polygon(InteriorArt.footprint("chest_closed"), 2.0):
+					draw_colored_polygon(polygon, Color(.01, .025, .03, .24))
 				if InteriorArt.draw(self, "chest_open" if opened else "chest_closed"):
 					return
 				draw_colored_polygon(PackedVector2Array([Vector2(-13, -2), Vector2(0, 5), Vector2(14, -2), Vector2(14, -13), Vector2(0, -6), Vector2(-13, -13)]), Color("5d4630"))
@@ -67,13 +76,18 @@ static func build(game) -> void:
 			var furniture := Interior.Furniture.new()
 			furniture.kind = piece[0]
 			furniture.position = Layout.iso(piece[1])
+			furniture.fit_to_floor(house)
 			game.actors.add_child(furniture)
 		var district := _district_label(house["district"])
 		_fixture(game, id, "porta_" + id, "door", house["door"], "Entrar · " + str(house["name"])).leads_inside = true
 		_fixture(game, id, "saida_" + id, "door", house["exit"], "Sair para " + district)
 		for fixture in house["fixtures"]:
-			var caption: String = {"house_chest": "Abrir o baú", "house_note": "Ler o bilhete", "shopkeeper": "Falar com " + str(house.get("keeper", ""))}[fixture[0]]
+			var caption: String = {"house_chest": "Abrir o baú", "house_note": "Ler o bilhete", "shopkeeper": "Falar com " + str(house.get("keeper", "")), "questgiver": "Falar com Tarek"}[fixture[0]]
 			var item := _fixture(game, id, fixture[1], fixture[0], fixture[2], caption)
+			if fixture[0] in ["shopkeeper", "questgiver"]:
+				for piece in house["furniture"]:
+					if piece[0] == house.get("shop", "tarek"):
+						item.marker_offset = Layout.iso(piece[1]) - item.position
 			if fixture[0] == "house_chest" and fixture[1] in game.store.data["collected"]:
 				item.opened = true
 				item.active = false
@@ -94,6 +108,8 @@ static func activate(game, item: PortInteractable) -> bool:
 			var house: Dictionary = Catalog.HOUSES[item.house_id]
 			game.hud.show_shop(str(house["name"]), str(house["shop"]), str(house["greeting"]))
 			return true
+		"questgiver":
+			return Quests.talk(game, "tarek")
 	return false
 
 static func inside(game) -> bool:

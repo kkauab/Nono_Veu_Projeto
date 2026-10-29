@@ -430,6 +430,10 @@ func _update_scene() -> void:
 		_hero.facing = Vector2.RIGHT if walk<1 else Vector2(1,-.7)
 	_hero.position = at.round()
 	_hero.velocity = velocity
+	# The staged walk bypasses physics, so provide its authored ground travel
+	# to the same visual observer used by the playable character.
+	_hero._visual_speed = Vector2(velocity.x, velocity.y / SenuPlayer.ISO_Y).length()
+	_hero._visual_distance = distance
 	_hero._time = _animation_clock
 	_hero._supplied_view.sample(_hero)
 	_hero._supplied_view.gait_phase = fposmod(distance/28,1)

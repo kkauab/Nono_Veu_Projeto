@@ -229,6 +229,16 @@ Achado: `Start-Process` do PowerShell 5.1 não põe aspas nos argumentos. Na pas
 ```powershell
 & $demoGodot --headless --path . --script res://tests/interiors_art_test.gd
 ```
+# NPCs e interiores v2 — 28/10/2026
+
+Conferência final no Godot 4.7.2 com `--qa`, separada do progresso normal:
+
+- Arte dos interiores: 19/19, incluindo correspondência entre o Pixelorama e o atlas final de 45 quadros.
+- Missões dos NPCs: 70/70, incluindo estados antigos, coleta antecipada, reencontro dos irmãos e recompensas únicas.
+- Empório: 47/47; forja e tenda: 37/37.
+- Efeitos de combate: 108/108; economia e coleta: 43/43.
+
+Os testes de empório, combate e economia ainda relatam recursos em uso ao encerrar a execução de teste; as verificações funcionais passaram. Capturas dos quatro interiores e do caderno ficam em `qa/npc_v2_*.png`. A gravação de referência da morte e moedas fica em `art/animation_reference/death_loot.gif`.
 
 ## Tela preta em "Nova jornada" — 27/10/2026
 

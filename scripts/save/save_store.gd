@@ -129,7 +129,7 @@ func archive_progress() -> bool:
 	var archive := FileAccess.open(directory.path_join(name), FileAccess.WRITE)
 	if archive == null:
 		return false
-	archive.store_string(JSON.stringify(data, "\t"))
+	archive.store_string(FileAccess.get_file_as_string(path))
 	archive.flush()
 	var success := archive.get_error() == OK
 	archive.close()

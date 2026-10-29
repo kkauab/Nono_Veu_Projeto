@@ -75,7 +75,7 @@ static func activate(game, item) -> bool:
 	# Vira para Senu enquanto fala.
 	item.facing = signf(game.player.position.x - item.position.x) if absf(game.player.position.x - item.position.x) > 1 else item.facing
 	item.gesture(2.0)
-	game.hud.show_dialog(item.title, line)
+	game.hud.show_conversation(item.title, line, item.item_id)
 	return true
 
 

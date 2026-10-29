@@ -1,6 +1,7 @@
 extends Node2D
 class_name PortInteractable
 const Art = preload("res://scripts/world/port_art.gd")
+const ResidentArt = preload("res://scripts/world/interior_art.gd")
 
 var item_id := ""
 var kind := "nous"
@@ -26,6 +27,7 @@ func _ready() -> void:
 	add_to_group("interactables")
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_draw_tick = fposmod(position.x * .013 + position.y * .007, .1)
+	time = fposmod(absf(position.x * .017 + position.y * .011), 6.0)
 	_footprint = footprint()
 	if _footprint.is_empty():
 		return
@@ -113,6 +115,19 @@ func _draw() -> void:
 		draw_arc(Vector2.ZERO, 23, 0, TAU, 24, gold, 1)
 		draw_set_transform(Vector2.ZERO)
 	match kind:
+		"quest_object":
+			draw_set_transform(Vector2.ZERO, 0, Vector2.ONE * .7)
+			ResidentArt.draw(self, "amphora" if figure == "merit" else ("chest_closed" if figure == "nakht" else "easel"))
+			draw_set_transform(Vector2.ZERO)
+			draw_colored_polygon(PackedVector2Array([Vector2(0, -34 + bob), Vector2(3, -30 + bob), Vector2(0, -26 + bob), Vector2(-3, -30 + bob)]), gold)
+		"fisher_bell":
+			draw_line(Vector2(-7, 0), Vector2(-7, -35), Color("674d34"), 3)
+			draw_line(Vector2(-9, -35), Vector2(9, -35), Color("a27d50"), 3)
+			draw_line(Vector2(4, -35), Vector2(4, -30), gold, 1)
+			draw_colored_polygon(PackedVector2Array([Vector2(0, -30), Vector2(8, -30), Vector2(11, -19), Vector2(-3, -19)]), Color("c39e65"))
+			draw_line(Vector2(-3, -19), Vector2(11, -19), gold, 2)
+			draw_line(Vector2(4, -18), Vector2(4, -7), Color("dbcfaa"), 1)
+			draw_rect(Rect2(3, -7, 3, 3), teal if opened else gold)
 		"shrine":
 			if not _base("pillar", .58):
 				draw_rect(Rect2(-8, -27, 16, 25), Color("69786f"))
@@ -214,6 +229,8 @@ func _draw() -> void:
 					draw_circle(spot, 1.5, teal if socket < puzzle_value else Color("3b3a33"))
 
 func _draw_figure() -> void:
+	if ResidentArt.draw(self, "sabu" if figure == "brother" else "hori", time):
+		return
 	if _fisherman == null and ResourceLoader.exists(FISHERMAN_SHEET):
 		_fisherman = load(FISHERMAN_SHEET) as Texture2D
 	# Sheet poses: 0 idle, 5 talk, 6 listen. Sabu repeats the knot gesture until

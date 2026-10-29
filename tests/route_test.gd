@@ -145,6 +145,10 @@ func _run() -> void:
 	check(PortLayout.room_at(world.player.position) == "hub", "Galeria do Eco devolve Senu ao santuário")
 	for room_id in ["hub", "p1", "market", "p2", "bridge", "p3", "secret", "lower_dock", "garden", "aqueduct", "p4", "b1", "a02", "echo_descent", "echo_gallery"]:
 		check(room_id in world.store.data["visited"], "Jornada descobre o setor %s" % room_id)
+	var final_tower := find_item("hub")
+	world.player.position = final_tower.position
+	check(world.activate(final_tower), "A torre ancora o percurso antes de reabrir o arquivo")
+	await process_frame
 	var reload := DemoSaveStore.new(world.store.path)
 	check(reload.load_progress(), "Save real da jornada reabre")
 	check(reload.data["flags"]["shortcut"] and reload.data["flags"]["boss"] and "vontade" in reload.data["skills"], "Mundo/chefe/habilidade persistem depois do percurso")

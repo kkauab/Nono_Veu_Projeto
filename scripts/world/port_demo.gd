@@ -9,6 +9,7 @@ const LEVER_FLAGS := {"alavanca": "shortcut", "alavanca_aqueduct": "aqueduct", "
 const Story = preload("res://scripts/world/port_story.gd")
 const Life = preload("res://scripts/world/port_life.gd")
 const Skills = preload("res://scripts/progression/skill_catalog.gd")
+const Quests = preload("res://scripts/world/port_quests.gd")
 var store: DemoSaveStore
 var player: SenuPlayer
 var actors: Node2D
@@ -33,12 +34,20 @@ var _opening_player: Control
 var _opening_layer: CanvasLayer
 var _perception_tick := 0.0
 var _enemy_renewal_pending := false
+var _last_anchored_data: Dictionary = {}
 
 func _ready() -> void:
 	Inputs.install()
 	qa_mode = "--qa" in OS.get_cmdline_user_args()
 	store = DemoSaveStore.new("user://qa/run_%d.json" % Time.get_ticks_usec() if qa_mode else "user://progress.json")
 	store.load_progress()
+	# Starting a new journey changes memory until the first tower anchors it.
+	# The previous disk slot is retained if the player leaves before that point.
+	if get_tree().has_meta("nono_fresh_journey"):
+		get_tree().remove_meta("nono_fresh_journey")
+		store.data = DemoSaveStore.fresh_data()
+		store.loaded_existing = false
+	_last_anchored_data = store.data.duplicate(true)
 	checkpoints = {"hub": Layout.MARKERS["hub_spawn"], "s1": Layout.MARKERS["s1"], "market_rest": Layout.MARKERS["market_rest"], "caravan_rest": Layout.MARKERS["caravan_rest"], "cistern_rest": Layout.MARKERS["cistern_rest"]}
 	get_tree().auto_accept_quit = false
 	_build_world_view()
@@ -179,6 +188,7 @@ func _build_objects() -> void:
 	echo_gate = _make_gate("echo", "echo")
 	Story.build(self)
 	Houses.build(self)
+	Quests.build(self)
 	Life.build(self)
 	# Barco de Sabu e Ilha do Bennu (Gustavo, 27/10/2026; docs/MUNDO_BARCO_ILHA.md).
 	Isle.build(self)
@@ -245,6 +255,7 @@ func _physics_process(_delta: float) -> void:
 		current_room = room
 		if room not in store.data["visited"]:
 			store.data["visited"].append(room)
+			Quests.refresh(self)
 			_save()
 		if room == "a02" and not store.data["flags"]["complete"]:
 			store.data["flags"]["complete"] = true
@@ -273,10 +284,12 @@ func activate(item: PortInteractable) -> bool:
 	match item.kind:
 		"townsfolk", "vendor":
 			return Life.activate(self, item)
-		"iri_mark", "iri_relic", "npc":
+		"iri_mark", "iri_relic", "npc", "fisher_bell":
 			return Story.activate(self, item)
-		"door", "house_chest", "house_note", "shopkeeper":
+		"door", "house_chest", "house_note", "shopkeeper", "questgiver":
 			return Houses.activate(self, item)
+		"quest_object":
+			return Quests.activate(self, item)
 		"boat_moor":
 			return Sea.activate(self, item)
 		"isle_npc", "isle_brazier", "isle_altar", "isle_net":
@@ -355,8 +368,8 @@ func _rest_at_shrine(item: PortInteractable) -> bool:
 	hud.toast("Memória ancorada · vida restaurada · inimigos renovados · progresso salvo")
 	return true
 
-## Explicit rest/exit saves begin a fresh encounter cycle. Routine autosaves
-## deliberately keep defeated IDs, otherwise every kill would revive its target.
+## Only a tower anchors a fresh encounter cycle. Memory updates elsewhere
+## retain defeated IDs and never write a save or renew an encounter.
 func _save_enemy_cycle() -> bool:
 	var previous: Array = store.data["defeated"].duplicate()
 	var ordinary_ids := {}
@@ -364,7 +377,7 @@ func _save_enemy_cycle() -> bool:
 		if not spawn.get("boss", false):
 			ordinary_ids[spawn["id"]] = true
 	store.data["defeated"] = previous.filter(func(id): return not ordinary_ids.has(id))
-	if _save():
+	if _persist_progress():
 		return true
 	store.data["defeated"] = previous
 	return false
@@ -437,7 +450,7 @@ func _award_seal(flag: String, title: String) -> bool:
 	store.collect("reward_" + flag, 1)
 	refresh_seals()
 	_save()
-	hud.show_dialog(title, "Uma lembrança retorna ao bronze da guarita. Selos despertos: %d de 3.\n\n+1 Fragmento de Nous. Os mecanismos e esta descoberta ficam salvos.\n\n%s" % [seals_found(), "A Porta das Três Lembranças se abriu. O Porteiro espera." if seals_found() == 3 else "As outras marcas apontam para os Sinos ao norte, a Cisterna ao sul e o Observatório a leste."])
+	hud.show_dialog(title, "Uma lembrança retorna ao bronze da guarita. Selos despertos: %d de 3.\n\n+1 Fragmento de Nous. Medite numa torre para ancorar os mecanismos e esta descoberta.\n\n%s" % [seals_found(), "A Porta das Três Lembranças se abriu. O Porteiro espera." if seals_found() == 3 else "As outras marcas apontam para os Sinos ao norte, a Cisterna ao sul e o Observatório a leste."])
 	return true
 
 func _activate_puzzle(item: PortInteractable) -> bool:
@@ -531,6 +544,9 @@ func buy_skill(id: String) -> bool:
 	_save()
 	return true
 
+func talk_to_resident(id: String) -> bool:
+	return Quests.talk(self, id)
+
 func _apply_upgrades(restore_health: bool) -> void:
 	var previous_max: int = player.max_health
 	var effects := Skills.effects(store.data["skills"])
@@ -551,7 +567,7 @@ func _update_skill_perception() -> void:
 	for item in get_tree().get_nodes_in_group("interactables"):
 		if not item is PortInteractable:
 			continue
-		var optional: bool = item.kind in ["nous", "daggers", "cache", "memory", "iri_mark", "iri_relic"]
+		var optional: bool = item.kind in ["nous", "daggers", "cache", "memory", "iri_mark", "iri_relic", "quest_object"]
 		var unread: bool = not bool(store.data["flags"].get(item.item_id, false))
 		var offset: Vector2 = item.global_position - player.global_position
 		var nearby := Vector2(offset.x, offset.y / SenuPlayer.ISO_Y).length() <= 220.0
@@ -588,10 +604,22 @@ func _on_player_died() -> void:
 	camera.reset_smoothing()
 	respawning = false
 
+## Existing quest, combat and shop call sites synchronize the current session.
+## Persisting those events automatically would bypass the tower-only rule.
 func _save() -> bool:
 	store.data["equipped"] = player.equipped_weapon().id if player != null else store.data["equipped"]
+	return true
+
+func has_unsaved_progress() -> bool:
+	return store.data != _last_anchored_data
+
+## Called only by the tower's encounter-cycle transaction.
+func _persist_progress() -> bool:
+	_save()
 	var success := store.save_progress()
-	if not success and hud != null:
+	if success:
+		_last_anchored_data = store.data.duplicate(true)
+	elif hud != null:
 		hud.toast(store.last_error, Color("e4aaa0"), 6)
 	return success
 
@@ -666,23 +694,28 @@ func begin_new_journey() -> void:
 	if not store.archive_progress():
 		hud.toast("Não foi possível arquivar o progresso. A jornada atual foi preservada.", Color("e4aaa0"), 6)
 		return
-	var previous := store.data.duplicate(true)
-	store.data = DemoSaveStore.fresh_data()
-	if not store.save_progress():
-		store.data = previous
-		hud.toast(store.last_error, Color("e4aaa0"), 6)
-		return
+	get_tree().set_meta("nono_fresh_journey", true)
 	get_tree().set_meta("nono_autostart", true)
 	get_tree().paused = false
+	_restart_for_new_journey()
+
+func _restart_for_new_journey() -> void:
 	get_tree().reload_current_scene()
 
+func quit_without_save() -> void:
+	# Leaving must not anchor discoveries, purchases, upgrades, or enemy cycles.
+	_exit_to_desktop()
+
+## Compatibility for older launch/menu callers; no save occurs on this path.
 func save_and_quit() -> void:
-	if _save_enemy_cycle():
-		get_tree().quit()
+	quit_without_save()
+
+func _exit_to_desktop() -> void:
+	get_tree().quit()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST and store != null:
-		save_and_quit()
+		quit_without_save()
 
 func _capture(suffix: String = "") -> void:
 	await get_tree().process_frame
@@ -732,7 +765,8 @@ func collect_loot(kind: String, value: int) -> void:
 	_save_soon()
 
 func _save_soon() -> void:
-	# Várias moedas chegam juntas: um salvamento só, logo depois da última.
+	# Várias moedas chegam juntas: sincronize a sessão após a última.
+	# O arquivo em disco só muda quando Senu medita numa torre.
 	if _loot_save_pending:
 		return
 	_loot_save_pending = true

@@ -1,6 +1,6 @@
 extends SceneTree
 const Opening = preload("res://scripts/ui/opening_cutscene.gd")
-## Exercise the real new-game button, continuous hold, save and scene reload.
+## Exercise the real new-game button, continuous hold, session state and scene reload.
 var checks := 0
 var failures: Array[String] = []
 var world: Node2D
@@ -93,8 +93,8 @@ func _run() -> void:
 	await process_frame
 	check(not world.opening_active and not paused and world.player.controls_enabled, "Three continuous seconds skip and restore player control")
 	check(world.hud.visible and world.world_container.visible and world.hud.overlay == "", "World rendering, HUD and input resume together")
-	var saved := DemoSaveStore.new(world.store.path)
-	check(saved.load_progress() and saved.data["flags"]["opening_seen"], "Completed or skipped opening is recorded with the journey")
+	check(world.store.data["flags"]["opening_seen"], "Completed or skipped opening is recorded in the current session")
+	check(not FileAccess.file_exists(world.store.path), "Completing the opening does not anchor progress before a tower")
 	world._opening_finished()
 	check(not paused and not world.opening_active, "Repeated finish callbacks do not reopen or pause the world")
 	# Start a second NEW journey. This must show the cinematic again, even

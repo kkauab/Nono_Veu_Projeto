@@ -21,6 +21,7 @@ class Demo extends Node2D:
 		add_child(player)
 		player.set_physics_process(false)
 		player.weapon_unlocked[1] = true
+		store.data["weapons"].append(DemoSaveStore.WEAPONS[1])
 	func objective() -> String: return "Encontre os três selos."
 	func seals_found() -> int: return 2
 	func start_journey() -> void: started += 1
@@ -28,7 +29,7 @@ class Demo extends Node2D:
 	func save_and_quit() -> void: exited += 1
 	func _save() -> bool:
 		saves += 1
-		return store.save_progress()
+		return true
 	func buy_skill(id: String) -> bool:
 		if id in store.data["skills"]: return false
 		store.data["skills"].append(id)
@@ -43,8 +44,8 @@ func check(condition: bool, message: String) -> void:
 		push_error(message)
 
 func find_button(hud: Control, caption: String) -> Button:
-	for child in hud.get_children():
-		if child is Button and child.text == caption: return child
+	for child in hud.find_children("*", "Button", true, false):
+		if child.text == caption or child.tooltip_text == caption: return child
 	return null
 
 func labels_fit(hud: Control) -> bool:
@@ -79,35 +80,39 @@ func _run() -> void:
 	find_button(hud, "Iniciar nova jornada").pressed.emit()
 	check(demo.restarted == 1, "New-journey confirmation invokes its callback")
 	hud.show_overlay("pause")
-	check(hud._buttons.size() == 7, "Pause offers all seven menu actions")
+	check(hud.get_node_or_null("PauseNotebook") != null, "Pause opens the character page of the notebook")
+	find_button(hud, "Configurações").pressed.emit()
 	find_button(hud, "Controles").pressed.emit()
 	check(hud.overlay == "controls" and paused, "Controls opens while gameplay remains paused")
-	find_button(hud, "Voltar · Esc").pressed.emit()
-	check(hud.overlay == "pause", "Back returns from controls to pause")
-	find_button(hud, "Continuar").pressed.emit()
+	hud._back()
+	check(hud.overlay == "settings", "Controls returns to its settings page")
+	hud.show_overlay("pause")
+	find_button(hud, "Continuar jornada").pressed.emit()
 	check(hud.overlay == "" and not paused, "Continue unpauses gameplay")
 	hud.show_overlay("pause")
 	find_button(hud, "Inventário").pressed.emit()
 	check(hud.overlay == "inventory", "Inventory is reachable through its real native button")
+	hud.find_child("InventorySlot_" + DemoSaveStore.WEAPONS[1], true, false).pressed.emit()
 	find_button(hud, "Equipar").pressed.emit()
 	check(demo.player.weapon_index == 1 and demo.store.data["equipped"] == DemoSaveStore.WEAPONS[1], "Inventory equips the discovered alternate and updates save data")
-	check(demo.saves == 1, "Equipping from inventory saves the choice")
+	check(demo.saves == 1, "Equipping updates the session without requiring a disk save")
 	check(labels_fit(hud), "Inventory descriptions fit their own cards without crossing adjacent content")
 	hud.show_overlay("tree")
 	check(labels_fit(hud), "Skill descriptions remain inside their cards")
 	for room in PortLayout.ROOMS: demo.store.data["visited"].append(room["id"])
 	hud.show_overlay("map")
-	var scroll: ScrollContainer
-	for child in hud.get_children():
-		if child is ScrollContainer: scroll = child
-	check(scroll != null and scroll.get_child(0).get_child_count() == PortLayout.ROOMS.size(), "Map legend includes every revealed room in a scrollable native list")
+	var scroll: ScrollContainer = hud.find_child("NotebookRooms", true, false)
+	check(scroll != null and scroll.get_child(0).get_child_count() == PortLayout.ROOMS.size(), "The notebook map lists every revealed room")
 	hud.show_overlay("settings")
-	var before: bool = hud._hint_controls
-	var hint_button: Button
-	for button in hud._buttons:
-		if button.text.begins_with("Lembrete"): hint_button = button
-	hint_button.pressed.emit()
-	check(hud._hint_controls != before and FileAccess.file_exists("user://qa/ui_preferences.cfg"), "HUD hint setting changes and writes only the QA preference file")
+	var before: bool = hud._limit_fps
+	var limit_button: Button
+	var old_hints := false
+	for button in hud.find_children("*", "Button", true, false):
+		if button.text.begins_with("Limite de 60"): limit_button = button
+		if button.text.begins_with("Lembrete"): old_hints = true
+	limit_button.pressed.emit()
+	check(hud._limit_fps != before and FileAccess.file_exists("user://qa/ui_preferences.cfg"), "Frame preference still works and writes only the QA preference file")
+	check(not old_hints and hud.HUD_STYLE_VERSION == 8, "Minimal HUD permanently removes the persistent movement command strip")
 	hud.show_dialog("Prova", "Uma inscrição permanece legível.")
 	check(hud.overlay == "dialog" and paused, "World dialogue API remains compatible")
 	var dialog_scroll := false

@@ -119,6 +119,20 @@ func _wall(a: Vector2, b: Vector2, color: Color, seed: int) -> void:
 		draw_line(joint, joint + Vector2(0, WALL_HEIGHT / 6.0).round(), color.darkened(.22), 1)
 	draw_line(a + Vector2(0, -1), b + Vector2(0, -1), color.darkened(.4), 2)
 	draw_line(a + up, b + up, color.lightened(.22), 2)
+	# Recessed panels and a bronze cornice tie each room to the port's masonry.
+	draw_line(a + Vector2(0, -49), b + Vector2(0, -49), Color("a09a7e").darkened(.25), 1)
+	if posmod(seed, 3) == 0:
+		var left := a.lerp(b, .25) + Vector2(0, -43)
+		var right := a.lerp(b, .75) + Vector2(0, -43)
+		var panel := PackedVector2Array([left, right, right + Vector2(0, 22), left + Vector2(0, 22)])
+		draw_colored_polygon(panel, Color("2b4449"))
+		var outline := panel.duplicate()
+		outline.append(panel[0])
+		draw_polyline(outline, Color("846443"), 1)
+		var center := left.lerp(right, .5) + Vector2(0, 10)
+		draw_arc(center + Vector2(0, -5), 3, 0, TAU, 8, Color("c39e65"), 1)
+		draw_line(center + Vector2(0, -2), center + Vector2(0, 7), Color("c39e65"), 1)
+		draw_line(center + Vector2(-3, -1), center + Vector2(3, -1), Color("c39e65"), 1)
 
 func _lip(a: Vector2, b: Vector2, color: Color) -> void:
 	var up := Vector2(0, -LIP_HEIGHT)
@@ -133,7 +147,7 @@ class Furniture extends Node2D:
 	## Móveis longos medidos em tiles (comprimento em x, em y, altura em px):
 	## o desenho e a base sólida saem da mesma caixa isométrica.
 	const BOXES := {"counter": Vector3(2.4, .6, 14), "shelf": Vector3(1.5, .3, 40), "furnace": Vector3(2.0, .9, 46), "rack": Vector3(1.4, .25, 34), "cords": Vector3(1.4, .25, 38), "trade_chest": Vector3(1.6, .55, 12)}
-	const ANIMATED := ["brazier", "merit", "furnace", "nakht", "adiam", "coal"]
+	const ANIMATED := ["brazier", "merit", "furnace", "nakht", "adiam", "tarek", "coal"]
 	const InteriorArt = preload("res://scripts/world/interior_art.gd")
 	## Largura de cada fatia de profundidade das caixas, em pixels.
 	const SLICE_WIDTH := 4
@@ -158,18 +172,26 @@ class Furniture extends Node2D:
 		func _draw() -> void:
 			furniture.draw_glow(self)
 
+	class ContactShadow extends Node2D:
+		var polygons: Array[PackedVector2Array] = []
+		func _draw() -> void:
+			for polygon in polygons:
+				draw_colored_polygon(polygon, Color(.01, .025, .03, .24))
+
 	func _ready() -> void:
 		texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		_time = fposmod(absf(position.x * .017 + position.y * .011), 6.0)
 		add_to_group("house_furniture")
+		var shadow := ContactShadow.new()
+		shadow.z_index = -1
+		# Same contact rim as exterior PortProp: grow the actual painted base.
+		shadow.polygons = Geometry2D.offset_polygon(ground_footprint(), 2.0)
+		add_child(shadow)
 		var body := StaticBody2D.new()
 		body.collision_layer = 1
 		body.collision_mask = 6
 		var shape := CollisionPolygon2D.new()
-		if BOXES.has(kind):
-			shape.polygon = _footprint()
-		else:
-			var half: Vector2 = {"bed": Vector2(26, 11), "table": Vector2(20, 9), "brazier": Vector2(9, 4), "amphora": Vector2(7, 4), "merit": Vector2(6, 3), "nakht": Vector2(6, 3), "adiam": Vector2(6, 3), "anvil": Vector2(11, 5), "tub": Vector2(12, 6), "coal": Vector2(13, 5), "easel": Vector2(8, 4), "saddle": Vector2(13, 5)}.get(kind, Vector2(12, 6))
-			shape.polygon = PackedVector2Array([Vector2(-half.x, -half.y * .2), Vector2(0, half.y * .8), Vector2(half.x, -half.y * .2), Vector2(0, -half.y * 1.2)])
+		shape.polygon = ground_footprint()
 		body.add_child(shape)
 		add_child(body)
 		if BOXES.has(kind) and InteriorArt.has(_art_name()):
@@ -178,11 +200,12 @@ class Furniture extends Node2D:
 	func _slice_art() -> void:
 		y_sort_enabled = true
 		var base := _footprint()
-		for column in range(floori(base[3].x) - 2, ceili(base[1].x) + 2, SLICE_WIDTH):
+		var bounds := InteriorArt.column_bounds(_art_name())
+		for column in range(bounds.x, bounds.y, SLICE_WIDTH):
 			var slice := ArtSlice.new()
 			slice.furniture = self
 			slice.from = column
-			slice.to = column + SLICE_WIDTH
+			slice.to = mini(column + SLICE_WIDTH, bounds.y)
 			slice.position = Vector2(column + SLICE_WIDTH * .5, _front_edge(base, column + SLICE_WIDTH * .5)).round()
 			add_child(slice)
 			_slices.append(slice)
@@ -223,9 +246,35 @@ class Furniture extends Node2D:
 		return kind
 
 	func _footprint() -> PackedVector2Array:
+		var painted := InteriorArt.footprint(_art_name())
+		if not painted.is_empty(): return painted
 		var box: Vector3 = BOXES[kind]
 		var half := Vector2(box.x, box.y) * .5
 		return PackedVector2Array([Layout.iso(Vector2(-half.x, -half.y)), Layout.iso(Vector2(half.x, -half.y)), Layout.iso(half), Layout.iso(Vector2(-half.x, half.y))])
+
+	func ground_footprint() -> PackedVector2Array:
+		var painted := InteriorArt.footprint(_art_name())
+		if not painted.is_empty(): return painted
+		if BOXES.has(kind): return _footprint()
+		if kind in ["crate", "brazier"]: return Art.footprint(kind)
+		return PackedVector2Array([Vector2(0, -5), Vector2(6, -2), Vector2(0, 1), Vector2(-6, -2)])
+
+	## Keep every ground contact on the floor, including the back of shelves.
+	## Catalog positions used to describe the center of code-drawn furniture;
+	## clamping only the new sprite's front pivot put its rear feet in the wall.
+	func fit_to_floor(house: Dictionary) -> void:
+		var minimum := Vector2(INF, INF)
+		var maximum := Vector2(-INF, -INF)
+		for point in ground_footprint():
+			var tile := Layout.unproject(point)
+			minimum = minimum.min(tile)
+			maximum = maximum.max(tile)
+		var floor_min := Vector2(house["origin"]) - Vector2(.44, .44)
+		var floor_max := Vector2(house["origin"] + house["size"]) - Vector2(.56, .56)
+		var center := Layout.unproject(position)
+		center.x = clampf(center.x, floor_min.x - minimum.x, floor_max.x - maximum.x)
+		center.y = clampf(center.y, floor_min.y - minimum.y, floor_max.y - maximum.y)
+		position = Layout.iso(center).round()
 
 	## Caixa isométrica: topo e as duas faces viradas para a câmera.
 	func _box(top: Color, left: Color, right: Color) -> PackedVector2Array:
@@ -240,8 +289,6 @@ class Furniture extends Node2D:
 	func _draw() -> void:
 		if not _slices.is_empty():
 			return
-		if not BOXES.has(kind):
-			draw_rect(Rect2(-14, -2, 28, 4), Color(.01, .025, .03, .28))
 		if kind == "furnace":
 			# O clarão do fogo cai no chão diante da boca, por baixo da arte.
 			var base := _footprint()

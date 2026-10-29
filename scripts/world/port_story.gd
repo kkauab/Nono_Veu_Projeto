@@ -32,6 +32,7 @@ const FISHER_TILE := Vector2(12.6, 1.6)
 const BROTHER_DOCK_TILE := Vector2(27, 32.5)
 const BROTHER_HOME_TILE := Vector2(13.6, 1.2)
 const FISHER_REWARD := 2
+const BELL_TILE := Vector2(33, 35)
 const IsleStory = preload("res://scripts/world/isle_story.gd")
 
 static func build(game) -> void:
@@ -40,6 +41,7 @@ static func build(game) -> void:
 	_add(game, "iri_relic", "iri_relic", RELIC_TILE)
 	_add(game, "npc_fisher", "npc", FISHER_TILE).figure = "fisher"
 	_add(game, "npc_brother", "npc", BROTHER_HOME_TILE if _has(game, "fisher_done") else BROTHER_DOCK_TILE).figure = "brother"
+	_add(game, "fisher_bell", "fisher_bell", BELL_TILE)
 	refresh(game)
 
 static func marks_read(game) -> int:
@@ -64,6 +66,9 @@ static func refresh(game) -> void:
 				# Until Sabu remembers, Kauã's fisherman sheet is drawn in faded colors.
 				item.opened = _has(game, "fisher_named")
 				item.label = "Falar com Sabu" if _has(game, "fisher_brother_found") else "Falar com o homem das cordas"
+			"fisher_bell":
+				item.opened = _has(game, "fisher_bell_rung") or _has(game, "fisher_done")
+				item.label = "Sino da travessia · já tocado" if item.opened else "Tocar o sino da travessia"
 			_:
 				if MARKS.has(item.item_id):
 					item.opened = _has(game, item.item_id)
@@ -76,6 +81,18 @@ static func activate(game, item: PortInteractable) -> bool:
 			return _read_mark(game, item.item_id)
 		"iri_relic":
 			return _open_relic(game)
+		"fisher_bell":
+			if _has(game, "fisher_done"):
+				game.hud.show_dialog("O sino da travessia", "Os irmãos já estão reunidos no Cais dos Esquecidos. O sino volta a guardar uma história, em vez de apenas esperar uma volta.")
+			elif not _has(game, "fisher_knot_shown"):
+				game.hud.show_dialog("O sino da travessia", "O bronze traz marcas de corda e sal. Este sino chamava os barcos de volta ao cais. Talvez o homem das cordas reconheça o seu som, mas primeiro é preciso descobrir quem ele espera.")
+			elif not _has(game, "fisher_bell_rung"):
+				_advance(game, "fisher_bell_rung")
+				game.player._fx.memory_restored(item.global_position)
+				_say(game, "Uma voz sobre a água", "Senu puxa a corda. O bronze soa uma vez, e o eco percorre os postes vazios.\n\nAo longe, Sabu ergue a cabeça. Os dedos param no nó de três voltas. Não é uma voz que o chama: é a lembrança de alguém que sempre esperava sua volta.", "Volte a Sabu e pergunte de quem ele se lembrou.")
+			else:
+				game.hud.show_dialog("O sino da travessia", "O eco já alcançou Sabu. Volte ao homem das cordas no Embarcadouro Velho.")
+			return true
 		"npc":
 			# Other people of the port (shopkeepers, for instance) answer elsewhere.
 			match item.item_id:
@@ -113,43 +130,59 @@ static func _talk_to_fisher(game) -> bool:
 		return true
 	if not _has(game, "fisher_met"):
 		_advance(game, "fisher_met")
-		_say(game, "O pescador do cais", "PESCADOR — Você voltou. Achou seu mestre?\n\nSENU — Ainda não. Mas sigo o rastro dele.\n\nPESCADOR — Eu sou Hori. Não disse meu nome naquela manhã… hoje parece importante dizer. Meu irmão, Sabu, não voltou ao cais. Um carregador viu um homem enrolando cordas sozinho no Embarcadouro Velho, ao sul do Pátio das Memórias. Se for ele…\n\nSENU — Vou procurá-lo.", "Missão: procure Sabu, o irmão de Hori, no Embarcadouro Velho.")
+		if _has(game, "fisher_brother_found"):
+			_advance(game, "fisher_knot")
+			_say(game, "Hori", "PESCADOR — Encontrou o homem das cordas? É Sabu, meu irmão. Eu sou Hori.\n\nSENU — Ele lembra como trabalhar, mas não de quem o espera.\n\nHori entrega um cordão com um nó de três voltas.\n\nHORI — Foi ele que me ensinou. Leve este nó; as mãos lembram antes das palavras.", "Leve o nó de Hori a Sabu, no Embarcadouro Velho.", "npc_fisher")
+		else:
+			_say(game, "O pescador do cais", "PESCADOR — Você voltou. Achou seu mestre?\n\nSENU — Ainda não. Mas sigo o rastro dele.\n\nPESCADOR — Eu sou Hori. Meu irmão, Sabu, não voltou. Viram um homem enrolando cordas no Embarcadouro Velho, ao sul do Pátio das Memórias. Ele sempre descia até lá para consertar as redes.\n\nSENU — Vou procurá-lo.\n\nHORI — Se ele não souber quem é, volte até mim. Não o deixe sozinho com esse esquecimento.", "Procure Sabu no Embarcadouro Velho. [N] Missões", "npc_fisher")
 	elif not _has(game, "fisher_brother_found"):
-		game.hud.show_dialog("Hori", "HORI — O Embarcadouro Velho fica ao sul do Pátio das Memórias. Sabu sempre gostou daquele píer; dizia que lá a água era mais calma.")
+		game.hud.show_conversation("Hori", "HORI — O Embarcadouro Velho fica ao sul do Pátio das Memórias. Sabu sempre gostou daquele píer; dizia que lá a água era mais calma.", "npc_fisher")
 	elif not _has(game, "fisher_knot"):
 		_advance(game, "fisher_knot")
-		_say(game, "Hori", "HORI — Ele está vivo… e ainda faz os nós.\n\nHori tira do bolso um cordão com um nó de três voltas.\n\nHORI — Foi o primeiro nó que ele me ensinou, quando éramos meninos. Leve. Se alguma coisa ainda lembra dentro dele, vai lembrar disso.", "Missão: leve o nó de Hori a Sabu, no Embarcadouro Velho.")
+		_say(game, "Hori", "HORI — Ele está vivo… e ainda faz os nós.\n\nHori tira do bolso um cordão com um nó de três voltas.\n\nHORI — Foi o primeiro nó que ele me ensinou, quando éramos meninos. Leve. Se alguma coisa ainda lembra dentro dele, vai lembrar disso.", "Missão: leve o nó de Hori a Sabu, no Embarcadouro Velho.", "npc_fisher")
 	elif not _has(game, "fisher_named"):
-		game.hud.show_dialog("Hori", "HORI — Ele reconheceu o nó, mas não o meu nome? Então ainda há caminho.\n\nDizem que os nomes de quem esquece ficam presos além do Porteiro, perto das Catacumbas.")
+		game.hud.show_conversation("Hori", "HORI — Leve o cordão a Sabu. Se as mãos reconhecerem o nó, faça o sino da travessia soar no Embarcadouro Velho. Eu o tocava quando ele demorava a voltar. Depois fale com ele outra vez.\n\n◆ " + fisher_objective(game.store.data), "npc_fisher")
 	elif not _has(game, "fisher_done"):
 		game.store.collect("fisher_done", FISHER_REWARD)
 		game._save()
 		_move_brother_home(game)
 		refresh(game)
-		_say(game, "O nome de Hori", "Antes que Senu termine de contar, Hori já está olhando para o fim do cais.\n\nHORI — Ele disse meu nome? … Então eu espero. Esperar eu sei.\n\nHori põe na mão de Senu dois fragmentos que guardava na rede.\n\nHORI — Vieram no fundo da rede, dias atrás. Brilham como as coisas da sua ordem. São seus.\n\n+%d Fragmentos de Nous." % FISHER_REWARD, "Missão concluída: o nome de Hori voltou.")
+		_say(game, "O nome de Hori", "Antes que Senu termine de contar, Hori já está olhando para o fim do cais.\n\nHORI — Ele disse meu nome? … Então eu espero. Esperar eu sei.\n\nHori põe na mão de Senu dois fragmentos que guardava na rede.\n\nHORI — Vieram no fundo da rede, dias atrás. Brilham como as coisas da sua ordem. São seus.\n\n+%d Fragmentos de Nous." % FISHER_REWARD, "Missão concluída: o nome de Hori voltou.", "npc_fisher")
 	else:
-		game.hud.show_dialog("Hori", "HORI — Sabu chegou ao entardecer. Ainda confunde as coisas de ontem, mas sabe meu nome. Se encontrar seu mestre, Senu, traga-o aqui. Temos água para os dois.")
+		game.hud.show_conversation("Hori", "HORI — Sabu chegou ao entardecer. Ainda confunde as coisas de ontem, mas sabe meu nome. Se encontrar seu mestre, Senu, traga-o aqui. Temos água para os dois.", "npc_fisher")
 	return true
 
 static func _talk_to_brother(game) -> bool:
 	if _has(game, "fisher_done"):
-		game.hud.show_dialog("Sabu", "SABU — Hori diz que fui eu que ensinei esse nó. Eu digo que foi ele. Vamos discutir isso pelo resto da vida." + ("\n\nSABU — Vi o meu barco atravessar a baía. Rema melhor do que eu remava. Cuide dele." if _has(game, "boat_sailed") else ""))
+		game.hud.show_conversation("Sabu", "SABU — Hori diz que fui eu que ensinei esse nó. Eu digo que foi ele. Vamos discutir isso pelo resto da vida." + ("\n\nSABU — Vi o meu barco atravessar a baía. Rema melhor do que eu remava. Cuide dele." if _has(game, "boat_sailed") else ""), "npc_brother")
 	elif _has(game, "fisher_named"):
-		game.hud.show_dialog("Sabu", "SABU — Vá na frente e diga a ele. Eu conheço o caminho até o cais. Sempre conheci.")
+		game.hud.show_conversation("Sabu", "SABU — Vá na frente e diga a ele. Eu conheço o caminho até o cais. Sempre conheci.", "npc_brother")
 	elif _has(game, "fisher_knot"):
-		if not game.store.data["flags"]["boss"]:
-			game.hud.show_dialog("Sabu", "Sabu segura o cordão de Hori e passa os dedos pelas três voltas.\n\nSABU — Este nó é meu. Eu sei que é meu. Mas o nome que vem com ele… está atrás de uma porta. Ouço alguém chamando do outro lado do limiar.\n\nTalvez quem guarda o limiar guarde também os nomes.")
+		if not _has(game, "fisher_bell_rung") and not game.store.data["flags"]["boss"]:
+			_advance(game, "fisher_knot_shown")
+			_say(game, "As mãos lembram", "Sabu percorre as três voltas do cordão com os dedos.\n\nSABU — Este nó… eu ensinava alguém a fazê-lo. Quando a maré subia, um sino me chamava para casa. Ele ainda está na ponta leste deste embarcadouro.\n\nSENU — Vou fazê-lo soar. Depois volto até você.\n\nSabu fecha a mão sobre o cordão, como se segurasse a ponta de uma lembrança.", "Toque o sino da travessia na ponta leste do Embarcadouro Velho.", "npc_brother")
 		else:
 			_advance(game, "fisher_named")
-			_say(game, "Sabu", "Sabu aperta o cordão. Os olhos dele param de procurar.\n\nSABU — Hori. O nome dele é Hori. Ele me esperava no cais… todos os dias, não é?\n\nSENU — Todos os dias.\n\nSABU — Então eu também tenho um caminho até lá.", "Missão: volte ao cais e conte a Hori.")
+			_say(game, "Sabu", "Sabu aperta o cordão. Os olhos dele param de procurar.\n\nSABU — Hori. O nome dele é Hori. Ele me esperava no cais… todos os dias, não é?\n\nSENU — Todos os dias.\n\nSABU — Então eu também tenho um caminho até lá.", "Missão: volte ao cais e conte a Hori.", "npc_brother")
 	elif _has(game, "fisher_brother_found"):
-		game.hud.show_dialog("Sabu", "O homem continua a desfazer e refazer o mesmo nó.\n\nSABU — Irmão… Você disse que eu tenho um irmão. A palavra é boa, mas não traz rosto nenhum.")
+		game.hud.show_conversation("Sabu", "O homem continua a desfazer e refazer o mesmo nó.\n\nSABU — Irmão… Você disse que eu tenho um irmão. A palavra é boa, mas não traz rosto nenhum.", "npc_brother")
 	elif _has(game, "fisher_met"):
 		_advance(game, "fisher_brother_found")
-		_say(game, "O homem das cordas", "O homem enrola a mesma corda, desfaz o nó e começa de novo.\n\nSENU — Você é Sabu? Seu irmão, Hori, espera você no cais.\n\nHOMEM — Irmão? Eu… conheço este nó. Alguém me ensinou. Não, fui eu que ensinei. Mas a quem?\n\nEle não reconhece o nome. Talvez Hori saiba como alcançá-lo.", "Missão: conte a Hori o que viu no Embarcadouro.")
+		_say(game, "O homem das cordas", "O homem enrola a mesma corda, desfaz o nó e começa de novo.\n\nSENU — Você é Sabu? Seu irmão, Hori, espera você no cais.\n\nHOMEM — Irmão? Eu… conheço este nó. Alguém me ensinou. Não, fui eu que ensinei. Mas a quem?\n\nEle não reconhece o nome. Talvez Hori saiba como alcançá-lo.", "Missão: conte a Hori o que viu no Embarcadouro.", "npc_brother")
 	else:
-		game.hud.show_dialog("O homem das cordas", "O homem enrola e desenrola a mesma corda, sem pressa.\n\nHOMEM — Quanto você quer pela rede? Eu pago bem. Ou… eu já paguei?\n\n%s" % _brother_echo(game.seals_found()))
+		_advance(game, "fisher_brother_found")
+		_say(game, "O homem das cordas", "Senu encontra um nome bordado na bolsa de ferramentas: Sabu.\n\nSENU — Este é seu nome?\n\nHOMEM — Talvez. Sei fazer estes nós, mas não lembro para quem são as redes. Havia alguém no cais… alguém que me esperava.\n\nSenu reconhece o cordame do barco que o trouxe ao Porto. O pescador do Cais dos Esquecidos pode conhecer este homem.", "Conte ao pescador do Cais dos Esquecidos sobre Sabu.", "npc_brother")
 	return true
+
+static func fisher_objective(data: Dictionary) -> String:
+	var steps: Array = data["collected"]
+	if "fisher_done" in steps: return "Hori e Sabu estão reunidos no Cais dos Esquecidos."
+	if "fisher_named" in steps: return "Volte a Hori no Cais dos Esquecidos para concluir a missão."
+	if "fisher_bell_rung" in steps: return "Fale novamente com Sabu no Embarcadouro Velho."
+	if "fisher_knot_shown" in steps: return "Toque o sino da travessia na ponta leste do Embarcadouro Velho."
+	if "fisher_knot" in steps: return "Leve o nó de Hori a Sabu, no Embarcadouro Velho."
+	if "fisher_brother_found" in steps: return "Volte ao pescador Hori no Cais dos Esquecidos e conte o que viu."
+	return "Procure Sabu no Embarcadouro Velho, ao sul do Pátio das Memórias."
 
 ## While no one asked for him, Sabu's lines drift as the seals return.
 static func _brother_echo(seals: int) -> String:
@@ -167,8 +200,11 @@ static func _advance(game, step: String) -> void:
 
 ## The HUD toast keeps counting while a dialog pauses the game, so the progress
 ## line also closes the dialog itself.
-static func _say(game, title: String, text: String, note: String = "") -> void:
-	game.hud.show_dialog(title, text + ("\n\n◆ " + note if note != "" else ""))
+static func _say(game, title: String, text: String, note: String = "", npc_id: String = "") -> void:
+	if npc_id.is_empty():
+		game.hud.show_dialog(title, text + ("\n\n◆ " + note if note != "" else ""))
+	else:
+		game.hud.show_conversation(title, text + ("\n\n◆ " + note if note != "" else ""), npc_id)
 	if note != "":
 		game.hud.toast(note, Color("e2c693"), 5)
 

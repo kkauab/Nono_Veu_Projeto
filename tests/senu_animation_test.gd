@@ -29,12 +29,14 @@ func _run() -> void:
 		view.sample(actor)
 		check(view.current_direction == View.DIRECTIONS[i], "Direction %s uses its expected clip" % View.DIRECTIONS[i])
 	actor.facing = Vector2.LEFT
-	actor.velocity = Vector2(-100, 0)
+	Input.action_press("move_left")
+	actor._physics_process(1.0 / 60.0)
 	var walk_first := view.sample(actor)
-	actor._time += .16
+	for step in range(10): actor._physics_process(1.0 / 60.0)
 	var walk_next := view.sample(actor)
 	check(view.current_state == "walk" and walk_first["frame"] != walk_next["frame"], "Moving player advances the walk cycle")
-	actor.velocity = Vector2.ZERO
+	Input.action_release("move_left")
+	actor._physics_process(.001)
 	check(actor.try_attack(), "Real light attack starts")
 	var windup := view.sample(actor)
 	actor._physics_process(.09)

@@ -135,8 +135,7 @@ func _test_world() -> void:
 	await process_frame
 	_check(Economy.coins(world.store.data) == 115 and Shop.balm_heal(world.store.data) == 55, "the real button buys myrrh")
 	_check(_button(hud, "Esgotado") != null and _button(hud, "Esgotado").disabled, "myrrh shows sold out")
-	var on_disk: DemoSaveStore = SaveStore.new(world.store.path)
-	_check(on_disk.load_progress() and Shop.owned(on_disk.data, "mirra") == 1 and Economy.coins(on_disk.data) == 115, "each purchase is saved at once")
+	_check(not FileAccess.file_exists(world.store.path), "purchases remain in memory before the first tower")
 	_button(hud, "Voltar · Esc").pressed.emit()
 	await process_frame
 	_check(hud.overlay == "" and not paused, "Back returns to the game")
@@ -162,6 +161,8 @@ func _test_world() -> void:
 	player.position = shrine.position + Vector2(18, 10)
 	await physics_frame
 	_check(world.activate(shrine) and Shop.charges(world.store.data, "balsamo") == 1, "meditating refills the balm")
+	var on_disk: DemoSaveStore = SaveStore.new(world.store.path)
+	_check(on_disk.load_progress() and Shop.owned(on_disk.data, "mirra") == 1 and Economy.coins(on_disk.data) == 115, "the tower saves purchases made earlier in the session")
 	player.health = player.max_health
 	world._last_balm_ms = -100000
 	_check(not world.use_balm() and Shop.charges(world.store.data, "balsamo") == 1, "a full life keeps the charge")
