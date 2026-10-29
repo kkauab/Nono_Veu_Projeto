@@ -11,6 +11,8 @@ const INTERIOR_MIN_X := 4400.0
 const HOUSES := {
 	"casa_guarda": {
 		"name": "Casa da Guarda",
+		"keeper": "Tarek",
+		"rugs": [[Vector2(152.6, -8.1), Vector2(2.6, 1.5), Color("294b50")]],
 		"district": "p4",
 		# Exterior: o vão sob o toldo do armazém da Guarita, em (9, 18.5).
 		"door": Vector2(8.6, 19.3),
@@ -25,6 +27,7 @@ const HOUSES := {
 		"spawn": Vector2(152, -6.75),
 		"furniture": [
 			["bed", Vector2(150.15, -9.0)],
+			["tarek", Vector2(153.0, -9.0)],
 			["table", Vector2(154.2, -7.7)],
 			["crate", Vector2(155.0, -9.6)],
 			["barrel", Vector2(154.9, -6.3)],
@@ -32,11 +35,13 @@ const HOUSES := {
 		],
 		"fixtures": [
 			["house_chest", "bau_guarda", Vector2(150.25, -7.0)],
-			["house_note", "nota_guarda", Vector2(151.4, -9.65)]
+			["house_note", "nota_guarda", Vector2(151.4, -9.65)],
+			["questgiver", "missao_tarek", Vector2(153.0, -8.1)]
 		]
 	},
 	"emporio_merit": {
 		"name": "Empório de Merit",
+		"rugs": [[Vector2(193.0, -6.6), Vector2(3.8, 1.4), Color("35534d")]],
 		# Os dois armazéns do Mercado têm o santuário e a estela do mercador diante
 		# da porta; o empório usa o armazém vizinho, em (30, -0.25).
 		"district": "p2",
@@ -53,7 +58,7 @@ const HOUSES := {
 			["shelf", Vector2(191.3, -10.3)],
 			["shelf", Vector2(193.0, -10.3)],
 			["shelf", Vector2(194.7, -10.3)],
-			["merit", Vector2(193.0, -8.85)],
+			["merit", Vector2(193.4, -8.45)],
 			["counter", Vector2(193.0, -8.0)],
 			["brazier", Vector2(190.35, -9.6)],
 			["amphora", Vector2(196.05, -8.6)],
@@ -70,6 +75,7 @@ const HOUSES := {
 	},
 	"forja_nakht": {
 		"name": "Forja de Nakht",
+		"rugs": [[Vector2(235.3, -6.4), Vector2(2.8, 1.1), Color("493b2b")]],
 		"district": "kilns",
 		# O armazém do centro dos Fornos, em (65, -2.75).
 		"door": Vector2(64.6, -1.95),
@@ -114,7 +120,7 @@ const HOUSES := {
 		"spawn": Vector2(278, -6.75),
 		"furniture": [
 			["easel", Vector2(277.0, -8.9)],
-			["adiam", Vector2(279.0, -8.95)],
+			["adiam", Vector2(278.92, -8.87)],
 			["trade_chest", Vector2(279.0, -8.2)],
 			["cords", Vector2(281.4, -10.3)],
 			["saddle", Vector2(276.5, -6.5)],

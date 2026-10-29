@@ -95,11 +95,12 @@ func _test_depth() -> void:
 		if slices.is_empty():
 			continue
 		sliced += 1
-		var box: Vector3 = Interior.Furniture.BOXES[furniture.kind]
-		var tile := Layout.unproject(furniture.position)
-		for along in [-.9, -.45, 0.0, .45, .9]:
+		var base: PackedVector2Array = furniture.ground_footprint()
+		for along in [.1, .3, .5, .7, .9]:
 			for side in [-1, 1]:
-				var spot := Layout.iso(tile + Vector2(along * box.x * .5, side * (box.y * .5 + .2)))
+				var x := lerpf(base[3].x, base[1].x, along)
+				var edge: float = furniture._front_edge(base, x)
+				var spot: Vector2 = furniture.position + Vector2(x, edge + side * 10)
 				for slice in slices:
 					var left: float = furniture.position.x + slice.from
 					if left + Interior.Furniture.SLICE_WIDTH < spot.x - 8 or left > spot.x + 8:

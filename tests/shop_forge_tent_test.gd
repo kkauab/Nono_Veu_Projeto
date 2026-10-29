@@ -134,8 +134,13 @@ func _test_world() -> void:
 	if "--capture-shop3" in OS.get_cmdline_user_args():
 		await _capture("mapa_rotas")
 	hud.show_overlay("")
+	_check(not FileAccess.file_exists(world.store.path), "Forge and Tent purchases are not autosaved")
+	await _leave("tenda_adiam")
+	var shrine := _fixture("caravan_rest")
+	world.player.position = shrine.position
+	_check(world.activate(shrine), "A real tower anchors Forge and Tent purchases")
 	var on_disk: DemoSaveStore = SaveStore.new(world.store.path)
-	_check(on_disk.load_progress() and Shop.owned(on_disk.data, "sandalias_caravana") == 1 and Shop.owned(on_disk.data, "tempera_adagas") == 1, "Forge and Tent purchases are saved at once")
+	_check(on_disk.load_progress() and Shop.owned(on_disk.data, "sandalias_caravana") == 1 and Shop.owned(on_disk.data, "tempera_adagas") == 1, "Forge and Tent purchases persist after the tower")
 	world.queue_free()
 	await process_frame
 

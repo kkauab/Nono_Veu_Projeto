@@ -50,7 +50,25 @@ func _run() -> void:
 	for i in range(12):
 		await physics_frame
 		await process_frame
-	check(enemy.draw_count == first_draws, "Idle enemies retain their cached drawing instead of rebuilding it each physics tick")
+	check(enemy.draw_count - first_draws <= 2, "Idle enemies retain their cached drawing between the sparse one-pixel breath transitions")
+	# Simulate a complete breath independently of monitor/physics frequency.
+	# Rendering every sample proves the cache is invalidated when needed,
+	# while catching a regression to rebuilding every resting enemy each tick.
+	enemy.set_physics_process(false)
+	enemy._time = -enemy._breath_phase
+	enemy._breath_pixel = 0.0
+	enemy.queue_redraw()
+	await process_frame
+	await process_frame
+	var breath_draws := enemy.draw_count
+	for frame in range(240):
+		enemy._physics_process(4.0 / 240.0)
+		await process_frame
+	await process_frame
+	await process_frame
+	var breath_changes := enemy.draw_count - breath_draws
+	check(breath_changes >= 2 and breath_changes <= 4, "A complete four-second resting breath redraws only its two or three pixel transitions")
+	enemy.set_physics_process(true)
 	hero.position = Vector2(20, 0)
 	await physics_frame
 	await process_frame

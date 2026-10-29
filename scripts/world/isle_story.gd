@@ -83,17 +83,17 @@ static func activate(game, item: PortInteractable) -> bool:
 static func _talk_to_ankhet(game) -> bool:
 	if not _has(game, "isle_ankhet_met"):
 		_advance(game, "isle_ankhet_met")
-		_say(game, "A guardiã das garças", "Uma mulher idosa, apoiada num cajado de junco, observa as aves. O xale azul está desbotado de sol.\n\nMULHER — Barco de Sabu, remo de outro. Faz tempo que ninguém atravessa a baía.\n\nSENU — Sou Senu. Procuro meu mestre, Iri.\n\nMULHER — Eu sou Ankhet. Guardo as garças desta ilha… ou guardava. Três Esquecidos vieram do porto e não deixam as aves pousar. Desde então elas não cantam. Afaste-os, e eu lhe conto o que as garças viram passar por esta água.", "Missão: afaste os três Esquecidos da Ilha do Bennu.")
+		_say(game, "A guardiã das garças", "Uma mulher idosa, apoiada num cajado de junco, observa as aves. O xale azul está desbotado de sol.\n\nMULHER — Barco de Sabu, remo de outro. Faz tempo que ninguém atravessa a baía.\n\nSENU — Sou Senu. Procuro meu mestre, Iri.\n\nMULHER — Eu sou Ankhet. Guardo as garças desta ilha… ou guardava. Três Esquecidos vieram do porto e não deixam as aves pousar. Desde então elas não cantam. Afaste-os, e eu lhe conto o que as garças viram passar por esta água.", "Missão: afaste os três Esquecidos da Ilha do Bennu.", "isle_ankhet")
 		return true
 	if not _has(game, "isle_foes_done"):
 		var left := FOES.size() - foes_cleared(game)
 		if left > 0:
-			game.hud.show_dialog("Ankhet", "ANKHET — Ainda ouço %s. Eles andam entre as palmeiras e perto das ruínas, onde as garças faziam ninho." % ("um deles" if left == 1 else "%d deles" % left))
+			game.hud.show_conversation("Ankhet", "ANKHET — Ainda ouço %s. Eles andam entre as palmeiras e perto das ruínas, onde as garças faziam ninho." % ("um deles" if left == 1 else "%d deles" % left), "isle_ankhet")
 			return true
 		_advance(game, "isle_foes_done")
 		game.collect_loot("coin", FOES_COINS)
 		game.collect_loot("xp", FOES_XP)
-		_say(game, "As garças voltam", "ANKHET — Ouça… Estão cantando de novo.\n\nAnkhet tira da bolsa um punhado de óbolos amarrados num pano.\n\nANKHET — Os pescadores deixavam isto como oferenda. As garças não gastam dinheiro.\n\nE sobre o seu mestre: um homem de manto escuro passou por aqui antes da última cheia. Olhou para o altar do Bennu como quem procura um nome perdido. Depois remou de volta ao porto, na direção das Catacumbas.", "Missão concluída: as garças sem voz.")
+		_say(game, "As garças voltam", "ANKHET — Ouça… Estão cantando de novo.\n\nAnkhet tira da bolsa um punhado de óbolos amarrados num pano.\n\nANKHET — Os pescadores deixavam isto como oferenda. As garças não gastam dinheiro.\n\nANKHET — E sobre o seu mestre: um homem de manto escuro passou por aqui antes da última cheia. Olhou para o altar do Bennu como quem procura um nome perdido. Depois remou de volta ao porto, na direção das Catacumbas.", "Missão concluída: as garças sem voz.", "isle_ankhet")
 		return true
 	var lines := []
 	if not _has(game, "isle_flames"):
@@ -103,8 +103,8 @@ static func _talk_to_ankhet(game) -> bool:
 	else:
 		lines.append("ANKHET — Fazia uma geração que eu não via as três chamas acesas. Guarde a pena; o Bennu não dá duas.")
 	if not _has(game, "isle_net"):
-		lines.append("Na praia do sul ficou presa uma rede de pescador. Tem um nó estranho, de três voltas.")
-	game.hud.show_dialog("Ankhet", "\n\n".join(lines))
+		lines.append("ANKHET — Na praia do sul ficou presa uma rede de pescador. Tem um nó estranho, de três voltas.")
+	game.hud.show_conversation("Ankhet", "\n\n".join(lines), "isle_ankhet")
 	return true
 
 
@@ -179,7 +179,7 @@ static func return_net(game) -> bool:
 	_advance(game, "isle_net_done")
 	game.collect_loot("coin", NET_COINS)
 	game.collect_loot("xp", NET_XP)
-	_say(game, "A rede de Hori", "Hori pega a rede e procura o nó com os dedos antes de olhar para Senu.\n\nHORI — É a minha. A tempestade a levou no ano em que Sabu se perdeu… Achei que o mar tinha ficado com ela, como ficou com tantas coisas.\n\nHORI — Leve isto. É pouco, mas hoje o mar me devolveu mais do que eu esperava.", "Missão concluída: a rede de Hori.")
+	_say(game, "A rede de Hori", "Hori pega a rede e procura o nó com os dedos antes de olhar para Senu.\n\nHORI — É a minha. A tempestade a levou no ano em que Sabu se perdeu… Achei que o mar tinha ficado com ela, como ficou com tantas coisas.\n\nHORI — Leve isto. É pouco, mas hoje o mar me devolveu mais do que eu esperava.", "Missão concluída: a rede de Hori.", "npc_fisher")
 	return true
 
 
@@ -190,8 +190,11 @@ static func _advance(game, step: String) -> void:
 
 
 ## Como em port_story.gd: o aviso de progresso também fecha o diálogo.
-static func _say(game, title: String, text: String, note: String = "") -> void:
-	game.hud.show_dialog(title, text + ("\n\n◆ " + note if note != "" else ""))
+static func _say(game, title: String, text: String, note: String = "", npc_id: String = "") -> void:
+	if npc_id.is_empty():
+		game.hud.show_dialog(title, text + ("\n\n◆ " + note if note != "" else ""))
+	else:
+		game.hud.show_conversation(title, text + ("\n\n◆ " + note if note != "" else ""), npc_id)
 	if note != "":
 		game.hud.toast(note, NOTE, 5)
 

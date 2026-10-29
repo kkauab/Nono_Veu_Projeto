@@ -186,7 +186,7 @@ func _test_altar() -> void:
 	Shop.refill(world.store.data)
 	_check(Shop.charges(world.store.data, "balsamo") == 1, "a shrine refills the feather's charge")
 	_check(Shop.purchase(world.store.data, "jarro_balsamo") == false or Shop.capacity(world.store.data, "balsamo") == 2, "jars still add on top of the feather")
-	world._save()
+	_check(await _use(_item("isle_rest")), "the island tower anchors the feather reward")
 	var on_disk: DemoSaveStore = SaveStore.new(world.store.path)
 	_check(on_disk.load_progress() and Shop.capacity(on_disk.data, "balsamo") == Shop.capacity(world.store.data, "balsamo"), "a save with the feather loads back")
 	_check(not Shop.SHOPS["merit"].has("pena_bennu") and not Shop.SHOPS["adiam"].has("pena_bennu") and not Shop.SHOPS["nakht"].has("pena_bennu"), "no shop sells the feather")

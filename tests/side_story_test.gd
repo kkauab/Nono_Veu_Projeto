@@ -76,20 +76,19 @@ func _iri_trail() -> void:
 
 func _fisherman() -> void:
 	await use_item("npc_brother")
-	check(world.hud.dialog_title == "O homem das cordas" and not "fisher_brother_found" in world.store.data["collected"], "Sabu is only a stranger before Hori asks for him")
+	check(world.hud.dialog_title == "O homem das cordas" and "fisher_brother_found" in world.store.data["collected"], "Finding Sabu before Hori records the discovery instead of losing it")
 	await use_item("npc_fisher")
-	check("fisher_met" in world.store.data["collected"] and world.hud.dialog_body.contains("Embarcadouro Velho"), "Hori introduces himself and sends Senu to the old pier")
+	check("fisher_met" in world.store.data["collected"] and "fisher_knot" in world.store.data["collected"], "Hori recognizes the early discovery and immediately gives the knot")
 	check(find_item("npc_fisher").label == "Falar com Hori", "The fisherman is called by his name after meeting him")
 	await use_item("npc_brother")
-	check("fisher_brother_found" in world.store.data["collected"] and find_item("npc_brother").label == "Falar com Sabu", "Senu finds Sabu at the old pier")
-	await use_item("npc_fisher")
-	check("fisher_knot" in world.store.data["collected"] and world.hud.dialog_body.contains("nó de três voltas"), "Hori gives Senu the knot")
+	check("fisher_knot_shown" in world.store.data["collected"] and find_item("npc_brother").label == "Falar com Sabu", "Sabu recognizes the knot and gives the next concrete objective")
 	world.store.data["flags"]["boss"] = false
 	await use_item("npc_brother")
-	check(not "fisher_named" in world.store.data["collected"] and world.hud.dialog_body.contains("limiar"), "Before the Gatekeeper falls, the name stays behind the threshold")
-	world.store.data["flags"]["boss"] = true
+	check(not "fisher_named" in world.store.data["collected"] and world.hud.dialog_body.contains("sino"), "Before the bell Sabu explains the objective without requiring the boss")
+	await use_item("fisher_bell")
+	check("fisher_bell_rung" in world.store.data["collected"], "The pier bell answers the fisherman's memory")
 	await use_item("npc_brother")
-	check("fisher_named" in world.store.data["collected"] and find_item("npc_brother").opened, "After the Gatekeeper, Sabu remembers Hori's name")
+	check("fisher_named" in world.store.data["collected"] and find_item("npc_brother").opened and not world.store.data["flags"]["boss"], "Sabu remembers Hori and the quest advances before defeating the boss")
 	var fragments := int(world.store.data["fragments"])
 	await use_item("npc_fisher")
 	check("fisher_done" in world.store.data["collected"] and int(world.store.data["fragments"]) == fragments + Story.FISHER_REWARD, "Hori's thanks closes the story with its reward")
@@ -98,6 +97,10 @@ func _fisherman() -> void:
 	check(int(world.store.data["fragments"]) == fragments + Story.FISHER_REWARD and world.hud.dialog_body.contains("entardecer"), "Talking again gives no second reward")
 
 func _after_reopening() -> void:
+	world.hud.show_overlay("")
+	var tower := find_item("hub")
+	world.player.position = tower.position
+	check(world.activate(tower), "A tower anchors both completed stories")
 	var reopened := DemoSaveStore.new(world.store.path)
 	check(reopened.load_progress(), "The journey with both stories reopens")
 	for id in ["iri_mark_archive", "iri_mark_oracle", "iri_mark_buried", "iri_mark_guard", "iri_relic", "fisher_met", "fisher_brother_found", "fisher_knot", "fisher_named", "fisher_done"]:

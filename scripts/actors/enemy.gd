@@ -25,6 +25,9 @@ var _attack_origin: Vector2 = Vector2.ZERO
 var _strike_applied: bool = false
 var _knockback: Vector2 = Vector2.ZERO
 var _hurt_visual: float = 0.0
+var _hurt_direction := Vector2.ZERO
+var _breath_phase := 0.0
+var _breath_pixel := 0.0
 var _stagger_resistance_timer: float = 0.0
 var _time: float = 0.0
 var _attack_count: int = 0
@@ -74,6 +77,8 @@ func _ready() -> void:
 		detection_radius = 205.0
 	health = max_health
 	_spawn_position = global_position
+	_breath_phase = float(posmod(hash(enemy_id), 997)) / 997.0 * TAU
+	_breath_pixel = PixelView.rest_offset(_breath_phase)
 	var collider := CollisionShape2D.new()
 	var shape := CircleShape2D.new()
 	# Only the ground-contact area blocks movement; the enlarged upper sprite
@@ -87,6 +92,12 @@ func _physics_process(delta: float) -> void:
 	var previous_state := state
 	var previous_hurt := _hurt_visual
 	_time += delta
+	# Idle artwork only needs rebuilding when its one-pixel breath changes,
+	# instead of redrawing every sentinel at the physics rate.
+	var breath_pixel := PixelView.rest_offset(_time + _breath_phase)
+	if breath_pixel != _breath_pixel and state == State.WAIT:
+		queue_redraw()
+	_breath_pixel = breath_pixel
 	_hurt_visual = maxf(0.0, _hurt_visual - delta)
 	_stagger_resistance_timer = maxf(0.0, _stagger_resistance_timer - delta)
 	state_timer = maxf(0.0, state_timer - delta)
@@ -197,6 +208,9 @@ func receive_hit(amount: int, from_position: Vector2, stagger: bool = false) -> 
 		return
 	health = maxi(0, health - maxi(0, amount))
 	_hurt_visual = 0.17
+	_hurt_direction = (global_position - from_position).normalized()
+	if _hurt_direction.is_zero_approx():
+		_hurt_direction = -Vector2(facing.x, facing.y * .70).normalized()
 	_knockback = (global_position - from_position).normalized() * (22.0 if is_boss else 62.0)
 	if health <= 0:
 		dead = true
@@ -222,6 +236,7 @@ func reset_enemy() -> void:
 	_knockback = Vector2.ZERO
 	_attack_count = 0
 	_hurt_visual = 0.0
+	_hurt_direction = Vector2.ZERO
 	_stagger_resistance_timer = 0.0
 	_path.clear()
 	_path_refresh = 0
@@ -345,7 +360,7 @@ func _draw() -> void:
 	var sprite_tint := Color("fff0cb") if _hurt_visual > 0 else Color.WHITE
 	sprite_tint.a = tint.a
 	var sprite_kind := "keeper" if is_boss else archetype
-	var has_sprite := PixelView.draw_actor(self, sprite_kind, state, _distance_walked, _animation_moving, _visual_facing, sprite_tint, scale_factor, _animation_progress(), _hurt_visual > 0)
+	var has_sprite := PixelView.draw_actor(self, sprite_kind, state, _distance_walked, _animation_moving, _visual_facing, sprite_tint, scale_factor, _animation_progress(), _hurt_visual > 0, _time + _breath_phase, _hurt_direction, _hurt_visual / .17)
 	if not has_sprite:
 		_draw_fallback_body(scale_factor, tint, bob)
 	if health < max_health and not dead:

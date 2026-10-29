@@ -34,11 +34,13 @@ func _run() -> void:
 		check(sword.get("body_model_id") == "senu_shared_body_v6" and daggers.get("body_model_id") == "senu_shared_body_v6", "Both weapons use the same body model in " + View.DIRECTIONS[i])
 		check(sword.get("frame") == daggers.get("frame") and sword.get("region") == daggers.get("region") and sword.get("size") == daggers.get("size"), "Weapon switch preserves the actual body pixels, proportions and pivot in " + View.DIRECTIONS[i])
 		actor.velocity = Vector2(actor.facing.x, actor.facing.y * .7) * actor.move_speed
+		actor._visual_speed = actor.move_speed # Selection-only shared-body fixture.
 		var dagger_walk := view.sample(actor)
 		actor.equip_weapon(0)
 		var sword_walk := view.sample(actor)
 		check(dagger_walk.get("frame") == sword_walk.get("frame"), "Walk uses shared anatomical frames in " + View.DIRECTIONS[i])
 		actor.velocity = Vector2.ZERO
+		actor._visual_speed = 0
 		actor.reset_at(Vector2.ZERO)
 		actor.facing = Vector2.DOWN.rotated(-i * PI / 4)
 		view.sample(actor)

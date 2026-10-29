@@ -1,5 +1,5 @@
 extends SceneTree
-## Descanso e saída manual iniciam um ciclo de encontros; autosaves não.
+## Somente o descanso na torre grava e inicia um ciclo de encontros.
 ## O mundo fica desativado e todos os arquivos pertencem a user://qa.
 
 const Main = preload("res://scenes/boot/main.tscn")
@@ -41,7 +41,7 @@ func _run() -> void:
 	await _death_and_rewards()
 	await _removed_and_queued_bodies()
 	await _save_failure()
-	await _boss_and_manual_exit()
+	await _boss_and_last_tower()
 	world.queue_free()
 	await process_frame
 	print("ENEMY_RESPAWN_RESULT checks=%d failures=%d %s" % [checks, failures.size(), failures])
@@ -93,7 +93,7 @@ func _death_and_rewards() -> void:
 	var corpse_id := enemy.get_instance_id()
 	await _deferred()
 	check(is_instance_valid(enemy) and enemy.dead, "Disabled world retains the fresh corpse before its .45-second lifetime")
-	check(id in world.store.data["defeated"], "Death autosave records the current encounter cycle")
+	check(id in world.store.data["defeated"], "Death records the current encounter cycle in memory")
 	check(_loot_value("xp") == reward["xp"] and _loot_value("coin") == reward["coins"], "First kill creates exactly one XP and coin reward")
 	enemy.receive_hit(9999, enemy.position)
 	world._drop_loot(id, false, enemy)
@@ -101,14 +101,14 @@ func _death_and_rewards() -> void:
 	check(_loot_value("xp") == reward["xp"] and _loot_value("coin") == reward["coins"], "Duplicate death or reward callback cannot pay twice within a cycle")
 	var pickup := _item("nous_market")
 	world.player.position = pickup.position
-	check(world.activate(pickup), "A pickup performs its normal autosave")
+	check(world.activate(pickup), "A pickup updates the current session")
 	var clue := _item("water_clue")
 	world.player.position = clue.position
-	check(world.activate(clue), "A clue performs its normal puzzle autosave")
+	check(world.activate(clue), "A clue updates the current puzzle session")
 	world.hud.show_overlay("")
 	world.collect_loot("coin", 1)
 	world._flush_loot_save()
-	check(_enemy(world, id) == enemy and enemy.dead and id in world.store.data["defeated"], "Pickup, puzzle and loot autosaves do not renew a defeated enemy")
+	check(_enemy(world, id) == enemy and enemy.dead and id in world.store.data["defeated"], "Pickup, puzzle and loot memory updates do not renew a defeated enemy")
 	permanent = _progress_snapshot()
 	check(await _rest(), "Rest accepts a recently defeated enemy")
 	var renewed := _enemy(world, id)
@@ -175,7 +175,7 @@ func _save_failure() -> void:
 	await _collect_drops()
 	check(await _rest(), "A successful meditation remains possible after save recovery")
 
-func _boss_and_manual_exit() -> void:
+func _boss_and_last_tower() -> void:
 	var boss: VeilEnemy = world.boss
 	var boss_id := boss.enemy_id
 	boss.receive_hit(9999, boss.position)
@@ -190,13 +190,15 @@ func _boss_and_manual_exit() -> void:
 	enemy.receive_hit(9999, enemy.position)
 	await _collect_drops()
 	world.player.health = 23
-	var position_before: Vector2 = world.player.position
-	check(world._save_enemy_cycle(), "The manual exit-save helper starts the next saved cycle without quitting the suite")
-	check(world.player.health == 23 and world.player.position.is_equal_approx(position_before) and enemy.dead, "Exit saving does not heal, move the player or renew current actors")
+	var anchored := FileAccess.get_file_as_string(world.store.path)
+	world._save()
+	check(FileAccess.get_file_as_string(world.store.path) == anchored and enemy.dead, "Ordinary synchronization neither writes the file nor renews an enemy")
+	check(await _rest(), "Only the next tower anchors the new encounter cycle")
+	check(world.player.health == world.player.max_health and _enemy(world, regular_id) != null and not _enemy(world, regular_id).dead, "Tower saving heals and renews the current actors")
 	var restored := DemoSaveStore.new(world.store.path)
-	check(restored.load_progress(), "The manual encounter-cycle save reopens from disk")
+	check(restored.load_progress(), "The tower encounter-cycle save reopens from disk")
 	check(regular_id not in restored.data["defeated"] and boss_id in restored.data["defeated"], "The saved next cycle contains the boss victory and no common defeat")
-	check(restored.data["skills"] == world.store.data["skills"] and restored.data["collected"] == world.store.data["collected"] and restored.data["puzzles"] == JSON.parse_string(JSON.stringify(world.store.data["puzzles"])), "Exit saving preserves skills, unique discoveries, mission steps and puzzles")
+	check(restored.data["skills"] == world.store.data["skills"] and restored.data["collected"] == world.store.data["collected"] and restored.data["puzzles"] == JSON.parse_string(JSON.stringify(world.store.data["puzzles"])), "Tower saving preserves skills, unique discoveries, mission steps and puzzles")
 	var reloaded_world: Node2D = Main.instantiate()
 	reloaded_world.process_mode = Node.PROCESS_MODE_DISABLED
 	root.add_child(reloaded_world)
@@ -209,7 +211,7 @@ func _boss_and_manual_exit() -> void:
 	reloaded_world.boss = null
 	for spawn in Layout.ENEMY_SPAWNS:
 		reloaded_world._spawn_enemy(spawn["id"], spawn["tile"], spawn.get("boss", false), spawn.get("archetype", "guard"))
-	_check_population(reloaded_world, false, "Restored manual-save population")
+	_check_population(reloaded_world, false, "Restored tower-save population")
 	check(_enemy(reloaded_world, regular_id) != null and _enemy(reloaded_world, boss_id) == null, "Loading the next cycle recreates commons and omits the defeated boss")
 	reloaded_world.queue_free()
 	await process_frame

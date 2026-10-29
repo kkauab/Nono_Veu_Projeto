@@ -6,6 +6,7 @@ const V4_MANIFEST_PATH := "res://assets/sprites/senu_v4_manifest.json"
 const MOTION_MANIFEST_PATH := "res://assets/sprites/senu_motion_v5_manifest.json"
 const SHARED_MANIFEST_PATH := "res://assets/sprites/senu_shared_v6_manifest.json"
 const SwordView := preload("res://scripts/actors/senu_sword_view.gd")
+const PixelMotion := preload("res://scripts/actors/actor_pixel_motion.gd")
 const DIRECTIONS := ["down", "down_right", "right", "up_right", "up", "up_left", "left", "down_left"]
 
 var current_state := "idle"
@@ -61,6 +62,7 @@ var _previous_hurt := 0.0
 var _previous_dodge := 0.0
 var _previous_parry := 0.0
 var _previous_attack := 0.0
+var _last_distance := 0.0
 
 
 func draw(actor: Node2D) -> bool:
@@ -85,7 +87,8 @@ func draw(actor: Node2D) -> bool:
 	if _shared_body and bool(frame.get("modular_equipment", false)) and equipment_behind:
 		_draw_equipment(actor, frame)
 	# O corpo v6 é exatamente o mesmo nas duas armas; lâminas são camadas próprias.
-	actor.draw_texture_rect_region(frame_texture, Rect2(frame["offset"], frame["size"]), frame["region"], frame["tint"])
+	var motion: Dictionary = frame["motion"]
+	PixelMotion.draw_frame(actor, frame_texture, frame["offset"], frame["size"], frame["region"], frame["tint"], motion["upper_offset"], motion["middle_offset"])
 	if _shared_body and bool(frame.get("modular_equipment", false)) and not equipment_behind:
 		_draw_equipment(actor, frame)
 	# A pose do poder não contém arco: usa o efeito dourado da quarta folha.
@@ -103,6 +106,7 @@ func draw(actor: Node2D) -> bool:
 ## Também permite verificar a seleção visual sem chamar métodos de desenho.
 func sample(actor: Node2D) -> Dictionary:
 	var now := float(actor.get("_time"))
+	var distance := float(actor.get("_visual_distance"))
 	var dead := bool(actor.get("dead"))
 	var hurt := float(actor.get("_hurt_visual"))
 	var dodge := float(actor.get("_dodge_timer"))
@@ -113,6 +117,7 @@ func sample(actor: Node2D) -> Dictionary:
 	var category := str(weapon.get("category"))
 	if _owner_id != actor.get_instance_id() or now < _last_time:
 		_reset_observer(actor.get_instance_id(), now)
+		_last_distance = distance
 	if _previous_dead and not dead:
 		_reset_observer(actor.get_instance_id(), now)
 	if not _previous_weapon.is_empty() and category != _previous_weapon:
@@ -179,7 +184,7 @@ func sample(actor: Node2D) -> Dictionary:
 		state = _attack_state
 		elapsed = now - _attack_started
 		heading = actor.get("_attack_direction")
-	elif (actor.get("velocity") as Vector2).length() > 8:
+	elif float(actor.get("_visual_speed")) > 8:
 		state = "run" if bool(actor.get("is_sprinting")) else "walk"
 	var previous_state := current_state
 	if state != previous_state:
@@ -208,15 +213,12 @@ func sample(actor: Node2D) -> Dictionary:
 	if state in ["walk", "run"]:
 		if previous_state not in ["walk", "run"]:
 			gait_phase = 0
-		else:
-			var velocity: Vector2 = actor.get("velocity")
-			var speed := Vector2(velocity.x, velocity.y / .7).length()
-			# Distância autorada da passada: velocidades maiores aceleram o ciclo,
-			# em vez de fazer a mesma passada deslizar mais pelo chão.
-			var reference_speed := 112.0 if state == "run" else 64.0
-			var speed_ratio := clampf(speed / maxf(1, reference_speed), 0, 1.6)
-			var cycle_duration := maxf(.1, float(clip.get("cycle_duration", _sequence_duration(sequence, clip["fps"], frame_durations))))
-			gait_phase = fposmod(gait_phase + maxf(0, now - _last_time) * speed_ratio / cycle_duration, 1.0)
+		# Post-collision travel keeps the stride grounded even while sliding along
+		# a wall. Drawing twice in the same tick cannot advance the supporting leg.
+		var reference_speed := 112.0 if state == "run" else 64.0
+		var cycle_duration := maxf(.1, float(clip.get("cycle_duration", _sequence_duration(sequence, clip["fps"], frame_durations))))
+		gait_phase = fposmod(gait_phase + maxf(0, distance - _last_distance) / (reference_speed * cycle_duration), 1.0)
+	_last_distance = distance
 	_last_time = now
 	var frame_position := _sequence_position(state, sequence, maxf(0, elapsed), clip["fps"], clip["loop"], frame_durations)
 	var frame_value: Variant = sequence[frame_position]
@@ -240,8 +242,57 @@ func sample(actor: Node2D) -> Dictionary:
 	load_error = ""
 	var frame := {"frame": current_frame, "state": state, "clip": current_clip, "direction": current_direction, "weapon": current_weapon, "region": region, "offset": -_pivot * _scale, "size": _canvas * _scale, "tint": tint, "elapsed": elapsed, "gait_phase": gait_phase, "frame_position": frame_position, "frame_count": sequence.size(), "texture": clip.get("texture", _texture), "texture_path": clip.get("texture_path", _texture.resource_path), "body_model_id": "senu_shared_body_v6" if _shared_body else "legacy", "modular_equipment": _shared_body}
 	var selected := SwordView.sample(frame, _attack_duration) if _shared_body else frame
+	selected["motion"] = _motion_sample(actor, state, maxf(0, elapsed))
 	current_frame = int(selected["frame"])
 	return selected
+
+
+## Only the drawn upper body moves. Feet, shadow and physics remain at zero.
+func _motion_sample(actor: Node2D, state: String, elapsed: float) -> Dictionary:
+	var upper := Vector2.ZERO
+	var middle := Vector2.ZERO
+	var now := float(actor.get("_time"))
+	if state == "idle":
+		# A long exhale and a quiet pause, instead of a continuous floating bob.
+		var breath := pow((sin(now * 1.8 - PI * .5) + 1.0) * .5, 1.4)
+		upper.y = -roundf(breath * .8)
+	elif state in ["walk", "run"]:
+		var heading: Vector2 = actor.get("facing")
+		var side := Vector2(-heading.y, heading.x * .7)
+		var counterstep := sin(gait_phase * TAU)
+		upper = (side * counterstep * (.85 if state == "walk" else 1.1)).round()
+		middle = (side * -counterstep * .35).round()
+	elif state == "hurt":
+		var away: Vector2 = actor.get("_hurt_direction")
+		var t := clampf(elapsed / .22, 0, 1)
+		# Fast give at contact, then a slower return, independent of knockback.
+		var recoil := (1.0 - t) * (1.0 - t)
+		upper = (away * (2.0 * recoil)).round()
+		middle = (away * (.7 * recoil)).round()
+	elif state in ["attack_light", "attack_heavy", "power"] and not _shadow_power:
+		var direction: Vector2 = actor.get("_attack_direction")
+		direction = Vector2(direction.x, direction.y * .7)
+		var impact := .075 if current_weapon == "leve" else .12
+		if state == "attack_heavy": impact = .24
+		if state == "power": impact = .15
+		var weight := 1.4 if state == "attack_light" else 2.0
+		var push := _attack_weight(elapsed, impact, _attack_duration, weight)
+		if current_weapon == "leve" and state == "attack_light" and elapsed >= .11:
+			push = _attack_weight(elapsed - .11, .06, _attack_duration - .11, 1.2)
+		upper = (direction * push).round()
+		middle = (direction * push * .3).round()
+	return {"upper_offset": upper, "middle_offset": middle, "feet_offset": Vector2.ZERO}
+
+
+func _attack_weight(elapsed: float, impact: float, duration: float, weight: float) -> float:
+	var release := impact * .6
+	if elapsed < release:
+		return -smoothstep(0.0, release, elapsed) * .85
+	if elapsed < impact:
+		var t := clampf((elapsed - release) / maxf(.001, impact - release), 0, 1)
+		return lerpf(-.85, weight, t * t)
+	var settle := clampf((elapsed - impact) / maxf(.001, duration - impact), 0, 1)
+	return weight * (1.0 - smoothstep(0.0, 1.0, settle))
 
 
 func _reset_observer(owner_id: int, now: float) -> void:
@@ -262,6 +313,7 @@ func _reset_observer(owner_id: int, now: float) -> void:
 	_previous_attack = 0
 	_previous_weapon = ""
 	gait_phase = 0
+	_last_distance = 0
 	_last_time = now
 
 
@@ -551,6 +603,8 @@ func equipment_pose(actor: Node2D, frame: Dictionary, side: String = "right") ->
 		return {}
 	var values: Array = hands.get(side, [192, 220])
 	var hand := (Vector2(float(values[0]), float(values[1])) - _pivot) * _scale
+	var motion: Dictionary = frame.get("motion", {})
+	hand += PixelMotion.offset_at(hand.y, motion.get("upper_offset", Vector2.ZERO), motion.get("middle_offset", Vector2.ZERO))
 	var direction: Vector2 = actor.get("_attack_direction") if current_state in ["attack_light", "attack_heavy", "power"] and not _shadow_power else actor.get("facing")
 	var heading := Vector2(direction.x, direction.y * .7).angle()
 	var angle := atan2(.9, direction.x * .45)

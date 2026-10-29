@@ -1,11 +1,25 @@
 extends RefCounted
 
-## Móveis e lojistas das casas, desenhados no Pixelorama (art/pixelorama/interiors_v1)
-## e exportados por tools/pixelorama/export_interiors_v1.ps1. Mesmo contrato de
+## Móveis e lojistas das casas, desenhados no Pixelorama (art/pixelorama/interiors_v4)
+## e exportados por tools/pixelorama/export_interiors_v4.ps1. Mesmo contrato de
 ## port_art.gd: sem a folha exportada, `draw` devolve false e quem chama desenha a reserva.
 
-const TEXTURE := "res://assets/world/interiors_v1.png"
-const MANIFEST := "res://assets/world/interiors_v1_manifest.json"
+const TEXTURE := "res://assets/world/interiors_v4.png"
+const MANIFEST := "res://assets/world/interiors_v4_manifest.json"
+
+## The same native plan defines painting, collision, shadow and depth. No
+## separate hand-estimated rectangle can drift away from the visible feet.
+static func footprint(name: String) -> PackedVector2Array:
+	_ensure()
+	var result := PackedVector2Array()
+	for point in _sprites.get(name, {}).get("ground_base", []):
+		result.append(Vector2(point[0], point[1]))
+	return result
+
+static func column_bounds(name: String) -> Vector2i:
+	_ensure()
+	var bounds: Array = _sprites.get(name, {}).get("painted_columns", [-64, 64])
+	return Vector2i(bounds[0], bounds[1])
 
 static var _texture: Texture2D
 static var _sprites: Dictionary = {}

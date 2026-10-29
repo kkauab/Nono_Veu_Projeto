@@ -5,10 +5,10 @@ extends SceneTree
 # paleta do Porto e que todo móvel das casas tem arte. Roda sem o mundo.
 const Catalog = preload("res://scripts/world/house_catalog.gd")
 const InteriorArt = preload("res://scripts/world/interior_art.gd")
-const PXO := "res://art/pixelorama/interiors_v1/interiors_v1.pxo"
-const PLAN := "res://art/pixelorama/interiors_v1/export_plan.json"
-const MANIFEST := "res://assets/world/interiors_v1_manifest.json"
-const SHEET := "res://assets/world/interiors_v1.png"
+const PXO := "res://art/pixelorama/interiors_v4/interiors_v4.pxo"
+const PLAN := "res://art/pixelorama/interiors_v4/export_plan.json"
+const MANIFEST := "res://assets/world/interiors_v4_manifest.json"
+const SHEET := "res://assets/world/interiors_v4.png"
 ## Peças que usam a arte do Porto (port_art.gd), não a dos interiores.
 const PORT_ART := ["brazier", "crate"]
 const PALETTE := ["14252c", "1e343a", "2b4449", "3c5659", "526765", "6d7b70", "8c9380", "b4b298", "dbcfaa", "eee0ba",
@@ -87,6 +87,16 @@ func _run() -> void:
 		var sprite: Dictionary = plan["sprites"][name]
 		if sprite["frames"].size() < 2 or not sprite.has("sequence"): animated = false
 	_check(animated, "shopkeepers, furnace and coal are animated")
+	for npc in ["hori", "sabu", "merit", "nakht", "adiam", "tarek"]:
+		var poses: Array = plan["sprites"][npc]["frames"]
+		var hashes := {}
+		var anchored := true
+		for pose in poses:
+			var region := sheet.get_region(Rect2i(Vector2i(int(pose) % columns, int(pose) / columns) * cell, cell))
+			hashes[region.get_data().hex_encode().sha256_text()] = true
+			var used := region.get_used_rect()
+			if used.size.y > 44 or used.end.y != 113: anchored = false
+		_check(poses.size() == 4 and hashes.size() == 4 and anchored, npc + " has four distinct authored poses, fixed feet and world scale")
 	print("INTERIORS ART RESULT checks=%d failures=%d" % [checks, failures.size()])
 	quit(0 if failures.is_empty() else 1)
 

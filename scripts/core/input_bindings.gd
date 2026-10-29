@@ -8,7 +8,7 @@ static func install() -> void:
 		"attack": [KEY_J], "heavy_attack": [KEY_F], "dodge": [KEY_SPACE],
 		"parry": [KEY_K], "weapon_power": [KEY_Q], "cast_seal": [KEY_C], "switch_weapon": [KEY_TAB],
 		"interact": [KEY_E], "skill_tree": [KEY_T], "world_map": [KEY_M],
-		"pause_game": [KEY_ESCAPE],
+		"pause_game": [KEY_ESCAPE], "quest_journal": [KEY_N],
 		# Bálsamo comprado no Empório de Merit (Gustavo, 27/10/2026).
 		"use_item": [KEY_R]
 	}

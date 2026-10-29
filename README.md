@@ -88,3 +88,11 @@ Revisão atual de legibilidade, menus animados, proporções, resistência, apoi
 
 Sistema reutilizável de diálogo com retratos novos, digitação e atuação natural independente: [docs/SISTEMA_DIALOGO_RETRATOS.md](docs/SISTEMA_DIALOGO_RETRATOS.md).
 
+NPCs e interiores: seis moradores com novas poses, quatro interiores renovados e quatro missões opcionais. Use **N** para consultar o Caderno de Missões e **Conversar · missão** nas lojas. A missão do pescador agora segue até o reencontro dos irmãos, inclusive em partidas existentes. Detalhes: [docs/NPCS_INTERIORES_MISSOES_V2.md](docs/NPCS_INTERIORES_MISSOES_V2.md).
+
+Referência para reutilizar os efeitos de morte e moedas: [guia de animações](docs/GUIA_ANIMACOES_REUTILIZAVEIS.md) e [gravação](art/animation_reference/death_loot.gif).
+
+
+HUD minimalista e caderno em couro/papiro: veja [docs/HUD_MINIMAL_E_CADERNO.md](docs/HUD_MINIMAL_E_CADERNO.md). A faixa de comandos foi removida; N abre o caderno, com páginas selecionáveis e objetivos que acompanham o progresso salvo.
+
+A pausa agora usa o caderno em todas as páginas. Esc abre na prévia de Senu com os sprites reais; o inventário tem slots e detalhes; Controles fica em Configurações. Aprender Emanações exige manter o botão por 1,5 segundo. Sair não salva: o progresso é gravado somente nas torres. Veja [docs/CADERNO_PAUSA_V8.md](docs/CADERNO_PAUSA_V8.md).

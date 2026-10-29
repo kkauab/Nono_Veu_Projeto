@@ -58,6 +58,10 @@ var _attack_stagger: bool = false
 var _attack_visual: float = 0.0
 var _power_visual: float = 0.0
 var _hurt_visual: float = 0.0
+## Presentation only: actual travel after collision, never the requested velocity.
+var _visual_distance: float = 0.0
+var _visual_speed: float = 0.0
+var _hurt_direction := Vector2.ZERO
 var _riposte_timer: float = 0.0
 var _shadow_finish: bool = false
 var _knockback: Vector2 = Vector2.ZERO
@@ -120,6 +124,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	_time += delta
+	_visual_speed = 0.0
 	is_sprinting = false
 	attack_timer = maxf(0.0, attack_timer - delta)
 	parry_timer = maxf(0.0, parry_timer - delta)
@@ -162,7 +167,8 @@ func _physics_process(delta: float) -> void:
 		if _second_hit_delay < 0.0:
 			_attack_visual = 0.12
 			_apply_attack()
-	if _dodge_timer > 0.0:
+	var was_dodging := _dodge_timer > 0.0
+	if was_dodging:
 		var remaining := _dodge_timer
 		_dodge_timer = maxf(0, _dodge_timer - delta)
 		# O último passo parcial conserva o alcance mesmo entre taxas de física.
@@ -190,6 +196,10 @@ func _physics_process(delta: float) -> void:
 	_knockback = _knockback.move_toward(Vector2.ZERO, 700.0 * delta)
 	velocity += _knockback
 	move_and_slide()
+	if _hurt_visual <= 0.0 and not was_dodging:
+		var travel := _metric(get_position_delta()).length()
+		_visual_speed = travel / maxf(.0001, delta)
+		_visual_distance += travel
 	if _dodge_timer <= 0.0:
 		_restore_phase_collision()
 	queue_redraw()
@@ -431,6 +441,7 @@ func receive_hit(damage: int, from_position: Vector2) -> bool:
 	health = maxi(0, health - received_damage)
 	invulnerability_timer = 0.58
 	_hurt_visual = 0.22
+	_hurt_direction = (global_position - from_position).normalized()
 	parry_timer = 0.0
 	_hit_delay = -1.0
 	_second_hit_delay = -1.0
@@ -468,6 +479,9 @@ func reset_at(spawn_position: Vector2) -> void:
 	_attack_visual = 0.0
 	_power_visual = 0.0
 	_hurt_visual = 0.0
+	_visual_distance = 0.0
+	_visual_speed = 0.0
+	_hurt_direction = Vector2.ZERO
 	_knockback = Vector2.ZERO
 	_shadow_finish = false
 	_riposte_timer = 0.0

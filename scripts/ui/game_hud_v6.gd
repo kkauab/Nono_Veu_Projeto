@@ -9,7 +9,13 @@ const MUTED := Color("a3b6ad")
 const TITLE_IMAGE := "res://assets/ui/port_title_v7.png"
 const PORTRAIT_IMAGE := "res://assets/ui/senu_portrait_v7.png"
 const PORTRAIT_IDLE_IMAGE := "res://assets/ui/senu_menu_idle_v8.png"
+const PortQuests = preload("res://scripts/world/port_quests.gd")
 const SkillCatalog = preload("res://scripts/progression/skill_catalog.gd")
+const JournalBook = preload("res://scripts/ui/quest_journal_book.gd")
+const HUD_STYLE_VERSION := 8
+const Notebook = preload("res://scripts/ui/pause_notebook.gd")
+const SpeechBubble = preload("res://scripts/ui/npc_speech_bubble.gd")
+const BOOK_MODES := ["pause", "journal", "inventory", "map", "tree", "settings", "controls", "exit"]
 const FramePacing = preload("res://scripts/core/frame_pacing.gd")
 const SKILL_POINTS := {
 	"vontade": Vector2(145, 392), "materia": Vector2(325, 392), "intelecto": Vector2(505, 392),
@@ -32,6 +38,8 @@ var message_color := GOLD
 var message_time := 0.0
 var dialog_title := ""
 var dialog_body := ""
+var _conversation_active := false
+var conversation_npc_id := ""
 var font: Font
 var title_font: SystemFont
 var _factor := 1.0
@@ -48,7 +56,11 @@ var _menu_clock := 0.0
 var _redraw_tick := 0.0
 var _weapon_icons: Dictionary = {}
 var _next_asset_check := 0.0
-var _hint_controls := false
+var _selected_quest := ""
+var _book_inventory_selected := ""
+var _book_inventory_filter := "Todos"
+var _book_map_selected := ""
+var _book_return_to := ""
 ## Desligado por padrão: o jogo segue a taxa do monitor (scripts/core/frame_pacing.gd).
 var _limit_fps := false
 var _buttons: Array[Button] = []
@@ -121,11 +133,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		if overlay == "": show_overlay("pause")
 		else: _back()
 		get_viewport().set_input_as_handled()
-	elif overlay in ["", "tree", "map"] and event.is_action_pressed("skill_tree"):
+	elif overlay in [""] + BOOK_MODES and event.is_action_pressed("skill_tree"):
 		show_overlay("" if overlay == "tree" else "tree")
 		get_viewport().set_input_as_handled()
-	elif overlay in ["", "tree", "map"] and event.is_action_pressed("world_map"):
+	elif overlay in [""] + BOOK_MODES and event.is_action_pressed("world_map"):
 		show_overlay("" if overlay == "map" else "map")
+		get_viewport().set_input_as_handled()
+	elif InputMap.has_action("quest_journal") and overlay in [""] + BOOK_MODES and event.is_action_pressed("quest_journal"):
+		show_overlay("" if overlay == "journal" else "journal")
 		get_viewport().set_input_as_handled()
 
 func toast(text: String, color: Color = GOLD, duration: float = 3.8) -> void:
@@ -134,13 +149,26 @@ func toast(text: String, color: Color = GOLD, duration: float = 3.8) -> void:
 	message_time = duration
 
 func show_dialog(title: String, body: String) -> void:
+	_conversation_active = false
+	dialog_title = title
+	dialog_body = body
+	_return_overlay = ""
+	show_overlay("dialog")
+
+func show_conversation(title: String, body: String, npc_id: String = "") -> void:
+	_conversation_active = true
+	conversation_npc_id = npc_id
+	set_meta("speech_page", 0)
 	dialog_title = title
 	dialog_body = body
 	_return_overlay = ""
 	show_overlay("dialog")
 
 func show_overlay(mode: String) -> void:
-	if mode in ["tree", "map", "inventory", "controls", "settings"] and overlay in ["pause", "intro", ""]:
+	if mode != "dialog": _conversation_active = false
+	if mode in BOOK_MODES and overlay not in BOOK_MODES:
+		_book_return_to = "intro" if overlay == "intro" else ""
+	if mode in ["tree", "map", "inventory", "controls", "settings", "journal"] and overlay in ["pause", "intro", ""]:
 		_return_overlay = overlay
 	if mode == "new_journey": _return_overlay = "intro"
 	overlay = mode
@@ -152,7 +180,12 @@ func show_overlay(mode: String) -> void:
 
 func _back() -> void:
 	if overlay == "intro": return
-	show_overlay("" if overlay == "pause" else _return_overlay)
+	if overlay == "controls":
+		show_overlay("settings")
+	elif overlay in BOOK_MODES:
+		show_overlay(_book_return_to)
+	else:
+		show_overlay(_return_overlay)
 
 func _build_controls() -> void:
 	_buttons.clear()
@@ -164,6 +197,11 @@ func _build_controls() -> void:
 		remove_child(child)
 		child.queue_free()
 	if game == null: return
+	if overlay in BOOK_MODES:
+		var notebook := Notebook.new()
+		add_child(notebook)
+		notebook.configure(self, overlay)
+		return
 	match overlay:
 		"intro":
 			_button("Nova jornada", Rect2(104, 294, 302, 44), func():
@@ -174,22 +212,9 @@ func _build_controls() -> void:
 			_button("Configurações", Rect2(104, 399, 302, 42), func(): show_overlay("settings"), "diamond", "", true)
 			_button("Sair", Rect2(104, 451, 302, 42), game.save_and_quit, "diamond", "", true)
 		"new_journey":
-			_label("Uma cópia da jornada atual será preservada antes de começar.\nSenu voltará ao santuário e redescobrirá os caminhos do Porto.", Rect2(112, 205, 706, 100), 19, MUTED)
+			_label("Uma cópia do último progresso salvo será preservada antes de começar.\nSenu voltará ao santuário e redescobrirá os caminhos do Porto.", Rect2(112, 205, 706, 100), 19, MUTED)
 			_button("Iniciar nova jornada", Rect2(112, 370, 350, 46), game.begin_new_journey, "continue")
 			_button("Voltar", Rect2(492, 370, 326, 46), func(): show_overlay("intro"), "back")
-		"pause":
-			var options := [
-				["Continuar", "continue", "Retome a travessia entre as memórias do Porto.", func(): show_overlay("")],
-				["Árvore das Emanações", "tree", "Transforme Fragmentos de Nous em novas capacidades.", func(): show_overlay("tree")],
-				["Mapa", "map", "Consulte os lugares recordados e os atalhos abertos.", func(): show_overlay("map")],
-				["Inventário", "inventory", "Examine suas armas e o que a jornada já revelou.", func(): show_overlay("inventory")],
-				["Controles", "controls", "Veja os comandos e atalhos do jogo.", func(): show_overlay("controls")],
-				["Configurações", "settings", "Ajuste a janela, os quadros e a ajuda de comandos.", func(): show_overlay("settings")],
-				["Salvar e sair", "exit", "Ancore a memória e encerre a jornada por agora.", game.save_and_quit]
-			]
-			for index in range(options.size()):
-				var option: Array = options[index]
-				_button(option[0], Rect2(79, 142 + index * 44, 327, 40), option[3], option[1], option[2])
 		"tree":
 			_build_skill_tree()
 			_back_button()
@@ -203,7 +228,7 @@ func _build_controls() -> void:
 			var commands := [["WASD / setas", "Andar"], ["Shift + movimento", "Correr"], ["Espaço", "Rolar / esquivar"],
 				["J / mouse esquerdo", "Ataque leve"], ["F", "Ataque forte"], ["K / mouse direito", "Aparar"],
 				["Q", "Poder da arma"], ["Tab", "Trocar arma encontrada"], ["E", "Interagir / recolher"],
-				["T", "Árvore das Emanações"], ["M", "Mapa"], ["Esc", "Pausa / voltar"], ["R", "Usar bálsamo"], ["C", "Selo de Mercúrio¹"]]
+				["T", "Árvore das Emanações"], ["M / N", "Mapa / missões"], ["Esc", "Pausa / voltar"], ["R", "Usar bálsamo"], ["C", "Selo de Mercúrio¹"]]
 			for index in range(commands.size()):
 				var column := index / 7
 				var row := index % 7
@@ -218,15 +243,25 @@ func _build_controls() -> void:
 				FramePacing.apply(_limit_fps)
 				_write_preferences()
 				_build_controls(), "settings")
-			_button("Lembrete de comandos: " + ("visível" if _hint_controls else "oculto"), Rect2(112, 283, 660, 47), func():
-				_hint_controls = not _hint_controls
-				_write_preferences()
-				_build_controls(), "controls")
-			_label("As alterações são salvas neste computador.\nOs menus aceitam mouse, setas, Tab e Enter.", Rect2(112, 350, 700, 60), 17, MUTED)
+			_label("As alterações são salvas neste computador.\nOs menus aceitam mouse, setas, Tab e Enter.", Rect2(112, 306, 700, 60), 17, MUTED)
 			_back_button()
 		"dialog":
-			_scroll_text(dialog_body, Rect2(100, 156, 760, 250), 19)
-			_back_button()
+			if _conversation_active:
+				var speech := SpeechBubble.new()
+				add_child(speech)
+				speech.finished.connect(func(): show_overlay(""))
+				speech.configure(self, dialog_title, dialog_body, conversation_npc_id)
+			else:
+				_scroll_text(dialog_body, Rect2(100, 156, 760, 250), 19)
+				_back_button()
+		"journal":
+			var book := JournalBook.new()
+			book.name = "QuestJournalBook"
+			book.position = _offset
+			book.scale = Vector2.ONE * _factor
+			book.size = UI_SIZE
+			add_child(book)
+			book.configure(self)
 		"shop":
 			ShopPanel.build(self, game)
 			_back_button()
@@ -489,62 +524,70 @@ func _draw() -> void:
 	if overlay == "intro":
 		_draw_intro()
 		return
+	if overlay in BOOK_MODES: return
 	_draw_gameplay()
-	if overlay != "": _draw_modal()
+	if overlay != "" and not _conversation_active: _draw_modal()
 
+## Gameplay chrome stays open to the world: only small corner marks, a
+## health ribbon and the current area. Objectives live in the notebook.
 func _draw_gameplay() -> void:
 	var hero = game.player
-	_frame(Rect2(11, 10, 938, 520), false)
 	var data: Dictionary = game.store.data
-	_frame(Rect2(22, 22, 360, 82), true, .94)
-	_sun(Vector2(62, 62), 20)
-	_text("SENU / DISCÍPULO", Vector2(101, 45), 15, GOLD)
-	_text("NV %d" % Economy.level(data), Vector2(322, 45), 14, IVORY)
-	draw_rect(Rect2(101, 53, 259, 9), Color("2d423c"))
-	draw_rect(Rect2(101, 53, 259 * clampf(float(hero.health) / maxf(1, hero.max_health), 0, 1), 9), Color("9bc9ae"))
-	# Barra fina de XP: o que já foi juntado dentro do nível atual.
+	for corner in [Vector2(14, 14), Vector2(946, 14), Vector2(14, 526), Vector2(946, 526)]:
+		var inward := Vector2(1 if corner.x < 480 else -1, 1 if corner.y < 270 else -1)
+		draw_line(corner, corner + Vector2(16 * inward.x, 0), Color(GOLD, .28), 1)
+		draw_line(corner, corner + Vector2(0, 16 * inward.y), Color(GOLD, .28), 1)
+	_hud_shade(Rect2(23, 24, 337, 80))
+	_sun(Vector2(57, 60), 20)
+	_text("SENU", Vector2(98, 40), 16, GOLD, true)
+	_text("/  DISCÍPULO", Vector2(154, 39), 11, MUTED, true)
+	_text("NV %d" % Economy.level(data), Vector2(319, 40), 12, IVORY, true)
+	var health := clampf(float(hero.health) / maxf(1, hero.max_health), 0, 1)
+	var track := Rect2(98, 50, 216, 8)
+	_ribbon(track, Color("332b2b"))
+	if health > 0:
+		_ribbon(Rect2(track.position, Vector2(maxf(7, track.size.x * health), track.size.y)), Color("a84442"))
+	draw_line(Vector2(315, 54), Vector2(340, 54), Color(GOLD, .35), 1)
+	_diamond(Vector2(346, 54), 1.5)
 	var progress := Economy.level_progress(Economy.xp(data))
-	draw_rect(Rect2(101, 65, 259, 4), Color("22343a"))
-	draw_rect(Rect2(101, 65, 259 * clampf(float(progress.x) / maxf(1, progress.y), 0, 1), 4), LOOT_XP)
-	_text("%d / %d" % [hero.health, hero.max_health], Vector2(101, 92), 16, IVORY)
-	draw_circle(Vector2(200, 86), 5, LOOT_COIN.darkened(.35))
-	draw_circle(Vector2(200, 86), 3.5, LOOT_COIN)
-	_text("%d" % Economy.coins(data), Vector2(210, 92), 15, LOOT_COIN)
-	_diamond(Vector2(266, 86), 4)
-	_text("%d NOUS" % data["fragments"], Vector2(280, 92), 15, GOLD)
+	draw_rect(Rect2(99, 64, 206, 3), Color("253233"))
+	draw_rect(Rect2(99, 64, 206 * clampf(float(progress.x) / maxf(1, progress.y), 0, 1), 3), Color("9ba995"))
+	_text("%d / %d" % [hero.health, hero.max_health], Vector2(99, 85), 13, IVORY, true)
+	draw_circle(Vector2(211, 81), 3.5, LOOT_COIN)
+	_text(str(Economy.coins(data)), Vector2(220, 85), 11, MUTED)
+	_diamond(Vector2(265, 81), 3)
+	_text("%d NOUS" % data["fragments"], Vector2(276, 85), 11, GOLD)
 	if _loot_time > 0 and overlay == "": _draw_loot_ticker()
 	_draw_balm()
-	_frame(Rect2(615, 22, 323, 112), true, .96)
+	_hud_shade(Rect2(650, 25, 285, 39))
+	draw_line(Vector2(655, 25), Vector2(655, 36), Color(GOLD, .8), 1)
+	_diamond(Vector2(655, 42), 4)
+	_diamond(Vector2(655, 42), 1.5)
+	draw_line(Vector2(655, 48), Vector2(655, 58), Color(GOLD, .8), 1)
 	var area := "Porto dos Esquecidos"
 	for room in PortLayout.ROOMS:
 		if room["id"] == game.current_room: area = room["name"]
 	var house_id := str(game.get("inside_house"))
 	if HouseCatalog.HOUSES.has(house_id): area = HouseCatalog.HOUSES[house_id]["name"]
-	# No barco de Sabu (scripts/world/sea.gd), entre o porto e a Ilha do Bennu.
 	if game.get("at_sea") == true: area = "Baía das Garças"
-	_text_block(area, Vector2(634, 48), 240, 19, 21, IVORY, true)
-	if game.has_method("seals_found"):
-		_diamond(Vector2(884, 42), 4)
-		_text("%d/3" % int(game.call("seals_found")), Vector2(895, 47), 13, GOLD)
-	draw_line(Vector2(634, 77), Vector2(918, 77), Color(GOLD, .42), 1)
-	var objective: String = game.objective()
-	if objective.begins_with("Selos ") and " · " in objective: objective = objective.split(" · ", false, 1)[1]
-	_text_block(objective, Vector2(634, 98), 284, 14, 18, IVORY)
+	_text_block(area, Vector2(677, 43), 219, 16, 18, GOLD, true)
 	var weapon = hero.equipped_weapon()
-	_frame(Rect2(24, 449, 294, 70), true, .96)
-	draw_rect(Rect2(35, 459, 50, 50), Color("13282c"))
-	draw_rect(Rect2(35, 459, 50, 50), GOLD.darkened(.4), false, 1)
-	if _weapon_icons.has(weapon.category): draw_texture_rect(_weapon_icons[weapon.category], Rect2(39, 463, 42, 42), false)
-	_fit_text(weapon.display_name, Vector2(97, 476), 203, 17, IVORY)
+	_hud_shade(Rect2(28, 458, 273, 58))
+	draw_line(Vector2(33, 459), Vector2(76, 459), Color(GOLD, .65), 1)
+	draw_line(Vector2(33, 459), Vector2(33, 509), Color(GOLD, .65), 1)
+	draw_line(Vector2(33, 509), Vector2(76, 509), Color(GOLD, .65), 1)
+	_diamond(Vector2(28, 454), 2.5)
+	if _weapon_icons.has(weapon.category): draw_texture_rect(_weapon_icons[weapon.category], Rect2(37, 464, 38, 38), false)
+	_fit_text(weapon.display_name, Vector2(89, 477), 203, 14, IVORY, true)
+	var ready: bool = hero.power_cooldown_remaining <= 0
 	if "selo_mercurio" in data["skills"]:
-		_text("Q · pronto" if hero.power_cooldown_remaining <= 0 else "Q · %.1f s" % hero.power_cooldown_remaining, Vector2(97, 500), 13, IVORY)
+		_text("Q  Pronto" if ready else "Q  %.1f s" % hero.power_cooldown_remaining, Vector2(89, 500), 11, IVORY if ready else MUTED)
 		var seal_value: Variant = hero.get("seal_cooldown_remaining")
 		var seal_cooldown := float(seal_value) if seal_value != null else 0.0
-		_text("C · pronto" if seal_cooldown <= 0 else "C · %.1f s" % seal_cooldown, Vector2(214, 500), 13, GOLD)
+		_text("C  Pronto" if seal_cooldown <= 0 else "C  %.1f s" % seal_cooldown, Vector2(197, 500), 11, GOLD)
 	else:
-		_text("ADAGAS" if weapon.category == "leve" else "ESPADA", Vector2(97, 500), 13, GOLD)
-		_text("Q · pronto" if hero.power_cooldown_remaining <= 0 else "Q · %.1f s" % hero.power_cooldown_remaining, Vector2(214, 500), 14, IVORY)
-	if _hint_controls: _text("WASD mover · Shift correr · Espaço rolar · J/F atacar · E interagir", Vector2(333, 512), 14, IVORY)
+		_text("ADAGAS" if weapon.category == "leve" else "ESPADA", Vector2(89, 500), 10, GOLD, true)
+		_text("Q  Pronto" if ready else "Q  %.1f s" % hero.power_cooldown_remaining, Vector2(215, 500), 11, IVORY if ready else MUTED)
 	if game.nearest != null and is_instance_valid(game.nearest) and not game.respawning and overlay == "": _draw_interaction()
 	if is_instance_valid(game.boss) and game.boss.health > 0 and hero.position.distance_to(game.boss.position) < 240 and overlay == "":
 		_text("O PORTEIRO SEM NOME", Vector2(430, 426), 16, GOLD)
@@ -554,7 +597,7 @@ func _draw_gameplay() -> void:
 		var toast_width := minf(690, font.get_string_size(message, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 40)
 		var toast_rows := _wrapped_text(message, toast_width - 38, font, 16).split("\n").size()
 		var rect := Rect2(480 - toast_width / 2, 145, toast_width, 36 if toast_rows == 1 else 54)
-		_frame(rect, true, .97)
+		_notice_panel(rect)
 		_text_block(message, rect.position + Vector2(19, 24), rect.size.x - 38, 16, 21, message_color)
 
 func _draw_interaction() -> void:
@@ -566,7 +609,7 @@ func _draw_interaction() -> void:
 	var height := 36.0 if rows == 1 else 57.0
 	point.x = clampf(point.x, 34, 926 - width)
 	point.y = clampf(point.y, 202, 411 - height)
-	_frame(Rect2(point, Vector2(width, height)), true, .97)
+	_notice_panel(Rect2(point, Vector2(width, height)))
 	draw_line(point + Vector2(36, 5), point + Vector2(36, height - 5), GOLD.darkened(.35), 1)
 	_text("E", point + Vector2(13, 25), 19, IVORY)
 	_text_block(caption, point + Vector2(48, 24), width - 58, 16, 21, IVORY)
@@ -592,7 +635,7 @@ func _draw_modal() -> void:
 	_frame(Rect2(51, 44, 858, 451), true, .96)
 	_sun(Vector2(480, 44), 22, .65)
 	_sun(Vector2(480, 495), 22, .65)
-	var titles := {"pause": "Uma pausa entre os véus", "tree": "Árvore das Emanações", "map": "Memórias do Porto", "inventory": "Inventário da travessia", "controls": "Controles", "settings": "Configurações", "dialog": dialog_title, "new_journey": "Uma nova travessia", "shop": dialog_title}
+	var titles := {"pause": "Uma pausa entre os véus", "tree": "Árvore das Emanações", "map": "Memórias do Porto", "journal": "Caderno de Missões · N", "inventory": "Inventário da travessia", "controls": "Controles", "settings": "Configurações", "dialog": dialog_title, "new_journey": "Uma nova travessia", "shop": dialog_title}
 	_fit_text(titles.get(overlay, "O Nono Véu"), Vector2(83, 101), 780, 34, IVORY, true)
 	draw_line(Vector2(84, 118), Vector2(414 if overlay == "pause" else 875, 118), GOLD.darkened(.28), 1)
 	_diamond(Vector2(249 if overlay == "pause" else 480, 118), 4)
@@ -752,7 +795,6 @@ func _preferences_path() -> String:
 func _read_preferences() -> void:
 	var config := ConfigFile.new()
 	if config.load(_preferences_path()) == OK:
-		_hint_controls = bool(config.get_value("interface", "control_hints", false))
 		# Chave nova: a antiga ("limit_fps") era gravada ligada junto com as outras
 		# preferências, sem o jogador escolher, e prendia monitores rápidos em 60.
 		_limit_fps = bool(config.get_value("display", "limit_fps_60", false))
@@ -763,7 +805,6 @@ func _read_preferences() -> void:
 
 func _write_preferences() -> void:
 	var config := ConfigFile.new()
-	config.set_value("interface", "control_hints", _hint_controls)
 	config.set_value("display", "limit_fps_60", _limit_fps)
 	config.set_value("display", "fullscreen", DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_preferences_path().get_base_dir()))
@@ -828,11 +869,28 @@ func _draw_balm() -> void:
 	var room := ShopCatalog.capacity(game.store.data, "balsamo")
 	if room <= 0: return
 	var full := ShopCatalog.charges(game.store.data, "balsamo")
-	_frame(Rect2(24, 404, 46 + room * 18, 38), true, .94)
+	_hud_shade(Rect2(30, 420, 34 + room * 18, 30))
 	for slot in range(room):
-		var center := Vector2(44 + slot * 18, 426)
+		var center := Vector2(40 + slot * 18, 439)
 		var tint := Color("b47a4a") if slot < full else Color("2b3a38")
 		draw_circle(center, 6, tint.darkened(.35))
 		draw_circle(center, 4.5, tint)
 		draw_rect(Rect2(center + Vector2(-2, -11), Vector2(4, 5)), tint.darkened(.2))
-	_text("R", Vector2(38 + room * 18, 431), 15, IVORY)
+	_text("R", Vector2(36 + room * 18, 444), 15, IVORY)
+
+## A faint feathered wash keeps text readable over bright floor tiles, with no
+## boxed panels or nested gold borders on the playfield.
+func _hud_shade(rect: Rect2) -> void:
+	for ring in range(8, -1, -1):
+		draw_rect(rect.grow(ring * 1.5), Color(INK, .025))
+
+func _ribbon(rect: Rect2, color: Color) -> void:
+	var p := rect.position
+	var e := rect.end
+	var cut := minf(4, rect.size.x * .5)
+	draw_colored_polygon(PackedVector2Array([p + Vector2(cut, 0), Vector2(e.x - cut, p.y), Vector2(e.x, p.y + rect.size.y * .5), e - Vector2(cut, 0), Vector2(p.x + cut, e.y), Vector2(p.x, p.y + rect.size.y * .5)]), color)
+
+func _notice_panel(rect: Rect2) -> void:
+	draw_rect(rect, Color(INK, .92))
+	draw_rect(rect, Color(GOLD, .38), false, 1)
+	draw_line(rect.position + Vector2(1, 4), Vector2(rect.position.x + 1, rect.end.y - 4), GOLD, 1)

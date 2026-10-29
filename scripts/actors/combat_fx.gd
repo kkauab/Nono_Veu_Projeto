@@ -177,6 +177,14 @@ func power(power_id: String) -> void:
 		Sfx.play(self, "power_riposte", origin)
 		_ring(origin, 8.0, 46.0, .3, Color("e8bd75"))
 
+## Reuses the approved death/loot visual language for discoveries, without
+## hitstop, camera shake, combat damage or reward logic.
+func memory_restored(at: Vector2) -> void:
+	if not is_inside_tree(): return
+	_ring(at, 4.0, 28.0, .5, Color("dfc38c"))
+	_veil_fragments(at + Vector2(0, -12), 10, Color("dfc38c"))
+	_star(at + Vector2(0, -18), 1.0)
+
 
 # --- ferramentas ---------------------------------------------------------------
 

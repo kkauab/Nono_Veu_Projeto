@@ -94,14 +94,18 @@ func verify_motion(actor: SenuPlayer) -> void:
 	actor.reset_at(Vector2.ZERO)
 	actor.equip_weapon(0)
 	actor.facing = Vector2.RIGHT
-	actor.velocity = Vector2(actor.move_speed, 0)
+	Input.action_press("move_right")
+	actor._physics_process(1.0 / 60.0)
 	var walk := view.sample(actor)
 	check(walk.get("texture_path") == manifest["texture"] and view.current_state == "walk" and view.motion_load_error.is_empty(), "Walking uses the new pose atlas")
-	actor._time += .17
+	for step in range(10): actor._physics_process(1.0 / 60.0)
+	Input.action_release("move_right")
 	var stepped := view.sample(actor)
 	check(stepped["frame_position"] != walk["frame_position"], "Walk advances to a different step pose")
 	actor.is_sprinting = true
 	actor.velocity *= actor.sprint_multiplier
+	# Clip-selection fixture preserves distance while changing the measured speed.
+	actor._visual_speed *= actor.sprint_multiplier
 	var run := view.sample(actor)
 	check(view.current_state == "run" and view.current_clip == "run" and run["texture_path"] == manifest["texture"], "Running uses its own pose sequence in the new atlas")
 	check(is_equal_approx(float(run["gait_phase"]), float(stepped["gait_phase"])), "Walk-to-run transition preserves the supporting leg phase")

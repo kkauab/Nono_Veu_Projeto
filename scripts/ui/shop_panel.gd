@@ -12,6 +12,9 @@ const WARN := Color("d9ad8a")
 
 static func build(hud: Control, game: Node) -> void:
 	var data: Dictionary = game.store.data
+	if game.has_method("talk_to_resident"):
+		hud._button("Conversar · missão", Rect2(86, 449, 242, 32), func():
+			game.talk_to_resident(hud.shop_id), "dialog", "", true)
 	hud._label(hud.shop_greeting, Rect2(86, 130, 560, 48), 15, hud.MUTED)
 	var items: Array = Shop.SHOPS.get(hud.shop_id, [])
 	for index in range(items.size()):

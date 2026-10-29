@@ -44,12 +44,14 @@ func _run() -> void:
 	var sword := view.sample(actor)
 	check(not sword.is_empty() and view.current_weapon == "espada", "Player loads the sword variant from the v4 atlas")
 	actor.facing = Vector2.DOWN
-	actor.velocity = Vector2(0, actor.move_speed * actor.ISO_Y)
+	Input.action_press("move_down")
+	actor._physics_process(1.0 / 60.0)
 	view.sample(actor)
-	actor._time += .13
+	for step in range(8): actor._physics_process(1.0 / 60.0)
+	Input.action_release("move_down")
 	var forward := view.sample(actor)
 	actor.facing = Vector2.LEFT
-	actor.velocity = Vector2(-actor.move_speed, 0)
+	actor.velocity = Vector2(-actor.move_speed, 0) # Selection-only turn keeps the last measured ground speed.
 	var turned := view.sample(actor)
 	check(is_equal_approx(float(forward["gait_phase"]), float(turned["gait_phase"])) and forward["frame_position"] == turned["frame_position"], "Turning preserves the same footfall phase")
 	check(actor.equip_weapon(1), "Unlocked Daggers equip while walking")
