@@ -8,6 +8,7 @@ extends RefCounted
 ## - `respawn`, quando Senu volta ao santuário.
 ## O estado fica no próprio port_demo: boat, at_sea, sea_busy e boat_dock.
 
+const SenuBoatView = preload("res://scripts/actors/senu_boat_view.gd")
 const Boat = preload("res://scripts/world/sea_boat.gd")
 const SeaArt = preload("res://scripts/world/sea_art.gd")
 const Layout = preload("res://scripts/world/port_layout.gd")
@@ -16,7 +17,7 @@ const Sfx = preload("res://scripts/audio/sfx.gd")
 const Art = preload("res://scripts/world/port_art.gd")
 const MOORED_SHADER = preload("res://assets/shaders/harbor_pixel_moored.gdshader")
 static var _hull_texture: ImageTexture
-const HOP := .32
+const HOP := .48
 const DOCK_REACH := 52.0
 const DOCK_SPEED := 110.0
 const AMPHORA_REACH := 26.0
@@ -301,6 +302,7 @@ static func moor(game, dock: String) -> void:
 	game.boat_dock = dock
 	var boat: Node2D = game.boat
 	boat.rider = null
+	boat.transfer_locked = false
 	boat.velocity = Vector2.ZERO
 	boat.rowing = false
 	boat.global_position = Layout.iso(DOCKS[dock]["water"])
@@ -370,10 +372,11 @@ static func board(game) -> bool:
 	player.set_meta("sea_collision", [player.collision_layer, player.collision_mask])
 	player.collision_layer = 0
 	player.collision_mask = 0
+	player.visible = false
 	var boat: Node2D = game.boat
 	var tween: Tween = game.create_tween()
 	game.set_meta("sea_tween", tween)
-	_hop(tween, player, player.global_position, boat.global_position)
+	_hop(tween, player, player.global_position, boat.global_position, "board")
 	tween.tween_callback(_seated.bind(game))
 	_sound(boat, "water_splash", -12.0)
 	return true
@@ -381,6 +384,7 @@ static func board(game) -> bool:
 
 static func _seated(game) -> void:
 	var player: SenuPlayer = game.player
+	_clear_transfer(player)
 	player.visible = false
 	game.boat.rider = player
 	game.at_sea = true
@@ -399,7 +403,7 @@ static func land(game, dock: String) -> void:
 	game.nearest = null
 	var boat: Node2D = game.boat
 	var player: SenuPlayer = game.player
-	boat.rider = null
+	boat.transfer_locked = true
 	boat.velocity = Vector2.ZERO
 	boat.rowing = false
 	var mooring := Layout.iso(DOCKS[dock]["water"])
@@ -409,8 +413,8 @@ static func land(game, dock: String) -> void:
 	tween.parallel().tween_method(_turn.bind(boat, boat.heading, float(DOCKS[dock]["heading"])), 0.0, 1.0, .3)
 	tween.tween_callback(func() -> void:
 		player.global_position = mooring
-		player.visible = true)
-	_hop(tween, player, mooring, Layout.iso(DOCKS[dock]["land"]))
+		boat.rider = null)
+	_hop(tween, player, mooring, Layout.iso(DOCKS[dock]["land"]), "land")
 	tween.tween_callback(_ashore.bind(game, dock))
 	_sound(boat, "water_splash", -14.0)
 
@@ -421,6 +425,7 @@ static func _turn(progress: float, boat: Node2D, from: float, to: float) -> void
 
 
 static func _ashore(game, dock: String) -> void:
+	game.boat.transfer_locked = false
 	_release(game.player)
 	game.at_sea = false
 	game.sea_busy = false
@@ -432,6 +437,7 @@ static func _ashore(game, dock: String) -> void:
 
 ## Devolve a Senu o corpo, a colisão e os controles.
 static func _release(player: SenuPlayer) -> void:
+	_clear_transfer(player)
 	player.visible = true
 	player.controls_enabled = true
 	if player.has_meta("sea_collision"):
@@ -441,11 +447,43 @@ static func _release(player: SenuPlayer) -> void:
 		player.remove_meta("sea_collision")
 
 
-## Salto de Senu entre o píer e o barco: sobe e desce em `HOP` segundos.
-static func _hop(tween: Tween, body: Node2D, from: Vector2, to: Vector2) -> void:
-	var middle := from.lerp(to, .5) + Vector2(0, -12)
-	tween.tween_property(body, "global_position", middle, HOP * .5).from(from).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(body, "global_position", to, HOP * .5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+## Pivô lógico no chão; a altura pertence só ao desenho do sprite transitório.
+static func _hop(tween: Tween, body: Node2D, from: Vector2, to: Vector2, action: String) -> void:
+	# A criação deve ocorrer na etapa certa do tween (após alinhar ao desembarcar).
+	tween.tween_callback(_begin_transfer.bind(body, from, to, action))
+	tween.tween_method(_transfer_step.bind(body, from, to), 0.0, 1.0, HOP)
+
+
+static func _begin_transfer(body: Node2D, from: Vector2, to: Vector2, action: String) -> void:
+	_clear_transfer(body)
+	var view := SenuBoatView.new()
+	view.name = "SenuSeaTransfer"
+	view.actor = body
+	view.state = action
+	view.facing = (to - from).normalized()
+	body.facing = view.facing
+	body.get_parent().add_child(view)
+	view.global_position = from
+	body.set_meta("sea_transfer", view)
+	body.visible = false
+
+
+static func _transfer_step(phase: float, body: Node2D, from: Vector2, to: Vector2) -> void:
+	body.global_position = from.lerp(to, smoothstep(0.0, 1.0, phase))
+	var view: Node2D = body.get_meta("sea_transfer") if body.has_meta("sea_transfer") else null
+	if is_instance_valid(view):
+		view.progress = phase
+		view.global_position = body.global_position
+		view.queue_redraw()
+
+
+static func _clear_transfer(body: Node2D) -> void:
+	var view: Node2D = body.get_meta("sea_transfer") if body.has_meta("sea_transfer") else null
+	if is_instance_valid(view):
+		view.hide()
+		view.queue_free()
+	if body.has_meta("sea_transfer"):
+		body.remove_meta("sea_transfer")
 
 
 ## Ao voltar ao santuário: Senu desce do barco e o barco vai para o píer do

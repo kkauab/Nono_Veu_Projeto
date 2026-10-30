@@ -221,12 +221,9 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	var sans := SystemFont.new()
-	sans.font_names = PackedStringArray(["Segoe UI","Noto Sans","sans-serif"])
-	_font = sans
-	var serif := SystemFont.new()
-	serif.font_names = PackedStringArray(["Georgia","serif"])
-	_title_font = serif
+	_font = preload("res://scripts/ui/ui_typography.gd").body()
+	_title_font = preload("res://scripts/ui/ui_typography.gd").title()
+	theme = preload("res://scripts/ui/ui_typography.gd").make_theme()
 	_container = SubViewportContainer.new()
 	_container.stretch = true
 	_container.stretch_shrink = 2

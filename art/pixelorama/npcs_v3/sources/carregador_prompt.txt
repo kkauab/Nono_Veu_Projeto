@@ -1,0 +1,8 @@
+Use case: stylized-concept. Asset type: production sprite sheet for ancient Egyptian isometric RPG O Nono Veu. Reference image is STYLE ONLY: match richly shaded readable anatomy, weathered linen, dark outlines, muted bronze/teal. Draw ONE consistent CARREGADOR porter: warm tan skin, short dark hair under fitted faded TEAL cap, tan knee-length linen tunic with worn darker brown belt, leather sandals, little belt pouch. Working-class no weapons. Cargo is a modest bulging burlap sack hugged against chest, never above the head.
+Create true transparent PNG, exactly FOUR columns by FOUR rows equal invisible cells, 16 isolated FULL BODY figures. All face isometric three-quarter RIGHT, same proportions, head size, tunic, camera and foot baseline. Dense polished crisp PIXEL ART, strong color clusters suitable downsample to40-44px body in32x52 game cell. No chibi, no stick-figure, no smooth vector, no blur. Transparent gutters around every figure and cargo.
+EXACT row-major poses:
+ROW1: idle empty hands; walk contact LEFT leg forward; walk passing left; walk contact RIGHT leg forward.
+ROW2: walk passing right; talking small hand gesture; idle CARRYING burlap sack; carrying walk contact left leg.
+ROW3: carrying walk passing left; carrying walk contact right leg; carrying walk passing right; bending to pick up sack.
+ROW4: empty-handed gentle breath SAME soles as idle; empty-handed brief closed eyes SAME stance as idle; carrying breath SAME soles as carrying idle; carrying blink SAME stance as carrying idle.
+All 16 complete full bodies with stable anatomy and minimal motion in rest poses. No labels, no text, no numbers, no grid lines, no floor, no scene, no shadow, no colored background. REAL transparent background.

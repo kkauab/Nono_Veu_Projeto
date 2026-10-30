@@ -1,0 +1,6888 @@
+{
+  "version": 3,
+  "pixel_art": true,
+  "runtime_scale": 1,
+  "palette": [
+    "14252c",
+    "1e343a",
+    "2b4449",
+    "3c5659",
+    "526765",
+    "6d7b70",
+    "8c9380",
+    "b4b298",
+    "dbcfaa",
+    "eee0ba",
+    "343b38",
+    "4b5553",
+    "646b60",
+    "81816e",
+    "a09a7e",
+    "bdad89",
+    "332e28",
+    "4b3b2d",
+    "674d34",
+    "846443",
+    "a27d50",
+    "c39e65",
+    "e0bd7e",
+    "1f444b",
+    "2c5b61",
+    "3e7373",
+    "609087",
+    "5a623e",
+    "7d8051",
+    "a49e66",
+    "be733a",
+    "e69d4a",
+    "f5cc76"
+  ],
+  "provenance": "ImageGen complete authored poses; registered at one uniform scale per character; Pixelorama exports delivery.",
+  "source_hashes": {
+    "estivador": "515fe836eda71a9bed334e72d40bc98194d5e3fd8d6c3de74e111a733735ebb7",
+    "carregador": "09d77551b2dbcd8c76e832b7e6658ac69904b2496585dd1cd13f149d0807d302",
+    "peixeira": "ee04a103dbd5b2767d8b555ab91d256967b8d366f381323b0c569a174757ad68",
+    "mercador": "88f4ae80969cc0475190e911047c216507ef8f71fbf0ee294b30083820a1c7e1",
+    "marinheiro": "afb3cae187f630736965c54f9219efcb8454b2b6f90486c45bcf75fc76b96976",
+    "remador": "3e41f459d01ecb061cba373aa2f749af85f10884924523f7e6112d93781d242b",
+    "escriba": "fc2d5b674358d47bc53fba6758c8e373510df55170ab7359f8dc23a56d5ccc84",
+    "peregrina": "c9c7240b283d7bbc20a017a62de18f543c2bb6b2c7b2a5523b0c46bea111027b",
+    "velho": "7514a700ba5ac558588859a6a5537ce18b39c9e42bf9c5494c54b1a49141039e",
+    "aguadeira": "164596c00071075c0a1508646658e4faeb44f9f95bd1efceaca349ff6a569cb9",
+    "padeira": "0b3c1ddf8cf38a2cbede14eff5b8fc6c359f3ebddc1f71384f67a3449f0bc007",
+    "caravaneiro": "21180631db2271e59391efbc2c75cee72a0ed689039efce6faa5cdbb3ea417ee",
+    "ankhet": "a703d9dff6edc5982548c5d5d7c15412cfd4cab2a739ce1af00b5e70495b892e"
+  },
+  "canvas": [
+    64,
+    64
+  ],
+  "cell": [
+    64,
+    64
+  ],
+  "pivot": [
+    32,
+    58
+  ],
+  "columns": 16,
+  "frames": 192,
+  "looks": [
+    "estivador",
+    "carregador",
+    "peixeira",
+    "mercador",
+    "marinheiro",
+    "remador",
+    "escriba",
+    "peregrina",
+    "velho",
+    "aguadeira",
+    "padeira",
+    "caravaneiro"
+  ],
+  "poses": [
+    "idle",
+    "walk_1",
+    "walk_2",
+    "walk_3",
+    "walk_4",
+    "talk",
+    "carry_idle",
+    "carry_1",
+    "carry_2",
+    "carry_3",
+    "carry_4",
+    "bend",
+    "breathe",
+    "blink",
+    "carry_breathe",
+    "carry_blink"
+  ],
+  "sprites": {
+    "estivador": {
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "carregador": {
+      "frames": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "peixeira": {
+      "frames": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "mercador": {
+      "frames": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "marinheiro": {
+      "frames": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "remador": {
+      "frames": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "escriba": {
+      "frames": [
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "peregrina": {
+      "frames": [
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "velho": {
+      "frames": [
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "aguadeira": {
+      "frames": [
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "padeira": {
+      "frames": [
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    },
+    "caravaneiro": {
+      "frames": [
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191
+      ],
+      "authored_poses": [
+        "idle",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "talk",
+        "carry_idle",
+        "carry_1",
+        "carry_2",
+        "carry_3",
+        "carry_4",
+        "bend",
+        "breathe",
+        "blink",
+        "carry_breathe",
+        "carry_blink"
+      ]
+    }
+  },
+  "texture": "res://assets/world/townsfolk_v3.png",
+  "source": "res://art/pixelorama/npcs_v3/townsfolk_v3.pxo",
+  "registrations": {
+    "estivador": {
+      "source": "art/pixelorama/npcs_v3/sources/estivador.png",
+      "sha256": "515fe836eda71a9bed334e72d40bc98194d5e3fd8d6c3de74e111a733735ebb7",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.1301775147928994,
+      "idle_body_height": 338,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            269,
+            381
+          ],
+          "source_bounds": [
+            65,
+            28,
+            225,
+            366
+          ],
+          "source_pivot": [
+            144.0,
+            366
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            13,
+            10
+          ],
+          "bounds": [
+            21,
+            14,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            269,
+            0,
+            258,
+            381
+          ],
+          "source_bounds": [
+            46,
+            27,
+            225,
+            365
+          ],
+          "source_pivot": [
+            178.5,
+            365
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            9,
+            10
+          ],
+          "bounds": [
+            15,
+            14,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            527,
+            0,
+            245,
+            381
+          ],
+          "source_bounds": [
+            35,
+            28,
+            206,
+            365
+          ],
+          "source_pivot": [
+            162.5,
+            365
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            11,
+            10
+          ],
+          "bounds": [
+            16,
+            14,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            772,
+            0,
+            252,
+            381
+          ],
+          "source_bounds": [
+            41,
+            28,
+            213,
+            366
+          ],
+          "source_pivot": [
+            172.5,
+            366
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            10,
+            10
+          ],
+          "bounds": [
+            15,
+            14,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            381,
+            274,
+            378
+          ],
+          "source_bounds": [
+            50,
+            19,
+            240,
+            363
+          ],
+          "source_pivot": [
+            188.0,
+            363
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            8,
+            11
+          ],
+          "bounds": [
+            15,
+            13,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            274,
+            381,
+            278,
+            378
+          ],
+          "source_bounds": [
+            35,
+            16,
+            250,
+            363
+          ],
+          "source_pivot": [
+            127.5,
+            363
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            15,
+            11
+          ],
+          "bounds": [
+            20,
+            13,
+            48,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            552,
+            381,
+            222,
+            378
+          ],
+          "source_bounds": [
+            29,
+            16,
+            185,
+            364
+          ],
+          "source_pivot": [
+            97.5,
+            364
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            19,
+            11
+          ],
+          "bounds": [
+            23,
+            13,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            774,
+            381,
+            250,
+            378
+          ],
+          "source_bounds": [
+            38,
+            17,
+            217,
+            363
+          ],
+          "source_pivot": [
+            179.0,
+            363
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            9,
+            11
+          ],
+          "bounds": [
+            14,
+            13,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            759,
+            278,
+            372
+          ],
+          "source_bounds": [
+            53,
+            15,
+            228,
+            359
+          ],
+          "source_pivot": [
+            186.5,
+            359
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            8,
+            11
+          ],
+          "bounds": [
+            15,
+            13,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            278,
+            759,
+            250,
+            372
+          ],
+          "source_bounds": [
+            52,
+            15,
+            215,
+            361
+          ],
+          "source_pivot": [
+            171.5,
+            361
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            10,
+            11
+          ],
+          "bounds": [
+            17,
+            13,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            528,
+            759,
+            234,
+            372
+          ],
+          "source_bounds": [
+            36,
+            15,
+            211,
+            360
+          ],
+          "source_pivot": [
+            170.5,
+            360
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            10,
+            11
+          ],
+          "bounds": [
+            15,
+            13,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            762,
+            759,
+            262,
+            372
+          ],
+          "source_bounds": [
+            25,
+            86,
+            244,
+            330
+          ],
+          "source_pivot": [
+            139.0,
+            330
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            14,
+            15
+          ],
+          "bounds": [
+            17,
+            26,
+            46,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1131,
+            260,
+            405
+          ],
+          "source_bounds": [
+            48,
+            12,
+            211,
+            373
+          ],
+          "source_pivot": [
+            131.0,
+            373
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            15,
+            9
+          ],
+          "bounds": [
+            21,
+            11,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            260,
+            1131,
+            260,
+            405
+          ],
+          "source_bounds": [
+            51,
+            12,
+            216,
+            373
+          ],
+          "source_pivot": [
+            136.0,
+            373
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            14,
+            9
+          ],
+          "bounds": [
+            21,
+            11,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            520,
+            1131,
+            251,
+            405
+          ],
+          "source_bounds": [
+            45,
+            13,
+            202,
+            373
+          ],
+          "source_pivot": [
+            123.5,
+            373
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            16,
+            9
+          ],
+          "bounds": [
+            22,
+            11,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            771,
+            1131,
+            253,
+            405
+          ],
+          "source_bounds": [
+            50,
+            13,
+            207,
+            373
+          ],
+          "source_pivot": [
+            128.0,
+            373
+          ],
+          "scale": 0.1301775147928994,
+          "translation": [
+            15,
+            9
+          ],
+          "bounds": [
+            22,
+            11,
+            42,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "carregador": {
+      "source": "art/pixelorama/npcs_v3/sources/carregador.png",
+      "sha256": "09d77551b2dbcd8c76e832b7e6658ac69904b2496585dd1cd13f149d0807d302",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.13968253968253969,
+      "idle_body_height": 315,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            272,
+            385
+          ],
+          "source_bounds": [
+            80,
+            48,
+            219,
+            363
+          ],
+          "source_pivot": [
+            107.5,
+            363
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            17,
+            7
+          ],
+          "bounds": [
+            28,
+            14,
+            48,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            272,
+            0,
+            262,
+            385
+          ],
+          "source_bounds": [
+            54,
+            48,
+            223,
+            361
+          ],
+          "source_pivot": [
+            174.0,
+            361
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            8,
+            8
+          ],
+          "bounds": [
+            16,
+            15,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            534,
+            0,
+            238,
+            385
+          ],
+          "source_bounds": [
+            41,
+            45,
+            195,
+            354
+          ],
+          "source_pivot": [
+            125.5,
+            354
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            14,
+            9
+          ],
+          "bounds": [
+            20,
+            15,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            772,
+            0,
+            252,
+            385
+          ],
+          "source_bounds": [
+            45,
+            48,
+            220,
+            361
+          ],
+          "source_pivot": [
+            169.5,
+            361
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            8,
+            8
+          ],
+          "bounds": [
+            14,
+            15,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            385,
+            278,
+            368
+          ],
+          "source_bounds": [
+            62,
+            23,
+            234,
+            346
+          ],
+          "source_pivot": [
+            200.5,
+            346
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            4,
+            10
+          ],
+          "bounds": [
+            13,
+            13,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            278,
+            385,
+            269,
+            368
+          ],
+          "source_bounds": [
+            45,
+            23,
+            233,
+            346
+          ],
+          "source_pivot": [
+            123.5,
+            346
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            15,
+            10
+          ],
+          "bounds": [
+            21,
+            13,
+            47,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            547,
+            385,
+            225,
+            368
+          ],
+          "source_bounds": [
+            37,
+            27,
+            175,
+            346
+          ],
+          "source_pivot": [
+            98.0,
+            346
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            18,
+            10
+          ],
+          "bounds": [
+            23,
+            14,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            772,
+            385,
+            252,
+            368
+          ],
+          "source_bounds": [
+            51,
+            34,
+            212,
+            346
+          ],
+          "source_pivot": [
+            181.0,
+            346
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            7,
+            10
+          ],
+          "bounds": [
+            14,
+            15,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            753,
+            269,
+            368
+          ],
+          "source_bounds": [
+            49,
+            25,
+            222,
+            343
+          ],
+          "source_pivot": [
+            188.5,
+            343
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            6,
+            10
+          ],
+          "bounds": [
+            13,
+            13,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            269,
+            753,
+            250,
+            368
+          ],
+          "source_bounds": [
+            49,
+            26,
+            212,
+            350
+          ],
+          "source_pivot": [
+            169.5,
+            350
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            8,
+            9
+          ],
+          "bounds": [
+            15,
+            13,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            519,
+            753,
+            244,
+            368
+          ],
+          "source_bounds": [
+            40,
+            24,
+            209,
+            345
+          ],
+          "source_pivot": [
+            169.5,
+            345
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            8,
+            10
+          ],
+          "bounds": [
+            14,
+            13,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            763,
+            753,
+            261,
+            368
+          ],
+          "source_bounds": [
+            36,
+            87,
+            242,
+            334
+          ],
+          "source_pivot": [
+            148.0,
+            334
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            11,
+            11
+          ],
+          "bounds": [
+            16,
+            23,
+            45,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1121,
+            271,
+            415
+          ],
+          "source_bounds": [
+            70,
+            20,
+            218,
+            361
+          ],
+          "source_pivot": [
+            145.0,
+            361
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            12,
+            8
+          ],
+          "bounds": [
+            22,
+            11,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            271,
+            1121,
+            253,
+            415
+          ],
+          "source_bounds": [
+            54,
+            20,
+            202,
+            361
+          ],
+          "source_pivot": [
+            129.5,
+            361
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            14,
+            8
+          ],
+          "bounds": [
+            22,
+            11,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            524,
+            1121,
+            252,
+            415
+          ],
+          "source_bounds": [
+            53,
+            27,
+            197,
+            361
+          ],
+          "source_pivot": [
+            117.5,
+            361
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            16,
+            8
+          ],
+          "bounds": [
+            23,
+            12,
+            44,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            776,
+            1121,
+            248,
+            415
+          ],
+          "source_bounds": [
+            56,
+            27,
+            201,
+            361
+          ],
+          "source_pivot": [
+            121.5,
+            361
+          ],
+          "scale": 0.13968253968253969,
+          "translation": [
+            15,
+            8
+          ],
+          "bounds": [
+            23,
+            12,
+            43,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "peixeira": {
+      "source": "art/pixelorama/npcs_v3/sources/peixeira.png",
+      "sha256": "ee04a103dbd5b2767d8b555ab91d256967b8d366f381323b0c569a174757ad68",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.12680115273775217,
+      "idle_body_height": 347,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            270,
+            380
+          ],
+          "source_bounds": [
+            61,
+            17,
+            220,
+            364
+          ],
+          "source_pivot": [
+            138.5,
+            364
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            14,
+            12
+          ],
+          "bounds": [
+            22,
+            14,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            270,
+            0,
+            267,
+            380
+          ],
+          "source_bounds": [
+            52,
+            17,
+            235,
+            367
+          ],
+          "source_pivot": [
+            189.0,
+            367
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            8,
+            11
+          ],
+          "bounds": [
+            15,
+            13,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            537,
+            0,
+            261,
+            380
+          ],
+          "source_bounds": [
+            33,
+            17,
+            217,
+            369
+          ],
+          "source_pivot": [
+            153.5,
+            369
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            13,
+            11
+          ],
+          "bounds": [
+            17,
+            13,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            798,
+            0,
+            226,
+            380
+          ],
+          "source_bounds": [
+            45,
+            16,
+            211,
+            365
+          ],
+          "source_pivot": [
+            172.0,
+            365
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            10,
+            12
+          ],
+          "bounds": [
+            16,
+            14,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            380,
+            278,
+            375
+          ],
+          "source_bounds": [
+            39,
+            13,
+            237,
+            366
+          ],
+          "source_pivot": [
+            177.0,
+            366
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            10,
+            12
+          ],
+          "bounds": [
+            15,
+            14,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            278,
+            380,
+            268,
+            375
+          ],
+          "source_bounds": [
+            42,
+            13,
+            240,
+            361
+          ],
+          "source_pivot": [
+            125.0,
+            361
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            16,
+            12
+          ],
+          "bounds": [
+            21,
+            14,
+            46,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            546,
+            380,
+            246,
+            375
+          ],
+          "source_bounds": [
+            29,
+            13,
+            212,
+            364
+          ],
+          "source_pivot": [
+            108.5,
+            364
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            18,
+            12
+          ],
+          "bounds": [
+            22,
+            14,
+            45,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            792,
+            380,
+            232,
+            375
+          ],
+          "source_bounds": [
+            35,
+            15,
+            212,
+            365
+          ],
+          "source_pivot": [
+            156.5,
+            365
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            12,
+            12
+          ],
+          "bounds": [
+            17,
+            14,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            755,
+            268,
+            370
+          ],
+          "source_bounds": [
+            43,
+            10,
+            225,
+            363
+          ],
+          "source_pivot": [
+            172.5,
+            363
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            10,
+            12
+          ],
+          "bounds": [
+            15,
+            13,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            268,
+            755,
+            264,
+            370
+          ],
+          "source_bounds": [
+            44,
+            10,
+            228,
+            355
+          ],
+          "source_pivot": [
+            143.5,
+            355
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            14,
+            13
+          ],
+          "bounds": [
+            20,
+            14,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            532,
+            755,
+            243,
+            370
+          ],
+          "source_bounds": [
+            38,
+            10,
+            217,
+            356
+          ],
+          "source_pivot": [
+            155.0,
+            356
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            12,
+            13
+          ],
+          "bounds": [
+            17,
+            14,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            775,
+            755,
+            249,
+            370
+          ],
+          "source_bounds": [
+            27,
+            80,
+            235,
+            350
+          ],
+          "source_pivot": [
+            136.0,
+            350
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            15,
+            14
+          ],
+          "bounds": [
+            18,
+            24,
+            45,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1125,
+            272,
+            411
+          ],
+          "source_bounds": [
+            61,
+            8,
+            221,
+            361
+          ],
+          "source_pivot": [
+            141.0,
+            361
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            14,
+            12
+          ],
+          "bounds": [
+            22,
+            13,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            272,
+            1125,
+            257,
+            411
+          ],
+          "source_bounds": [
+            53,
+            8,
+            213,
+            361
+          ],
+          "source_pivot": [
+            133.5,
+            361
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            15,
+            12
+          ],
+          "bounds": [
+            22,
+            13,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            529,
+            1125,
+            262,
+            411
+          ],
+          "source_bounds": [
+            46,
+            8,
+            226,
+            361
+          ],
+          "source_pivot": [
+            126.5,
+            361
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            16,
+            12
+          ],
+          "bounds": [
+            22,
+            13,
+            45,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            791,
+            1125,
+            233,
+            411
+          ],
+          "source_bounds": [
+            37,
+            8,
+            216,
+            361
+          ],
+          "source_pivot": [
+            117.5,
+            361
+          ],
+          "scale": 0.12680115273775217,
+          "translation": [
+            17,
+            12
+          ],
+          "bounds": [
+            22,
+            13,
+            44,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "mercador": {
+      "source": "art/pixelorama/npcs_v3/sources/mercador.png",
+      "sha256": "88f4ae80969cc0475190e911047c216507ef8f71fbf0ee294b30083820a1c7e1",
+      "source_size": [
+        984,
+        1599
+      ],
+      "uniform_scale": 0.1337386018237082,
+      "idle_body_height": 329,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            253,
+            409
+          ],
+          "source_bounds": [
+            59,
+            62,
+            210,
+            391
+          ],
+          "source_pivot": [
+            139.0,
+            391
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            13,
+            6
+          ],
+          "bounds": [
+            21,
+            14,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            253,
+            0,
+            246,
+            409
+          ],
+          "source_bounds": [
+            45,
+            59,
+            210,
+            390
+          ],
+          "source_pivot": [
+            170.0,
+            390
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            9,
+            6
+          ],
+          "bounds": [
+            15,
+            14,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            499,
+            0,
+            254,
+            409
+          ],
+          "source_bounds": [
+            38,
+            66,
+            216,
+            393
+          ],
+          "source_pivot": [
+            174.5,
+            393
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            9,
+            5
+          ],
+          "bounds": [
+            14,
+            14,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            753,
+            0,
+            231,
+            409
+          ],
+          "source_bounds": [
+            39,
+            66,
+            193,
+            394
+          ],
+          "source_pivot": [
+            161.0,
+            394
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            10,
+            5
+          ],
+          "bounds": [
+            15,
+            14,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            409,
+            254,
+            375
+          ],
+          "source_bounds": [
+            42,
+            23,
+            214,
+            359
+          ],
+          "source_pivot": [
+            177.0,
+            359
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            8,
+            10
+          ],
+          "bounds": [
+            14,
+            13,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            254,
+            409,
+            266,
+            375
+          ],
+          "source_bounds": [
+            41,
+            19,
+            247,
+            363
+          ],
+          "source_pivot": [
+            123.5,
+            363
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            15,
+            9
+          ],
+          "bounds": [
+            20,
+            12,
+            48,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            520,
+            409,
+            223,
+            375
+          ],
+          "source_bounds": [
+            20,
+            17,
+            179,
+            363
+          ],
+          "source_pivot": [
+            101.5,
+            363
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            18,
+            9
+          ],
+          "bounds": [
+            21,
+            11,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            743,
+            409,
+            241,
+            375
+          ],
+          "source_bounds": [
+            46,
+            19,
+            203,
+            362
+          ],
+          "source_pivot": [
+            172.5,
+            362
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            9,
+            10
+          ],
+          "bounds": [
+            15,
+            13,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            784,
+            250,
+            379
+          ],
+          "source_bounds": [
+            56,
+            13,
+            208,
+            360
+          ],
+          "source_pivot": [
+            173.5,
+            360
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            9,
+            10
+          ],
+          "bounds": [
+            16,
+            12,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            250,
+            784,
+            248,
+            379
+          ],
+          "source_bounds": [
+            44,
+            18,
+            213,
+            360
+          ],
+          "source_pivot": [
+            144.0,
+            360
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            13,
+            10
+          ],
+          "bounds": [
+            19,
+            12,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            498,
+            784,
+            230,
+            379
+          ],
+          "source_bounds": [
+            37,
+            22,
+            197,
+            362
+          ],
+          "source_pivot": [
+            165.0,
+            362
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            10,
+            10
+          ],
+          "bounds": [
+            15,
+            13,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            728,
+            784,
+            256,
+            379
+          ],
+          "source_bounds": [
+            35,
+            88,
+            232,
+            355
+          ],
+          "source_pivot": [
+            142.5,
+            355
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            13,
+            11
+          ],
+          "bounds": [
+            18,
+            23,
+            44,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1163,
+            253,
+            436
+          ],
+          "source_bounds": [
+            56,
+            18,
+            211,
+            367
+          ],
+          "source_pivot": [
+            139.0,
+            367
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            13,
+            9
+          ],
+          "bounds": [
+            20,
+            11,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            253,
+            1163,
+            242,
+            436
+          ],
+          "source_bounds": [
+            44,
+            18,
+            199,
+            368
+          ],
+          "source_pivot": [
+            128.0,
+            368
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            15,
+            9
+          ],
+          "bounds": [
+            21,
+            11,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            495,
+            1163,
+            248,
+            436
+          ],
+          "source_bounds": [
+            44,
+            18,
+            202,
+            369
+          ],
+          "source_pivot": [
+            123.0,
+            369
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            16,
+            9
+          ],
+          "bounds": [
+            22,
+            11,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            743,
+            1163,
+            241,
+            436
+          ],
+          "source_bounds": [
+            47,
+            18,
+            204,
+            369
+          ],
+          "source_pivot": [
+            126.5,
+            369
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            15,
+            9
+          ],
+          "bounds": [
+            21,
+            11,
+            42,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "marinheiro": {
+      "source": "art/pixelorama/npcs_v3/sources/marinheiro.png",
+      "sha256": "afb3cae187f630736965c54f9219efcb8454b2b6f90486c45bcf75fc76b96976",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.1337386018237082,
+      "idle_body_height": 329,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            280,
+            387
+          ],
+          "source_bounds": [
+            84,
+            35,
+            229,
+            364
+          ],
+          "source_pivot": [
+            153.5,
+            364
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            11,
+            9
+          ],
+          "bounds": [
+            22,
+            14,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            280,
+            0,
+            264,
+            387
+          ],
+          "source_bounds": [
+            63,
+            30,
+            231,
+            360
+          ],
+          "source_pivot": [
+            196.0,
+            360
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            6,
+            10
+          ],
+          "bounds": [
+            14,
+            14,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            544,
+            0,
+            251,
+            387
+          ],
+          "source_bounds": [
+            35,
+            38,
+            208,
+            352
+          ],
+          "source_pivot": [
+            127.5,
+            352
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            15,
+            11
+          ],
+          "bounds": [
+            20,
+            16,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            795,
+            0,
+            229,
+            387
+          ],
+          "source_bounds": [
+            45,
+            38,
+            203,
+            369
+          ],
+          "source_pivot": [
+            161.5,
+            369
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            10,
+            9
+          ],
+          "bounds": [
+            16,
+            14,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            387,
+            284,
+            373
+          ],
+          "source_bounds": [
+            61,
+            23,
+            243,
+            346
+          ],
+          "source_pivot": [
+            206.5,
+            346
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            4,
+            12
+          ],
+          "bounds": [
+            12,
+            15,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            284,
+            387,
+            271,
+            373
+          ],
+          "source_bounds": [
+            43,
+            19,
+            240,
+            351
+          ],
+          "source_pivot": [
+            123.5,
+            351
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            15,
+            11
+          ],
+          "bounds": [
+            21,
+            14,
+            47,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            555,
+            387,
+            240,
+            373
+          ],
+          "source_bounds": [
+            32,
+            19,
+            194,
+            351
+          ],
+          "source_pivot": [
+            107.5,
+            351
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            18,
+            11
+          ],
+          "bounds": [
+            22,
+            14,
+            44,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            795,
+            387,
+            229,
+            373
+          ],
+          "source_bounds": [
+            47,
+            26,
+            207,
+            354
+          ],
+          "source_pivot": [
+            160.5,
+            354
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            11,
+            11
+          ],
+          "bounds": [
+            17,
+            14,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            760,
+            291,
+            366
+          ],
+          "source_bounds": [
+            68,
+            20,
+            251,
+            345
+          ],
+          "source_pivot": [
+            202.5,
+            345
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            5,
+            12
+          ],
+          "bounds": [
+            14,
+            15,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            291,
+            760,
+            259,
+            366
+          ],
+          "source_bounds": [
+            47,
+            25,
+            222,
+            348
+          ],
+          "source_pivot": [
+            176.5,
+            348
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            8,
+            11
+          ],
+          "bounds": [
+            14,
+            14,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            550,
+            760,
+            237,
+            366
+          ],
+          "source_bounds": [
+            42,
+            25,
+            216,
+            345
+          ],
+          "source_pivot": [
+            172.0,
+            345
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            9,
+            12
+          ],
+          "bounds": [
+            15,
+            15,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            787,
+            760,
+            237,
+            366
+          ],
+          "source_bounds": [
+            22,
+            111,
+            218,
+            346
+          ],
+          "source_pivot": [
+            116.5,
+            346
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            16,
+            12
+          ],
+          "bounds": [
+            19,
+            27,
+            45,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1126,
+            280,
+            410
+          ],
+          "source_bounds": [
+            83,
+            21,
+            230,
+            355
+          ],
+          "source_pivot": [
+            156.0,
+            355
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            11,
+            11
+          ],
+          "bounds": [
+            22,
+            14,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            280,
+            1126,
+            252,
+            410
+          ],
+          "source_bounds": [
+            51,
+            21,
+            198,
+            355
+          ],
+          "source_pivot": [
+            126.0,
+            355
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            15,
+            11
+          ],
+          "bounds": [
+            22,
+            14,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            532,
+            1126,
+            259,
+            410
+          ],
+          "source_bounds": [
+            55,
+            20,
+            217,
+            355
+          ],
+          "source_pivot": [
+            131.5,
+            355
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            14,
+            11
+          ],
+          "bounds": [
+            21,
+            14,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            791,
+            1126,
+            233,
+            410
+          ],
+          "source_bounds": [
+            44,
+            20,
+            203,
+            356
+          ],
+          "source_pivot": [
+            118.5,
+            356
+          ],
+          "scale": 0.1337386018237082,
+          "translation": [
+            16,
+            10
+          ],
+          "bounds": [
+            22,
+            13,
+            43,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "remador": {
+      "source": "art/pixelorama/npcs_v3/sources/remador.png",
+      "sha256": "3e41f459d01ecb061cba373aa2f749af85f10884924523f7e6112d93781d242b",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.125,
+      "idle_body_height": 352,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            275,
+            382
+          ],
+          "source_bounds": [
+            79,
+            22,
+            219,
+            374
+          ],
+          "source_pivot": [
+            151.5,
+            374
+          ],
+          "scale": 0.125,
+          "translation": [
+            13,
+            11
+          ],
+          "bounds": [
+            23,
+            14,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            275,
+            0,
+            266,
+            382
+          ],
+          "source_bounds": [
+            60,
+            21,
+            228,
+            370
+          ],
+          "source_pivot": [
+            187.0,
+            370
+          ],
+          "scale": 0.125,
+          "translation": [
+            9,
+            12
+          ],
+          "bounds": [
+            16,
+            15,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            541,
+            0,
+            259,
+            382
+          ],
+          "source_bounds": [
+            40,
+            22,
+            216,
+            368
+          ],
+          "source_pivot": [
+            181.5,
+            368
+          ],
+          "scale": 0.125,
+          "translation": [
+            9,
+            12
+          ],
+          "bounds": [
+            14,
+            15,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            800,
+            0,
+            224,
+            382
+          ],
+          "source_bounds": [
+            47,
+            22,
+            205,
+            370
+          ],
+          "source_pivot": [
+            138.5,
+            370
+          ],
+          "scale": 0.125,
+          "translation": [
+            15,
+            12
+          ],
+          "bounds": [
+            21,
+            15,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            382,
+            285,
+            366
+          ],
+          "source_bounds": [
+            62,
+            12,
+            238,
+            355
+          ],
+          "source_pivot": [
+            204.0,
+            355
+          ],
+          "scale": 0.125,
+          "translation": [
+            6,
+            14
+          ],
+          "bounds": [
+            14,
+            16,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            285,
+            382,
+            269,
+            366
+          ],
+          "source_bounds": [
+            51,
+            11,
+            236,
+            356
+          ],
+          "source_pivot": [
+            120.5,
+            356
+          ],
+          "scale": 0.125,
+          "translation": [
+            17,
+            14
+          ],
+          "bounds": [
+            23,
+            15,
+            46,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            554,
+            382,
+            226,
+            366
+          ],
+          "source_bounds": [
+            37,
+            10,
+            183,
+            357
+          ],
+          "source_pivot": [
+            106.0,
+            357
+          ],
+          "scale": 0.125,
+          "translation": [
+            19,
+            13
+          ],
+          "bounds": [
+            24,
+            14,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            780,
+            382,
+            244,
+            366
+          ],
+          "source_bounds": [
+            44,
+            10,
+            224,
+            354
+          ],
+          "source_pivot": [
+            190.5,
+            354
+          ],
+          "scale": 0.125,
+          "translation": [
+            8,
+            14
+          ],
+          "bounds": [
+            13,
+            15,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            748,
+            270,
+            361
+          ],
+          "source_bounds": [
+            42,
+            13,
+            234,
+            352
+          ],
+          "source_pivot": [
+            199.0,
+            352
+          ],
+          "scale": 0.125,
+          "translation": [
+            7,
+            14
+          ],
+          "bounds": [
+            12,
+            16,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            270,
+            748,
+            260,
+            361
+          ],
+          "source_bounds": [
+            37,
+            11,
+            223,
+            351
+          ],
+          "source_pivot": [
+            189.5,
+            351
+          ],
+          "scale": 0.125,
+          "translation": [
+            8,
+            14
+          ],
+          "bounds": [
+            13,
+            15,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            530,
+            748,
+            255,
+            361
+          ],
+          "source_bounds": [
+            38,
+            11,
+            233,
+            352
+          ],
+          "source_pivot": [
+            198.0,
+            352
+          ],
+          "scale": 0.125,
+          "translation": [
+            7,
+            14
+          ],
+          "bounds": [
+            12,
+            15,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            785,
+            748,
+            239,
+            361
+          ],
+          "source_bounds": [
+            24,
+            110,
+            222,
+            335
+          ],
+          "source_pivot": [
+            132.0,
+            335
+          ],
+          "scale": 0.125,
+          "translation": [
+            16,
+            16
+          ],
+          "bounds": [
+            19,
+            30,
+            44,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1109,
+            271,
+            427
+          ],
+          "source_bounds": [
+            74,
+            10,
+            215,
+            386
+          ],
+          "source_pivot": [
+            144.5,
+            386
+          ],
+          "scale": 0.125,
+          "translation": [
+            14,
+            10
+          ],
+          "bounds": [
+            23,
+            11,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            271,
+            1109,
+            256,
+            427
+          ],
+          "source_bounds": [
+            57,
+            11,
+            199,
+            387
+          ],
+          "source_pivot": [
+            128.5,
+            387
+          ],
+          "scale": 0.125,
+          "translation": [
+            16,
+            10
+          ],
+          "bounds": [
+            23,
+            11,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            527,
+            1109,
+            260,
+            427
+          ],
+          "source_bounds": [
+            58,
+            11,
+            209,
+            389
+          ],
+          "source_pivot": [
+            128.0,
+            389
+          ],
+          "scale": 0.125,
+          "translation": [
+            16,
+            9
+          ],
+          "bounds": [
+            23,
+            10,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            787,
+            1109,
+            237,
+            427
+          ],
+          "source_bounds": [
+            52,
+            11,
+            201,
+            387
+          ],
+          "source_pivot": [
+            123.5,
+            387
+          ],
+          "scale": 0.125,
+          "translation": [
+            17,
+            10
+          ],
+          "bounds": [
+            23,
+            11,
+            42,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "escriba": {
+      "source": "art/pixelorama/npcs_v3/sources/escriba.png",
+      "sha256": "fc2d5b674358d47bc53fba6758c8e373510df55170ab7359f8dc23a56d5ccc84",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.14012738853503184,
+      "idle_body_height": 314,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            277,
+            377
+          ],
+          "source_bounds": [
+            81,
+            41,
+            223,
+            355
+          ],
+          "source_pivot": [
+            159.5,
+            355
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            10,
+            8
+          ],
+          "bounds": [
+            21,
+            14,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            277,
+            0,
+            247,
+            377
+          ],
+          "source_bounds": [
+            55,
+            43,
+            203,
+            355
+          ],
+          "source_pivot": [
+            173.0,
+            355
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            8,
+            8
+          ],
+          "bounds": [
+            16,
+            14,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            524,
+            0,
+            250,
+            377
+          ],
+          "source_bounds": [
+            45,
+            45,
+            202,
+            349
+          ],
+          "source_pivot": [
+            129.5,
+            349
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            14,
+            9
+          ],
+          "bounds": [
+            20,
+            15,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            774,
+            0,
+            250,
+            377
+          ],
+          "source_bounds": [
+            49,
+            43,
+            201,
+            352
+          ],
+          "source_pivot": [
+            125.0,
+            352
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            14,
+            9
+          ],
+          "bounds": [
+            21,
+            15,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            377,
+            275,
+            370
+          ],
+          "source_bounds": [
+            64,
+            25,
+            228,
+            345
+          ],
+          "source_pivot": [
+            156.0,
+            345
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            10,
+            10
+          ],
+          "bounds": [
+            19,
+            14,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            275,
+            377,
+            263,
+            370
+          ],
+          "source_bounds": [
+            48,
+            25,
+            235,
+            353
+          ],
+          "source_pivot": [
+            128.5,
+            353
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            14,
+            9
+          ],
+          "bounds": [
+            21,
+            13,
+            47,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            538,
+            377,
+            230,
+            370
+          ],
+          "source_bounds": [
+            29,
+            23,
+            186,
+            353
+          ],
+          "source_pivot": [
+            107.0,
+            353
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            17,
+            9
+          ],
+          "bounds": [
+            21,
+            12,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            768,
+            377,
+            256,
+            370
+          ],
+          "source_bounds": [
+            45,
+            26,
+            215,
+            352
+          ],
+          "source_pivot": [
+            183.5,
+            352
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            6,
+            9
+          ],
+          "bounds": [
+            12,
+            13,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            747,
+            290,
+            364
+          ],
+          "source_bounds": [
+            69,
+            21,
+            249,
+            334
+          ],
+          "source_pivot": [
+            166.0,
+            334
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            9,
+            11
+          ],
+          "bounds": [
+            19,
+            14,
+            44,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            290,
+            747,
+            241,
+            364
+          ],
+          "source_bounds": [
+            42,
+            19,
+            203,
+            340
+          ],
+          "source_pivot": [
+            151.5,
+            340
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            11,
+            10
+          ],
+          "bounds": [
+            17,
+            13,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            531,
+            747,
+            229,
+            364
+          ],
+          "source_bounds": [
+            40,
+            24,
+            205,
+            338
+          ],
+          "source_pivot": [
+            165.5,
+            338
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            9,
+            11
+          ],
+          "bounds": [
+            15,
+            14,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            760,
+            747,
+            264,
+            364
+          ],
+          "source_bounds": [
+            25,
+            114,
+            256,
+            329
+          ],
+          "source_pivot": [
+            206.0,
+            329
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            3,
+            12
+          ],
+          "bounds": [
+            7,
+            28,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1111,
+            271,
+            425
+          ],
+          "source_bounds": [
+            75,
+            26,
+            222,
+            360
+          ],
+          "source_pivot": [
+            158.0,
+            360
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            10,
+            8
+          ],
+          "bounds": [
+            21,
+            12,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            271,
+            1111,
+            246,
+            425
+          ],
+          "source_bounds": [
+            51,
+            26,
+            198,
+            360
+          ],
+          "source_pivot": [
+            134.0,
+            360
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            13,
+            8
+          ],
+          "bounds": [
+            20,
+            12,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            517,
+            1111,
+            260,
+            425
+          ],
+          "source_bounds": [
+            50,
+            26,
+            208,
+            360
+          ],
+          "source_pivot": [
+            128.0,
+            360
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            14,
+            8
+          ],
+          "bounds": [
+            21,
+            12,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            777,
+            1111,
+            247,
+            425
+          ],
+          "source_bounds": [
+            53,
+            26,
+            210,
+            360
+          ],
+          "source_pivot": [
+            129.0,
+            360
+          ],
+          "scale": 0.14012738853503184,
+          "translation": [
+            14,
+            8
+          ],
+          "bounds": [
+            21,
+            12,
+            43,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "peregrina": {
+      "source": "art/pixelorama/npcs_v3/sources/peregrina.png",
+      "sha256": "c9c7240b283d7bbc20a017a62de18f543c2bb6b2c7b2a5523b0c46bea111027b",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.12979351032448377,
+      "idle_body_height": 339,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            274,
+            377
+          ],
+          "source_bounds": [
+            69,
+            27,
+            226,
+            366
+          ],
+          "source_pivot": [
+            156.5,
+            366
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            12,
+            10
+          ],
+          "bounds": [
+            21,
+            14,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            274,
+            0,
+            249,
+            377
+          ],
+          "source_bounds": [
+            49,
+            26,
+            216,
+            364
+          ],
+          "source_pivot": [
+            172.0,
+            364
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            10,
+            11
+          ],
+          "bounds": [
+            16,
+            14,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            523,
+            0,
+            246,
+            377
+          ],
+          "source_bounds": [
+            35,
+            26,
+            203,
+            358
+          ],
+          "source_pivot": [
+            132.5,
+            358
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            15,
+            12
+          ],
+          "bounds": [
+            20,
+            15,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            769,
+            0,
+            255,
+            377
+          ],
+          "source_bounds": [
+            44,
+            26,
+            191,
+            359
+          ],
+          "source_pivot": [
+            160.0,
+            359
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            11,
+            11
+          ],
+          "bounds": [
+            17,
+            14,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            377,
+            272,
+            367
+          ],
+          "source_bounds": [
+            60,
+            14,
+            227,
+            347
+          ],
+          "source_pivot": [
+            198.0,
+            347
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            6,
+            13
+          ],
+          "bounds": [
+            14,
+            15,
+            35,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            272,
+            377,
+            270,
+            367
+          ],
+          "source_bounds": [
+            47,
+            14,
+            247,
+            358
+          ],
+          "source_pivot": [
+            131.0,
+            358
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            15,
+            12
+          ],
+          "bounds": [
+            21,
+            14,
+            47,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            542,
+            377,
+            224,
+            367
+          ],
+          "source_bounds": [
+            24,
+            13,
+            167,
+            357
+          ],
+          "source_pivot": [
+            105.0,
+            357
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            18,
+            12
+          ],
+          "bounds": [
+            21,
+            14,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            766,
+            377,
+            258,
+            367
+          ],
+          "source_bounds": [
+            59,
+            13,
+            211,
+            359
+          ],
+          "source_pivot": [
+            181.0,
+            359
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            9,
+            11
+          ],
+          "bounds": [
+            17,
+            13,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            744,
+            268,
+            368
+          ],
+          "source_bounds": [
+            59,
+            9,
+            220,
+            353
+          ],
+          "source_pivot": [
+            190.0,
+            353
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            7,
+            12
+          ],
+          "bounds": [
+            15,
+            13,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            268,
+            744,
+            251,
+            368
+          ],
+          "source_bounds": [
+            50,
+            10,
+            212,
+            353
+          ],
+          "source_pivot": [
+            181.5,
+            353
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            8,
+            12
+          ],
+          "bounds": [
+            14,
+            13,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            519,
+            744,
+            238,
+            368
+          ],
+          "source_bounds": [
+            40,
+            10,
+            200,
+            353
+          ],
+          "source_pivot": [
+            169.5,
+            353
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            10,
+            12
+          ],
+          "bounds": [
+            15,
+            13,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            757,
+            744,
+            267,
+            368
+          ],
+          "source_bounds": [
+            39,
+            71,
+            226,
+            330
+          ],
+          "source_pivot": [
+            141.0,
+            330
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            14,
+            15
+          ],
+          "bounds": [
+            19,
+            24,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1112,
+            263,
+            424
+          ],
+          "source_bounds": [
+            61,
+            16,
+            222,
+            374
+          ],
+          "source_pivot": [
+            154.0,
+            374
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            12,
+            9
+          ],
+          "bounds": [
+            20,
+            11,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            263,
+            1112,
+            245,
+            424
+          ],
+          "source_bounds": [
+            43,
+            16,
+            203,
+            374
+          ],
+          "source_pivot": [
+            136.0,
+            374
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            14,
+            9
+          ],
+          "bounds": [
+            20,
+            11,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            508,
+            1112,
+            245,
+            424
+          ],
+          "source_bounds": [
+            43,
+            17,
+            191,
+            375
+          ],
+          "source_pivot": [
+            131.5,
+            375
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            15,
+            9
+          ],
+          "bounds": [
+            21,
+            11,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            753,
+            1112,
+            271,
+            424
+          ],
+          "source_bounds": [
+            56,
+            16,
+            205,
+            375
+          ],
+          "source_pivot": [
+            143.0,
+            375
+          ],
+          "scale": 0.12979351032448377,
+          "translation": [
+            13,
+            9
+          ],
+          "bounds": [
+            20,
+            11,
+            40,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "velho": {
+      "source": "art/pixelorama/npcs_v3/sources/velho.png",
+      "sha256": "7514a700ba5ac558588859a6a5537ce18b39c9e42bf9c5494c54b1a49141039e",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.13333333333333333,
+      "idle_body_height": 330,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            274,
+            379
+          ],
+          "source_bounds": [
+            73,
+            35,
+            226,
+            365
+          ],
+          "source_pivot": [
+            149.0,
+            365
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            12,
+            9
+          ],
+          "bounds": [
+            22,
+            14,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            274,
+            0,
+            251,
+            379
+          ],
+          "source_bounds": [
+            50,
+            37,
+            216,
+            366
+          ],
+          "source_pivot": [
+            167.5,
+            366
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            10,
+            9
+          ],
+          "bounds": [
+            17,
+            14,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            525,
+            0,
+            248,
+            379
+          ],
+          "source_bounds": [
+            37,
+            36,
+            198,
+            366
+          ],
+          "source_pivot": [
+            158.0,
+            366
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            11,
+            9
+          ],
+          "bounds": [
+            16,
+            14,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            773,
+            0,
+            251,
+            379
+          ],
+          "source_bounds": [
+            52,
+            40,
+            195,
+            361
+          ],
+          "source_pivot": [
+            164.5,
+            361
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            10,
+            10
+          ],
+          "bounds": [
+            17,
+            15,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            379,
+            276,
+            378
+          ],
+          "source_bounds": [
+            57,
+            21,
+            239,
+            356
+          ],
+          "source_pivot": [
+            183.5,
+            356
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            8,
+            11
+          ],
+          "bounds": [
+            16,
+            14,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            276,
+            379,
+            277,
+            378
+          ],
+          "source_bounds": [
+            39,
+            14,
+            256,
+            358
+          ],
+          "source_pivot": [
+            123.5,
+            358
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            16,
+            10
+          ],
+          "bounds": [
+            21,
+            12,
+            50,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            553,
+            379,
+            220,
+            378
+          ],
+          "source_bounds": [
+            23,
+            17,
+            180,
+            359
+          ],
+          "source_pivot": [
+            94.0,
+            359
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            19,
+            10
+          ],
+          "bounds": [
+            22,
+            12,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            773,
+            379,
+            251,
+            378
+          ],
+          "source_bounds": [
+            42,
+            19,
+            213,
+            365
+          ],
+          "source_pivot": [
+            170.5,
+            365
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            9,
+            9
+          ],
+          "bounds": [
+            15,
+            12,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            757,
+            271,
+            371
+          ],
+          "source_bounds": [
+            59,
+            14,
+            227,
+            355
+          ],
+          "source_pivot": [
+            179.5,
+            355
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            8,
+            11
+          ],
+          "bounds": [
+            16,
+            13,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            271,
+            757,
+            256,
+            371
+          ],
+          "source_bounds": [
+            45,
+            16,
+            221,
+            355
+          ],
+          "source_pivot": [
+            137.0,
+            355
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            14,
+            11
+          ],
+          "bounds": [
+            20,
+            13,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            527,
+            757,
+            243,
+            371
+          ],
+          "source_bounds": [
+            36,
+            18,
+            214,
+            355
+          ],
+          "source_pivot": [
+            154.0,
+            355
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            11,
+            11
+          ],
+          "bounds": [
+            16,
+            13,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            770,
+            757,
+            254,
+            371
+          ],
+          "source_bounds": [
+            31,
+            69,
+            235,
+            354
+          ],
+          "source_pivot": [
+            165.5,
+            354
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            10,
+            11
+          ],
+          "bounds": [
+            14,
+            20,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1128,
+            276,
+            408
+          ],
+          "source_bounds": [
+            73,
+            17,
+            227,
+            351
+          ],
+          "source_pivot": [
+            150.5,
+            351
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            12,
+            11
+          ],
+          "bounds": [
+            22,
+            13,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            276,
+            1128,
+            252,
+            408
+          ],
+          "source_bounds": [
+            50,
+            18,
+            204,
+            351
+          ],
+          "source_pivot": [
+            127.5,
+            351
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            15,
+            11
+          ],
+          "bounds": [
+            22,
+            13,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            528,
+            1128,
+            247,
+            408
+          ],
+          "source_bounds": [
+            49,
+            19,
+            205,
+            353
+          ],
+          "source_pivot": [
+            122.5,
+            353
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            16,
+            11
+          ],
+          "bounds": [
+            23,
+            14,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            775,
+            1128,
+            249,
+            408
+          ],
+          "source_bounds": [
+            44,
+            19,
+            202,
+            353
+          ],
+          "source_pivot": [
+            119.0,
+            353
+          ],
+          "scale": 0.13333333333333333,
+          "translation": [
+            16,
+            11
+          ],
+          "bounds": [
+            22,
+            14,
+            43,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "aguadeira": {
+      "source": "art/pixelorama/npcs_v3/sources/aguadeira.png",
+      "sha256": "164596c00071075c0a1508646658e4faeb44f9f95bd1efceaca349ff6a569cb9",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.13924050632911392,
+      "idle_body_height": 316,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            272,
+            372
+          ],
+          "source_bounds": [
+            97,
+            30,
+            221,
+            346
+          ],
+          "source_pivot": [
+            166.0,
+            346
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            9,
+            10
+          ],
+          "bounds": [
+            23,
+            14,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            272,
+            0,
+            253,
+            372
+          ],
+          "source_bounds": [
+            52,
+            29,
+            203,
+            346
+          ],
+          "source_pivot": [
+            175.0,
+            346
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            8,
+            10
+          ],
+          "bounds": [
+            15,
+            14,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            525,
+            0,
+            248,
+            372
+          ],
+          "source_bounds": [
+            51,
+            28,
+            197,
+            352
+          ],
+          "source_pivot": [
+            154.0,
+            352
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            11,
+            9
+          ],
+          "bounds": [
+            18,
+            13,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            773,
+            0,
+            251,
+            372
+          ],
+          "source_bounds": [
+            52,
+            34,
+            197,
+            352
+          ],
+          "source_pivot": [
+            156.0,
+            352
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            10,
+            9
+          ],
+          "bounds": [
+            17,
+            14,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            372,
+            285,
+            373
+          ],
+          "source_bounds": [
+            81,
+            27,
+            239,
+            352
+          ],
+          "source_pivot": [
+            190.5,
+            352
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            5,
+            9
+          ],
+          "bounds": [
+            16,
+            13,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            285,
+            372,
+            260,
+            373
+          ],
+          "source_bounds": [
+            56,
+            27,
+            242,
+            352
+          ],
+          "source_pivot": [
+            130.5,
+            352
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            14,
+            9
+          ],
+          "bounds": [
+            22,
+            13,
+            48,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            545,
+            372,
+            228,
+            373
+          ],
+          "source_bounds": [
+            20,
+            23,
+            174,
+            352
+          ],
+          "source_pivot": [
+            111.5,
+            352
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            16,
+            9
+          ],
+          "bounds": [
+            19,
+            12,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            773,
+            372,
+            251,
+            373
+          ],
+          "source_bounds": [
+            56,
+            22,
+            216,
+            351
+          ],
+          "source_pivot": [
+            181.0,
+            351
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            7,
+            9
+          ],
+          "bounds": [
+            15,
+            12,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            745,
+            286,
+            365
+          ],
+          "source_bounds": [
+            82,
+            23,
+            241,
+            350
+          ],
+          "source_pivot": [
+            197.5,
+            350
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            4,
+            9
+          ],
+          "bounds": [
+            15,
+            12,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            286,
+            745,
+            247,
+            365
+          ],
+          "source_bounds": [
+            49,
+            23,
+            210,
+            350
+          ],
+          "source_pivot": [
+            168.5,
+            350
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            9,
+            9
+          ],
+          "bounds": [
+            16,
+            12,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            533,
+            745,
+            243,
+            365
+          ],
+          "source_bounds": [
+            38,
+            24,
+            210,
+            350
+          ],
+          "source_pivot": [
+            158.5,
+            350
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            10,
+            9
+          ],
+          "bounds": [
+            15,
+            12,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            776,
+            745,
+            248,
+            365
+          ],
+          "source_bounds": [
+            34,
+            61,
+            229,
+            336
+          ],
+          "source_pivot": [
+            129.5,
+            336
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            14,
+            11
+          ],
+          "bounds": [
+            19,
+            19,
+            46,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1110,
+            278,
+            426
+          ],
+          "source_bounds": [
+            93,
+            18,
+            224,
+            343
+          ],
+          "source_pivot": [
+            167.5,
+            343
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            9,
+            10
+          ],
+          "bounds": [
+            22,
+            13,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            278,
+            1110,
+            234,
+            426
+          ],
+          "source_bounds": [
+            58,
+            17,
+            189,
+            343
+          ],
+          "source_pivot": [
+            132.0,
+            343
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            14,
+            10
+          ],
+          "bounds": [
+            22,
+            12,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            512,
+            1110,
+            249,
+            426
+          ],
+          "source_bounds": [
+            47,
+            18,
+            206,
+            343
+          ],
+          "source_pivot": [
+            146.5,
+            343
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            12,
+            10
+          ],
+          "bounds": [
+            19,
+            13,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            761,
+            1110,
+            263,
+            426
+          ],
+          "source_bounds": [
+            44,
+            17,
+            201,
+            343
+          ],
+          "source_pivot": [
+            139.5,
+            343
+          ],
+          "scale": 0.13924050632911392,
+          "translation": [
+            13,
+            10
+          ],
+          "bounds": [
+            19,
+            12,
+            41,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "padeira": {
+      "source": "art/pixelorama/npcs_v3/sources/padeira.png",
+      "sha256": "0b3c1ddf8cf38a2cbede14eff5b8fc6c359f3ebddc1f71384f67a3449f0bc007",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.13293051359516617,
+      "idle_body_height": 331,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            277,
+            362
+          ],
+          "source_bounds": [
+            93,
+            18,
+            222,
+            349
+          ],
+          "source_pivot": [
+            162.0,
+            349
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            10,
+            12
+          ],
+          "bounds": [
+            22,
+            14,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            277,
+            0,
+            265,
+            362
+          ],
+          "source_bounds": [
+            67,
+            19,
+            221,
+            350
+          ],
+          "source_pivot": [
+            181.5,
+            350
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            8,
+            11
+          ],
+          "bounds": [
+            17,
+            14,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            542,
+            0,
+            246,
+            362
+          ],
+          "source_bounds": [
+            46,
+            19,
+            199,
+            347
+          ],
+          "source_pivot": [
+            154.5,
+            347
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            11,
+            12
+          ],
+          "bounds": [
+            17,
+            15,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            788,
+            0,
+            236,
+            362
+          ],
+          "source_bounds": [
+            48,
+            19,
+            194,
+            350
+          ],
+          "source_pivot": [
+            160.5,
+            350
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            11,
+            11
+          ],
+          "bounds": [
+            17,
+            14,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            362,
+            279,
+            362
+          ],
+          "source_bounds": [
+            69,
+            15,
+            227,
+            346
+          ],
+          "source_pivot": [
+            176.5,
+            346
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            9,
+            12
+          ],
+          "bounds": [
+            18,
+            14,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            279,
+            362,
+            270,
+            362
+          ],
+          "source_bounds": [
+            54,
+            15,
+            238,
+            347
+          ],
+          "source_pivot": [
+            130.0,
+            347
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            15,
+            12
+          ],
+          "bounds": [
+            22,
+            14,
+            47,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            549,
+            362,
+            236,
+            362
+          ],
+          "source_bounds": [
+            33,
+            15,
+            191,
+            348
+          ],
+          "source_pivot": [
+            107.0,
+            348
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            18,
+            12
+          ],
+          "bounds": [
+            22,
+            14,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            785,
+            362,
+            239,
+            362
+          ],
+          "source_bounds": [
+            47,
+            14,
+            212,
+            353
+          ],
+          "source_pivot": [
+            132.5,
+            353
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            14,
+            11
+          ],
+          "bounds": [
+            20,
+            13,
+            42,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            724,
+            275,
+            365
+          ],
+          "source_bounds": [
+            65,
+            12,
+            228,
+            352
+          ],
+          "source_pivot": [
+            169.0,
+            352
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            10,
+            11
+          ],
+          "bounds": [
+            19,
+            13,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            275,
+            724,
+            252,
+            365
+          ],
+          "source_bounds": [
+            48,
+            12,
+            209,
+            354
+          ],
+          "source_pivot": [
+            162.5,
+            354
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            10,
+            11
+          ],
+          "bounds": [
+            16,
+            13,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            527,
+            724,
+            238,
+            365
+          ],
+          "source_bounds": [
+            44,
+            11,
+            211,
+            355
+          ],
+          "source_pivot": [
+            157.0,
+            355
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            11,
+            11
+          ],
+          "bounds": [
+            17,
+            12,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            765,
+            724,
+            259,
+            365
+          ],
+          "source_bounds": [
+            29,
+            102,
+            240,
+            342
+          ],
+          "source_pivot": [
+            142.5,
+            342
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            13,
+            13
+          ],
+          "bounds": [
+            17,
+            27,
+            45,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1089,
+            274,
+            447
+          ],
+          "source_bounds": [
+            80,
+            12,
+            216,
+            369
+          ],
+          "source_pivot": [
+            159.5,
+            369
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            11,
+            9
+          ],
+          "bounds": [
+            22,
+            11,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            274,
+            1089,
+            247,
+            447
+          ],
+          "source_bounds": [
+            63,
+            12,
+            200,
+            369
+          ],
+          "source_pivot": [
+            142.0,
+            369
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            13,
+            9
+          ],
+          "bounds": [
+            21,
+            11,
+            40,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            521,
+            1089,
+            260,
+            447
+          ],
+          "source_bounds": [
+            49,
+            12,
+            216,
+            369
+          ],
+          "source_pivot": [
+            130.5,
+            369
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            15,
+            9
+          ],
+          "bounds": [
+            22,
+            11,
+            44,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            781,
+            1089,
+            243,
+            447
+          ],
+          "source_bounds": [
+            45,
+            12,
+            212,
+            369
+          ],
+          "source_pivot": [
+            125.5,
+            369
+          ],
+          "scale": 0.13293051359516617,
+          "translation": [
+            15,
+            9
+          ],
+          "bounds": [
+            21,
+            11,
+            43,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    },
+    "caravaneiro": {
+      "source": "art/pixelorama/npcs_v3/sources/caravaneiro.png",
+      "sha256": "21180631db2271e59391efbc2c75cee72a0ed689039efce6faa5cdbb3ea417ee",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "uniform_scale": 0.13836477987421383,
+      "idle_body_height": 318,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "idle",
+          "source_rect": [
+            0,
+            0,
+            256,
+            374
+          ],
+          "source_bounds": [
+            57,
+            34,
+            200,
+            352
+          ],
+          "source_pivot": [
+            92.5,
+            352
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            19,
+            9
+          ],
+          "bounds": [
+            27,
+            14,
+            47,
+            58
+          ]
+        },
+        {
+          "pose": "walk_1",
+          "source_rect": [
+            256,
+            0,
+            268,
+            374
+          ],
+          "source_bounds": [
+            58,
+            35,
+            223,
+            347
+          ],
+          "source_pivot": [
+            185.5,
+            347
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            6,
+            10
+          ],
+          "bounds": [
+            14,
+            15,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "walk_2",
+          "source_rect": [
+            524,
+            0,
+            260,
+            374
+          ],
+          "source_bounds": [
+            47,
+            33,
+            213,
+            349
+          ],
+          "source_pivot": [
+            164.5,
+            349
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            9,
+            10
+          ],
+          "bounds": [
+            16,
+            15,
+            38,
+            58
+          ]
+        },
+        {
+          "pose": "walk_3",
+          "source_rect": [
+            784,
+            0,
+            240,
+            374
+          ],
+          "source_bounds": [
+            48,
+            35,
+            204,
+            347
+          ],
+          "source_pivot": [
+            170.5,
+            347
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            8,
+            10
+          ],
+          "bounds": [
+            15,
+            15,
+            36,
+            58
+          ]
+        },
+        {
+          "pose": "walk_4",
+          "source_rect": [
+            0,
+            374,
+            276,
+            376
+          ],
+          "source_bounds": [
+            53,
+            24,
+            235,
+            350
+          ],
+          "source_pivot": [
+            189.5,
+            350
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            6,
+            10
+          ],
+          "bounds": [
+            13,
+            13,
+            39,
+            58
+          ]
+        },
+        {
+          "pose": "talk",
+          "source_rect": [
+            276,
+            374,
+            264,
+            376
+          ],
+          "source_bounds": [
+            43,
+            24,
+            232,
+            352
+          ],
+          "source_pivot": [
+            85.0,
+            352
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            20,
+            9
+          ],
+          "bounds": [
+            26,
+            12,
+            52,
+            58
+          ]
+        },
+        {
+          "pose": "carry_idle",
+          "source_rect": [
+            540,
+            374,
+            239,
+            376
+          ],
+          "source_bounds": [
+            34,
+            31,
+            194,
+            355
+          ],
+          "source_pivot": [
+            72.0,
+            355
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            22,
+            9
+          ],
+          "bounds": [
+            27,
+            13,
+            49,
+            58
+          ]
+        },
+        {
+          "pose": "carry_1",
+          "source_rect": [
+            779,
+            374,
+            245,
+            376
+          ],
+          "source_bounds": [
+            46,
+            30,
+            221,
+            345
+          ],
+          "source_pivot": [
+            141.0,
+            345
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            12,
+            10
+          ],
+          "bounds": [
+            18,
+            14,
+            43,
+            58
+          ]
+        },
+        {
+          "pose": "carry_2",
+          "source_rect": [
+            0,
+            750,
+            272,
+            375
+          ],
+          "source_bounds": [
+            62,
+            31,
+            223,
+            351
+          ],
+          "source_pivot": [
+            191.5,
+            351
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            6,
+            9
+          ],
+          "bounds": [
+            15,
+            13,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "carry_3",
+          "source_rect": [
+            272,
+            750,
+            263,
+            375
+          ],
+          "source_bounds": [
+            51,
+            29,
+            212,
+            352
+          ],
+          "source_pivot": [
+            170.5,
+            352
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            8,
+            9
+          ],
+          "bounds": [
+            15,
+            13,
+            37,
+            58
+          ]
+        },
+        {
+          "pose": "carry_4",
+          "source_rect": [
+            535,
+            750,
+            245,
+            375
+          ],
+          "source_bounds": [
+            53,
+            23,
+            213,
+            354
+          ],
+          "source_pivot": [
+            143.5,
+            354
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            12,
+            9
+          ],
+          "bounds": [
+            19,
+            12,
+            41,
+            58
+          ]
+        },
+        {
+          "pose": "bend",
+          "source_rect": [
+            780,
+            750,
+            244,
+            375
+          ],
+          "source_bounds": [
+            34,
+            88,
+            231,
+            338
+          ],
+          "source_pivot": [
+            142.0,
+            338
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            12,
+            11
+          ],
+          "bounds": [
+            17,
+            23,
+            44,
+            58
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            0,
+            1125,
+            265,
+            411
+          ],
+          "source_bounds": [
+            57,
+            22,
+            211,
+            355
+          ],
+          "source_pivot": [
+            95.5,
+            355
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            19,
+            9
+          ],
+          "bounds": [
+            27,
+            12,
+            48,
+            58
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            265,
+            1125,
+            256,
+            411
+          ],
+          "source_bounds": [
+            56,
+            24,
+            210,
+            355
+          ],
+          "source_pivot": [
+            96.5,
+            355
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            19,
+            9
+          ],
+          "bounds": [
+            27,
+            12,
+            48,
+            58
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "source_rect": [
+            521,
+            1125,
+            261,
+            411
+          ],
+          "source_bounds": [
+            48,
+            26,
+            220,
+            358
+          ],
+          "source_pivot": [
+            98.0,
+            358
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            18,
+            8
+          ],
+          "bounds": [
+            25,
+            12,
+            48,
+            58
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "source_rect": [
+            782,
+            1125,
+            242,
+            411
+          ],
+          "source_bounds": [
+            42,
+            23,
+            212,
+            358
+          ],
+          "source_pivot": [
+            90.5,
+            358
+          ],
+          "scale": 0.13836477987421383,
+          "translation": [
+            19,
+            8
+          ],
+          "bounds": [
+            25,
+            11,
+            48,
+            58
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_breathe",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        },
+        {
+          "pose": "carry_blink",
+          "from": "carry_idle",
+          "rows": [
+            40,
+            64
+          ]
+        }
+      ]
+    }
+  }
+}

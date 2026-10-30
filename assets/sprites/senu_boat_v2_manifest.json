@@ -1,0 +1,472 @@
+{
+  "version": 2,
+  "pixel_art": true,
+  "canvas": [
+    96,
+    96
+  ],
+  "pivot": [
+    48,
+    76
+  ],
+  "columns": 8,
+  "frames": 96,
+  "game_scale": 1.0,
+  "source": "res://art/pixelorama/senu/boat_v2/senu_boat_v2.pxo",
+  "texture": "res://assets/sprites/senu_boat_v2.png",
+  "sprites": {
+    "board_right": {
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "assentar"
+      ]
+    },
+    "board_down_right": {
+      "frames": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "assentar"
+      ]
+    },
+    "board_down": {
+      "frames": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "assentar"
+      ]
+    },
+    "board_down_left": {
+      "frames": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "assentar"
+      ]
+    },
+    "board_left": {
+      "frames": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "assentar"
+      ]
+    },
+    "board_up_left": {
+      "frames": [
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "assentar"
+      ]
+    },
+    "board_up": {
+      "frames": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "assentar"
+      ]
+    },
+    "board_up_right": {
+      "frames": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "assentar"
+      ]
+    },
+    "land_right": {
+      "frames": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "de pé"
+      ]
+    },
+    "land_down_right": {
+      "frames": [
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "de pé"
+      ]
+    },
+    "land_down": {
+      "frames": [
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "de pé"
+      ]
+    },
+    "land_down_left": {
+      "frames": [
+        66,
+        67,
+        68,
+        69,
+        70,
+        71
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "de pé"
+      ]
+    },
+    "land_left": {
+      "frames": [
+        72,
+        73,
+        74,
+        75,
+        76,
+        77
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "de pé"
+      ]
+    },
+    "land_up_left": {
+      "frames": [
+        78,
+        79,
+        80,
+        81,
+        82,
+        83
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "de pé"
+      ]
+    },
+    "land_up": {
+      "frames": [
+        84,
+        85,
+        86,
+        87,
+        88,
+        89
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "de pé"
+      ]
+    },
+    "land_up_right": {
+      "frames": [
+        90,
+        91,
+        92,
+        93,
+        94,
+        95
+      ],
+      "fps": 12.5,
+      "sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "loop": false,
+      "poses": [
+        "apoio",
+        "preparação",
+        "impulso",
+        "travessia",
+        "contato",
+        "de pé"
+      ]
+    }
+  },
+  "provenance": {
+    "body_sha256": "b18a24c971d86ccc2f77ec31188d9d706bc60b66f2fafe9ba28efc94c91a6ac9",
+    "hull_pxo_sha256": "f0c4e225c984f57341b8222e745e52825bbb10fe4a55ec05d20923b4284df37b"
+  },
+  "playback": "distance-independent row phase; transfer clips clamp to final pose"
+}

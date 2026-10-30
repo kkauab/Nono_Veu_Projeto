@@ -1,0 +1,296 @@
+{
+  "version": 3,
+  "pixel_art": true,
+  "runtime_scale": 1,
+  "palette": [
+    "14252c",
+    "1e343a",
+    "2b4449",
+    "3c5659",
+    "526765",
+    "6d7b70",
+    "8c9380",
+    "b4b298",
+    "dbcfaa",
+    "eee0ba",
+    "343b38",
+    "4b5553",
+    "646b60",
+    "81816e",
+    "a09a7e",
+    "bdad89",
+    "332e28",
+    "4b3b2d",
+    "674d34",
+    "846443",
+    "a27d50",
+    "c39e65",
+    "e0bd7e",
+    "1f444b",
+    "2c5b61",
+    "3e7373",
+    "609087",
+    "5a623e",
+    "7d8051",
+    "a49e66",
+    "be733a",
+    "e69d4a",
+    "f5cc76"
+  ],
+  "provenance": "ImageGen complete authored poses; registered at one uniform scale per character; Pixelorama exports delivery.",
+  "source_hashes": {
+    "estivador": "515fe836eda71a9bed334e72d40bc98194d5e3fd8d6c3de74e111a733735ebb7",
+    "carregador": "09d77551b2dbcd8c76e832b7e6658ac69904b2496585dd1cd13f149d0807d302",
+    "peixeira": "ee04a103dbd5b2767d8b555ab91d256967b8d366f381323b0c569a174757ad68",
+    "mercador": "88f4ae80969cc0475190e911047c216507ef8f71fbf0ee294b30083820a1c7e1",
+    "marinheiro": "afb3cae187f630736965c54f9219efcb8454b2b6f90486c45bcf75fc76b96976",
+    "remador": "d1ff758014bbaa12322129f0c2240416e0effde17b5c2ffbb116291f8430ed63",
+    "escriba": "fc2d5b674358d47bc53fba6758c8e373510df55170ab7359f8dc23a56d5ccc84",
+    "peregrina": "c9c7240b283d7bbc20a017a62de18f543c2bb6b2c7b2a5523b0c46bea111027b",
+    "velho": "7514a700ba5ac558588859a6a5537ce18b39c9e42bf9c5494c54b1a49141039e",
+    "aguadeira": "164596c00071075c0a1508646658e4faeb44f9f95bd1efceaca349ff6a569cb9",
+    "padeira": "0b3c1ddf8cf38a2cbede14eff5b8fc6c359f3ebddc1f71384f67a3449f0bc007",
+    "caravaneiro": "21180631db2271e59391efbc2c75cee72a0ed689039efce6faa5cdbb3ea417ee",
+    "ankhet": "a703d9dff6edc5982548c5d5d7c15412cfd4cab2a739ce1af00b5e70495b892e"
+  },
+  "canvas": [
+    128,
+    144
+  ],
+  "pivot": [
+    64,
+    112
+  ],
+  "columns": 4,
+  "frames": 4,
+  "texture": "res://assets/world/ankhet_v3.png",
+  "source": "res://art/pixelorama/npcs_v3/ankhet_v3.pxo",
+  "sprites": {
+    "ankhet": {
+      "frames": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "authored_poses": [
+        "rest",
+        "breathe",
+        "blink",
+        "gesture"
+      ],
+      "fps": 8,
+      "sequence": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        3,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "registrations": {
+    "ankhet": {
+      "source": "art/pixelorama/npcs_v3/sources/ankhet.png",
+      "sha256": "a703d9dff6edc5982548c5d5d7c15412cfd4cab2a739ce1af00b5e70495b892e",
+      "source_size": [
+        2172,
+        724
+      ],
+      "uniform_scale": 0.07815275310834814,
+      "idle_body_height": 563,
+      "target_idle_height": 44,
+      "registrations": [
+        {
+          "pose": "rest",
+          "source_rect": [
+            0,
+            0,
+            601,
+            724
+          ],
+          "source_bounds": [
+            207,
+            87,
+            516,
+            650
+          ],
+          "source_pivot": [
+            365.5,
+            650
+          ],
+          "scale": 0.07815275310834814,
+          "translation": [
+            35,
+            61
+          ],
+          "bounds": [
+            51,
+            68,
+            75,
+            112
+          ]
+        },
+        {
+          "pose": "breathe",
+          "source_rect": [
+            601,
+            0,
+            474,
+            724
+          ],
+          "source_bounds": [
+            87,
+            87,
+            397,
+            650
+          ],
+          "source_pivot": [
+            245.0,
+            650
+          ],
+          "scale": 0.07815275310834814,
+          "translation": [
+            45,
+            61
+          ],
+          "bounds": [
+            52,
+            68,
+            76,
+            112
+          ]
+        },
+        {
+          "pose": "blink",
+          "source_rect": [
+            1075,
+            0,
+            482,
+            724
+          ],
+          "source_bounds": [
+            78,
+            87,
+            387,
+            650
+          ],
+          "source_pivot": [
+            235.5,
+            650
+          ],
+          "scale": 0.07815275310834814,
+          "translation": [
+            46,
+            61
+          ],
+          "bounds": [
+            52,
+            68,
+            76,
+            112
+          ]
+        },
+        {
+          "pose": "gesture",
+          "source_rect": [
+            1557,
+            0,
+            615,
+            724
+          ],
+          "source_bounds": [
+            93,
+            87,
+            498,
+            650
+          ],
+          "source_pivot": [
+            250.5,
+            650
+          ],
+          "scale": 0.07815275310834814,
+          "translation": [
+            44,
+            61
+          ],
+          "bounds": [
+            51,
+            68,
+            83,
+            112
+          ]
+        }
+      ],
+      "planted_lower_pixels": [
+        {
+          "pose": "breathe",
+          "from": "rest",
+          "rows": [
+            94,
+            144
+          ]
+        },
+        {
+          "pose": "blink",
+          "from": "rest",
+          "rows": [
+            94,
+            144
+          ]
+        },
+        {
+          "pose": "gesture",
+          "from": "rest",
+          "rows": [
+            94,
+            144
+          ]
+        }
+      ]
+    }
+  }
+}

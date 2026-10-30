@@ -8,6 +8,7 @@ extends RefCounted
 const IsleLayout = preload("res://scripts/world/isle_layout.gd")
 const IsleStory = preload("res://scripts/world/isle_story.gd")
 const SeaArt = preload("res://scripts/world/sea_art.gd")
+const NpcArt = preload("res://scripts/world/npc_art.gd")
 const Art = preload("res://scripts/world/port_art.gd")
 const Layout = preload("res://scripts/world/port_layout.gd")
 const KINDS := ["isle_npc", "isle_brazier", "isle_altar", "isle_net"]
@@ -137,6 +138,8 @@ class IsleFixture extends PortInteractable:
 				piece = "brazier_on" if opened else "brazier_off"
 			"isle_altar":
 				piece = "altar_open" if opened else "altar_closed"
+		if kind == "isle_npc" and NpcArt.draw(self, "ankhet", time):
+			return
 		if SeaArt.draw(self, "isle_v1", piece, time):
 			return
 		match kind:

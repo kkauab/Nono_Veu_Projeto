@@ -37,6 +37,7 @@ var _blink_due := [3.1,4.3]
 var _blink_clock := [-1.0,-1.0]
 var _blink_count := [0,0]
 var _clock := 0.0
+var _gesture_energy := [0.0,0.0]
 var _letter_due := .025
 var _speech_phase := 0
 var _speech_phrase := 0
@@ -44,8 +45,8 @@ var _speech_due := 0.0
 var _reveal_emitted := false
 var _textures: Dictionary = {}
 var _body: RichTextLabel
-var _font: SystemFont
-var _name_font: SystemFont
+var _font: Font
+var _name_font: Font
 var _factor := 1.0
 var _offset := Vector2.ZERO
 var _last_size := Vector2.ZERO
@@ -56,10 +57,9 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_font = SystemFont.new()
-	_font.font_names = PackedStringArray(["Segoe UI","Noto Sans","sans-serif"])
-	_name_font = SystemFont.new()
-	_name_font.font_names = PackedStringArray(["Georgia","Noto Serif","serif"])
+	_font = preload("res://scripts/ui/ui_typography.gd").body()
+	_name_font = preload("res://scripts/ui/ui_typography.gd").title()
+	theme = preload("res://scripts/ui/ui_typography.gd").make_theme()
 	_body = RichTextLabel.new()
 	_body.name = "DialogueText"
 	_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -156,6 +156,9 @@ func tick(delta: float) -> void:
 	_clock += delta
 	_animate_blinks(delta)
 	_animate_speech(delta)
+	for index in range(2):
+		var target := 1.0 if is_speaking and index == _speaker_index(active_speaker) else 0.0
+		_gesture_energy[index] = lerpf(_gesture_energy[index],target,1.0-exp(-delta*5.0))
 	if is_typing:
 		_letter_due -= delta
 		var revealed_this_tick := 0
@@ -300,10 +303,48 @@ func _draw_portrait(speaker: String, rect: Rect2) -> void:
 	var active: bool = state["active"]
 	# Only the transparent cutout is drawn here; the world remains visible behind it.
 	if _textures.get(speaker) != null:
-		var frame: int = state["frame"]
-		var source := Rect2(Vector2(frame%ATLAS_COLUMNS,frame/ATLAS_COLUMNS)*PORTRAIT_CELL,PORTRAIT_CELL)
 		var tint := Color.WHITE if active else Color(.82,.86,.84,1)
-		draw_texture_rect_region(_textures[speaker],rect,source,tint)
+		_draw_living_portrait(speaker,rect,state,tint)
+
+## Stable shoulders, an independently blinking face and a slowly settling head.
+## Destination rows stay filled; displacement changes sampling, never opens seams.
+func portrait_motion(speaker: String) -> Dictionary:
+	var index := _speaker_index(speaker)
+	var energy: float = _gesture_energy[index]
+	var phase := _clock * 1.55 + index * 1.9
+	var breath := (sin(phase) + 1.0) * .45
+	var gesture := sin(_clock * 2.6 + index * 1.4) * energy
+	return {"breath":breath,"head_x":gesture * .85 * (1 if index == 0 else -1),
+		"head_y":sin(_clock * 3.4 + index * 1.1 + .4) * energy * .65,"energy":energy}
+
+func _draw_living_portrait(speaker: String, rect: Rect2, state: Dictionary, tint: Color) -> void:
+	var motion := portrait_motion(speaker)
+	var expression := int(state["expression_index"])
+	var mouth_frame := expression * 5 + int(state["speech_mouth"])
+	var eye_frame := expression * 5 + (4 if int(state["eye"]) == 2 else 3)
+	var eyes := Rect2(91,55,47,22) if speaker == "SENU" else Rect2(51,60,41,22)
+	var pixel_scale := rect.size / PORTRAIT_CELL
+	for row in range(roundi(rect.size.y)):
+		var y := (float(row)+.5) / pixel_scale.y
+		var head_weight := 1.0-smoothstep(98.0,145.0,y)
+		var chest_weight := 1.0-smoothstep(140.0,188.0,y)
+		var lift := float(motion["breath"])*chest_weight + float(motion["head_y"])*head_weight
+		var source_y := clampf(float(row)/pixel_scale.y + roundf(lift),0,PORTRAIT_CELL.y-1.0/pixel_scale.y)
+		var shift := roundf(float(motion["head_x"])*head_weight*pixel_scale.x)
+		var frame := mouth_frame if source_y < 112 else expression * 5
+		var destination := Rect2(rect.position+Vector2(shift,row),Vector2(rect.size.x,1))
+		if int(state["eye"]) > 0 and source_y >= eyes.position.y and source_y < eyes.end.y:
+			_portrait_strip(speaker,frame,source_y,0,eyes.position.x,destination,pixel_scale,tint)
+			_portrait_strip(speaker,eye_frame,source_y,eyes.position.x,eyes.size.x,destination,pixel_scale,tint)
+			_portrait_strip(speaker,frame,source_y,eyes.end.x,PORTRAIT_CELL.x-eyes.end.x,destination,pixel_scale,tint)
+		else:
+			_portrait_strip(speaker,frame,source_y,0,PORTRAIT_CELL.x,destination,pixel_scale,tint)
+
+func _portrait_strip(speaker: String, frame: int, source_y: float, x: float, width: float, destination: Rect2, pixel_scale: Vector2, tint: Color) -> void:
+	var origin := Vector2(frame%ATLAS_COLUMNS,frame/ATLAS_COLUMNS)*PORTRAIT_CELL
+	var source := Rect2(origin+Vector2(x,source_y),Vector2(width,1.0/pixel_scale.y))
+	var target := Rect2(destination.position+Vector2(x*pixel_scale.x,0),Vector2(width*pixel_scale.x,1))
+	draw_texture_rect_region(_textures[speaker],target,source,tint)
 
 func _text(value: String, at: Vector2, point_size: int, color: Color, serif: bool = false) -> void:
 	draw_set_transform(Vector2.ZERO)
