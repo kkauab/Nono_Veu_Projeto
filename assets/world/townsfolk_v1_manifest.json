@@ -15,7 +15,11 @@
     "velho",
     "aguadeira",
     "padeira",
-    "caravaneiro"
+    "caravaneiro",
+    "sacerdote",
+    "alquimista",
+    "sentinela",
+    "mercadora"
   ],
   "pivot": [
     16,

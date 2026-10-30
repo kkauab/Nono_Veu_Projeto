@@ -49,6 +49,7 @@ func _run() -> void:
 	await _buying(vendors)
 	_talking(walkers)
 	_making_way(walkers)
+	_detour(walkers)
 	await _sleeping(walkers)
 	print("PORT LIFE CHECKS: %d passed=%d failures=%s" % [checks, checks - failures.size(), failures])
 	world.queue_free()
@@ -165,6 +166,31 @@ func _making_way(walkers: Array) -> void:
 	check(person.position.distance_to(start) > 4 and absf(person.position.y - start.y) > 3, "%s dá um passo para o lado quando Senu encosta" % person.item_id)
 	world.player.velocity = Vector2.ZERO
 
+## Senu parado no caminho de quem anda: o morador espera um instante e dá a volta
+## por fora dele. Antes ficava parado a 16 px de Senu para sempre.
+func _detour(walkers: Array) -> void:
+	var person = walkers.filter(func(p): return p.item_id == "marinheiro_cais")[0]
+	person._acting = false
+	person._stop = 1
+	person._waypoint = 0
+	person._ghost = 0.0
+	person.position = PortLayout.iso(Vector2(8.5, .5))
+	var goal: Vector2 = person.stops[1]["path"][0]
+	var heading: Vector2 = (goal - person.position).normalized()
+	world.player.velocity = Vector2.ZERO
+	world.player.position = person.position + heading * 14.0
+	var hero_at: Vector2 = world.player.position
+	var start_gap: float = person.position.distance_to(goal)
+	var always_free := true
+	for step in range(120):
+		person.advance(.05)
+		if not _free(person.position): always_free = false
+	check(person.position.distance_to(goal) < start_gap - 30.0 or person._waypoint > 0 or person._acting, "%s contorna Senu parado no caminho (%.0f → %.0f px do destino)" % [person.item_id, start_gap, person.position.distance_to(goal)])
+	check(always_free, "%s contorna Senu por chão livre" % person.item_id)
+	check(world.player.position == hero_at, "Senu não é empurrado pelo desvio")
+	person._body.collision_layer = 4
+	person._ghost = 0.0
+
 func _sleeping(walkers: Array) -> void:
 	world.player.reset_at(PortLayout.iso(Vector2(85, 13)))
 	var far: Array = walkers.filter(func(person): return person.position.distance_to(world.player.position) > 1400)
@@ -175,6 +201,7 @@ func _sleeping(walkers: Array) -> void:
 	for index in range(far.size()):
 		if far[index].position != before[index]: still = false
 	check(not far.is_empty() and still, "Longe de Senu, a rotina pausa (%d moradores)" % far.size())
+	check(far.all(func(person): return person._asleep), "Longe de Senu, o morador nem redesenha (adormecido)")
 
 ## Chão livre para um corpo de 6 px: sem cenário e sem borda de água.
 func _free(point: Vector2) -> bool:

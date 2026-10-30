@@ -13,6 +13,7 @@ const Boat = preload("res://scripts/world/sea_boat.gd")
 const SeaArt = preload("res://scripts/world/sea_art.gd")
 const Layout = preload("res://scripts/world/port_layout.gd")
 const IsleStory = preload("res://scripts/world/isle_story.gd")
+const FarIsles = preload("res://scripts/world/far_isles.gd")
 const Sfx = preload("res://scripts/audio/sfx.gd")
 const Art = preload("res://scripts/world/port_art.gd")
 const MOORED_SHADER = preload("res://assets/shaders/harbor_pixel_moored.gdshader")
@@ -27,11 +28,16 @@ const AMPHORA_COINS := 12
 const DOCKS := {
 	"sabu": {"name": "Píer de Sabu", "land": Vector2(25.5, 38.1), "water": Vector2(25.5, 39.4), "heading": PI * .75, "side": "port"},
 	"bennu": {"name": "Píer do Bennu", "land": Vector2(44.5, 59.1), "water": Vector2(44.5, 57.6), "heading": -PI * .25, "side": "isle"},
+	# Ilhas além da baía (far_isles_layout.gd; docs/MUNDO_PROPOSTA_2026-10-30.md).
+	"ibis": {"name": "Píer do Íbis", "land": Vector2(12.5, 64.1), "water": Vector2(12.5, 62.6), "heading": -PI * .25, "side": "far"},
+	"wreck": {"name": "Píer do Recife", "land": Vector2(66.1, 66.5), "water": Vector2(64.6, 66.5), "heading": -PI * .75, "side": "far"},
 }
 ## Ânforas de uma carga perdida, boiando na Baía das Garças.
-const AMPHORAE := [Vector2(31, 47), Vector2(51, 51), Vector2(60, 62), Vector2(31, 68)]
+## As três últimas são carga do navio encalhado e boiam em volta do recife e do Íbis.
+const AMPHORAE := [Vector2(31, 47), Vector2(51, 51), Vector2(60, 62), Vector2(31, 68), Vector2(69, 61), Vector2(93, 68.5), Vector2(24.5, 70.5)]
 ## Rochedos para contornar no caminho.
-const SEA_ROCKS := [Vector2(33, 50), Vector2(48, 55.5), Vector2(38.5, 58.5)]
+## Os quatro últimos são o recife em volta do navio e as pedras da costa do Íbis.
+const SEA_ROCKS := [Vector2(33, 50), Vector2(48, 55.5), Vector2(38.5, 58.5), Vector2(71, 59.5), Vector2(91.5, 62.5), Vector2(4, 66), Vector2(22.5, 81)]
 const SEA_NAME := "Baía das Garças"
 
 
@@ -433,6 +439,8 @@ static func _ashore(game, dock: String) -> void:
 	_refresh_posts(game)
 	if DOCKS[dock]["side"] == "isle":
 		IsleStory.on_landed(game)
+	elif DOCKS[dock]["side"] == "far":
+		FarIsles.on_landed(game, dock)
 
 
 ## Devolve a Senu o corpo, a colisão e os controles.

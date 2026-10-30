@@ -10,7 +10,7 @@ extends Node
 ## tools/audio/build_combat_sfx.py.
 
 const Banks = preload("res://scripts/audio/sfx_banks.gd")
-const BUSES := ["SFX", "Ambiente", "Vozes"]
+const BUSES := ["SFX", "Ambiente", "Vozes", "Musica"]
 const POOL_NAME := "VeilSfx"
 const POSITIONAL_VOICES := 12
 const FLAT_VOICES := 4

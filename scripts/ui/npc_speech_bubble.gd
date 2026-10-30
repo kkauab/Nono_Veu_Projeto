@@ -19,6 +19,7 @@ var panel: PanelContainer
 var speaker_label: Label
 var body_label: Label
 var next_button: Button
+var portrait_rect: TextureRect
 var _factor := 1.0
 var _tail := PackedVector2Array()
 var _body_width := 320.0
@@ -89,11 +90,23 @@ func _build() -> void:
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", roundi(6 * _factor))
 	panel.add_child(column)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", roundi(8 * _factor))
+	column.add_child(header)
+	portrait_rect = TextureRect.new()
+	portrait_rect.name = "SpeechPortrait"
+	portrait_rect.custom_minimum_size = Vector2(28, 32) * _factor
+	portrait_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	portrait_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	portrait_rect.visible = false
+	header.add_child(portrait_rect)
 	speaker_label = Label.new()
+	speaker_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	speaker_label.add_theme_font_override("font", hud.title_font)
 	speaker_label.add_theme_font_size_override("font_size", roundi(14 * _factor))
 	speaker_label.add_theme_color_override("font_color", GOLD.darkened(.25))
-	column.add_child(speaker_label)
+	header.add_child(speaker_label)
 	body_label = Label.new()
 	body_label.name = "SpeechText"
 	body_label.custom_minimum_size.x = _body_width
@@ -118,6 +131,19 @@ func _show_page() -> void:
 	var page: Dictionary = pages[page_index]
 	speaker_id = str(page["speaker"])
 	speaker_label.text = "Anotação" if speaker_id.is_empty() else _speaker_name(speaker_id)
+	if is_instance_valid(portrait_rect) and is_instance_valid(hud) and hud.has_method("_find_npc_portrait"):
+		var p_tex: Texture2D = hud.call("_find_npc_portrait", speaker_label.text)
+		if p_tex != null and p_tex.get_width() > 160:
+			var atlas := AtlasTexture.new()
+			atlas.atlas = p_tex
+			atlas.region = Rect2(0, 0, 160, 192)
+			portrait_rect.texture = atlas
+			portrait_rect.visible = true
+		elif p_tex != null:
+			portrait_rect.texture = p_tex
+			portrait_rect.visible = true
+		else:
+			portrait_rect.visible = false
 	body_label.text = page["text"]
 	next_button.text = ("Concluir" if page_index == pages.size() - 1 else "Continuar") + "  ·  E / Espaço   %d/%d" % [page_index + 1, pages.size()]
 	hud.set_meta("speech_page", page_index)

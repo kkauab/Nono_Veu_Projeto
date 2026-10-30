@@ -70,11 +70,29 @@ static func build(game) -> void:
 static func activate(game, item) -> bool:
 	if item.kind == "vendor":
 		return _buy(game, item)
+	if item.item_id == "mendigo_alaude":
+		return _talk_beggar(game, item)
 	var line: String = item.lines[item.talks % item.lines.size()] if not item.lines.is_empty() else "..."
 	item.talks += 1
 	# Vira para Senu enquanto fala.
 	item.facing = signf(game.player.position.x - item.position.x) if absf(game.player.position.x - item.position.x) > 1 else item.facing
 	item.gesture(2.0)
+	game.hud.show_conversation(item.title, line, item.item_id)
+	return true
+
+
+static func _talk_beggar(game, item) -> bool:
+	var line: String = item.lines[item.talks % item.lines.size()] if not item.lines.is_empty() else "..."
+	item.talks += 1
+	item.facing = signf(game.player.position.x - item.position.x) if absf(game.player.position.x - item.position.x) > 1 else item.facing
+	item.gesture(2.4)
+	Sfx.play(game, "beggar_blessing", item.position, 1.5)
+
+	if item.talks == 1 and Economy.coins(game.store.data) > 0:
+		Economy.spend_coins(game.store.data, 1)
+		game.hud.toast("Oferta de 1 óbolo ao velho marinheiro do alaúde!", Color("f3d489"), 3.2)
+		game._save_soon()
+
 	game.hud.show_conversation(item.title, line, item.item_id)
 	return true
 

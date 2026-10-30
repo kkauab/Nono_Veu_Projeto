@@ -3,6 +3,8 @@ class_name PortLayout
 const Art = preload("res://scripts/world/port_art.gd")
 const WaterLife = preload("res://scripts/world/water_life.gd")
 const IsleLayout = preload("res://scripts/world/isle_layout.gd")
+const CloisterLayout = preload("res://scripts/world/cloister_layout.gd")
+const FarIslesLayout = preload("res://scripts/world/far_isles_layout.gd")
 ## Onde o mar é desenhado. Interiores ficam fora dele, sobre fundo próprio.
 const SEA_RECT := Rect2(-4000, -2400, 8000, 6000)
 
@@ -41,7 +43,15 @@ const ROOMS := [
 	# Só se chega de barco (sea.gd). O chão segue a costa de isle_layout.gd, não o
 	# retângulo; "outline" é o contorno desenhado no mapa.
 	{"id": "isle", "label": "Ilha do Bennu", "name": "Ilha do Bennu", "rect": Rect2i(35, 59, 22, 19), "color": Color("5e6b4f"), "theme": "garden", "generated": false, "shape": "isle",
-		"outline": [Vector2(57.2, 70.0), Vector2(55.8, 72.7), Vector2(53.2, 74.5), Vector2(50.9, 76.2), Vector2(48.1, 77.2), Vector2(45.0, 77.2), Vector2(41.8, 77.5), Vector2(37.9, 77.4), Vector2(35.2, 75.4), Vector2(35.4, 72.4), Vector2(36.2, 70.0), Vector2(35.8, 67.7), Vector2(36.2, 65.1), Vector2(38.5, 63.2), Vector2(41.6, 62.0), Vector2(44.0, 61.4), Vector2(44.0, 58.6), Vector2(46.0, 58.6), Vector2(46.0, 61.4), Vector2(48.3, 62.2), Vector2(50.3, 64.5), Vector2(52.2, 66.0), Vector2(55.3, 67.4)]}
+		"outline": [Vector2(57.2, 70.0), Vector2(55.8, 72.7), Vector2(53.2, 74.5), Vector2(50.9, 76.2), Vector2(48.1, 77.2), Vector2(45.0, 77.2), Vector2(41.8, 77.5), Vector2(37.9, 77.4), Vector2(35.2, 75.4), Vector2(35.4, 72.4), Vector2(36.2, 70.0), Vector2(35.8, 67.7), Vector2(36.2, 65.1), Vector2(38.5, 63.2), Vector2(41.6, 62.0), Vector2(44.0, 61.4), Vector2(44.0, 58.6), Vector2(46.0, 58.6), Vector2(46.0, 61.4), Vector2(48.3, 62.2), Vector2(50.3, 64.5), Vector2(52.2, 66.0), Vector2(55.3, 67.4)]},
+	# Gustavo, 30/10/2026 (docs/MUNDO_PROPOSTA_2026-10-30.md). O claustro amplia o
+	# santuário onde Senu desperta; o chão vem de cloister_layout.gd.
+	{"id": "cloister", "label": "Iniciados", "name": "Claustro dos Iniciados", "rect": Rect2i(-14, 4, 13, 10), "color": Color("5f6b5c"), "theme": "mosaic", "generated": false, "shape": "cloister"},
+	# Ilhas além da baía, só de barco; o chão segue far_isles_layout.gd.
+	{"id": "ibis", "label": "Ilha do Íbis", "name": "Ilha do Íbis Afogado", "rect": Rect2i(1, 63, 23, 20), "color": Color("6a6a5c"), "theme": "sand", "generated": false, "shape": "ibis",
+		"outline": [Vector2(22.8, 74.0), Vector2(22.1, 76.0), Vector2(20.1, 77.4), Vector2(18.0, 78.2), Vector2(16.5, 79.2), Vector2(15.2, 80.8), Vector2(13.3, 82.2), Vector2(10.7, 82.6), Vector2(8.3, 81.8), Vector2(6.4, 80.4), Vector2(4.9, 79.0), Vector2(3.8, 77.4), Vector2(3.5, 75.7), Vector2(3.6, 74.0), Vector2(3.5, 72.3), Vector2(3.1, 70.3), Vector2(3.6, 68.1), Vector2(5.6, 66.7), Vector2(8.4, 66.6), Vector2(11.5, 67.6), Vector2(11.5, 63.5), Vector2(13.5, 63.5), Vector2(13.5, 67.6), Vector2(15.1, 67.6), Vector2(17.3, 67.9), Vector2(19.2, 68.9), Vector2(20.8, 70.3), Vector2(22.1, 72.0)]},
+	{"id": "wreck", "label": "Navio Esquecido", "name": "Recife do Navio Esquecido", "rect": Rect2i(65, 59, 27, 16), "color": Color("7a745e"), "theme": "sand", "generated": false, "shape": "wreck",
+		"outline": [Vector2(91.4, 67.0), Vector2(90.7, 68.6), Vector2(89.3, 69.9), Vector2(87.8, 71.1), Vector2(85.9, 72.1), Vector2(83.7, 72.7), Vector2(81.2, 72.9), Vector2(78.8, 72.7), Vector2(76.5, 72.5), Vector2(73.9, 72.2), Vector2(71.4, 71.5), Vector2(69.5, 70.3), Vector2(71.0, 67.5), Vector2(65.5, 67.5), Vector2(65.5, 65.5), Vector2(71.0, 65.5), Vector2(72.2, 64.6), Vector2(72.6, 63.1), Vector2(73.5, 61.5), Vector2(75.6, 60.2), Vector2(78.5, 59.9), Vector2(81.3, 60.7), Vector2(83.4, 61.8), Vector2(85.1, 62.6), Vector2(87.1, 63.3), Vector2(89.3, 64.1), Vector2(90.9, 65.4)]}
 ]
 const ROOM_LINKS := [
 	["hub", "p1"], ["p1", "market"], ["market", "p2"], ["p2", "bridge"],
@@ -55,7 +65,8 @@ const ROOM_LINKS := [
 	["reservoir", "copper_dock"], ["copper_dock", "lower_dock"],
 	["garden", "cistern"], ["cistern", "sluice"], ["sluice", "buried"],
 	["a02", "echo_descent"], ["echo_descent", "echo_gallery"], ["echo_gallery", "hub", "echo"],
-	["lower_dock", "isle", "sea_route"]
+	["lower_dock", "isle", "sea_route"],
+	["hub", "cloister"], ["lower_dock", "ibis", "sea_route"], ["isle", "wreck", "sea_route"]
 ]
 const CONNECTORS := [
 	{"rect": Rect2i(4, 0, 1, 2), "room": "p1", "theme": "stone", "color": Color("626456")},
@@ -84,7 +95,9 @@ const CONNECTORS := [
 	{"rect": Rect2i(16, 30, 3, 1), "room": "cistern", "theme": "aqueduct", "color": Color("61736b")},
 	{"rect": Rect2i(11, 37, 1, 3), "room": "sluice", "theme": "stone", "color": Color("61736b")},
 	{"rect": Rect2i(-1, 37, 1, 3), "room": "buried", "theme": "crypt", "color": Color("61736b")},
-	{"rect": Rect2i(-6, -1, 1, 2), "room": "echo_gallery", "theme": "crypt", "color": Color("4f5260")}
+	{"rect": Rect2i(-6, -1, 1, 2), "room": "echo_gallery", "theme": "crypt", "color": Color("4f5260")},
+	# Boca do Claustro dos Iniciados, na borda sul do santuário (x -5..-2).
+	{"rect": Rect2i(-5, 3, 4, 1), "room": "cloister", "theme": "mosaic", "color": Color("5f6b5c")}
 ]
 ## Broad, level thresholds support both feet of the entrance arches.
 ## They are away from the locked shortcut/boss corridors, preserving their seals.
@@ -119,15 +132,19 @@ const GATES := {
 	"boss_entry": {"a": Vector2(.5, 20.5), "b": Vector2(.5, 24.5)},
 	"echo": {"a": Vector2(-5.5, -1.5), "b": Vector2(-5.5, .5)}
 }
+## A rota inicial (Cais, Mercado e Armazém) ensina com guardas, de golpe lento; daí
+## em diante cada lugar tem o seu tipo: o lanceiro na ponte estreita, o guardião
+## na alcova secreta das Adagas, o corredor errante no jardim e o lanceiro da
+## guarita antes do Porteiro (docs/MUNDO_PROPOSTA_2026-10-30.md). Os ids não mudam.
 const ENEMY_SPAWNS := [
 	{"id": "marinheiro_01", "tile": Vector2(11, 1), "boss": false},
 	{"id": "vigia_mercado", "tile": Vector2(22, 2), "boss": false},
 	{"id": "carregador_armazem", "tile": Vector2(36, 5), "boss": false},
-	{"id": "barqueiro_ponte", "tile": Vector2(33, 15), "boss": false},
+	{"id": "barqueiro_ponte", "tile": Vector2(33, 15), "boss": false, "archetype": "lancer"},
 	{"id": "marinheiro_02", "tile": Vector2(36, 26), "boss": false},
-	{"id": "copista_alcova", "tile": Vector2(42, 24), "boss": false},
-	{"id": "errante_jardim", "tile": Vector2(19, 28), "boss": false},
-	{"id": "vigia_guarita", "tile": Vector2(9, 25), "boss": false},
+	{"id": "copista_alcova", "tile": Vector2(42, 24), "boss": false, "archetype": "keeper"},
+	{"id": "errante_jardim", "tile": Vector2(19, 28), "boss": false, "archetype": "runner"},
+	{"id": "vigia_guarita", "tile": Vector2(9, 25), "boss": false, "archetype": "lancer"},
 	{"id": "porteiro", "tile": Vector2(-6, 23), "boss": true},
 	{"id": "errante_escriba_01", "tile": Vector2(5, -11), "archetype": "runner"},
 	{"id": "errante_escriba_02", "tile": Vector2(11, -17), "archetype": "guard"},
@@ -161,7 +178,13 @@ const ENEMY_SPAWNS := [
 	# Ilha do Bennu: os três Esquecidos da missão de Ankhet (isle_story.gd).
 	{"id": "esquecido_ilha_01", "tile": Vector2(39, 70.5), "archetype": "runner"},
 	{"id": "esquecido_ilha_02", "tile": Vector2(48, 73), "archetype": "guard"},
-	{"id": "esquecido_ilha_03", "tile": Vector2(49, 67.5), "archetype": "lancer"}
+	{"id": "esquecido_ilha_03", "tile": Vector2(49, 67.5), "archetype": "lancer"},
+	# Ilha do Íbis Afogado: escribas vazios guardam o templo; Recife do Navio
+	# Esquecido: saqueadores reviram a carga (far_isles.gd).
+	{"id": "escriba_afogado_01", "tile": Vector2(15.5, 73.5), "archetype": "keeper"},
+	{"id": "escriba_afogado_02", "tile": Vector2(10.5, 78.5), "archetype": "lancer"},
+	{"id": "saqueador_recife_01", "tile": Vector2(78, 64.6), "archetype": "runner"},
+	{"id": "saqueador_recife_02", "tile": Vector2(84, 69.4), "archetype": "guard"}
 ]
 const MAIN_ROUTE_WAYPOINTS := [
 	Vector2(-1, -1), Vector2(3, 0), Vector2(6, 0), Vector2(11, 0), Vector2(16, 0),
@@ -212,7 +235,23 @@ static func tile_catalog() -> Dictionary:
 	var isle := IsleLayout.tiles()
 	for tile in isle:
 		catalog[tile] = {"color": IsleLayout.COLORS[isle[tile]], "theme": isle[tile]}
+	# Salas com desenho próprio ("shape"): o claustro e as ilhas além da baía.
+	var cloister := CloisterLayout.tiles()
+	for tile in cloister:
+		catalog[tile] = {"color": CloisterLayout.COLORS[cloister[tile]], "theme": cloister[tile]}
+	for id in FarIslesLayout.ISLES:
+		var ground := FarIslesLayout.tiles(id)
+		for tile in ground:
+			catalog[tile] = {"color": FarIslesLayout.COLORS[id][ground[tile]], "theme": ground[tile]}
 	return catalog
+
+## Tiles das ilhas que só se alcançam de barco (Bennu, Íbis e o recife), para os
+## testes que andam pelo porto a pé.
+static func sea_only_tiles() -> Dictionary:
+	var result := IsleLayout.tiles()
+	for id in FarIslesLayout.ISLES:
+		result.merge(FarIslesLayout.tiles(id))
+	return result
 
 func _ready() -> void:
 	z_index = -20

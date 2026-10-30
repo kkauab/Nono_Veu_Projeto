@@ -22,7 +22,8 @@ const BANKS := {
 	"water_loop": [preload("res://assets/audio/sfx/water_loop.wav")],
 	"pickup_coin": [preload("res://assets/audio/sfx/pickup_coin_01.wav"), preload("res://assets/audio/sfx/pickup_coin_02.wav"), preload("res://assets/audio/sfx/pickup_coin_03.wav")],
 	"door_open": [preload("res://assets/audio/sfx/door_open_01.wav"), preload("res://assets/audio/sfx/door_open_02.wav")],
-	"chest_open": [preload("res://assets/audio/sfx/chest_open_01.wav"), preload("res://assets/audio/sfx/chest_open_02.wav")]
+	"chest_open": [preload("res://assets/audio/sfx/chest_open_01.wav"), preload("res://assets/audio/sfx/chest_open_02.wav")],
+	"beggar_blessing": [preload("res://assets/audio/music/beggar_oud_riff.wav")]
 }
 
 const BUS := {
@@ -46,7 +47,8 @@ const BUS := {
 	"water_loop": "Ambiente",
 	"pickup_coin": "SFX",
 	"door_open": "SFX",
-	"chest_open": "SFX"
+	"chest_open": "SFX",
+	"beggar_blessing": "Musica"
 }
 
 const VOLUME_DB := {
@@ -70,5 +72,6 @@ const VOLUME_DB := {
 	"water_loop": -16.0,
 	"pickup_coin": -8.0,
 	"door_open": -8.0,
-	"chest_open": -7.0
+	"chest_open": -7.0,
+	"beggar_blessing": -4.0
 }
