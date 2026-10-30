@@ -31,7 +31,7 @@ func configure(owner_hud: Control, mode: String) -> void:
 	position = hud._offset
 	size = Vector2(960, 540) * _ui_scale
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	name = "PauseNotebook"
 	_build_tabs()
@@ -103,10 +103,24 @@ func _character_page() -> void:
 	for i in range(stats.size()):
 		_label(self, stats[i][0], Rect2(157, 331 + i * 24, 88, 24), 12, INK)
 		_label(self, stats[i][1], Rect2(247, 331 + i * 24, 35, 24), 12, FADED)
-	_label(self, "HISTÓRIA", Rect2(523, 80, 310, 21), 12, FADED)
-	_label(self, "Um jovem discípulo chega ao Porto dos Esquecidos em busca de Iri. Entre nomes perdidos e memórias encobertas, Senu segue os vestígios da irmã e procura uma passagem para o norte.", Rect2(523, 111, 314, 119), 17, INK)
-	_label(self, "ESTILO DE COMBATE", Rect2(523, 243, 310, 21), 12, FADED)
-	_label(self, "Passos atentos, esquivas e aparos abrem espaço para a lâmina. A arma e as Emanações definem suas possibilidades.", Rect2(523, 274, 314, 70), 16, INK)
+	# Paragraphs determine their own height. Longer text scrolls inside the
+	# narrative area instead of covering the next heading or action buttons.
+	var narrative := ScrollContainer.new()
+	narrative.name = "CharacterNarrativeScroll"
+	narrative.position = Vector2(523, 80) * _ui_scale
+	narrative.size = Vector2(314, 260) * _ui_scale
+	narrative.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_theme_scroll(narrative)
+	add_child(narrative)
+	var paragraphs := VBoxContainer.new()
+	paragraphs.name = "CharacterParagraphs"
+	paragraphs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	paragraphs.add_theme_constant_override("separation", roundi(10 * _ui_scale))
+	narrative.add_child(paragraphs)
+	_flow_label(paragraphs, "HISTÓRIA", 12, FADED).custom_minimum_size.y = 21 * _ui_scale
+	_flow_label(paragraphs, "Um jovem discípulo chega ao Porto dos Esquecidos em busca de Iri. Entre nomes perdidos e memórias encobertas, Senu segue os vestígios da irmã e procura uma passagem para o norte.", 17, INK).name = "CharacterHistory"
+	_flow_label(paragraphs, "ESTILO DE COMBATE", 12, FADED).custom_minimum_size.y = 21 * _ui_scale
+	_flow_label(paragraphs, "Passos atentos, esquivas e aparos abrem espaço para a lâmina. A arma e as Emanações definem suas possibilidades.", 16, INK).name = "CharacterCombatStyle"
 	for index in range(3):
 		var action: String = ["attack", "dodge", "parry"][index]
 		_button(self, ["Ataque", "Esquiva", "Aparar"][index], Rect2(523 + index * 106, 351, 98, 27), func(): _preview.demonstrate(action)).name = "SenuAction_" + action

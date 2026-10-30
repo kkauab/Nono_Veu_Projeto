@@ -80,7 +80,7 @@ func _test_smoothness() -> void:
 	# Ritmo dos quadros: sem o limite, a física acompanha o monitor.
 	_check(FramePacing.ticks_for(165.0, false) == 165 and FramePacing.ticks_for(144.0, false) == 144 and FramePacing.ticks_for(59.94, false) == 60, "physics steps follow the monitor when uncapped")
 	_check(FramePacing.ticks_for(165.0, true) == 60 and FramePacing.ticks_for(-1.0, false) == 60 and FramePacing.ticks_for(360.0, false) == FramePacing.MAX_TICKS, "the 60 cap, unknown monitors and very fast ones stay bounded")
-	_check(world.hud.get("_limit_fps") == false, "the 60-frame cap is off by default")
+	_check(Engine.max_fps == (0 if DisplayServer.get_name() == "headless" else (60 if bool(world.hud.get("_limit_fps")) else 0)), "frame cap follows the loaded option; headless keeps pacing disabled")
 	# Navios ancorados: linha d'água, balanço e anéis.
 	var ships := 0
 	var seated := 0
@@ -93,7 +93,7 @@ func _test_smoothness() -> void:
 	_check(ships > 0 and seated == ships, "every moored ship sits in the water (%d of %d)" % [seated, ships])
 	var keel := Sea.keel_line(PackedFloat32Array([NAN, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 2.0, NAN]))
 	_check(absf(keel.x - 1.0) < .01 and absf(keel.y - 9.0) < .01, "the keel is the straight line through the middle of the hull, not the raised ends")
-	_check(Boat.ROW_FRAMES == 8 and SeaArt.frame_count("boat_v1", "boat_00") == Boat.FRAME_EMPTY + 1, "the boat sheet has idle, eight stroke frames and the empty boat")
+	_check(Boat.ROW_FRAMES == 8 and SeaArt.frame_count("boat_v4", "boat_00") == Boat.FRAME_EMPTY + 1, "the boat sheet has idle, eight stroke frames and the empty boat")
 
 
 func _test_board() -> void:

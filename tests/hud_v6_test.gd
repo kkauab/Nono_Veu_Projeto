@@ -77,7 +77,7 @@ func _run() -> void:
 	hud.show_overlay("intro")
 	find_button(hud, "Nova jornada").pressed.emit()
 	check(hud.overlay == "new_journey", "Existing progress requires the in-game new-journey confirmation")
-	find_button(hud, "Iniciar nova jornada").pressed.emit()
+	find_button(hud, "Confirmar").pressed.emit()
 	check(demo.restarted == 1, "New-journey confirmation invokes its callback")
 	hud.show_overlay("pause")
 	check(hud.get_node_or_null("PauseNotebook") != null, "Pause opens the character page of the notebook")

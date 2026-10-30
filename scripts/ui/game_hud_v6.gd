@@ -17,6 +17,9 @@ const Notebook = preload("res://scripts/ui/pause_notebook.gd")
 const SpeechBubble = preload("res://scripts/ui/npc_speech_bubble.gd")
 const BOOK_MODES := ["pause", "journal", "inventory", "map", "tree", "settings", "controls", "exit"]
 const FramePacing = preload("res://scripts/core/frame_pacing.gd")
+const TitleMenuButton = preload("res://scripts/ui/title_menu_button.gd")
+const ButtonFeedback = preload("res://scripts/ui/ui_button_feedback.gd")
+const NewJourneyPopup = preload("res://scripts/ui/new_journey_popup.gd")
 const SKILL_POINTS := {
 	"vontade": Vector2(145, 392), "materia": Vector2(325, 392), "intelecto": Vector2(505, 392),
 	"ritmo_lamina": Vector2(145, 326), "passo_etereo": Vector2(325, 326), "selo_mercurio": Vector2(505, 326),
@@ -41,7 +44,7 @@ var dialog_body := ""
 var _conversation_active := false
 var conversation_npc_id := ""
 var font: Font
-var title_font: SystemFont
+var title_font: Font
 var _factor := 1.0
 var _offset := Vector2.ZERO
 var _last_size := Vector2.ZERO
@@ -71,13 +74,13 @@ var _skill_learn: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	ButtonFeedback.install(self)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var readable := SystemFont.new()
-	readable.font_names = PackedStringArray(["Segoe UI", "Noto Sans", "sans-serif"])
-	font = readable
-	title_font = SystemFont.new()
-	title_font.font_names = PackedStringArray(["Georgia", "Noto Serif", "serif"])
+	font = preload("res://scripts/ui/ui_typography.gd").body()
+	title_font = preload("res://scripts/ui/ui_typography.gd").title()
+	theme = preload("res://scripts/ui/ui_typography.gd").make_theme()
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_title_backdrop = TextureRect.new()
 	_title_backdrop.name = "AnimatedPixelHarbor"
 	_title_backdrop.show_behind_parent = true
@@ -112,7 +115,7 @@ func _process(delta: float) -> void:
 		if _portrait_idle_texture == null and ResourceLoader.exists(PORTRAIT_IDLE_IMAGE):
 			_portrait_idle_texture = load(PORTRAIT_IDLE_IMAGE) as Texture2D
 		_title_backdrop.texture = _title_texture
-	_title_backdrop.visible = overlay == "intro" and _title_texture != null
+	_title_backdrop.visible = overlay in ["intro","new_journey"] and _title_texture != null
 	_redraw_tick += delta
 	if _redraw_tick >= 1.0 / 30.0:
 		_redraw_tick = 0.0
@@ -147,6 +150,8 @@ func toast(text: String, color: Color = GOLD, duration: float = 3.8) -> void:
 	message = text
 	message_color = color
 	message_time = duration
+	if overlay == "new_journey" and has_node("NewJourneyPopup"):
+		get_node("NewJourneyPopup").show_error(text)
 
 func show_dialog(title: String, body: String) -> void:
 	_conversation_active = false
@@ -172,6 +177,7 @@ func show_overlay(mode: String) -> void:
 		_return_overlay = overlay
 	if mode == "new_journey": _return_overlay = "intro"
 	overlay = mode
+	set_meta(ButtonFeedback.SCREEN_KEY, mode)
 	get_tree().paused = mode != ""
 	mouse_filter = Control.MOUSE_FILTER_STOP if mode != "" else Control.MOUSE_FILTER_IGNORE
 	_geometry()
@@ -203,7 +209,7 @@ func _build_controls() -> void:
 		notebook.configure(self, overlay)
 		return
 	match overlay:
-		"intro":
+		"intro", "new_journey":
 			_button("Nova jornada", Rect2(104, 294, 302, 44), func():
 				if game.store.loaded_existing or bool(game.store.data["flags"].get("opening_seen", false)): show_overlay("new_journey")
 				else: game.start_journey(), "diamond", "", true)
@@ -211,10 +217,16 @@ func _build_controls() -> void:
 			resume.disabled = not game.store.loaded_existing
 			_button("Configurações", Rect2(104, 399, 302, 42), func(): show_overlay("settings"), "diamond", "", true)
 			_button("Sair", Rect2(104, 451, 302, 42), game.save_and_quit, "diamond", "", true)
-		"new_journey":
-			_label("Uma cópia do último progresso salvo será preservada antes de começar.\nSenu voltará ao santuário e redescobrirá os caminhos do Porto.", Rect2(112, 205, 706, 100), 19, MUTED)
-			_button("Iniciar nova jornada", Rect2(112, 370, 350, 46), game.begin_new_journey, "continue")
-			_button("Voltar", Rect2(492, 370, 326, 46), func(): show_overlay("intro"), "back")
+			if overlay == "new_journey":
+				for button in _buttons:
+					button.focus_mode = Control.FOCUS_NONE
+					button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				var popup := NewJourneyPopup.new()
+				add_child(popup)
+				popup.confirmed.connect(game.begin_new_journey)
+				popup.cancelled.connect(func(): show_overlay("intro"))
+				popup.configure(_factor)
+				return
 		"tree":
 			_build_skill_tree()
 			_back_button()
@@ -275,7 +287,8 @@ func _build_controls() -> void:
 
 func _focus_button(button: Button) -> void:
 	if is_instance_valid(button) and button.is_inside_tree() and button.get_parent() == self:
-		button.grab_focus()
+		if button is TitleMenuButton: button.focus_silently()
+		else: button.grab_focus()
 
 func _build_skill_tree() -> void:
 	if not SkillCatalog.NODES.has(_selected_skill): _selected_skill = SkillCatalog.ORDER[0]
@@ -391,13 +404,14 @@ func _back_button() -> void:
 	_button("Voltar · Esc", Rect2(373, 445, 214, 35), _back, "back", "", true)
 
 func _button(caption: String, rect: Rect2, callback: Callable, icon: String = "", description: String = "", centered: bool = false) -> Button:
-	var button := Button.new()
+	var button: Button = TitleMenuButton.new() if overlay in ["intro","new_journey"] else Button.new()
+	if button is TitleMenuButton: button.ui_scale = _factor
 	button.text = caption
 	button.position = _offset + rect.position * _factor
 	button.size = rect.size * _factor
 	button.alignment = HORIZONTAL_ALIGNMENT_CENTER if centered else HORIZONTAL_ALIGNMENT_LEFT
 	button.add_theme_font_override("font", title_font)
-	button.add_theme_font_size_override("font_size", maxi(9, roundi((20 if overlay in ["pause", "intro"] else 17) * _factor)))
+	button.add_theme_font_size_override("font_size", maxi(9, roundi((20 if overlay in ["pause", "intro", "new_journey"] else 17) * _factor)))
 	button.add_theme_color_override("font_color", IVORY)
 	button.add_theme_color_override("font_disabled_color", Color("7b8985"))
 	button.add_theme_color_override("font_hover_color", Color("ffe6ac"))
@@ -521,7 +535,7 @@ func _sun(center: Vector2, radius: float, opacity: float = 1.0) -> void:
 func _draw() -> void:
 	if game == null or game.player == null or font == null: return
 	draw_set_transform(_offset, 0, Vector2.ONE * _factor)
-	if overlay == "intro":
+	if overlay in ["intro", "new_journey"]:
 		_draw_intro()
 		return
 	if overlay in BOOK_MODES: return
@@ -656,7 +670,6 @@ func _draw_modal() -> void:
 			_text("O que foi encontrado permanece na memória.", Vector2(84, 143), 13, MUTED)
 			for index in range(2): _frame(Rect2(86 + index * 404, 166, 384, 205), true, .7)
 		"controls": _text("O mouse mira o cursor. ¹ Selo de Mercúrio: aprenda na Árvore das Emanações.", Vector2(99, 143), 12, MUTED)
-		"new_journey": _text("Sua travessia anterior ficará arquivada neste computador.", Vector2(112, 329), 14, GOLD)
 		"shop": ShopPanel.draw(self, game)
 
 func _cover(texture: Texture2D, rect: Rect2) -> void:

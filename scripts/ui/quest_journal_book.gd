@@ -35,7 +35,7 @@ func configure(owner_hud: Control) -> void:
 	var factor: Variant = hud.get("_factor")
 	_ui_scale = float(factor) if factor != null else 1.0
 	scale = Vector2.ONE
-	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	name = "QuestJournalBook"
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_IGNORE if embedded else Control.MOUSE_FILTER_STOP
@@ -114,7 +114,8 @@ func _build() -> void:
 	list_scroll.position = Vector2(155, 150) * _ui_scale
 	list_scroll.size = Vector2(292, 294) * _ui_scale
 	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	list_scroll.follow_focus = true
+	# Reveal the complete row, including its child labels, on keyboard focus.
+	list_scroll.follow_focus = false
 	_theme_scroll(list_scroll)
 	add_child(list_scroll)
 	var list := VBoxContainer.new()
@@ -164,6 +165,11 @@ func _build_row(list: VBoxContainer, entry: Dictionary) -> void:
 	lines.add_theme_constant_override("separation", roundi(4 * _ui_scale))
 	content.add_child(lines)
 	var title := _flow_label(lines, ("✓  " if entry["done"] else "◆  ") + str(entry["name"]), 17, FADED if entry["done"] else INK)
+	# The button owns the row height; its child container cannot enlarge it.
+	# Keep long list titles on one line; the details and tooltip retain the name.
+	title.autowrap_mode = TextServer.AUTOWRAP_OFF
+	title.clip_text = true
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.size.x = 254 * _ui_scale
 	_flow_label(lines, "Concluída" if entry["done"] else entry["giver"], 12, FADED)
 	rows[id] = row
@@ -215,6 +221,7 @@ func select_quest(id: String) -> void:
 		row.add_theme_stylebox_override("pressed", style)
 		row.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	_selected_button = rows[id]
+	_keep_selected_visible()
 	if _details == null: return
 	for child in _details.get_children():
 		_details.remove_child(child)
@@ -239,10 +246,7 @@ func select_quest(id: String) -> void:
 	_flow_label(body, "PRÓXIMO PASSO", 12, FADED)
 	_flow_label(body, str(entry["objective"]), 18, INK).name = "CurrentObjective"
 	var flavor := _flow_label(body, str(entry["flavor"]), 16, FADED)
-	var italic := SystemFont.new()
-	italic.font_names = PackedStringArray(["Georgia", "Noto Serif", "serif"])
-	italic.font_italic = true
-	flavor.add_theme_font_override("font", italic)
+	flavor.add_theme_font_override("font", hud.font)
 	_flow_label(body, "OBJETIVOS", 12, FADED)
 	for step in entry["steps"]:
 		var line := HBoxContainer.new()
@@ -259,7 +263,29 @@ func select_quest(id: String) -> void:
 	queue_redraw()
 
 func _focus_selected() -> void:
-	if is_instance_valid(_selected_button) and _selected_button.is_inside_tree(): _selected_button.grab_focus()
+	# Font wrapping and container minima settle after the page enters the tree.
+	# Bound one-shot callbacks disappear with a closed page; no coroutine can
+	# resume against a notebook already removed during rapid tab changes.
+	if is_inside_tree():
+		get_tree().process_frame.connect(_focus_after_layout, CONNECT_ONE_SHOT)
+
+func _focus_after_layout() -> void:
+	if is_inside_tree():
+		get_tree().process_frame.connect(_apply_selected_focus, CONNECT_ONE_SHOT)
+
+func _apply_selected_focus() -> void:
+	if is_instance_valid(_selected_button) and _selected_button.is_inside_tree():
+		_selected_button.grab_focus()
+		_keep_selected_visible()
+
+func _keep_selected_visible() -> void:
+	if not is_instance_valid(_selected_button) or not is_instance_valid(list_scroll): return
+	var top := _selected_button.position.y
+	var bottom := top + _selected_button.size.y
+	if top < list_scroll.scroll_vertical:
+		list_scroll.scroll_vertical = floori(top)
+	elif bottom > list_scroll.scroll_vertical + list_scroll.size.y:
+		list_scroll.scroll_vertical = ceili(bottom - list_scroll.size.y)
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo or entries.is_empty(): return

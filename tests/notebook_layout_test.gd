@@ -29,12 +29,22 @@ func _run() -> void:
 		root.size = dimensions
 		await process_frame
 		world.hud._geometry()
-		for page in ["pause", "settings", "controls", "exit", "map", "inventory", "tree"]:
+		for page in ["pause", "settings", "controls", "exit", "journal", "map", "inventory", "tree"]:
 			world.hud.show_overlay(page)
 			await process_frame
 			await process_frame
 			var book: Control = world.hud.get_node("PauseNotebook")
-			if page == "inventory":
+			if page == "journal":
+				var journal: Control = book.get_node("QuestJournalBook")
+				await process_frame
+				for entry in journal.entries:
+					journal.select_quest(entry["id"])
+					await process_frame
+					var row: Button = journal.rows[entry["id"]]
+					var viewport: Rect2 = journal.list_scroll.get_global_rect()
+					var bounds := row.get_global_rect()
+					_check(bounds.position.y >= viewport.position.y - 1 and bounds.end.y <= viewport.end.y + 1, "Selected quest row must remain fully visible: " + str(entry["id"]))
+			elif page == "inventory":
 				for entry in book.get_meta("inventory_entries"):
 					Inventory.select_item(book, entry["id"])
 					await process_frame
@@ -53,6 +63,8 @@ func _run() -> void:
 					_check_text(book, str(dimensions.x) + " tree " + id)
 			else:
 				_check_text(book, str(dimensions.x) + " " + page)
+				if page == "pause":
+					await _check_character_flow(book, str(dimensions.x))
 	world.hud.show_overlay("")
 	world.queue_free()
 	await process_frame
@@ -87,3 +99,25 @@ func _check(value: bool, caption: String) -> void:
 	if not value:
 		failures.append(caption)
 		push_error(caption)
+
+func _check_character_flow(book: Control, caption: String) -> void:
+	var scroll: ScrollContainer = book.get_node("CharacterNarrativeScroll")
+	var flow: VBoxContainer = scroll.get_node("CharacterParagraphs")
+	for enlarged in [false,true]:
+		if enlarged:
+			for name in ["CharacterHistory","CharacterCombatStyle"]:
+				flow.get_node(name).add_theme_font_size_override("font_size", roundi(24 * book._ui_scale))
+			await process_frame
+			await process_frame
+		var previous_bottom := -INF
+		for label: Label in flow.get_children():
+			_check(label.position.y >= previous_bottom, caption + ": character paragraphs cannot overlap")
+			previous_bottom = label.position.y + label.size.y
+		var actions: Button = book.get_node("SenuAction_attack")
+		_check(scroll.get_global_rect().end.y < actions.get_global_rect().position.y, caption + ": narrative viewport cannot cover action buttons")
+		if enlarged:
+			_check(flow.size.y > scroll.size.y, caption + ": larger text grows into scrollable content instead of fixed boxes")
+			scroll.scroll_vertical = roundi(flow.size.y)
+			await process_frame
+			var last: Control = flow.get_child(flow.get_child_count()-1)
+			_check(last.get_global_rect().end.y <= scroll.get_global_rect().end.y + 2, caption + ": the end of long combat text remains reachable by scrolling")

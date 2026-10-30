@@ -20,8 +20,8 @@ func key(code: int, down: bool) -> void:
 	Input.parse_input_event(event)
 
 func button(caption: String) -> Button:
-	for child in world.hud.get_children():
-		if child is Button and child.text == caption: return child
+	for child in world.hud.find_children("*", "Button", true, false):
+		if child.text == caption: return child
 	return null
 
 func _run() -> void:
@@ -101,7 +101,7 @@ func _run() -> void:
 	# after the first journey has already recorded its completed opening.
 	world.hud.show_overlay("intro")
 	button("Nova jornada").pressed.emit()
-	if world.hud.overlay == "new_journey": button("Iniciar nova jornada").pressed.emit()
+	if world.hud.overlay == "new_journey": button("Confirmar").pressed.emit()
 	for frame in range(4): await process_frame
 	world = current_scene
 	check(world.opening_active and paused and not world.store.data["flags"]["opening_seen"], "Starting another new game always shows the opening again")

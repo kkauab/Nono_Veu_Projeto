@@ -17,7 +17,7 @@ const DRAG := 90.0
 const TURN_RATE := 3.4
 const RADIUS := 11.0
 const DIRECTIONS := 16
-## Quadros de cada direção em boat_v1: parado, oito de remada e vazio.
+## Quadros de cada direção em boat_v4: parado, oito de remada e vazio.
 const FRAME_IDLE := 0
 const ROW_FRAMES := 8
 const FRAME_EMPTY := 9
@@ -30,6 +30,8 @@ signal stroked(blades: PackedVector2Array)
 ## Ângulo da proa no plano do chão (0 aponta para a direita da tela).
 var heading := PI * .75
 var rider: Node2D
+## Mantém Senu sentado durante o encaixe sem aceitar outra remada.
+var transfer_locked := false
 var rowing := false
 ## Fase da remada, de 0 a 1.
 var stroke := 0.0
@@ -53,7 +55,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_clock += delta
-	if rider == null:
+	if rider == null or transfer_locked:
 		velocity = Vector2.ZERO
 		rowing = false
 		_draw_tick += delta
@@ -125,7 +127,7 @@ func _draw() -> void:
 	draw_colored_polygon(hull, Color(.01, .05, .06, .32))
 	hull.append(hull[0])
 	draw_polyline(hull, Color(.83, .93, .88, .22 + (.12 if rowing else 0.0)), 1.0)
-	if SeaArt.draw_frame(self, "boat_v1", "boat_%02d" % direction(), frame(), Vector2(0, bob)):
+	if SeaArt.draw_frame(self, "boat_v4", "boat_%02d" % direction(), frame(), Vector2(0, bob)):
 		return
 	# Reserva sem a folha exportada: casco, bancos e Senu como manchas.
 	var shape := PackedVector2Array()

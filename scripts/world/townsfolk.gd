@@ -6,10 +6,11 @@ extends PortInteractable
 ## está no grupo "enemies". Longe de Senu, a rotina pausa.
 ## `kind` é "townsfolk" (fala ao apertar E) ou "vendor" (vende na bancada).
 
-const SHEET := "res://assets/world/townsfolk_v1.png"
-const CELL := Vector2(32, 52)
-const PIVOT := Vector2(16, 49)
-const POSES := ["idle", "walk_1", "walk_2", "walk_3", "walk_4", "talk", "carry_idle", "carry_1", "carry_2", "carry_3", "carry_4", "bend"]
+const SHEET := "res://assets/world/townsfolk_v3.png"
+const WalkArt = preload("res://scripts/world/npc_walk_art.gd")
+const CELL := Vector2(64, 64)
+const PIVOT := Vector2(32, 58)
+const POSES := ["idle", "walk_1", "walk_2", "walk_3", "walk_4", "talk", "carry_idle", "carry_1", "carry_2", "carry_3", "carry_4", "bend", "breathe", "blink", "carry_breathe", "carry_blink"]
 ## Mesma escala vertical do passo de Senu (player.gd).
 const ISO_Y := .70
 ## Distância de Senu em que a rotina anda; além disso tudo para.
@@ -40,6 +41,8 @@ var _waypoint := 0
 var _acting := false
 var _clock := 0.0
 var _walk_time := 0.0
+var _walk_distance := 0.0
+var _walking := false
 var _gesture := 0.0
 var _attend_clock := 0.0
 var _pushed := 0.0
@@ -73,12 +76,43 @@ func _physics_process(delta: float) -> void:
 	if not is_instance_valid(_hero):
 		_hero = get_tree().get_first_node_in_group("player") as Node2D
 	if is_instance_valid(_hero) and position.distance_squared_to(_hero.position) > AWAKE_RANGE * AWAKE_RANGE:
+		if _walking:
+			_walking = false
+			queue_redraw()
 		return
 	advance(delta)
 
 
 ## Um passo da rotina. Separado de _physics_process para os testes avançarem o tempo.
 func advance(delta: float) -> void:
+	var previous := position
+	var was_walking := _walking
+	_walking = false
+	_advance_route(delta)
+	# Measure the displacement that actually happened, including the short final
+	# waypoint step and making way for Senu. Time, speed and facing never reset it.
+	var moved := position - previous
+	var distance := Vector2(moved.x, moved.y / ISO_Y).length()
+	if distance > .0001 and kind != "vendor":
+		_walk_distance += distance
+		_walk_time += distance / maxf(speed, .001)
+		_walking = true
+		if absf(moved.x) > .05:
+			facing = signf(moved.x)
+	if _walking or was_walking:
+		queue_redraw()
+
+
+## Ground distance is independent of facing, load, stops and rendering cadence.
+func walk_distance() -> float:
+	return _walk_distance
+
+
+func is_walking() -> bool:
+	return _walking
+
+
+func _advance_route(delta: float) -> void:
 	_gesture = maxf(0.0, _gesture - delta)
 	if kind == "vendor":
 		_attend(delta)
@@ -104,12 +138,10 @@ func advance(delta: float) -> void:
 	var direction := ground.normalized()
 	var move := Vector2(direction.x, direction.y * ISO_Y) * step
 	if _blocked_by_hero(move):
-		_walk_time = 0.0
 		return
 	if absf(move.x) > .05:
 		facing = signf(move.x)
 	position += move
-	_walk_time += delta
 
 
 ## Senu encostado: o morador dá um passo para o lado, para fora da linha do
@@ -225,14 +257,13 @@ func _act(delta: float) -> void:
 
 ## A pose de agora: coluna da folha de arte.
 func pose() -> int:
-	var walking := not _acting and _walk_time > 0.0
 	if kind == "vendor":
-		return 5 if _gesture > 0.0 and fmod(time, .6) < .4 else 0
-	if not _acting:
-		if not walking:
-			return 6 if carrying else 0
-		var frame := int(_walk_time * speed / 9.0) % 4
+		return 5 if _gesture > 0.0 and fmod(time, .6) < .4 else rest_pose()
+	if is_walking():
+		var frame := int(_walk_distance / 6.0) % 4
 		return (7 if carrying else 1) + frame
+	if not _acting:
+		return rest_pose()
 	var stop: Dictionary = stops[_stop]
 	match stop["act"]:
 		"pray":
@@ -240,7 +271,15 @@ func pose() -> int:
 		"pick", "drop", "ship":
 			return 11 if _clock > .2 or stop["act"] != "ship" else (6 if carrying else 0)
 		"chat", "buy":
-			return 5 if fmod(time + float(look) * .37, 1.6) < .8 else 0
+			return 5 if fmod(time + float(look) * .37, 1.6) < .8 else rest_pose()
+	return rest_pose()
+
+## Asynchronous rest cycle: short closed eyelid, slower chest lift, feet fixed.
+func rest_pose() -> int:
+	var clock := fposmod(time + float(look) * .37, 5.8)
+	if clock >= 4.7 and clock < 4.825: return 15 if carrying else 13
+	if (clock >= 1.1 and clock < 1.9) or (clock >= 3.1 and clock < 3.9):
+		return 14 if carrying else 12
 	return 6 if carrying else 0
 
 
@@ -267,6 +306,9 @@ func _draw() -> void:
 		draw_rect(Rect2(-5, -36, 10, 36), Color("7d6a52"))
 		return
 	draw_set_transform(Vector2.ZERO, 0, Vector2(facing, 1))
+	if is_walking() and WalkArt.draw(self, look, carrying, walk_distance()):
+		draw_set_transform(Vector2.ZERO)
+		return
 	var region := Rect2(Vector2(pose(), look) * CELL, CELL)
 	draw_texture_rect_region(_sheet, Rect2(-PIVOT, CELL), region)
 	draw_set_transform(Vector2.ZERO)
