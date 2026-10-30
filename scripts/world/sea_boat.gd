@@ -26,6 +26,13 @@ const BOUNDS := Rect2(-3600, -2000, 7200, 5200)
 
 ## Uma remada terminou; `blades` são as pontas dos dois remos, na tela.
 signal stroked(blades: PackedVector2Array)
+## O casco cedeu às mordidas (sea_beasts.gd): Senu cai na água (sea.gd `capsize`).
+signal wrecked
+
+## Casco: as mordidas tiram; atracado num píer, é remendado (sea.gd).
+const HULL_MAX := 100
+var hull := HULL_MAX
+var _shake := 0.0
 
 ## Ângulo da proa no plano do chão (0 aponta para a direita da tela).
 var heading := PI * .75
@@ -55,6 +62,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_clock += delta
+	_shake = maxf(0.0, _shake - delta)
 	if rider == null or transfer_locked:
 		velocity = Vector2.ZERO
 		rowing = false
@@ -104,6 +112,26 @@ func hull_point(u: float, v: float) -> Vector2:
 	return Vector2(u * cos(heading) - v * sin(heading), (u * sin(heading) + v * cos(heading)) * .5)
 
 
+## Uma mordida no casco, vinda de `from`. Devolve false se não havia o que morder.
+func damage(amount: int, from: Vector2) -> bool:
+	if rider == null or transfer_locked or hull <= 0:
+		return false
+	hull = maxi(0, hull - amount)
+	_shake = .35
+	if Sfx.has_bank("water_splash"):
+		Sfx.play(self, "water_splash", global_position, -6.0, randf_range(.7, .85))
+	queue_redraw()
+	if hull <= 0:
+		wrecked.emit()
+	return true
+
+
+func repair() -> void:
+	hull = HULL_MAX
+	_shake = 0.0
+	queue_redraw()
+
+
 func frame() -> int:
 	if rider == null:
 		return FRAME_EMPTY
@@ -119,6 +147,7 @@ func _splash() -> void:
 
 func _draw() -> void:
 	var bob := roundf(sin(_clock * 2.2))
+	var shake := Vector2(roundf(sin(_clock * 70.0) * 2.0 * _shake / .35), 0)
 	# Sombra na água e uma linha de espuma em volta do casco.
 	var hull := PackedVector2Array()
 	for step in range(18):
@@ -127,7 +156,8 @@ func _draw() -> void:
 	draw_colored_polygon(hull, Color(.01, .05, .06, .32))
 	hull.append(hull[0])
 	draw_polyline(hull, Color(.83, .93, .88, .22 + (.12 if rowing else 0.0)), 1.0)
-	if SeaArt.draw_frame(self, "boat_v4", "boat_%02d" % direction(), frame(), Vector2(0, bob)):
+	if SeaArt.draw_frame(self, "boat_v4", "boat_%02d" % direction(), frame(), Vector2(0, bob) + shake):
+		_draw_hull()
 		return
 	# Reserva sem a folha exportada: casco, bancos e Senu como manchas.
 	var shape := PackedVector2Array()
@@ -140,3 +170,16 @@ func _draw() -> void:
 	if rider != null:
 		draw_circle(Vector2(0, bob - 14), 4.0, Color("dbcfaa"))
 		draw_circle(Vector2(0, bob - 20), 3.0, Color("a27d50"))
+
+
+## Barrinha do casco sobre o barco, só depois da primeira mordida.
+func _draw_hull() -> void:
+	if hull >= HULL_MAX or rider == null:
+		return
+	var width := 28.0
+	var fill := roundf(width * float(hull) / HULL_MAX)
+	var tint := Color("e0bd7e") if hull > HULL_MAX * .4 else Color("be733a")
+	draw_rect(Rect2(-width * .5 - 1, -49, width + 2, 4), Color("14252c"))
+	draw_rect(Rect2(-width * .5, -48, fill, 2), tint)
+	if _shake > 0.0:
+		draw_rect(Rect2(-width * .5, -48, width, 2), Color(1, .95, .8, _shake))

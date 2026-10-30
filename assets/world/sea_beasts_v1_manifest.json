@@ -1,0 +1,407 @@
+{
+	"canvas": [
+		64,
+		48
+	],
+	"columns": 8,
+	"frames": 132,
+	"game_scale": 1.0,
+	"pivot": [
+		32,
+		32
+	],
+	"pixel_art": true,
+	"source": "res://art/pixelorama/sea_v2/sea_beasts_v1.pxo",
+	"sprites": {
+		"croc_bite_0": {
+			"fps": 6.0,
+			"frames": [
+				6,
+				7
+			]
+		},
+		"croc_bite_1": {
+			"fps": 6.0,
+			"frames": [
+				14,
+				15
+			]
+		},
+		"croc_bite_2": {
+			"fps": 6.0,
+			"frames": [
+				22,
+				23
+			]
+		},
+		"croc_bite_3": {
+			"fps": 6.0,
+			"frames": [
+				30,
+				31
+			]
+		},
+		"croc_bite_4": {
+			"fps": 6.0,
+			"frames": [
+				38,
+				39
+			]
+		},
+		"croc_bite_5": {
+			"fps": 6.0,
+			"frames": [
+				46,
+				47
+			]
+		},
+		"croc_bite_6": {
+			"fps": 6.0,
+			"frames": [
+				54,
+				55
+			]
+		},
+		"croc_bite_7": {
+			"fps": 6.0,
+			"frames": [
+				62,
+				63
+			]
+		},
+		"croc_lurk_0": {
+			"fps": 2.0,
+			"frames": [
+				4,
+				5
+			]
+		},
+		"croc_lurk_1": {
+			"fps": 2.0,
+			"frames": [
+				12,
+				13
+			]
+		},
+		"croc_lurk_2": {
+			"fps": 2.0,
+			"frames": [
+				20,
+				21
+			]
+		},
+		"croc_lurk_3": {
+			"fps": 2.0,
+			"frames": [
+				28,
+				29
+			]
+		},
+		"croc_lurk_4": {
+			"fps": 2.0,
+			"frames": [
+				36,
+				37
+			]
+		},
+		"croc_lurk_5": {
+			"fps": 2.0,
+			"frames": [
+				44,
+				45
+			]
+		},
+		"croc_lurk_6": {
+			"fps": 2.0,
+			"frames": [
+				52,
+				53
+			]
+		},
+		"croc_lurk_7": {
+			"fps": 2.0,
+			"frames": [
+				60,
+				61
+			]
+		},
+		"croc_swim_0": {
+			"fps": 6.0,
+			"frames": [
+				0,
+				1,
+				2,
+				3
+			]
+		},
+		"croc_swim_1": {
+			"fps": 6.0,
+			"frames": [
+				8,
+				9,
+				10,
+				11
+			]
+		},
+		"croc_swim_2": {
+			"fps": 6.0,
+			"frames": [
+				16,
+				17,
+				18,
+				19
+			]
+		},
+		"croc_swim_3": {
+			"fps": 6.0,
+			"frames": [
+				24,
+				25,
+				26,
+				27
+			]
+		},
+		"croc_swim_4": {
+			"fps": 6.0,
+			"frames": [
+				32,
+				33,
+				34,
+				35
+			]
+		},
+		"croc_swim_5": {
+			"fps": 6.0,
+			"frames": [
+				40,
+				41,
+				42,
+				43
+			]
+		},
+		"croc_swim_6": {
+			"fps": 6.0,
+			"frames": [
+				48,
+				49,
+				50,
+				51
+			]
+		},
+		"croc_swim_7": {
+			"fps": 6.0,
+			"frames": [
+				56,
+				57,
+				58,
+				59
+			]
+		},
+		"ladder_x_stone": {
+			"frames": [
+				128
+			]
+		},
+		"ladder_x_wood": {
+			"frames": [
+				129
+			]
+		},
+		"ladder_y_stone": {
+			"frames": [
+				130
+			]
+		},
+		"ladder_y_wood": {
+			"frames": [
+				131
+			]
+		},
+		"sobek_bite_0": {
+			"fps": 6.0,
+			"frames": [
+				70,
+				71
+			]
+		},
+		"sobek_bite_1": {
+			"fps": 6.0,
+			"frames": [
+				78,
+				79
+			]
+		},
+		"sobek_bite_2": {
+			"fps": 6.0,
+			"frames": [
+				86,
+				87
+			]
+		},
+		"sobek_bite_3": {
+			"fps": 6.0,
+			"frames": [
+				94,
+				95
+			]
+		},
+		"sobek_bite_4": {
+			"fps": 6.0,
+			"frames": [
+				102,
+				103
+			]
+		},
+		"sobek_bite_5": {
+			"fps": 6.0,
+			"frames": [
+				110,
+				111
+			]
+		},
+		"sobek_bite_6": {
+			"fps": 6.0,
+			"frames": [
+				118,
+				119
+			]
+		},
+		"sobek_bite_7": {
+			"fps": 6.0,
+			"frames": [
+				126,
+				127
+			]
+		},
+		"sobek_lurk_0": {
+			"fps": 2.0,
+			"frames": [
+				68,
+				69
+			]
+		},
+		"sobek_lurk_1": {
+			"fps": 2.0,
+			"frames": [
+				76,
+				77
+			]
+		},
+		"sobek_lurk_2": {
+			"fps": 2.0,
+			"frames": [
+				84,
+				85
+			]
+		},
+		"sobek_lurk_3": {
+			"fps": 2.0,
+			"frames": [
+				92,
+				93
+			]
+		},
+		"sobek_lurk_4": {
+			"fps": 2.0,
+			"frames": [
+				100,
+				101
+			]
+		},
+		"sobek_lurk_5": {
+			"fps": 2.0,
+			"frames": [
+				108,
+				109
+			]
+		},
+		"sobek_lurk_6": {
+			"fps": 2.0,
+			"frames": [
+				116,
+				117
+			]
+		},
+		"sobek_lurk_7": {
+			"fps": 2.0,
+			"frames": [
+				124,
+				125
+			]
+		},
+		"sobek_swim_0": {
+			"fps": 6.0,
+			"frames": [
+				64,
+				65,
+				66,
+				67
+			]
+		},
+		"sobek_swim_1": {
+			"fps": 6.0,
+			"frames": [
+				72,
+				73,
+				74,
+				75
+			]
+		},
+		"sobek_swim_2": {
+			"fps": 6.0,
+			"frames": [
+				80,
+				81,
+				82,
+				83
+			]
+		},
+		"sobek_swim_3": {
+			"fps": 6.0,
+			"frames": [
+				88,
+				89,
+				90,
+				91
+			]
+		},
+		"sobek_swim_4": {
+			"fps": 6.0,
+			"frames": [
+				96,
+				97,
+				98,
+				99
+			]
+		},
+		"sobek_swim_5": {
+			"fps": 6.0,
+			"frames": [
+				104,
+				105,
+				106,
+				107
+			]
+		},
+		"sobek_swim_6": {
+			"fps": 6.0,
+			"frames": [
+				112,
+				113,
+				114,
+				115
+			]
+		},
+		"sobek_swim_7": {
+			"fps": 6.0,
+			"frames": [
+				120,
+				121,
+				122,
+				123
+			]
+		}
+	},
+	"texture": "res://assets/world/sea_beasts_v1.png",
+	"version": 1
+}

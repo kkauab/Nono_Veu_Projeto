@@ -585,7 +585,7 @@ func _draw_gameplay() -> void:
 		if room["id"] == game.current_room: area = room["name"]
 	var house_id := str(game.get("inside_house"))
 	if HouseCatalog.HOUSES.has(house_id): area = HouseCatalog.HOUSES[house_id]["name"]
-	if game.get("at_sea") == true: area = "Baía das Garças"
+	if game.get("at_sea") == true or bool(game.get_meta("swimming", false)): area = "Baía das Garças"
 	_text_block(area, Vector2(677, 43), 219, 16, 18, GOLD, true)
 	var weapon = hero.equipped_weapon()
 	_hud_shade(Rect2(28, 458, 273, 58))
