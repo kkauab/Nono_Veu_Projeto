@@ -9,7 +9,13 @@ const PORTRAIT_CELL := Vector2(160,192)
 const ATLAS_COLUMNS := 5
 const PORTRAIT_PATHS := {
 	"SENU": "res://assets/ui/dialogue_v15/senu.png",
-	"PESCADOR": "res://assets/ui/dialogue_v15/fisherman.png"
+	"PESCADOR": "res://assets/ui/dialogue_v15/fisherman.png",
+	"ESCRIBA": "res://assets/ui/dialogue_v15/escriba.png",
+	"PEIXEIRA": "res://assets/ui/dialogue_v15/peixeira.png",
+	"TAMAREIRO": "res://assets/ui/dialogue_v15/tamareiro.png",
+	"PADEIRA": "res://assets/ui/dialogue_v15/padeira.png",
+	"CERVEJEIRO": "res://assets/ui/dialogue_v15/cervejeiro.png",
+	"PEREGRINA": "res://assets/ui/dialogue_v15/peregrina.png"
 }
 const EXPRESSIONS := ["neutral","concerned","sad","resolute"]
 # A complete-pose delivery loop. These timings never inspect the written text.
@@ -341,10 +347,13 @@ func _draw_living_portrait(speaker: String, rect: Rect2, state: Dictionary, tint
 			_portrait_strip(speaker,frame,source_y,0,PORTRAIT_CELL.x,destination,pixel_scale,tint)
 
 func _portrait_strip(speaker: String, frame: int, source_y: float, x: float, width: float, destination: Rect2, pixel_scale: Vector2, tint: Color) -> void:
-	var origin := Vector2(frame%ATLAS_COLUMNS,frame/ATLAS_COLUMNS)*PORTRAIT_CELL
+	var texture: Texture2D = _textures[speaker]
+	# Retratos de moradores têm um quadro só: respiram e mexem a cabeça, sem trocar boca nem olhos.
+	var is_atlas := texture.get_width() > PORTRAIT_CELL.x
+	var origin := Vector2(frame%ATLAS_COLUMNS,frame/ATLAS_COLUMNS)*PORTRAIT_CELL if is_atlas else Vector2.ZERO
 	var source := Rect2(origin+Vector2(x,source_y),Vector2(width,1.0/pixel_scale.y))
 	var target := Rect2(destination.position+Vector2(x*pixel_scale.x,0),Vector2(width*pixel_scale.x,1))
-	draw_texture_rect_region(_textures[speaker],target,source,tint)
+	draw_texture_rect_region(texture,target,source,tint)
 
 func _text(value: String, at: Vector2, point_size: int, color: Color, serif: bool = false) -> void:
 	draw_set_transform(Vector2.ZERO)

@@ -1,0 +1,44 @@
+{
+  "cell": [
+    128,
+    128
+  ],
+  "looks": [
+    "estivador",
+    "carregador",
+    "peixeira",
+    "mercador",
+    "marinheiro",
+    "remador",
+    "escriba",
+    "peregrina",
+    "velho",
+    "aguadeira",
+    "padeira",
+    "caravaneiro",
+    "sacerdote",
+    "alquimista",
+    "sentinela",
+    "mercadora"
+  ],
+  "pivot": [
+    64,
+    112
+  ],
+  "poses": [
+    "idle",
+    "walk_1",
+    "walk_2",
+    "walk_3",
+    "walk_4",
+    "talk",
+    "carry_idle",
+    "carry_1",
+    "carry_2",
+    "carry_3",
+    "carry_4",
+    "bend"
+  ],
+  "texture": "res://assets/world/townsfolk_hires_v2.png",
+  "version": 3
+}

@@ -178,7 +178,7 @@ func _save_failure() -> void:
 func _boss_and_last_tower() -> void:
 	var boss: VeilEnemy = world.boss
 	var boss_id := boss.enemy_id
-	boss.receive_hit(9999, boss.position)
+	preload("res://tests/gatekeeper_test_tools.gd").defeat(world)
 	await _deferred()
 	check(world.store.data["flags"]["boss"] and boss_id in world.store.data["defeated"], "Defeating the boss records its permanent flag and ID")
 	await _collect_drops()

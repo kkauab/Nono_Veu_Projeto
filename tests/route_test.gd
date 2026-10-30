@@ -23,6 +23,9 @@ func _run() -> void:
 	world = load("res://scenes/boot/main.tscn").instantiate()
 	root.add_child(world)
 	current_scene = world
+	# This suite isolates navigation. Narrative entry/skip is covered by the
+	# Gatekeeper encounter tests and completed explicitly below.
+	world.gatekeeper_encounter.set_process(false)
 	await physics_frame
 	await physics_frame
 	# Este percurso continua isolando a navegação da rota original. Os puzzles
@@ -118,7 +121,7 @@ func _run() -> void:
 	await drive_to(PortLayout.iso(Vector2(-14, 25)), 100)
 	check(PortLayout.unproject(world.player.position).x > -12.8, "Catacumbas bloqueadas antes da derrota do chefe")
 	check(await walk_to(markers["selo"]), "Reaproximação física pelo centro da saída após testar a barreira")
-	world.boss.receive_hit(9999, world.player.position, true)
+	preload("res://tests/gatekeeper_test_tools.gd").defeat(world)
 	await physics_frame
 	check(world.store.data["flags"]["boss"] and world.exit_gate.opened, "Derrota real do chefe abre saída")
 	if not await follow_main(PortLayout.MAIN_ROUTE_WAYPOINTS[-1]):

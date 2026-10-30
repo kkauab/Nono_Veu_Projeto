@@ -11,6 +11,9 @@ const SeaArt = preload("res://scripts/world/sea_art.gd")
 const NpcArt = preload("res://scripts/world/npc_art.gd")
 const Art = preload("res://scripts/world/port_art.gd")
 const Layout = preload("res://scripts/world/port_layout.gd")
+const FarIslesLayout = preload("res://scripts/world/far_isles_layout.gd")
+const FarIsles = preload("res://scripts/world/far_isles.gd")
+const Cloister = preload("res://scripts/world/cloister.gd")
 const KINDS := ["isle_npc", "isle_brazier", "isle_altar", "isle_net"]
 ## Raio do tronco ou da base que bloqueia Senu, em pixels.
 const SOLID_RADIUS := {"palm": 7.0, "acacia": 5.0, "sycamore": 9.0, "bush_a": 8.0, "bush_b": 8.0, "rock_a": 12.0, "rock_b": 9.0, "column_broken": 7.0}
@@ -177,6 +180,20 @@ static func build(game) -> void:
 	if "isle_net" not in game.store.data["collected"]:
 		_fixture(game, "hori_net", "isle_net", "hori_net")
 	IsleStory.refresh(game)
+	# Gustavo, 30/10/2026 (docs/MUNDO_PROPOSTA_2026-10-30.md): a vegetação e as
+	# garças das ilhas além da baía, as peças delas e as do Claustro dos Iniciados.
+	for piece in FarIslesLayout.PROPS:
+		var prop := IsleProp.new()
+		prop.kind = piece[0]
+		prop.solid = piece[2]
+		prop.position = Layout.iso(piece[1])
+		game.actors.add_child(prop)
+	for tile in FarIslesLayout.HERONS:
+		var heron := Heron.new()
+		heron.position = Layout.iso(tile)
+		game.actors.add_child(heron)
+	FarIsles.build(game)
+	Cloister.build(game)
 
 
 static func _fixture(game, id: String, kind: String, marker: String) -> PortInteractable:
@@ -189,4 +206,8 @@ static func _fixture(game, id: String, kind: String, marker: String) -> PortInte
 
 
 static func activate(game, item: PortInteractable) -> bool:
+	# As peças do claustro e das ilhas além da baía (extra_fixture.gd) usam o tipo
+	# "isle_altar" só para chegar aqui; cada uma volta ao módulo dela.
+	if item.has_method("extra_activate"):
+		return item.extra_activate(game)
 	return IsleStory.activate(game, item)

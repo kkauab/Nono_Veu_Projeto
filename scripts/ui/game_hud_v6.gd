@@ -264,7 +264,9 @@ func _build_controls() -> void:
 				speech.finished.connect(func(): show_overlay(""))
 				speech.configure(self, dialog_title, dialog_body, conversation_npc_id)
 			else:
-				_scroll_text(dialog_body, Rect2(100, 156, 760, 250), 19)
+				var portrait := _find_npc_portrait(dialog_title)
+				var text_rect := Rect2(100, 156, 530 if portrait != null else 760, 250)
+				_scroll_text(dialog_body, text_rect, 19)
 				_back_button()
 		"journal":
 			var book := JournalBook.new()
@@ -583,7 +585,7 @@ func _draw_gameplay() -> void:
 		if room["id"] == game.current_room: area = room["name"]
 	var house_id := str(game.get("inside_house"))
 	if HouseCatalog.HOUSES.has(house_id): area = HouseCatalog.HOUSES[house_id]["name"]
-	if game.get("at_sea") == true: area = "Baía das Garças"
+	if game.get("at_sea") == true or bool(game.get_meta("swimming", false)): area = "Baía das Garças"
 	_text_block(area, Vector2(677, 43), 219, 16, 18, GOLD, true)
 	var weapon = hero.equipped_weapon()
 	_hud_shade(Rect2(28, 458, 273, 58))
@@ -603,10 +605,17 @@ func _draw_gameplay() -> void:
 		_text("ADAGAS" if weapon.category == "leve" else "ESPADA", Vector2(89, 500), 10, GOLD, true)
 		_text("Q  Pronto" if ready else "Q  %.1f s" % hero.power_cooldown_remaining, Vector2(215, 500), 11, IVORY if ready else MUTED)
 	if game.nearest != null and is_instance_valid(game.nearest) and not game.respawning and overlay == "": _draw_interaction()
-	if is_instance_valid(game.boss) and game.boss.health > 0 and hero.position.distance_to(game.boss.position) < 240 and overlay == "":
-		_text("O PORTEIRO SEM NOME", Vector2(430, 426), 16, GOLD)
-		draw_rect(Rect2(349, 438, 480, 7), Color("45312a"))
-		draw_rect(Rect2(349, 438, 480 * float(game.boss.health) / maxf(1, game.boss.max_health), 7), Color("bb8062"))
+	if is_instance_valid(game.boss) and game.boss.health > 0 and overlay == "":
+		var active: Variant=game.boss.get("encounter_active")
+		if active==true or (active==null and hero.position.distance_to(game.boss.position)<240):
+			var boss_name:="O PORTEIRO SEM NOME"
+			var width:=font.get_string_size(boss_name,HORIZONTAL_ALIGNMENT_LEFT,-1,15).x
+			_text(boss_name,Vector2(480-width*.5,427),15,GOLD)
+			draw_rect(Rect2(239,435,482,11),Color("172124"))
+			draw_rect(Rect2(240,436,480,9),Color("45312a"))
+			var desperate: Variant=game.boss.get("phase")
+			draw_rect(Rect2(241,437,478*float(game.boss.health)/maxf(1,game.boss.max_health),7),Color("ba8764") if desperate!=2 else Color("af775d"))
+			draw_line(Vector2(240,435),Vector2(720,435),Color(GOLD,.55))
 	if message_time > 0 and overlay == "":
 		var toast_width := minf(690, font.get_string_size(message, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 40)
 		var toast_rows := _wrapped_text(message, toast_width - 38, font, 16).split("\n").size()
@@ -671,6 +680,44 @@ func _draw_modal() -> void:
 			for index in range(2): _frame(Rect2(86 + index * 404, 166, 384, 205), true, .7)
 		"controls": _text("O mouse mira o cursor. ¹ Selo de Mercúrio: aprenda na Árvore das Emanações.", Vector2(99, 143), 12, MUTED)
 		"shop": ShopPanel.draw(self, game)
+		"dialog":
+			var portrait := _find_npc_portrait(dialog_title)
+			if portrait != null:
+				var p_rect := Rect2(650, 140, 220, 260)
+				_frame(p_rect, true, .85)
+				var canvas := Vector2(160, 192)
+				var factor := minf((p_rect.size.x - 20) / canvas.x, (p_rect.size.y - 20) / canvas.y)
+				var fitted := canvas * factor
+				var dest := Rect2(p_rect.get_center() - fitted * .5, fitted)
+				var src := Rect2(Vector2.ZERO, canvas)
+				draw_texture_rect_region(portrait, dest, src)
+				draw_rect(p_rect, GOLD.darkened(.35), false, 1.0)
+
+func _find_npc_portrait(title: String) -> Texture2D:
+	var lower := title.to_lower()
+	var path := ""
+	if lower == "senu": path = "res://assets/ui/dialogue_v15/senu.png"
+	elif "mendigo" in lower or "cordas" in lower or "alaúde" in lower or "alaude" in lower: path = "res://assets/ui/dialogue_v15/mendigo.png"
+	elif "escriba" in lower: path = "res://assets/ui/dialogue_v15/escriba.png"
+	elif "peixeira" in lower: path = "res://assets/ui/dialogue_v15/peixeira.png"
+	elif "tamareiro" in lower or "tâmara" in lower: path = "res://assets/ui/dialogue_v15/tamareiro.png"
+	elif "padeira" in lower or "pão" in lower: path = "res://assets/ui/dialogue_v15/padeira.png"
+	elif "cervejeiro" in lower or "cerveja" in lower or "caravaneiro" in lower: path = "res://assets/ui/dialogue_v15/cervejeiro.png"
+	elif "peregrina" in lower: path = "res://assets/ui/dialogue_v15/peregrina.png"
+	elif "pescador" in lower or "sabu" in lower or "hori" in lower: path = "res://assets/ui/dialogue_v15/fisherman.png"
+	elif "sacerdote" in lower: path = "res://assets/ui/dialogue_v15/sacerdote.png"
+	elif "alquimista" in lower: path = "res://assets/ui/dialogue_v15/alquimista.png"
+	elif "sentinela" in lower: path = "res://assets/ui/dialogue_v15/sentinela.png"
+	elif "mercadora" in lower: path = "res://assets/ui/dialogue_v15/mercadora.png"
+	elif "estivador" in lower: path = "res://assets/ui/dialogue_v15/estivador.png"
+	elif "carregador" in lower: path = "res://assets/ui/dialogue_v15/carregador.png"
+	elif "marinheiro" in lower: path = "res://assets/ui/dialogue_v15/marinheiro.png"
+	elif "velho" in lower: path = "res://assets/ui/dialogue_v15/velho.png"
+	elif "aguadeira" in lower: path = "res://assets/ui/dialogue_v15/aguadeira.png"
+	elif "remador" in lower: path = "res://assets/ui/dialogue_v15/remador.png"
+	if path != "" and ResourceLoader.exists(path):
+		return load(path) as Texture2D
+	return null
 
 func _cover(texture: Texture2D, rect: Rect2) -> void:
 	var texture_size := texture.get_size()

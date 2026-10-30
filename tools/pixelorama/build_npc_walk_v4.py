@@ -80,41 +80,47 @@ def prepare(name,ref):
     settings_path=ART/'sources'/f'{name}.source.json'
     settings=json.loads(settings_path.read_text(encoding='utf-8-sig')) if settings_path.exists() else {}
     columns,rows=settings.get('grid',[4,4])
-    cells=complete_cells(image,columns,rows,settings.get('indices'))
-    standing=median(cells[i][1][3]-cells[i][1][1] for i in [0,4,8,12])
-    target=ref[0].getbbox();height=target[3]-target[1]
-    scale=height/standing
-    colors=native.palette()
-    frames=[];records=[]
+    normal_indices=settings.get('indices',list(range(16)))[:8]
+    cells=complete_cells(image,columns,rows,normal_indices)
+    cell_sources=[(path,image.size)]*8
+    carry_file=settings.get('carry_source')
+    if carry_file:
+        carry_path=ART/'sources'/carry_file
+        carry_image=Image.open(carry_path).convert('RGBA')
+        cc,cr=settings.get('carry_grid',[4,2])
+        cells+=complete_cells(carry_image,cc,cr,list(range(8)))
+        cell_sources += [(carry_path,carry_image.size)]*8
+    else:
+        indices=settings.get('indices',list(range(16)))[8:16]
+        cells+=complete_cells(image,columns,rows,indices)
+        cell_sources += [(path,image.size)]*8
+    colors=native.palette();frames=[];records=[];scales=[]
     for i,(cel,bounds,rect) in enumerate(cells):
-        # Uniform scale, head anchor and a controlled one-pixel rise. Do not
-        # recenter the torso on a different supporting foot every other step.
         old=ref[0 if i<8 else 6];old_bounds=old.getbbox()
         old_anchor=head_anchor(old,old_bounds,8)
+        # Generated sheets accidentally change zoom between rows. Normalize each
+        # COMPLETE pose before native export, keeping its proportions and all
+        # hands/load connections. Runtime always draws the final native pixels.
+        bob=[0,1,0,-1,0,1,0,-1][i%8]
+        canonical_height=ref[0].getbbox()[3]-ref[0].getbbox()[1]-bob
+        scale=canonical_height/(bounds[3]-bounds[1])
+        scales.append(scale)
         anchor=head_anchor(cel,bounds,max(2,round(8/scale)))
-        bob=[0,0,-1,-1,0,0,-1,-1][i%8]
-        offset=(round(old_anchor[0]-anchor[0]*scale),round(old_anchor[1]+bob-anchor[1]*scale))
+        offset=(round(old_anchor[0]-anchor[0]*scale),round(PIVOT[1]-bounds[3]*scale))
         frame=cel.transform(CELL,Image.Transform.AFFINE,(1/scale,0,-offset[0]/scale,0,1/scale,-offset[1]/scale),resample=Image.Resampling.NEAREST)
         frame=native.quantize(frame,colors)
         projected=[bounds[0]*scale+offset[0],bounds[1]*scale+offset[1],bounds[2]*scale+offset[0],bounds[3]*scale+offset[1]]
         if min(projected[:2])<-.5 or projected[2]>64.5 or projected[3]>64.5:raise ValueError(f'{name}/{i}: full pose clipped {projected}')
         frames.append(frame)
-        records.append({'phase':PHASES[i%8],'mode':'walk' if i<8 else 'carry','source_rect':rect,'source_bounds':list(bounds),'source_head_anchor':list(anchor),'target_head_anchor':list(old_anchor),'bob':bob,'translation':list(offset),'scale':scale,'bounds':list(frame.getbbox()),'projected_bounds':projected})
-    # The complete authored carrying poses keep hands/load physically joined.
-    # Register one baseline per whole mode; never freeze a cargo block on new legs.
-    for mode in range(2):
-        offset_mode=mode*8
-        floor_shift=round(PIVOT[1]-median(frames[offset_mode+i].getbbox()[3] for i in [0,1,4,5]))
-        for phase in range(8):
-            i=offset_mode+phase
-            shifted=Image.new('RGBA',CELL)
-            shifted.paste(frames[i],(0,floor_shift))
-            frames[i]=shifted
-            records[i]['cycle_baseline_shift']=floor_shift
-            records[i]['upper_body']='complete authored pose, including hands and load'
-            records[i]['bounds']=list(shifted.getbbox())
+        source,source_size=cell_sources[i]
+        records.append({'phase':PHASES[i%8],'mode':'walk' if i<8 else 'carry','source':str(source.relative_to(ROOT)).replace('\\','/'),
+        'source_rect':rect,'source_size':list(source_size),'source_bounds':list(bounds),'source_head_anchor':list(anchor),'target_head_anchor':list(old_anchor),
+        'bob':bob,'translation':list(offset),'scale':scale,'bounds':list(frame.getbbox()),'projected_bounds':projected,
+        'upper_body':'complete authored pose, including hands and load'})
+    sources={str(p.relative_to(ROOT)).replace('\\','/'):digest(p.read_bytes()) for p,_ in cell_sources}
     record={'source':str(path.relative_to(ROOT)).replace('\\','/'),'sha256':digest(path.read_bytes()),'source_size':list(image.size),
-    'uniform_scale':scale,'registration':'crown alignment; supporting foot never recenters torso','registrations':records}
+    'sources':sources,'uniform_scale':median(scales),'source_scale_normalization':'complete cel to fixed 43-45px body height before native export; no runtime scaling',
+    'registration':'crown X alignment and fixed floor; original source zoom corrected per complete cel','registrations':records}
     return frames,record
 
 def previews(all_frames,old):

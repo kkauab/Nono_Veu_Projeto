@@ -177,10 +177,17 @@ func _test_world_events() -> void:
 	var boss: VeilEnemy = world.get("boss")
 	_check(is_instance_valid(boss), "actual boss exists before defeat")
 	if is_instance_valid(boss):
-		boss.receive_hit(boss.max_health + 1, player.position)
+		preload("res://tests/gatekeeper_test_tools.gd").defeat(world)
 		await process_frame
 		_check(store.data["flags"]["boss"] and "porteiro" in store.data["defeated"], "boss damage emits defeat and persists its ID")
 		_check(exit_gate.opened and exit_gate.get_node("Barrier").disabled, "boss defeat signal opens seal and disables collider")
+	var before_rest: DemoSaveStore = SaveStore.new(store.path)
+	_check(before_rest.load_progress() and not before_rest.data["flags"]["boss"], "boss victory stays unanchored until the next tower")
+	var victory_tower := _find_item(world, "s1")
+	player.position = victory_tower.position
+	_check(bool(world.call("activate", victory_tower)), "tower meditation anchors the boss victory and current equipment")
+	await process_frame
+	await process_frame
 	var restored: DemoSaveStore = SaveStore.new(store.path)
 	_check(restored.load_progress(), "world events produce a readable actual save")
 	_check(_same_snapshot(restored.data, store.data), "world inventory, upgrades, checkpoint and flags roundtrip together")

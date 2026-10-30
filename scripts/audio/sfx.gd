@@ -10,7 +10,7 @@ extends Node
 ## tools/audio/build_combat_sfx.py.
 
 const Banks = preload("res://scripts/audio/sfx_banks.gd")
-const BUSES := ["SFX", "Ambiente", "Vozes"]
+const BUSES := ["SFX", "Ambiente", "Vozes", "Musica"]
 const POOL_NAME := "VeilSfx"
 const POSITIONAL_VOICES := 12
 const FLAT_VOICES := 4
@@ -103,6 +103,12 @@ func play_bank(bank: String, at: Vector2 = Vector2.INF, volume_db: float = 0.0, 
 		choices = streams
 	var stream: AudioStream = choices[_rng.randi_range(0, choices.size() - 1)]
 	_last_stream[bank] = stream
+	return play_stream(stream, at, float(Banks.VOLUME_DB.get(bank, 0.0)) + volume_db,
+		pitch * (1.0 + _rng.randf_range(-PITCH_SPREAD, PITCH_SPREAD)), Banks.BUS.get(bank, "SFX"))
+
+## Original encounter streams share the same bounded voice pool as the banks.
+func play_stream(stream: AudioStream, at: Vector2 = Vector2.INF, volume_db: float = 0.0, pitch: float = 1.0, bus: String = "SFX", source: Node=null) -> Node:
+	if stream == null or _positional.is_empty(): return null
 	var voice: Node
 	if at == Vector2.INF:
 		voice = _flat[_next_flat]
@@ -112,8 +118,9 @@ func play_bank(bank: String, at: Vector2 = Vector2.INF, volume_db: float = 0.0, 
 		_next_positional = (_next_positional + 1) % _positional.size()
 		(voice as AudioStreamPlayer2D).global_position = at
 	voice.set("stream", stream)
-	voice.set("bus", Banks.BUS.get(bank, "SFX"))
-	voice.set("volume_db", float(Banks.VOLUME_DB.get(bank, 0.0)) + volume_db)
-	voice.set("pitch_scale", pitch * (1.0 + _rng.randf_range(-PITCH_SPREAD, PITCH_SPREAD)))
+	voice.set_meta("sfx_owner",source.get_instance_id() if is_instance_valid(source) else 0)
+	voice.set("bus", bus if AudioServer.get_bus_index(bus) >= 0 else "SFX")
+	voice.set("volume_db", volume_db)
+	voice.set("pitch_scale", pitch)
 	voice.call("play")
 	return voice

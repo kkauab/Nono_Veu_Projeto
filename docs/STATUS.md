@@ -1,40 +1,39 @@
 # Estado atual — O Nono Véu
-Atualizado em 2026-10-29; base: versão principal `D:\Nono_Veu`.
+Atualizado em 2026-10-30; base principal neste computador: `D:\Nono_Veu`; Gustavo usa `A:\nono veu`.
 
 ## Funcionalidades existentes
-- Demo do Porto dos Esquecidos: exploração isométrica, setores conectados, atalhos, três puzzles de selos, chefe e entrada demonstrativa das Catacumbas.
-- Senu: oito direções, caminhada/corrida, esquiva, ataques leves/fortes, parry, riposta; Khopesh e Adagas com sprites compartilhados e poderes próprios.
-- Inimigos animados, combate com efeitos/sons, XP, níveis, óbolos e coleta física de drops; 13 habilidades na Árvore das Emanações.
-- Água animada, moradores, comércio, quatro interiores e NPCs com poses; móveis v4 com bases/colisões/sombras alinhadas ao piso.
-- Missão de Hori/Sabu concluível sem chefe; missões de Merit, Nakht, Adiam e Tarek; marcas de Iri, barco navegável e Ilha do Bennu com conteúdo próprio.
-- Nova jornada preserva encenação no cais e retratos pixelados; Espaço por 3 s pula a abertura. Conversas na exploração usam balões no falante, com até quatro linhas por trecho.
-- HUD minimalista sem objetivos fixos; caderno com jornada principal e pedidos secundários, mapa descoberto, inventário, habilidades, configurações e saída.
-- Controles dentro de Configurações; aprender habilidade exige segurar 1,5 s, com cancelamento e cobrança única.
-- Somente torres salvam, restauram vida/cargas e renovam inimigos comuns; chefes vencidos permanecem no estado salvo. Sair/fechar não grava.
+- Porto dos Esquecidos: 33 setores, atalhos, três puzzles de selos, Porteiro Sem Nome em duas fases e limiar demonstrativo das Catacumbas.
+- Senu: oito direções, caminhada/corrida, esquiva, ataques leves/fortes, parry e riposta; Khopesh/Adagas com corpo compartilhado e poderes próprios; 13 habilidades.
+- Combate com efeitos, áudio, XP, óbolos e coleta física; 45 inimigos no mapa expandido (614 XP e 311 óbolos no catálogo do PR).
+- Moradores v3: 12 aparências do Kauã e quatro em `townsfolk_v3_extra.png`; nomeados/Ankhet preservados; aves, cães e gatos com fuga e colisão.
+- Comércio, quatro interiores, missões de Merit/Nakht/Adiam/Tarek; Hori/Sabu concluível sem chefe e quatro marcas de Iri até o relicário.
+- Claustro dos Iniciados; barco até Bennu, Íbis Afogado e Recife do Navio Esquecido; 96 peças adicionais e vida nas novas áreas.
+- Mar com seis crocodilos do Nilo/Sobek, casco de 100, naufrágio, nado e escadas; perímetro dos píeres seguro. Novos progressos usam IDs em `collected`.
+- Ambientação por setor (som, vento, zumbido sagrado e luz), 20 perfis e Mendigo das Cordas com alaúde; retratos de um quadro aceitos nos diálogos.
+- Abertura do cais preservada, pulável segurando Espaço por 3 s; balões seguem o falante, até quatro linhas; fonte Pixel Operator e bustos vivos.
+- HUD minimalista; pausa em caderno com inventário, habilidades, mapa e missões; aprender exige segurar 1,5 s; controles em Configurações.
+- Somente torres gravam, curam/recarregam e renovam inimigos comuns; chefes vencidos ficam no estado ancorado. Sair/fechar e morrer não gravam.
 
-## Últimas entregas — Senu no barco, NPCs e interface
-- Casco v4: comprimento-base 74 (antes 50), boca 28 (antes 17), madeira escura com veios, emendas, pregos e amarras inspirados no navio do porto; bancos e interior mais espaçosos. Senu v3 e remos preservados, sem mudar física/navegação. Fonte em `art/pixelorama/sea_v4/`; canvas/pivô maiores são apenas margens, sem escala do personagem.
-- Embarque/desembarque: seis poses por ação em oito vistas, sem loop; pivô físico no chão, altura só no desenho. Pausa congela o movimento; reaparecer limpa o sprite e restaura controles/colisões nos dois píeres. Sem alterar navegação ou salvamento.
-- NPCs v3: reimaginadas as 12 aparências de moradores/vendedores e Ankhet no estilo detalhado dos nomeados, com 196 poses completas (PNG+JSON e `.pxo` em `art/pixelorama/npcs_v3/`). Pés/pernas estáveis no repouso, corpo de ~44 px e margens para gestos/cargas; colisões, rotinas, IDs e seis nomeados v4 preservados. Remador magro, cabelo curto e sem barba, distinto do ferreiro. QA: sprites 2468/2468, anteriores 286/286, rotinas 250/250 e ilha 59/59; seis capturas reais, pranchas/GIF em `qa/npcs_v3/`. Fontes/prompts preservados; teste de arte emite avisos de leitura de PNG bruto, sem falhas.
-- QA do casco v4: preservação/tamanho 482/482 (160 cels do corpo e 320 dos remos idênticos no mundo), atlas 683/683 e barco gráfico 62/62; importação sem erros. Pranchas/GIF/comparação em `qa/boat_hull/`. Base anterior: remos 700/700, transições 85/85, NPCs 286/286, rotinas 250/250 e ilha 59/59. PNG+JSON exportados pelo Pixelorama, `.pxo` em cinco camadas.
-- Menu inicial tem seleção procedural em pixels; cliques em todos os botões da interface usam brilho curto e o toque aprovado, com pequenas variações por tela. Som continua durante pausa/troca de página; opções desabilitadas ficam silenciosas. QA: áudio/animação 592/592, menu 25/25; HUD 20/20, inventário 26/26, habilidades 13/13 + integração 16/16 e layout 7968/7968. Prévia em `qa/title_menu/`.
-- Interface usa Pixel Operator HB/Bold incluída no projeto (licença CC0 em `assets/fonts/`), com acentos e traços nítidos; balões, HUD, abertura e menus compartilham `ui_typography.gd`.
-- História/Estilo de Combate fluem pela altura real e têm rolagem antes dos botões; foco da lista de missões mantém o título inteiro visível. Fonte Pixelify descartada.
-- QA atual: layout 7968/7968 (540p/720p, texto ampliado e rolagem), caderno 21/21, navegação 16/16, missões 39/39, HUD 20/20, balões 57/57 e abertura com bustos 196/196; 72 glifos acentuados/números conferidos. Capturas em `qa/pixel_font/`.
-- Bustos: ombros estáveis, olhos/boca independentes, respiração e cabeça com entrada/retorno suaves; atlas e ritmo preservados. QA: integração 196/196, sílabas 49/49, movimento 7/7; 150 quadros em `qa/portrait_motion/`, incluindo piscadas na fala. Avisos preexistentes de recursos retidos em integração/áudio.
-- Atores: respiração de 1 px, contrapasso, peso no tronco e impactos visuais de até 2 px; base/sombra, regras de combate e física preservadas. Passadas de Senu seguem distância real após colisão, param na parede e conservam fase ao virar/trocar arma.
-- `actor_pixel_motion.gd` usa faixas nearest e base fixa, com equipamento nas mãos; abertura/caderno compartilham o contrato. Godot 4.7.2 importou; pranchas de Senu/Adagas/cinco inimigos e cais real em `qa/actor_motion/`.
-- QA: movimento procedural 48/48; Senu base 27/27, v4 40/40, v5 74/74, v6 58/58 e Khopesh v8 118/118; combate 26/26 e habilidades de combate 44/44.
-- QA: inimigos movimento 28/28, equilíbrio 56/56 e desempenho 7/7; profundidade 260/260, efeitos 108/108, loot 45/45, caderno 21/21 e abertura 24/24.
-- Interface anterior preservada: caderno revisado, N/M/Esc e abas funcionais, balões seguem os falantes (`qa/notebook_v8_*.png`, `qa/speech_*.png`).
-- Algumas suítes mantêm avisos de recursos retidos ao encerrar. Mundo executado somente com `-- --qa` e slots `user://qa/`; nenhum progresso real usado. Sem commit/push/merge.
+## Integração e trabalho local
+- PR #11 aprovado: principal atualizada de `3135f61` para `49256ed` por fast-forward, sem novo commit/push. Documentos conciliados e nenhum conflito pendente. Godot importou/abriu; menu e Cais capturados em QA. Pronto para teste pelo `JOGAR.cmd`; relatório em `docs/INTEGRACAO_PR11.md`.
+- Antes da atualização, 84 arquivos locais preservados por SHA-256 e ZIP em `qa/pr11_integracao_49256ed/`; stash de segurança dos dois documentos mantido. Fontes/arte locais de NPCs e Porteiro não foram substituídas pelo PR.
+- Caminhada NPC v4 local: 192 cels, oito fases por aparência/modo, ciclo por 24 px; fontes e edições manuais preservadas. Atlas/manifesto existem aqui; os quatro novos moradores usam a folha extra. QA atual: caminhada64, atlas1453, rotinas367, v32468 e extra302, todos aprovados com a expansão.
+- Casco v4 preservado: comprimento 74, boca 28, interior maior e remos/Senu mantidos; fonte `sea_v4`. Embarque/desembarque: seis poses em oito vistas, sem loop, pivô fixo. QA atual: barco75, transições85 e perigos/naufrágio/nado355; validação anterior da arte: casco482 e atlas683.
+- Porteiro integrado à partida normal: nove ataques JSON, duas fases, parry explícito, ecos/zonas/correntes sinalizados, impactos de pedra/poeira, introdução/transição/morte humana, portões e câmera. Vitória conserva os IDs antigos e só grava na próxima torre; 2 Nous e chave-lança únicos, sem liberar habilidades do Reverso. Hori/Sabu e quatro marcas preservados. Detalhes: `docs/PORTEIRO_SEM_NOME.md`.
+- Arte v9: 1.336 cels/oito vistas/cinco camadas; corpo57 px, pivô96,144 em192², atlas2048×2208 (~18 MB). Costas refinadas: cabelo/nuca separados da gola, manto sobre o dorso, dobras diagonais e abertura assimétrica; braços independentes. Cinco vistas frontais/laterais e rosto v3 mantidos pixel a pixel; caminhada16/fechamento32 por distância. Dificuldade atual:720 PV, velocidade46/54,28, fase2 em1,10×, pausas adicionais0,28/0,16 s, dano22–52/eco18. `TESTAR_PORTEIRO.cmd`: QA; `JOGAR.cmd`: normal. Fontes `porteiro_live_v9`; provas/capturas/GIFs `qa/porteiro_refino_v9/`. Senu/inimigos comuns preservados.
+- QA v9: combate67, IA autônoma24 (velocidades físicas46/54,28), persistência27 e pixels5062 aprovados. Rodadas anteriores desta integração: UI6, ataques104, caminhada68, ensaio33, pixels antigos853, percurso139, progressão125, missões72, história56, mundo134 e regressões de HUD/inventário/combate aprovados. Algumas suítes avisam sobre recursos retidos ao sair. Música/sinos/correntes/passos originais; vozes usam respirações sintéticas provisórias. Chave-lança visível no inventário; equipar/Último Chamado aguardam suporte de animação/arsenal. Balanceamento e atuação precisam de avaliação humana.
+- Pós-integração: 33 suítes, 9.430 verificações aprovadas. Progressão125, migração34, casas56 e atlas1453 atualizados para torres/popup/catálogo; fade de áudio129 usa tempo decorrido. Percurso139, mundo134, chão2007 e profundidade293 passaram. Logs/resultados em `qa/pr11_integracao_49256ed/`; progresso real não usado, avisos de recursos retidos permanecem em algumas suítes. STATUS local anterior preservado nessa pasta.
 
-## Pendências
-- Revalidar o bloqueio na subida da Galeria do Eco: último registro de `route_test.gd` teve 108/109 verificações; causa ainda não confirmada.
-- Conferir com o jogador o conforto de leitura dos balões e do caderno; apoios dos móveis não foram revalidados nesta tarefa.
-- README e registros antigos ainda contêm regras superadas de autosave e saída; usar as decisões atuais até uma revisão documental específica.
-- Campanha completa, arsenal completo, relíquias, gamepad e exportação independente não estão entregues; o GDD descreve também planos futuros.
+## Pendências conhecidas
+- Cinco testes foram conciliados com os contratos vigentes, sem mudar regras do jogo; revisão visual/humana de áudio e movimentos continua necessária. Detalhes e resultados no relatório de integração.
+- Senu quadro a quadro: produção não iniciada; captura do canvas Pixelorama falhou nas duas interfaces. Sem novos quadros dessa tarefa; retomar apenas com canvas visível e validar um ciclo antes das oito direções.
+- Galeria do Eco: percurso atual passou139/139; falha antiga108/109 não se reproduziu, sem correção de navegação.
+- `title_menu_test` pode falhar no áudio de seleção sob carga. Alguns testes emitem avisos de instâncias/recursos retidos ao encerrar.
+- Retratos dos moradores ainda divergem da v3; Caravaneiro usa retrato do cervejeiro. HUD chama todo o mar de Baía das Garças; Arquivo/Sinos/Observatório usam molde comum.
+- Caminhos dos moradores ainda não enxergam fixtures/estelas das ilhas; entrada voluntária na água não existe, nado começa no naufrágio.
+- Avaliar leitura dos balões/caderno e sutileza dos movimentos; apoios dos móveis não foram revalidados nesta integração. README/históricos ainda têm regras antigas de autosave.
+- Campanha/arsenal completos, relíquias, gamepad e exportação independente continuam pendentes; GDD inclui conteúdo futuro.
 
 ## Próximos passos
-1. Reproduzir a falha da Galeria em QA antes de propor qualquer correção de navegação.
-2. Avaliar com o jogador a sutileza das animações e o conforto da interface, preservando salvamento apenas nas torres.
+1. Jogador testar a versão principal integrada pelo `JOGAR.cmd`, incluindo Claustro, ilhas, píeres, casco e nado; guardar avanços meditando em uma torre.
+2. Avaliar a luta completa pelo `TESTAR_PORTEIRO.cmd` (progresso separado), especialmente dificuldade nova, leitura dos golpes e caminhada; o mesmo chefe já está no `JOGAR.cmd` após os três selos. Salvar a vitória normal em uma torre.

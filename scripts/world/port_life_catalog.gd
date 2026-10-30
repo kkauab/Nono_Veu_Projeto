@@ -11,8 +11,10 @@ extends RefCounted
 ## - "pick": abaixa e pega a carga; "drop": abaixa e larga;
 ## - "ship": espera o navio `extra` atracar e pega a carga dele.
 
-## Mesma ordem das linhas de assets/world/townsfolk_v1.png.
-const LOOKS := ["estivador", "carregador", "peixeira", "mercador", "marinheiro", "remador", "escriba", "peregrina", "velho", "aguadeira", "padeira", "caravaneiro"]
+## Mesma ordem das linhas das folhas: as 12 primeiras são as da v3 do Kauã
+## (assets/world/townsfolk_v3.png); as 4 do fim, as da townsfolk_v3_extra.png.
+## Novas aparências entram sempre no fim (os índices são guardados nos testes).
+const LOOKS := ["estivador", "carregador", "peixeira", "mercador", "marinheiro", "remador", "escriba", "peregrina", "velho", "aguadeira", "padeira", "caravaneiro", "sacerdote", "alquimista", "sentinela", "mercadora"]
 
 ## Bancadas: quem vende atrás de cada barraca do cenário (`stall` é o tile dela),
 ## o quê, por quantos óbolos e quanto cura. Comida cura na hora.
@@ -24,7 +26,9 @@ const VENDORS := [
 	{"id": "padeira", "look": "padeira", "stall": Vector2(43, 1), "title": "Padeira das caravanas", "goods": "pão de cevada", "price": 6, "heal": 20,
 		"lines": ["Pão de cevada com cominho. Para a estrada e para lembrar que ainda se tem fome.", "Asso antes do sol. Ninguém lembra de ter pedido, mas ninguém deixa de comer."]},
 	{"id": "cervejeiro", "look": "caravaneiro", "stall": Vector2(53, 1), "title": "Cervejeiro do deserto", "goods": "cerveja de cevada", "price": 4, "heal": 10,
-		"lines": ["Cerveja grossa, como a do Delta. Não cura a memória, mas cura a sede.", "Os camelos lembram o caminho melhor do que nós. Por isso eles vão na frente."]}
+		"lines": ["Cerveja grossa, como a do Delta. Não cura a memória, mas cura a sede.", "Os camelos lembram o caminho melhor do que nós. Por isso eles vão na frente."]},
+	{"id": "salgador", "look": "mercador", "stall": Vector2(61.6, 14), "title": "Salgador da estrada", "goods": "peixe salgado", "price": 7, "heal": 20,
+		"lines": ["Peixe salgado aguenta a estrada inteira. Mais do que muita lembrança.", "Sal de Natrun, o mesmo dos embalsamadores. Por isso o peixe dura e o freguês esquece."]}
 ]
 
 ## Navios mercantes. Chegam de proa (`arrive`), ficam `dock` segundos atracados,
@@ -38,7 +42,8 @@ const SHIPS := [
 
 const TOWNSFOLK := [
 	# Santuário da Primeira Palavra: uma peregrina reza junto ao santuário.
-	{"id": "peregrina_santuario", "look": "peregrina", "title": "Peregrina", "speed": 26.0, "route": [[Vector2(-2.4, -2.2), "pray", 14.0], [Vector2(-1.6, 1.4), "idle", 5.0], [Vector2(.8, -2.6), "idle", 4.0]],
+	# A parada de descanso fica a leste da boca do Claustro (connector em x -5..-2, y 3).
+	{"id": "peregrina_santuario", "look": "peregrina", "title": "Peregrina", "speed": 26.0, "route": [[Vector2(-2.4, -2.2), "pray", 14.0], [Vector2(.2, 1.5), "idle", 5.0], [Vector2(.8, -2.6), "idle", 4.0]],
 		"lines": ["Venho rezar aqui todo dia. Não sei a quem. O santuário parece saber.", "A Primeira Palavra... eu a sabia de cor. Agora só lembro que era curta."]},
 	# Cais dos Esquecidos.
 	{"id": "pescador_cais", "look": "remador", "title": "Pescador do cais", "speed": 28.0, "route": [[Vector2(8.6, 2.2), "fish", 22.0, -1], [Vector2(7.2, -.4), "idle", 4.0]],
@@ -58,6 +63,8 @@ const TOWNSFOLK := [
 	# Pátio das Memórias.
 	{"id": "velho_patio", "look": "velho", "title": "Velho do pátio", "speed": 18.0, "route": [[Vector2(33.4, 24.4), "pray", 12.0], [Vector2(30.6, 26.4), "idle", 6.0], [Vector2(27.6, 23.6), "idle", 5.0]],
 		"lines": ["Este pátio guardava as lembranças da cidade. Agora guarda só o pátio.", "Rezo diante da estátua. Ela também não lembra quem foi."]},
+	{"id": "mendigo_alaude", "look": "velho", "title": "Mendigo das Cordas", "speed": 0.0, "route": [[Vector2(26.4, 22.2), "play", 19.5], [Vector2(26.4, 22.2), "idle", 3.0]],
+		"lines": ["Não lembro quem fui em terra firme... Mas quando fecho os olhos e toco estas cordas, sinto o balanço das ondas e o vento salgado no rosto!", "Esta cantiga era a que os marujos tocavam ao navegar pelo mar aberto, rindo dos perigos. O mar não guarda mágoa de ninguém!", "Minha cabeça esqueceu o meu próprio nome, mas meus dedos nunca esqueceram o ritmo do mar! Quem ouve esta cantiga bate o pé até sem querer!", "Se tens um barco ou um par de pernas, aproveita o vento, viajante! O Nono Véu pode ser pesado, mas uma boa canção de marinheiro corta qualquer névoa!"]},
 	# Embarcadouro Velho: estivadores do navio e um pescador no píer leste.
 	{"id": "estivador_embarcadouro_1", "look": "estivador", "title": "Estivador do navio", "speed": 36.0, "route": [[Vector2(29.2, 35.1), "ship", 1.0, "embarcadouro"], [Vector2(27.6, 32.4), "drop", 1.0]],
 		"lines": ["O navio chega, descarregamos, ele vai. Ninguém nunca pergunta de onde.", "Cobre, linho, ânforas. As marcas nas caixas estão raspadas."]},
@@ -93,5 +100,38 @@ const TOWNSFOLK := [
 		"lines": ["Encho a ânfora na cisterna e esqueço para quem.", "Duas fontes: uma para beber, outra para lembrar. Ninguém sabe qual é qual."]},
 	# Jardim Inundado.
 	{"id": "padeira_jardim", "look": "padeira", "title": "Moça do jardim", "speed": 26.0, "route": [[Vector2(13.6, 24.6), "idle", 6.0], [Vector2(19.6, 22.4), "idle", 5.0], [Vector2(16.4, 27.6), "chat", 5.0]],
-		"lines": ["O jardim inundou no dia em que todos esqueceram. A água ficou.", "Colho junco para cestos. O junco cresce mesmo sem ninguém lembrar dele."]}
+		"lines": ["O jardim inundou no dia em que todos esqueceram. A água ficou.", "Colho junco para cestos. O junco cresce mesmo sem ninguém lembrar dele."]},
+	# Santuário: Sacerdote da Primeira Palavra
+	{"id": "sacerdote_santuario", "look": "sacerdote", "title": "Sacerdote da Primeira Palavra", "speed": 24.0, "route": [[Vector2(-1.2, -1.8), "pray", 10.0], [Vector2(-0.4, 0.8), "idle", 6.0], [Vector2(-2.0, -1.0), "chat", 5.0]],
+		"lines": ["A Primeira Palavra não se pronuncia: se escuta no silêncio entre as marés.", "O Véu não oculta a verdade para punir; ele a protege daqueles que esqueceram como olhar."]},
+	# Cais do Cobre: Alquimista
+	{"id": "alquimista_cobre", "look": "alquimista", "title": "Alquimista do Cobre", "speed": 28.0, "route": [[Vector2(47.4, 38.0), "idle", 6.0], [Vector2(48.0, 34.0), "pick", 2.0], [Vector2(46.6, 40.0), "drop", 2.0]],
+		"lines": ["O bronze de Nakht guarda o calor por séculos, mas o cobre deste cais perde a memória com a maré.", "Transmutar é apenas lembrar a matéria daquilo que ela era antes do esquecimento."]},
+	# Guarita e Portão: Sentinela do Porto
+	{"id": "sentinela_portao", "look": "sentinela", "title": "Sentinela do Porto", "speed": 32.0, "route": [[Vector2(45.0, 4.0), "idle", 6.0], [Vector2(42.0, 5.2), "chat", 5.0], [Vector2(48.0, 5.0), "idle", 6.0]],
+		"lines": ["Nenhum homem passa pelo portão sem deixar o que trouxe. Ou sem esquecer para onde ia.", "Tarek vigia os nomes no arquivo; eu vigio a poeira que as caravanas levantam ao cruzar a fronteira."]},
+	# Mercado das Cinzas: Mercadora de Joias
+	{"id": "mercadora_mercado", "look": "mercadora", "title": "Mercadora de Joias", "speed": 26.0, "route": [[Vector2(22.0, 0.4), "chat", 6.0], [Vector2(23.2, -1.2), "idle", 8.0], [Vector2(20.4, 1.2), "idle", 5.0]],
+		"lines": ["Lápis-lazúli do leste e cornalina das dunas. As pedras não perdem o brilho mesmo quando todos esquecem.", "Um anel de prata por uma lembrança tua. Tens alguma que ainda corte como vidro?"]},
+	# Claustro dos Iniciados: um noviço repete as lições diante do lago sagrado.
+	{"id": "novico_claustro", "look": "escriba", "title": "Escriba noviço", "speed": 25.0, "route": [[Vector2(-6.6, 11.0), "pray", 10.0], [Vector2(-10.0, 11.6), "idle", 6.0], [Vector2(-4.0, 7.2), "idle", 5.0]],
+		"lines": ["Copio as três lições de Iri todas as manhãs. À tarde, já não sei por que as copiei.", "O mestre dizia que o lago devolve o reflexo de quem a gente foi. Eu só vejo água."]},
+	# Ilha do Íbis Afogado: o copista que ficou para trás quando o templo afundou.
+	{"id": "escriba_ibis", "look": "escriba", "title": "Escriba esquecido do Íbis", "speed": 22.0, "route": [[Vector2(11.0, 77.6), "pray", 12.0], [Vector2(13.6, 79.6), "idle", 6.0]],
+		"lines": ["O templo afunda um palmo por cheia. Eu fico, porque alguém precisa lembrar a ordem das estelas.", "Olho, pena, junco. Repito para não esquecer. Já esqueci por que importa."]},
+	# Recife do Navio Esquecido: um náufrago ainda arruma a carga de um navio que não vai partir.
+	{"id": "naufrago_recife", "look": "marinheiro", "title": "Marinheiro náufrago", "speed": 30.0, "route": [[Vector2(81.6, 69.6), "idle", 8.0], [Vector2(75.8, 67.6), "pick", 1.0], [Vector2(79.6, 69.4), "drop", 1.0]],
+		"lines": ["O capitão mandou guardar a carga até a maré subir. A maré sobe todo dia. O capitão nunca voltou.", "Escrevi o nome do navio no diário de bordo. Depois a água apagou a tinta e a minha memória junto."]},
+	# Estrada do Sal: carga de sal até a barraca da estrada.
+	{"id": "caravaneiro_sal", "look": "caravaneiro", "title": "Caravaneiro do sal", "speed": 30.0, "route": [[Vector2(60.0, 18.2), "pick", 1.0], [Vector2(63.6, 21.2), "drop", 1.0]],
+		"lines": ["Sal do lago de Natrun. Conserva o peixe, a carne e os mortos. Só não conserva a lembrança.", "A estrada ainda leva ao Faium, dizem. Ninguém que foi voltou para confirmar."]},
+	# Fornos: fundidor que alimenta a fornalha nova.
+	{"id": "fundidor_fornos", "look": "estivador", "title": "Fundidor dos fornos", "speed": 30.0, "route": [[Vector2(69.6, 0.6), "idle", 6.0], [Vector2(66.0, 5.6), "pick", 1.0], [Vector2(70.6, 3.0), "drop", 1.0]],
+		"lines": ["O fogo não pode apagar. Se apagar, ninguém aqui lembra como se acende.", "Nakht funde o bronze; eu só carrego o carvão. É trabalho que não pede memória."]},
+	# Reservatório: água do lago para os fornos e as casas.
+	{"id": "aguadeira_reservatorio", "look": "aguadeira", "title": "Aguadeira do reservatório", "speed": 28.0, "route": [[Vector2(60.4, 33.0), "pick", 2.0], [Vector2(58.6, 30.4), "idle", 5.0]],
+		"lines": ["As estátuas do lago olham para a água como se esperassem alguém sair dela.", "A água daqui é mais fria que a da cisterna. Dizem que vem de antes do esquecimento."]},
+	# Escadaria dos Peregrinos: romeira diante das estelas votivas.
+	{"id": "romeira_estelas", "look": "peregrina", "title": "Romeira das estelas", "speed": 24.0, "route": [[Vector2(30.2, -13.4), "pray", 11.0], [Vector2(28.8, -11.6), "idle", 5.0]],
+		"lines": ["Cada estela tem um pedido gravado. Nenhuma tem o nome de quem pediu.", "Subo a escadaria todo dia. Lá em cima eu lembraria de algo, se chegasse."]}
 ]

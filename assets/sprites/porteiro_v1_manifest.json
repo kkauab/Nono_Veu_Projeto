@@ -1,0 +1,559 @@
+{
+  "version": 1,
+  "review_only": true,
+  "canvas": [
+    160,
+    160
+  ],
+  "pivot": [
+    80,
+    140
+  ],
+  "game_scale": 1.0,
+  "body_height": 57,
+  "columns": 8,
+  "frames": 17,
+  "texture": "res://assets/sprites/porteiro_v1.png",
+  "source": "art/pixelorama/porteiro_v1/porteiro_v1.pxo",
+  "directions_ready": [
+    "front",
+    "right",
+    "back"
+  ],
+  "clips": {
+    "idle": {
+      "front": [
+        0
+      ],
+      "right": [
+        1
+      ],
+      "back": [
+        2
+      ]
+    },
+    "walk": {
+      "right": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    "thrust": {
+      "right": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    }
+  },
+  "durations": [
+    0.4,
+    0.4,
+    0.4,
+    0.11,
+    0.11,
+    0.11,
+    0.11,
+    0.11,
+    0.11,
+    0.11,
+    0.11,
+    0.22,
+    0.33,
+    0.15,
+    0.09,
+    0.17,
+    0.33
+  ],
+  "contact_frame": 14,
+  "contact_seconds": 0.7,
+  "walk_stride": 24.0,
+  "palette": [
+    "171b1c",
+    "252825",
+    "343a35",
+    "4b5147",
+    "211c1b",
+    "322723",
+    "49332b",
+    "604336",
+    "785542",
+    "916a50",
+    "ab8663",
+    "c7a77b",
+    "2b191a",
+    "402021",
+    "57282a",
+    "713330",
+    "884534",
+    "9a5941",
+    "39332c",
+    "514635",
+    "6d5c44",
+    "8a785a",
+    "a89673",
+    "c7b38c",
+    "dfcba3",
+    "382e20",
+    "534027",
+    "705335",
+    "8b693c",
+    "ac844a",
+    "c9a461",
+    "dfbf7e"
+  ],
+  "reference_sha256": "9bdc4fb76e24009209f7a39c423c0da5c25cdb0343081d364f6c68ccfed6edde",
+  "frame_metadata": [
+    {
+      "clip": "idle",
+      "direction": "front",
+      "body_bounds": [
+        67,
+        83,
+        94,
+        140
+      ]
+    },
+    {
+      "clip": "idle",
+      "direction": "side",
+      "body_bounds": [
+        71,
+        83,
+        90,
+        140
+      ]
+    },
+    {
+      "clip": "idle",
+      "direction": "back",
+      "body_bounds": [
+        69,
+        83,
+        92,
+        140
+      ]
+    },
+    {
+      "clip": "walk",
+      "direction": "right",
+      "pose": 0,
+      "feet": [
+        [
+          83,
+          139
+        ],
+        [
+          77,
+          140
+        ]
+      ],
+      "grip": [
+        95,
+        113
+      ],
+      "tip_angle": -1.5707963267948966,
+      "body_lean": 0,
+      "body_drop": 0
+    },
+    {
+      "clip": "walk",
+      "direction": "right",
+      "pose": 1,
+      "feet": [
+        [
+          82,
+          139
+        ],
+        [
+          78,
+          140
+        ]
+      ],
+      "grip": [
+        95,
+        114
+      ],
+      "tip_angle": -1.553118657265233,
+      "body_lean": 0,
+      "body_drop": 1
+    },
+    {
+      "clip": "walk",
+      "direction": "right",
+      "pose": 2,
+      "feet": [
+        [
+          79,
+          139
+        ],
+        [
+          81,
+          140
+        ]
+      ],
+      "grip": [
+        95,
+        113
+      ],
+      "tip_angle": -1.5457963267948966,
+      "body_lean": 0,
+      "body_drop": 0
+    },
+    {
+      "clip": "walk",
+      "direction": "right",
+      "pose": 3,
+      "feet": [
+        [
+          76,
+          139
+        ],
+        [
+          84,
+          138
+        ]
+      ],
+      "grip": [
+        95,
+        113
+      ],
+      "tip_angle": -1.553118657265233,
+      "body_lean": 0,
+      "body_drop": 0
+    },
+    {
+      "clip": "walk",
+      "direction": "right",
+      "pose": 4,
+      "feet": [
+        [
+          75,
+          139
+        ],
+        [
+          85,
+          140
+        ]
+      ],
+      "grip": [
+        95,
+        113
+      ],
+      "tip_angle": -1.5707963267948966,
+      "body_lean": 0,
+      "body_drop": 0
+    },
+    {
+      "clip": "walk",
+      "direction": "right",
+      "pose": 5,
+      "feet": [
+        [
+          76,
+          139
+        ],
+        [
+          84,
+          140
+        ]
+      ],
+      "grip": [
+        95,
+        114
+      ],
+      "tip_angle": -1.5884739963245602,
+      "body_lean": 0,
+      "body_drop": 1
+    },
+    {
+      "clip": "walk",
+      "direction": "right",
+      "pose": 6,
+      "feet": [
+        [
+          79,
+          139
+        ],
+        [
+          81,
+          140
+        ]
+      ],
+      "grip": [
+        95,
+        113
+      ],
+      "tip_angle": -1.5957963267948965,
+      "body_lean": 0,
+      "body_drop": 0
+    },
+    {
+      "clip": "walk",
+      "direction": "right",
+      "pose": 7,
+      "feet": [
+        [
+          82,
+          137
+        ],
+        [
+          78,
+          140
+        ]
+      ],
+      "grip": [
+        95,
+        113
+      ],
+      "tip_angle": -1.5884739963245602,
+      "body_lean": 0,
+      "body_drop": 0
+    },
+    {
+      "clip": "thrust",
+      "direction": "right",
+      "pose": 0,
+      "feet": [
+        [
+          75,
+          139
+        ],
+        [
+          85,
+          140
+        ]
+      ],
+      "grip": [
+        95,
+        113
+      ],
+      "tip_angle": -1.5707963267948966,
+      "body_lean": 0,
+      "body_drop": 0
+    },
+    {
+      "clip": "thrust",
+      "direction": "right",
+      "pose": 1,
+      "feet": [
+        [
+          75,
+          139
+        ],
+        [
+          85,
+          140
+        ]
+      ],
+      "grip": [
+        93,
+        110
+      ],
+      "tip_angle": -0.95,
+      "body_lean": -1,
+      "body_drop": 1
+    },
+    {
+      "clip": "thrust",
+      "direction": "right",
+      "pose": 2,
+      "feet": [
+        [
+          75,
+          139
+        ],
+        [
+          85,
+          140
+        ]
+      ],
+      "grip": [
+        91,
+        106
+      ],
+      "tip_angle": -0.4,
+      "body_lean": -2,
+      "body_drop": 1
+    },
+    {
+      "clip": "thrust",
+      "direction": "right",
+      "pose": 3,
+      "feet": [
+        [
+          75,
+          139
+        ],
+        [
+          85,
+          140
+        ]
+      ],
+      "grip": [
+        108,
+        105
+      ],
+      "tip_angle": 0.04,
+      "body_lean": 3,
+      "body_drop": 2
+    },
+    {
+      "clip": "thrust",
+      "direction": "right",
+      "pose": 4,
+      "feet": [
+        [
+          75,
+          139
+        ],
+        [
+          85,
+          140
+        ]
+      ],
+      "grip": [
+        106,
+        108
+      ],
+      "tip_angle": 0.15,
+      "body_lean": 2,
+      "body_drop": 1
+    },
+    {
+      "clip": "thrust",
+      "direction": "right",
+      "pose": 5,
+      "feet": [
+        [
+          75,
+          139
+        ],
+        [
+          85,
+          140
+        ]
+      ],
+      "grip": [
+        95,
+        113
+      ],
+      "tip_angle": -1.5707963267948966,
+      "body_lean": 0,
+      "body_drop": 0
+    }
+  ],
+  "frame_regions": [
+    [
+      0,
+      0,
+      160,
+      160
+    ],
+    [
+      160,
+      0,
+      160,
+      160
+    ],
+    [
+      320,
+      0,
+      160,
+      160
+    ],
+    [
+      480,
+      0,
+      160,
+      160
+    ],
+    [
+      640,
+      0,
+      160,
+      160
+    ],
+    [
+      800,
+      0,
+      160,
+      160
+    ],
+    [
+      960,
+      0,
+      160,
+      160
+    ],
+    [
+      1120,
+      0,
+      160,
+      160
+    ],
+    [
+      0,
+      160,
+      160,
+      160
+    ],
+    [
+      160,
+      160,
+      160,
+      160
+    ],
+    [
+      320,
+      160,
+      160,
+      160
+    ],
+    [
+      480,
+      160,
+      160,
+      160
+    ],
+    [
+      640,
+      160,
+      160,
+      160
+    ],
+    [
+      800,
+      160,
+      160,
+      160
+    ],
+    [
+      960,
+      160,
+      160,
+      160
+    ],
+    [
+      1120,
+      160,
+      160,
+      160
+    ],
+    [
+      0,
+      320,
+      160,
+      160
+    ]
+  ]
+}

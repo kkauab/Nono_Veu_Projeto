@@ -91,8 +91,9 @@ static func select_item(book: Control, id: String) -> void:
 		child.queue_free()
 	book._label(detail, str(selected["category"]).to_upper(), Rect2(523, 77, 314, 18), 11, book.FADED)
 	book._label(detail, selected["name"], Rect2(523, 100, 314, 51), 22, book.INK).name = "InventoryItemName"
-	_icon(detail, str(selected["icon"]), Rect2(593, 151, 174, 131), book._ui_scale).name = "InventoryItemPreview"
-	book._label(detail, selected["description"], Rect2(523, 289, 314, 61), 14, book.INK).name = "InventoryItemDescription"
+	var heirloom: bool=selected["kind"]=="heirloom"
+	_icon(detail, str(selected["icon"]), Rect2(609,151,142,96) if heirloom else Rect2(593,151,174,131), book._ui_scale).name = "InventoryItemPreview"
+	book._label(detail, selected["description"], Rect2(523,255,314,95) if heirloom else Rect2(523,289,314,61), 13 if heirloom else 14, book.INK).name = "InventoryItemDescription"
 	var stats: Array = selected.get("stats", [])
 	for i in range(mini(3, stats.size())):
 		book._label(detail, str(stats[i]), Rect2(523, 355 + i * 19, 315, 20), 13, book.INK).name = "InventoryStat_%d" % i
@@ -146,6 +147,9 @@ static func _icon(parent: Node, id: String, rect: Rect2, factor: float) -> Textu
 
 static func icon_texture(id: String) -> Texture2D:
 	if _icons.has(id): return _icons[id]
+	if id=="key_spear":
+		_icons[id]=load("res://assets/ui/gatekeeper_key_spear.png") as Texture2D
+		return _icons[id]
 	if id in ["khopesh", "daggers"]:
 		# These isolated equipment cels are the blades actually drawn in Senu's
 		# hands. Cropping alpha keeps the game pixels, rather than enlarging SVG UI art.

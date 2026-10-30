@@ -1,5 +1,20 @@
 # Verificações do protótipo
 
+## Porteiro Sem Nome integrado — 30/10/2026
+
+Encontro normal com nove golpes/duas fases, usando o HUD, combate, inventário e salvamento em torres existentes. Comandos pertinentes, sempre com progresso separado:
+
+```powershell
+$porteiroGodot = "$env:USERPROFILE\Downloads\Godot_v4.7.2-stable_win64_console.exe"
+& $porteiroGodot --headless --path . --script res://tests/gatekeeper_combat_test.gd -- --qa
+& $porteiroGodot --headless --path . --script res://tests/gatekeeper_ai_test.gd -- --qa
+& $porteiroGodot --headless --path . --script res://tests/gatekeeper_persistence_test.gd -- --qa
+```
+
+Rodada atual v9,720 PV e movimento46/54,28: combate67/67, IA24/24 e persistência27/27, saída0; pixels5062/5062. IA mede a velocidade realmente percorrida nas duas fases e escolhe os nove golpes autonomamente, sem chamar `start_attack`; dano/defesa exercitam cada contato e a derrota completa. Persistência testa morte/checkpoint, torre, recarga real, legado e recompensa única. Na integração anterior, `gatekeeper_ui_preview.gd`, com renderizador gráfico, passou6/6 em janelas960×540,1920×1080 e800×900. Capturas/logs atuais em `qa/porteiro_refino_v9/`; resultados anteriores em `qa/porteiro_combate/`. Há avisos de recursos retidos em alguns encerramentos; validação automática não aprova dificuldade ou qualidade artística.
+
+`TESTAR_PORTEIRO.cmd` importa e abre o mesmo encontro, com Senu inicial e progresso de QA; `JOGAR.cmd` mantém o percurso normal após os selos. A vitória normal precisa ser ancorada em uma torre. A chave-lança é um pertence modular; não há terceira arma equipável nem Último Chamado funcional nesta etapa.
+
 ## Inimigos renovados nos salvamentos manuais — 27/10/2026
 
 Meditar em qualquer um dos cinco santuários agora salva o checkpoint, recarrega os frascos, restaura Senu e renova todos os inimigos comuns. Os vivos recuperam posição, vida e estado; os mortos e os já removidos são recriados uma única vez. O chefe derrotado permanece ausente. `Salvar e sair` grava o novo ciclo para o próximo carregamento. Autosaves de combate, loot, compras e exploração mantêm as derrotas do ciclo atual.

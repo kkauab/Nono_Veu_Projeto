@@ -74,13 +74,24 @@ func _run() -> void:
 			WalkArt._texture = null if version == "previous" else walking_texture
 			var directory: String = OUT+"/"+id+"_"+version
 			DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
+			var capture_data: Array = []
 			for frame in range(FRAME_COUNT):
 				actor.advance(1.0/30.0)
+				var physical_distance: float = actor._walk_distance
+				# The legacy renderer used one cel per9 ground pixels. The current
+				# fallback uses6; adapt only its presentation during this capture,
+				# then restore distance before advancing the actual route again.
+				if version == "previous":
+					actor._walk_distance = physical_distance * (2.0/3.0)
 				actor.queue_redraw()
 				for wait_frame in range(2):
 					await process_frame
 				await RenderingServer.frame_post_draw
 				root.get_texture().get_image().save_png(directory+"/%03d.png" % frame)
+				var screen_position: Vector2 = actor.get_global_transform_with_canvas().origin
+				var screen_scale := Vector2(world.world_container.size) / Vector2(world.world_view.size)
+				capture_data.append({"frame":frame, "screen":[screen_position.x,screen_position.y], "screen_scale":[screen_scale.x,screen_scale.y], "distance":physical_distance, "carrying":actor.carrying})
+				actor._walk_distance = physical_distance
 			# An explicit zero-displacement tick must return to the untouched rest cel.
 			actor.advance(0.0)
 			if actor.is_walking():
@@ -92,6 +103,7 @@ func _run() -> void:
 				await process_frame
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(OUT+"/"+id+"_"+version+"_stopped.png")
+			FileAccess.open(directory+"/metadata.json",FileAccess.WRITE).store_string(JSON.stringify(capture_data,"\t"))
 			print("NPC WALK CAPTURE: "+directory+" /48 frames")
 	WalkArt._texture = walking_texture
 	if FileAccess.file_exists(qa_path):

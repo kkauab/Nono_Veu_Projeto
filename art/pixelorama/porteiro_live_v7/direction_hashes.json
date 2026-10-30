@@ -1,0 +1,10 @@
+{
+  "directions/right.pxo": "1a73d921bdef9fb23a85cd8aa01b4af747ae87a9ebddad1554769eab0a53afdd",
+  "directions/down_right.pxo": "1316f3c57ea8258dbcd369c3cdcd396d27d84b51c055d9906dc1a6a065bc01d1",
+  "directions/down.pxo": "f325d07cc82376ab44734fae0c80180779ec8c3c7e197473eddbdfcaaaa8ea6e",
+  "directions/down_left.pxo": "6132cbaa06e9a792759fed78d9ea87d944f44899f9296268ea2ae6eb9185697f",
+  "directions/left.pxo": "cbddf3d24dec0c204fabd67bbcf11e73828161131f696f22c798d94e7bee29b5",
+  "directions/up_left.pxo": "41527856b47b71d0450b15a59c8f6de9dd0a316652fca0691825dca295b8aa18",
+  "directions/up.pxo": "42503e632a3c196cfcdeb4b5104952f8e02b84111c3112f1443214652745fa9b",
+  "directions/up_right.pxo": "304af6a0f091f9041cc01f375c5b19a462b927f6f742847fb23276976c84f53d"
+}

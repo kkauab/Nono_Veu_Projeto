@@ -95,6 +95,12 @@ func _test_optional_cache_and_restart(directory: String) -> void:
 	check(bool(world.call("activate", cache)), "As duas memórias permitem abrir o relicário")
 	check(cache.opened and isolated.data["fragments"] == 2, "Relicário abre visualmente e concede recompensa")
 	check(not world.call("activate", cache) and isolated.data["fragments"] == 2, "Relicário não duplica a recompensa")
+	check(not FileAccess.file_exists(isolated.path), "Relicário e pistas não criam autosave fora de uma torre")
+	var tower := _item(world, "hub")
+	hero.position = tower.position
+	check(bool(world.call("activate", tower)), "Meditar na torre ancora o relicário e suas pistas")
+	await process_frame
+	await process_frame
 	var saved := DemoSaveStore.new(isolated.path)
 	check(saved.load_progress() and "cache" in saved.data["collected"] and saved.data["flags"]["memory_dock"], "Segredo opcional e pistas persistem juntos")
 	isolated.loaded_existing = true
@@ -111,10 +117,7 @@ func _test_optional_cache_and_restart(directory: String) -> void:
 		return
 	new_button.pressed.emit()
 	check(hud.get("overlay") == "new_journey", "Nova jornada exige confirmação dentro do jogo")
-	var confirm: Button
-	for child in hud.get_children():
-		if child is Button and child.text == "Iniciar nova jornada":
-			confirm = child
+	var confirm := hud.find_child("ConfirmNewJourney", true, false) as Button
 	check(confirm != null, "Confirmação tem ação explícita")
 	if confirm == null:
 		paused = false

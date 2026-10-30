@@ -36,7 +36,11 @@ const LOOKS := [
 	{"id": "velho", "skin": "tan", "cloth": "stone_light", "accent": "stone", "garment": "robe", "head": "hood", "hat": "stone", "hair": "bone", "beard": true, "stoop": 2, "load": "sack"},
 	{"id": "aguadeira", "skin": "wood", "cloth": "olive_light", "accent": "rust", "garment": "tunic", "head": "cloth", "hat": "rust", "hair": "ink", "load": "amphora"},
 	{"id": "padeira", "skin": "tan", "cloth": "sage", "accent": "clay", "garment": "robe", "head": "cloth", "hat": "clay", "hair": "ink", "load": "basket"},
-	{"id": "caravaneiro", "skin": "wood_light", "cloth": "tan", "accent": "teal", "garment": "tunic", "head": "turban", "hat": "cream", "hair": "umber", "beard": true, "load": "sack"}
+	{"id": "caravaneiro", "skin": "wood_light", "cloth": "tan", "accent": "teal", "garment": "tunic", "head": "turban", "hat": "cream", "hair": "umber", "beard": true, "load": "sack"},
+	{"id": "sacerdote", "skin": "wood_light", "cloth": "cream", "accent": "gold", "garment": "robe", "head": "cloth", "hat": "bone", "hair": "ink", "beard": true, "stoop": 1, "load": "scroll"},
+	{"id": "alquimista", "skin": "tan", "cloth": "teal_dark", "accent": "rust", "garment": "robe", "head": "hood", "hat": "teal", "hair": "ink", "load": "amphora"},
+	{"id": "sentinela", "skin": "wood", "cloth": "sand_dark", "accent": "gold_dark", "garment": "tunic", "head": "cap", "hat": "wood_dark", "hair": "ink", "beard": true, "load": "crate"},
+	{"id": "mercadora", "skin": "wood_light", "cloth": "jade", "accent": "gold", "garment": "robe", "head": "turban", "hat": "cream", "hair": "umber", "load": "basket"}
 ]
 ## Pés (perto, longe), quanto cada pé sobe e o balanço do corpo, por pose de passo.
 const STEPS := {
@@ -108,13 +112,16 @@ func _leg(from: Vector2, foot: Vector2, color: String) -> void:
 	var knee := from.lerp(foot, .5) + Vector2(1, 0)
 	_thick(from, knee, color)
 	_thick(knee, foot + Vector2(0, -1), color)
+	# Sandália egípcia com correia de couro
 	_rect(roundi(foot.x) - 1, roundi(foot.y) - 1, 4, 1, "wood_dark")
+	_px(roundi(foot.x) + 1, roundi(foot.y) - 2, "umber")
 
 
 func _leg_near(hip: Vector2, foot: Vector2, color: String) -> void:
 	if _look["garment"] == "robe":
-		# Sob o manto só aparecem os pés.
+		# Sob o manto aparecem os pés e as tiras da sandália
 		_rect(roundi(foot.x) - 1, roundi(foot.y) - 1, 4, 1, "wood_dark")
+		_px(roundi(foot.x) + 1, roundi(foot.y) - 2, "umber")
 		_px(roundi(foot.x) + 2, roundi(foot.y) - 2, color)
 		return
 	_leg(hip + Vector2(1, 0), foot, color)
@@ -137,6 +144,7 @@ func _arm_near(pose: String, shoulder: Vector2, step: Array, carrying: bool, col
 		_thick(from, from + Vector2(3, 4), color)
 		_thick(from + Vector2(3, 4), hand, color)
 		_rect(roundi(hand.x), roundi(hand.y) - 1, 2, 2, color)
+		_px(roundi(hand.x) + 1, roundi(hand.y) - 2, _lighter(color))
 		return
 	if pose == "bend":
 		hand = from + Vector2(3, 11)
@@ -147,6 +155,9 @@ func _arm_near(pose: String, shoulder: Vector2, step: Array, carrying: bool, col
 		hand = from + Vector2(swing, 10)
 	_thick(from, hand, color)
 	_rect(roundi(hand.x), roundi(hand.y), 2, 2, color)
+	# Munhequeira / detalhe de manga
+	if _look.get("accent") != "":
+		_px(roundi(from.x) + 1, roundi(from.y) + 2, _look["accent"])
 
 
 func _body(pose: String, hip: Vector2, shoulder: Vector2, near_foot: Vector2, far_foot: Vector2) -> void:
@@ -159,23 +170,38 @@ func _body(pose: String, hip: Vector2, shoulder: Vector2, near_foot: Vector2, fa
 			_poly([shoulder + Vector2(-4, 0), shoulder + Vector2(3, 0), shoulder + Vector2(4, 4), waist + Vector2(3, 0), waist + Vector2(-3, 0)], skin)
 			_line(shoulder + Vector2(1, 3), waist + Vector2(1, -1), _darker(skin))
 			_poly([waist + Vector2(-4, 0), waist + Vector2(4, 0), hip + Vector2(5, 6), hip + Vector2(-4, 6)], cloth)
+			# Cinto ornamental com faixa suspensa
 			_line(waist + Vector2(-4, 0), waist + Vector2(4, 0), accent)
+			_line(waist + Vector2(1, 0), waist + Vector2(1, 4), accent)
 			_line(hip + Vector2(1, 1), hip + Vector2(3, 6), _darker(cloth))
 		"tunic":
 			_poly([shoulder + Vector2(-4, 0), shoulder + Vector2(3, 0), shoulder + Vector2(4, 4), hip + Vector2(5, 8), hip + Vector2(-5, 8)], cloth)
 			_line(hip + Vector2(1, 1), hip + Vector2(2, 7), _darker(cloth))
 			_line(waist + Vector2(-4, 0), waist + Vector2(4, 0), accent)
+			# Gola V decorada
+			_line(shoulder + Vector2(-1, 0), shoulder + Vector2(0, 3), accent)
+			_line(shoulder + Vector2(2, 0), shoulder + Vector2(1, 3), accent)
 			if _look.get("stripes", false):
 				for row in [3, 6]:
 					_line(shoulder + Vector2(-3, row), shoulder + Vector2(3, row), accent)
 		"robe":
 			var hem := (near_foot.x + far_foot.x) * .25
 			_poly([shoulder + Vector2(-4, 0), shoulder + Vector2(3, 0), shoulder + Vector2(4, 4), Vector2(hem + 5, -2), Vector2(hem - 5, -2)], cloth)
+			# Pregas e dobras verticais de tecido egípcio
 			_line(waist + Vector2(1, 2), Vector2(hem + 2, -3), _darker(cloth))
 			_line(waist + Vector2(-2, 3), Vector2(hem - 3, -3), _darker(cloth))
-			_line(Vector2(hem - 5, -2), Vector2(hem + 5, -2), _darker(cloth))
+			_line(shoulder + Vector2(0, 4), waist + Vector2(0, 0), _darker(cloth))
+			# Barra decorada da túnica
+			_line(Vector2(hem - 5, -2), Vector2(hem + 5, -2), accent)
+			_line(Vector2(hem - 4, -3), Vector2(hem + 4, -3), _darker(cloth))
 			_line(waist + Vector2(-4, 0), waist + Vector2(4, 0), accent)
-	# Ombro e pescoço.
+			# Colar ou detalhe no peito (como nos retratos)
+			if _look["id"] in ["escriba", "peregrina", "mercador"]:
+				_line(shoulder + Vector2(-1, 1), shoulder + Vector2(2, 1), "gold")
+			elif _look["id"] == "peixeira":
+				# Cordão de junco cruzando o peito
+				_line(shoulder + Vector2(-3, 1), waist + Vector2(2, 0), "clay")
+	# Ombro e pescoço
 	_rect(roundi(shoulder.x), roundi(shoulder.y) - 2, 2, 2, skin)
 
 
@@ -184,16 +210,37 @@ func _head(center: Vector2, pose: String) -> void:
 	var hair: String = _look["hair"]
 	var hat: String = _look.get("hat", hair)
 	var c := Vector2i(roundi(center.x), roundi(center.y))
-	# Crânio de perfil: 7 x 8, nariz à direita.
+	# Base anatômica do crânio com maçã do rosto
 	_rect(c.x - 3, c.y - 4, 7, 8, skin)
 	_rect(c.x - 2, c.y - 5, 5, 1, skin)
 	_rect(c.x - 2, c.y + 4, 5, 1, skin)
+	# Nariz e perfil
 	_px(c.x + 4, c.y, skin)
-	_px(c.x + 2, c.y - 1, "ink")
-	_px(c.x + 3, c.y + 2, _darker(skin))
+	_px(c.x + 4, c.y - 1, _lighter(skin))
+	# Olho egípcio com contorno kohl e esclera viva
+	_px(c.x + 1, c.y - 1, "bone") # esclera
+	_px(c.x + 2, c.y - 1, "ink")  # pupila
+	_px(c.x + 2, c.y - 2, "ink")  # delineado superior
+	_px(c.x + 3, c.y - 1, "ink")  # ponta externa do kohl
+	# Sobrancelha
+	_px(c.x + 1, c.y - 3, hair)
+	_px(c.x + 2, c.y - 3, hair)
+	# Boca expressiva
+	if pose == "talk":
+		_px(c.x + 3, c.y + 2, "ink") # boca aberta falando
+	else:
+		_px(c.x + 3, c.y + 2, _darker(skin))
+	_px(c.x + 2, c.y + 3, _darker(skin)) # sombra do queixo
+
 	if _look.get("beard", false):
 		_rect(c.x - 1, c.y + 2, 5, 3, hair)
 		_px(c.x + 3, c.y + 2, hair)
+		_px(c.x + 4, c.y + 3, hair)
+		if _look["id"] == "caravaneiro":
+			# Mechas grisalhas como no retrato
+			_px(c.x + 1, c.y + 3, "bone")
+			_px(c.x + 2, c.y + 4, "bone")
+
 	match _look["head"]:
 		"band":
 			_rect(c.x - 3, c.y - 5, 6, 3, hair)
@@ -203,18 +250,34 @@ func _head(center: Vector2, pose: String) -> void:
 			_rect(c.x - 3, c.y - 6, 7, 3, hat)
 			_rect(c.x - 4, c.y - 4, 9, 1, hat)
 			_rect(c.x - 4, c.y - 3, 2, 4, hair)
+			_px(c.x + 2, c.y - 4, _look["accent"])
 		"cloth":
 			_rect(c.x - 3, c.y - 6, 7, 3, hat)
 			_poly([Vector2(c.x - 4, c.y - 4), Vector2(c.x, c.y - 4), Vector2(c.x - 1, c.y + 6), Vector2(c.x - 5, c.y + 7)], hat)
 			_line(Vector2(c.x - 3, c.y - 3), Vector2(c.x + 3, c.y - 3), _darker(hat))
+			if _look["id"] == "peixeira":
+				# Pino/broche de bronze prendendo o lenço
+				_px(c.x - 1, c.y - 5, "gold")
+			elif _look["id"] == "peregrina":
+				# Véu com queda suave sobre o ombro e detalhe místico
+				_line(Vector2(c.x - 4, c.y + 2), Vector2(c.x - 4, c.y + 8), hat)
+				_px(c.x - 2, c.y - 4, "gold")
 		"turban":
 			_rect(c.x - 4, c.y - 8, 8, 5, hat)
 			_rect(c.x - 3, c.y - 9, 6, 1, hat)
 			_line(Vector2(c.x - 4, c.y - 6), Vector2(c.x + 3, c.y - 4), _look["accent"])
+			_line(Vector2(c.x - 3, c.y - 8), Vector2(c.x + 2, c.y - 8), _darker(hat))
+			if _look["id"] == "mercador":
+				# Broche de mercador
+				_px(c.x + 1, c.y - 6, "gold")
 		"bald":
 			_px(c.x - 1, c.y - 4, _lighter(skin))
 			_px(c.x, c.y - 4, _lighter(skin))
 			_rect(c.x - 3, c.y, 1, 2, hair)
+			if _look["id"] == "escriba":
+				# Pena de escriba de bronze atrás da orelha (como no retrato)
+				_px(c.x - 2, c.y - 3, "gold")
+				_px(c.x - 3, c.y - 5, "gold_dark")
 		"hood":
 			_poly([Vector2(c.x - 5, c.y + 6), Vector2(c.x - 5, c.y - 4), Vector2(c.x - 2, c.y - 7), Vector2(c.x + 3, c.y - 6), Vector2(c.x + 4, c.y - 3), Vector2(c.x + 1, c.y - 3), Vector2(c.x - 1, c.y + 6)], hat)
 			_rect(c.x + 1, c.y - 2, 2, 1, hair)
@@ -258,21 +321,28 @@ func _scroll(shoulder: Vector2) -> void:
 	_rect(at.x, at.y, 6, 2, "cream")
 	_px(at.x + 6, at.y, "sand_dark")
 	_px(at.x - 1, at.y + 1, "sand_dark")
+	# Fita de amarração do papiro
+	_px(at.x + 3, at.y, "rust")
 
 
 # --- Desenho --------------------------------------------------------------------
 
-## Luz da esquerda, como nas caixas do cenário: borda esquerda mais clara.
+## Luz direcional e ambient occlusion nos contornos
 func _shade() -> void:
 	var source := _img.duplicate() as Image
 	for y in range(CELL.y):
 		for x in range(1, CELL.x):
 			var here := source.get_pixel(x, y)
 			if here.a == 0: continue
+			# Borda esquerda recebe iluminação
 			if source.get_pixel(x - 1, y).a == 0:
-				_img.set_pixel(x, y, here.lightened(.14))
+				_img.set_pixel(x, y, here.lightened(.16))
+			# Borda direita recebe sombra
 			elif x + 1 < CELL.x and source.get_pixel(x + 1, y).a == 0:
-				_img.set_pixel(x, y, here.darkened(.16))
+				_img.set_pixel(x, y, here.darkened(.18))
+			# Sombra superior sob queixo ou ombro
+			elif y > 0 and source.get_pixel(x, y - 1).a == 0:
+				_img.set_pixel(x, y, here.lightened(.08))
 
 
 func _outline() -> void:
@@ -292,7 +362,7 @@ func _darker(name: String) -> String:
 
 
 func _lighter(name: String) -> String:
-	return {"wood": "wood_light", "wood_light": "tan", "tan": "gold_dark"}.get(name, name)
+	return {"wood": "wood_light", "wood_light": "tan", "tan": "gold_dark", "cream": "linen", "bone": "cream", "teal": "teal_light"}.get(name, name)
 
 
 func _px(x: int, y: int, color: String) -> void:

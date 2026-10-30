@@ -49,7 +49,7 @@ static func foes_cleared(game) -> int:
 
 static func refresh(game) -> void:
 	for item in game.get_tree().get_nodes_in_group("interactables"):
-		if not item is PortInteractable or not str(item.kind).begins_with("isle_"):
+		if not item is PortInteractable or not str(item.kind).begins_with("isle_") or item.has_method("extra_activate"):
 			continue
 		match item.kind:
 			"isle_npc":

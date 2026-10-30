@@ -4,6 +4,8 @@ extends CharacterBody2D
 signal stats_changed
 signal died
 signal combat_feedback(text: String, color: Color)
+signal attack_resolved(attacker: Node, result: int)
+enum AttackResult { EVADED, HIT, PARRIED, PERFECT_PARRY }
 
 const ISO_Y: float = 0.70
 const KHOPESH: WeaponDefinition = preload("res://resources/weapons/khopesh.tres")
@@ -42,6 +44,9 @@ var parry_timer: float = 0.0
 var invulnerability_timer: float = 0.0
 var dead: bool = false
 var is_sprinting: bool = false
+var _slow_scale := 1.0
+var _slow_seconds := 0.0
+var _slow_source := ""
 ## Runtime configuration only; the save/catalog remains the source of ownership.
 var learned_skills: Array = []
 var seal_cooldown_remaining: float = 0.0
@@ -124,6 +129,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	_time += delta
+	_slow_seconds=maxf(0,_slow_seconds-delta)
+	if _slow_seconds<=0:_slow_scale=1.0
 	_visual_speed = 0.0
 	is_sprinting = false
 	attack_timer = maxf(0.0, attack_timer - delta)
@@ -185,6 +192,7 @@ func _physics_process(delta: float) -> void:
 		if movement.length_squared() > 0.01:
 			facing = movement.normalized()
 		var movement_factor: float = 1.0
+		movement_factor *= _slow_scale
 		if attack_timer > 0.0:
 			movement_factor = 0.36
 		if parry_timer > 0.0:
@@ -410,10 +418,17 @@ func _restore_phase_collision() -> void:
 
 
 func receive_hit(damage: int, from_position: Vector2) -> bool:
+	return receive_attack(damage,from_position)==AttackResult.HIT
+
+## Existing damage/parry contract, with an explicit outcome for long boss hits.
+## Defaults preserve ordinary enemy calls; evasion remains the same i-frame rule.
+func receive_attack(damage: int, from_position: Vector2, attacker: Node=null, allow_parry: bool=true) -> int:
 	if dead or invulnerability_timer > 0.0:
-		return false
+		attack_resolved.emit(attacker,AttackResult.EVADED)
+		return AttackResult.EVADED
 	var incoming: Vector2 = _metric(from_position - global_position).normalized()
-	if parry_timer > 0.0 and facing.dot(incoming) >= -0.1:
+	if allow_parry and parry_timer > 0.0 and facing.dot(incoming) >= -0.1:
+		var precise:=parry_window-parry_timer<=.10
 		parry_timer = 0.0
 		invulnerability_timer = 0.34
 		_riposte_timer = 2.80
@@ -428,13 +443,16 @@ func receive_hit(damage: int, from_position: Vector2) -> bool:
 		for enemy: Node in get_tree().get_nodes_in_group("enemies"):
 			if enemy is Node2D and enemy.has_method("receive_hit"):
 				var body: Node2D = enemy as Node2D
-				if _metric(body.global_position - from_position).length() < 20.0:
+				if body!=attacker and _metric(body.global_position - from_position).length() < 20.0:
 					body.call("receive_hit", 5, global_position, true)
 		if has_skill("reflexo_palavra"):
 			_spawn_mercury(_metric(from_position - global_position), 24, 1)
 		combat_feedback.emit("APARADO · Q PARA RIPOSTA", Color("ffe7a3"))
 		stats_changed.emit()
-		return false
+		var result:=AttackResult.PERFECT_PARRY if precise else AttackResult.PARRIED
+		if is_instance_valid(attacker) and attacker.has_method("on_parried"):attacker.on_parried(precise)
+		attack_resolved.emit(attacker,result)
+		return result
 	var received_damage: int = maxi(0, damage)
 	if has_skill("pele_alabastro") and received_damage > 0:
 		received_damage = maxi(1, roundi(float(received_damage) * 0.85))
@@ -457,7 +475,32 @@ func receive_hit(damage: int, from_position: Vector2) -> bool:
 		_shadow_finish = false
 		_restore_phase_collision()
 		died.emit()
-	return true
+	attack_resolved.emit(attacker,AttackResult.HIT)
+	return AttackResult.HIT
+
+func apply_movement_slow(scale: float, seconds: float, source: String) -> void:
+	_slow_scale=clampf(scale,.65,1)
+	_slow_seconds=clampf(seconds,0,.6)
+	_slow_source=source
+
+func clear_movement_slow(source: String) -> void:
+	if _slow_source==source:
+		_slow_scale=1
+		_slow_seconds=0
+		_slow_source=""
+
+func cancel_actions() -> void:
+	_hit_delay=-1
+	_second_hit_delay=-1
+	attack_timer=0
+	_attack_visual=0
+	parry_timer=0
+	_dodge_timer=0
+	_shadow_finish=false
+	_counter_attack_bonus=0
+	_knockback=Vector2.ZERO
+	velocity=Vector2.ZERO
+	_restore_phase_collision()
 
 
 func heal_full() -> void:
@@ -467,6 +510,9 @@ func heal_full() -> void:
 
 func reset_at(spawn_position: Vector2) -> void:
 	global_position = spawn_position
+	_slow_scale=1
+	_slow_seconds=0
+	_slow_source=""
 	dead = false
 	is_sprinting = false
 	health = max_health

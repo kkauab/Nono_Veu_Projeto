@@ -1,0 +1,29 @@
+{
+  "version": 6,
+  "direction": "down_right",
+  "stride": 22.0,
+  "move_speed": 24.0,
+  "start_phase": 4,
+  "stance_fraction": 0.5625,
+  "foot_lift": 2.0,
+  "ground_axis": [0.9578262852, 0.2011435199],
+  "settle_seconds": [0.035, 0.06, 0.065, 0.08],
+  "poses": [
+    {"name": "heel_near", "drop": 1, "hem": 0},
+    {"name": "weight_near", "drop": 1, "hem": 0},
+    {"name": "support_near_a", "drop": 1, "hem": -1},
+    {"name": "support_near_b", "drop": 0, "hem": -1},
+    {"name": "passing_far", "drop": 0, "hem": -1},
+    {"name": "swing_far", "drop": 0, "hem": -1},
+    {"name": "extend_far", "drop": 0, "hem": 0},
+    {"name": "lower_far", "drop": 1, "hem": 0},
+    {"name": "heel_far", "drop": 1, "hem": 0},
+    {"name": "weight_far", "drop": 1, "hem": 0},
+    {"name": "support_far_a", "drop": 1, "hem": -1},
+    {"name": "support_far_b", "drop": 0, "hem": -1},
+    {"name": "passing_near", "drop": 0, "hem": -1},
+    {"name": "swing_near", "drop": 0, "hem": -1},
+    {"name": "extend_near", "drop": 0, "hem": 0},
+    {"name": "lower_near", "drop": 1, "hem": 0}
+  ]
+}

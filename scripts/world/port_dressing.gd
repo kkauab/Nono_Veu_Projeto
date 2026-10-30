@@ -1,5 +1,8 @@
 extends RefCounted
 const Story = preload("res://scripts/world/port_story.gd")
+const CloisterLayout = preload("res://scripts/world/cloister_layout.gd")
+const FarIslesLayout = preload("res://scripts/world/far_isles_layout.gd")
+const LifeCatalog = preload("res://scripts/world/port_life_catalog.gd")
 
 # A arquitetura fica fora dos eixos de circulação. Tudo o que tem base pintada é
 # sólido (muros, braseiros e entulho também); só juncos e barcos são atravessáveis.
@@ -108,6 +111,10 @@ static func _site() -> Dictionary:
 	spots.append_array(PortLayout.MARKERS.values())
 	for mark in Story.MARKS.values(): spots.append(mark["tile"])
 	spots.append_array([Story.RELIC_TILE, Story.FISHER_TILE, Story.BROTHER_DOCK_TILE, Story.BROTHER_HOME_TILE])
+	# As peças do claustro e das ilhas além da baía, e a ponta de cada píer novo.
+	spots.append_array(CloisterLayout.MARKERS.values())
+	spots.append_array(FarIslesLayout.MARKERS.values())
+	for id in FarIslesLayout.ISLES: spots.append(FarIslesLayout.ISLES[id]["landing"])
 	var spawns: Array[Vector2] = []
 	for spawn in PortLayout.ENEMY_SPAWNS: spawns.append(spawn["tile"])
 	return {"catalog": catalog, "doorways": doorways, "spots": spots, "spawns": spawns, "placed": []}
@@ -158,7 +165,7 @@ static func _fits(ground: Array[PackedVector2Array], site: Dictionary, margin: f
 
 ## Places a district prop at the first of `shifts` (tile offsets) where it fits;
 ## where none does, the room goes without it.
-static func _district_prop(parent: Node2D, site: Dictionary, kind: String, tile: Vector2, color: Color, variant: int = 0, shifts: Array = [Vector2.ZERO]) -> void:
+static func _district_prop(parent: Node2D, site: Dictionary, kind: String, tile: Vector2, color: Color, variant: int = 0, shifts: Array = [Vector2.ZERO], mirror: bool = false) -> void:
 	for shift: Vector2 in shifts:
 		var at := tile + shift
 		# Puzzle mechanisms, checkpoints and enemy starting positions stay clear.
@@ -166,7 +173,7 @@ static func _district_prop(parent: Node2D, site: Dictionary, kind: String, tile:
 			continue
 		if site["spawns"].any(func(spawn: Vector2) -> bool: return at.distance_to(spawn) < .9):
 			continue
-		var prop := _make(kind, at, color, variant)
+		var prop := _make(kind, at, color, variant, mirror)
 		var ground := _ground_of(prop)
 		if not _fits(ground, site, FACADE_MARGIN.get(kind, 0.0)):
 			prop.free()
@@ -213,3 +220,82 @@ static func _populate_districts(parent: Node2D, site: Dictionary) -> void:
 			_district_prop(parent, site, "rubble", origin + Vector2(size.x - 3, size.y - 3), stone)
 		if room["id"] in ["pilgrim", "caravan", "salt_road"]:
 			_district_prop(parent, site, "palm", origin + Vector2(1, 7), Color("647b60"))
+	_populate_identity(parent, site)
+
+
+## Identidade de cada lugar (docs/MUNDO_PROPOSTA_2026-10-30.md, Gustavo 30/10/2026):
+## o que cada distrito foi, nos espaços que o molde comum deixou vazios, mais o
+## Claustro dos Iniciados e a arquitetura de pedra das ilhas além da baía.
+## [peça, tile, cor, espelhar]. Cada peça passa pelo mesmo teste do gerador (base
+## inteira no chão, fora das bocas de passagem, longe das peças de missão, dos
+## inimigos e das paradas dos moradores); a que não cabe tenta um passo ao lado
+## e, se ainda não couber, fica de fora. A cor só pinta o que é desenhado por
+## código (entulho, montes de sal e escória); a arte do Pixelorama mantém a sua.
+const SALT := "ddd5c0"
+const SLAG := "3d3631"
+const IDENTITY := {
+	# Fornos: duas fornalhas acesas, escória, lingotes e carvão.
+	"kilns": [["torch", Vector2(70.4, -1.4), "a29b79"], ["torch", Vector2(71.6, -.2), "a29b79"], ["rubble", Vector2(71.6, 1.8), SLAG],
+		["rubble", Vector2(59.6, -1.0), SLAG], ["crate", Vector2(69.0, -1.2), "806343"], ["barrel", Vector2(62.2, -1.2), "806343"],
+		["rubble", Vector2(72.0, 4.6), SLAG], ["crate", Vector2(71.8, 6.6), "806343"], ["wall", Vector2(66.6, -1.6), "6f6a5f"],
+		["torch", Vector2(67.6, -.6), "a29b79"], ["rubble", Vector2(65.2, -.4), SLAG]],
+	# Estrada do Sal: montes de sal, a barraca do salineiro, carga e um marco.
+	"salt_road": [["rubble", Vector2(59.4, 15.4), SALT], ["rubble", Vector2(60.6, 16.8), SALT], ["rubble", Vector2(59.0, 20.8), SALT],
+		["rubble", Vector2(61.8, 22.0), SALT], ["stall", Vector2(61.6, 14.0), "a7a08a"], ["crate", Vector2(63.2, 19.4), "806343"],
+		["barrel", Vector2(64.4, 20.4), "806343"], ["crate", Vector2(70.0, 13.2), "806343"], ["barrel", Vector2(71.0, 14.4), "806343"],
+		["statue", Vector2(66.8, 21.2), "8b8168"], ["palm", Vector2(70.2, 23.2), "647b60"]],
+	# Escadaria dos Peregrinos: estelas votivas, um braseiro e a sombra da aguadeira.
+	"pilgrim": [["statue", Vector2(31.0, -15.4), "8a8574"], ["torch", Vector2(31.8, -13.4), "a29b79"], ["statue", Vector2(31.0, -11.6), "8a8574"],
+		["statue", Vector2(26.4, -13.0), "8a8574"], ["palm", Vector2(18.6, -18.2), "647b60"], ["stall", Vector2(19.6, -14.6), "657e70"],
+		["rubble", Vector2(32.2, -17.8), "8a8574"]],
+	# Pátio dos Escribas: o toldo onde se copiava, fileiras de estelas de registro.
+	"scriptorium": [["stall", Vector2(-1.0, -15.2), "8a8a74"], ["statue", Vector2(-2.6, -12.2), "858577"], ["palm", Vector2(-2.6, -17.8), "647b60"],
+		["statue", Vector2(8.6, -15.6), "858577"], ["statue", Vector2(10.6, -15.6), "858577"], ["statue", Vector2(12.6, -15.6), "858577"],
+		["torch", Vector2(12.6, -18.6), "a29b79"]],
+	# Terraço do Farol: braseiro de sinal, jarros de óleo, blocos caídos do farol.
+	"beacon": [["torch", Vector2(82.6, 13.0), "a29b79"], ["barrel", Vector2(83.6, 15.6), "806343"], ["crate", Vector2(85.4, 16.6), "806343"],
+		["rubble", Vector2(86.2, 18.8), "7a7b70"], ["rubble", Vector2(82.4, 19.8), "7a7b70"], ["rubble", Vector2(75.6, 23.4), "7a7b70"]],
+	# Reservatório: palmeiras e estátuas nas quinas do lago, juncos na margem.
+	"reservoir": [["palm", Vector2(61.4, 32.4), "647b60"], ["palm", Vector2(67.6, 37.6), "647b60"], ["statue", Vector2(67.4, 32.4), "819489"],
+		["statue", Vector2(61.4, 37.6), "819489"], ["reeds", Vector2(62.0, 36.6), "5b7864"], ["reeds", Vector2(66.4, 32.8), "5b7864"],
+		["torch", Vector2(59.0, 29.4), "a29b79"], ["torch", Vector2(70.4, 29.4), "a29b79"]],
+	# Cais do Cobre: carga empilhada e cabeços para os navios.
+	"copper_dock": [["crate", Vector2(51.6, 33.6), "806343"], ["barrel", Vector2(52.8, 34.2), "806343"], ["crate", Vector2(53.2, 37.6), "806343"],
+		["bollard", Vector2(42.6, 42.4), "797b65"], ["bollard", Vector2(51.6, 42.4), "797b65"]],
+	# Limiar das Catacumbas: colunas e entulho longe da subida do Eco.
+	"a02": [["pillar", Vector2(-24.4, 26.4), "74837c"], ["rubble", Vector2(-23.6, 29.4), "5e6d69"], ["torch", Vector2(-20.4, 29.6), "a29b79"],
+		["statue", Vector2(-16.6, 29.4), "71847c"], ["wall", Vector2(-24.6, 23.6), "5c6d6b", true]],
+	# Claustro dos Iniciados: a Casa das Primeiras Palavras, os mestres de pedra e o lago.
+	"cloister": [["temple", Vector2(-12.3, 5.7), "6f7c70"], ["torch", Vector2(-13.5, 7.4), "a29b79"], ["torch", Vector2(-11.4, 4.7), "a29b79"],
+		["statue", Vector2(-10.2, 4.6), "a5a087"], ["statue", Vector2(-6.6, 4.6), "a5a087"],
+		["pillar", Vector2(-1.9, 5.8), "97917b"], ["wall", Vector2(-13.4, 10.4), "747c70", true], ["palm", Vector2(-12.8, 12.6), "556f5a"],
+		["palm", Vector2(-3.0, 12.4), "556f5a"], ["reeds", Vector2(-8.6, 7.6), "51695d"], ["reeds", Vector2(-7.2, 9.2), "51695d"],
+		["rubble", Vector2(-6.0, 12.8), "7f8b78"], ["torch", Vector2(-2.2, 9.6), "a29b79"]],
+	# Ilha do Íbis Afogado: o templo dos escribas afundando, estelas e muros caídos.
+	"ibis": [["temple", Vector2(7.2, 73.6), "6a6f78"], ["statue", Vector2(13.4, 71.4), "7d8290"], ["statue", Vector2(14.0, 76.8), "7d8290"],
+		["wall", Vector2(9.2, 70.4), "666b74"], ["wall", Vector2(5.6, 76.8), "666b74", true], ["torch", Vector2(6.4, 71.4), "a29b79"],
+		["rubble", Vector2(16.6, 69.6), "7d8290"], ["rubble", Vector2(5.0, 72.8), "7d8290"], ["pillar", Vector2(19.0, 74.6), "8a8578"],
+		["palm", Vector2(6.0, 79.2), "556f5a"], ["palm", Vector2(18.8, 71.4), "556f5a"]],
+	# Recife do Navio Esquecido: o navio encalhado, a carga espalhada e a fogueira dos náufragos.
+	"wreck": [["boat", Vector2(89.6, 71.8), "86775b"], ["crate", Vector2(83.0, 70.4), "806343"], ["barrel", Vector2(81.6, 68.6), "806343"],
+		["crate", Vector2(74.8, 66.6), "806343"], ["barrel", Vector2(88.2, 68.6), "806343"], ["torch", Vector2(73.2, 64.8), "a29b79"],
+		["palm", Vector2(79.0, 61.8), "556f5a"], ["palm", Vector2(85.2, 63.4), "556f5a"], ["palm", Vector2(76.2, 65.4), "556f5a"],
+		["bollard", Vector2(72.4, 65.6), "797b65"], ["stall", Vector2(80.6, 68.2), "b0a88e"], ["crate", Vector2(81.8, 66.2), "806343"]],
+}
+const IDENTITY_NUDGES := [Vector2.ZERO, Vector2(.4, 0), Vector2(-.4, 0), Vector2(0, .4), Vector2(0, -.4)]
+
+
+static func _populate_identity(parent: Node2D, site: Dictionary) -> void:
+	# As paradas dos moradores (port_life_catalog.gd) ficam livres, como os inimigos.
+	# Só aqui: o molde comum dos distritos continua igual ao de antes.
+	var guarded := site.duplicate()
+	var spawns: Array[Vector2] = []
+	spawns.append_array(site["spawns"])
+	for folk in LifeCatalog.TOWNSFOLK:
+		for stop in folk.get("route", []):
+			spawns.append(stop[0])
+	guarded["spawns"] = spawns
+	for room_id in IDENTITY:
+		for entry: Array in IDENTITY[room_id]:
+			var mirror: bool = entry.size() > 3 and entry[3]
+			_district_prop(parent, guarded, entry[0], entry[1], Color(entry[2]), 0, IDENTITY_NUDGES, mirror)

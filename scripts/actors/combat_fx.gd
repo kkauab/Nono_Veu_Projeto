@@ -5,7 +5,8 @@ extends Node2D
 
 const Sfx = preload("res://scripts/audio/sfx.gd")
 
-enum Kind { SPARK, ASH, DUST, RING, STAR }
+enum Kind { SPARK, ASH, DUST, RING, STAR, STONE }
+signal ground_impacted(at: Vector2, strength: float)
 
 ## Testes que medem tempo de jogo podem desligar o congelamento.
 static var hitstop_enabled := true
@@ -185,6 +186,52 @@ func memory_restored(at: Vector2) -> void:
 	_veil_fragments(at + Vector2(0, -12), 10, Color("dfc38c"))
 	_star(at + Vector2(0, -18), 1.0)
 
+## Ground-contact extension of the approved impact/loot language. Ground
+## position, projected shadow and ballistic height are kept separate.
+func ground_impact(at: Vector2, strength: float = 1.0, direction: Vector2 = Vector2.RIGHT, source_id: int=0) -> void:
+	if not is_inside_tree(): return
+	var first:=_particles.size()
+	var force := clampf(strength, .15, 2.0)
+	var stone_count := 0
+	for existing in _particles:
+		if int(existing["kind"]) == Kind.STONE: stone_count += 1
+	var count := mini(maxi(0, 72 - stone_count), roundi(7 + force * 11))
+	for index in range(count):
+		var angle := _rng.randf_range(0, TAU)
+		var ground_speed := _rng.randf_range(12, 43) * (.7 + force * .4)
+		var tint: Color = [Color("30332f"),Color("676557"),Color("a2987b"),Color("d6c6a5")][index % 4]
+		var chip := _add(Kind.STONE, at, Vector2(cos(angle),sin(angle)*.5) * ground_speed,
+			_rng.randf_range(.50,.90), tint, 3.0 if force >= 1 and index % 5 == 0 else (2.0 if index % 2 == 0 else 1.0))
+		chip["height"] = 1.0
+		chip["height_velocity"] = _rng.randf_range(58,110) * (.8 + force*.25)
+		chip["bounced"] = false
+	_dust(at, roundi(5 + force * 5))
+	# Low, dense earth puffs make the contact read against the pale stone;
+	# the small airborne chips remain separate from their ground shadows.
+	for index in range(roundi(3 + force * 3)):
+		var drift := Vector2.from_angle(_rng.randf_range(0,TAU))
+		_add(Kind.DUST,at+Vector2(0,-1),Vector2(drift.x,drift.y*.5)*_rng.randf_range(18,40),
+			_rng.randf_range(.22,.38),Color("514a3d",.65),3.0 if index%2 else 4.0)
+	_ring(at, 3, 14 + force * 9, .18 + force * .04, Color("b6a17b", .6))
+	if force >= .8:
+		hitstop(.025 + force * .025)
+		shake(.10 + force * .12, direction)
+		_play_hit("hit_heavy", at, -2.0, .9)
+	if source_id!=0:
+		for i in range(first,_particles.size()):_particles[i]["source_id"]=source_id
+	ground_impacted.emit(at, force)
+
+func ground_dust(at: Vector2, count: int = 3, source_id: int=0) -> void:
+	if not is_inside_tree():return
+	var first:=_particles.size()
+	_dust(at,clampi(count,0,16))
+	if source_id!=0:
+		for i in range(first,_particles.size()):_particles[i]["source_id"]=source_id
+
+func clear_source(source_id: int) -> void:
+	_particles=_particles.filter(func(p):return int(p.get("source_id",0))!=source_id)
+	queue_redraw()
+
 
 # --- ferramentas ---------------------------------------------------------------
 
@@ -261,6 +308,7 @@ func _listen_to_enemies() -> void:
 		var id := enemy.get_instance_id()
 		var state := int(enemy.get("state"))
 		states[id] = state
+		if enemy.has_meta("owns_attack_audio"):continue
 		if state == int(_enemy_states.get(id, state)):
 			continue
 		var body := enemy as Node2D
@@ -313,6 +361,18 @@ func _update_particles(delta: float) -> void:
 				velocity *= 1.0 - minf(1.0, 1.2 * delta)
 			Kind.DUST:
 				velocity *= 1.0 - minf(1.0, 5.0 * delta)
+			Kind.STONE:
+				particle["height_velocity"] = float(particle["height_velocity"]) - 340.0 * delta
+				particle["height"] = float(particle["height"]) + float(particle["height_velocity"]) * delta
+				if float(particle["height"]) < 0:
+					particle["height"] = 0.0
+					if not bool(particle["bounced"]):
+						particle["height_velocity"] = absf(float(particle["height_velocity"])) * .22
+						particle["bounced"] = true
+					else:
+						particle["height_velocity"] = 0.0
+					velocity *= .7
+				velocity *= 1.0 - minf(1.0, 1.6 * delta)
 		particle["v"] = velocity
 		particle["p"] = (particle["p"] as Vector2) + velocity * delta
 
@@ -323,6 +383,12 @@ func _draw() -> void:
 		var color: Color = particle["color"]
 		var at: Vector2 = particle["p"]
 		match int(particle["kind"]):
+			Kind.STONE:
+				var height := float(particle["height"])
+				color.a *= clampf(life * 2.0, 0.0, 1.0)
+				draw_rect(Rect2(at.round(),Vector2(2,1)),Color(0,0,0,color.a*.24))
+				var raised := (at + Vector2(0,-height)).round()
+				draw_rect(Rect2(raised,Vector2.ONE * float(particle["size"])),color)
 			Kind.SPARK:
 				color.a *= clampf(life * 1.6, 0.0, 1.0)
 				var velocity: Vector2 = particle["v"]
