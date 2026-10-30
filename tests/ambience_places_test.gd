@@ -148,7 +148,10 @@ func _test_house_and_pause() -> void:
 	await _settle(1.4)
 	var open_wind := wind.volume_db
 	paused = true
-	for frame in range(30):
+	# The fade is timed, while a headless run may render 30 frames in far less
+	# than half a second. Keep the audible reduction threshold and bound time.
+	var duck_deadline := Time.get_ticks_msec() + 1500
+	while wind.volume_db >= open_wind - 4.0 and Time.get_ticks_msec() < duck_deadline:
 		await process_frame
 	_check(wind.volume_db < open_wind - 4.0, "the notebook pause ducks the place (%.1f → %.1f dB)" % [open_wind, wind.volume_db])
 	paused = false

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "p01_chave_lanca_porteiro"
+display_name = "Chave-Lança do Porteiro"
+category = "pesada"
+damage = 36
+attack_interval = 0.90
+range_px = 58.0
+arc_degrees = 110.0
+color = Color(0.78, 0.65, 0.40, 1)
+power_id = "ultimo_chamado"
+power_name = "Último Chamado"
+power_cooldown = 10.0
+description = "Uma antiga arma cerimonial utilizada por um guarda de Alexandria. Pequenos sinos pendem de sua haste. Seus registros foram apagados, mas os golpes ainda conservam a memória de quem os executava."

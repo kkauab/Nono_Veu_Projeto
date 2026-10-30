@@ -40,8 +40,14 @@ func _ready() -> void:
 		add_child(slice)
 
 func open() -> void:
-	opened = true
-	get_node("Barrier").set_deferred("disabled", true)
+	set_open(true)
+
+func close() -> void:
+	set_open(false)
+
+func set_open(value: bool) -> void:
+	opened = value
+	get_node("Barrier").set_deferred("disabled", value)
 	for child in get_children():
 		if child is GateSlice:
 			child.queue_redraw()

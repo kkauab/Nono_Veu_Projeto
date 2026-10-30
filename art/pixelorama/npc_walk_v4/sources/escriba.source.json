@@ -20,5 +20,10 @@
     21,
     22,
     23
+  ],
+  "carry_source": "escriba_carry.png",
+  "carry_grid": [
+    4,
+    2
   ]
 }

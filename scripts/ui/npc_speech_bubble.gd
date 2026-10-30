@@ -53,7 +53,7 @@ static func paginate(body: String, text_font: Font, font_size: int, width: float
 		var divider := text.find(" — ")
 		if divider > 0 and divider < 24:
 			var prefix := text.substr(0, divider).to_upper()
-			if prefix == "SENU" or NPC_IDS.has(prefix):
+			if prefix in ["SENU","PORTEIRO"] or NPC_IDS.has(prefix):
 				speaker = prefix
 				text = text.substr(divider + 3)
 		var lines: Array[String] = []
@@ -151,6 +151,7 @@ func _show_page() -> void:
 	_position_bubble.call_deferred()
 
 func _speaker_name(id: String) -> String:
+	if id=="PORTEIRO":return "Porteiro"
 	if id == "PESCADOR": return "Pescador"
 	if id == "HOMEM": return "Homem das cordas"
 	if id == "MULHER": return "Guardiã das garças"
@@ -174,6 +175,7 @@ func _process(_delta: float) -> void:
 func _actor() -> Node2D:
 	if not is_inside_tree() or not is_instance_valid(hud) or not is_instance_valid(hud.game): return null
 	if speaker_id == "SENU": return hud.game.player
+	if speaker_id=="PORTEIRO":return hud.game.boss
 	var target: String = NPC_IDS.get(speaker_id, npc_id)
 	for actor in get_tree().get_nodes_in_group("interactables"):
 		if str(actor.get("item_id")) == target: return actor as Node2D

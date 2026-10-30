@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "direction": "down_right",
+  "pose_names": ["guard", "take_grip", "load_body", "anticipation", "accelerate", "contact", "follow_through", "recover", "settle_guard"],
+  "order": ["charge", "sweep", "register", "bell", "warning", "echo_charge", "names", "chains", "last_name"],
+  "attacks": {
+    "charge": {
+      "name": "Investida da Guarita", "phase": 1, "pose_family": "charge", "cooldown": 3.5,
+      "seconds": [0.16, 0.16, 0.20, 0.30, 0.08, 0.12, 0.12, 0.25, 0.35], "contact_pose": 5,
+      "damage": 32, "parry": "normal", "shape": {"kind": "line", "reach": 110, "width": 12},
+      "impact": {"kind": "scrape", "strength": 0.5, "offset": [38, 0]}, "events": []
+    },
+    "sweep": {
+      "name": "Varredura Cerimonial", "phase": 1, "pose_family": "sweep", "cooldown": 3.0,
+      "seconds": [0.12, 0.14, 0.18, 0.28, 0.08, 0.12, 0.14, 0.23, 0.32], "contact_pose": 5,
+      "damage": 26, "parry": "normal", "shape": {"kind": "arc", "reach": 66, "degrees": 155},
+      "impact": {"kind": "sweep", "strength": 0.6, "offset": [36, 0]},
+      "events": [{"after_contact": 0.08, "kind": "scrape", "offset": [42, 14]}, {"after_contact": 0.16, "kind": "scrape", "offset": [32, 28]}]
+    },
+    "register": {
+      "name": "Golpe do Registro", "phase": 1, "pose_family": "slam", "cooldown": 4.0,
+      "seconds": [0.15, 0.20, 0.24, 0.43, 0.08, 0.14, 0.18, 0.34, 0.40], "contact_pose": 5,
+      "damage": 38, "parry": "normal", "shape": {"kind": "disc", "radius": 25, "offset": [35, 0]},
+      "impact": {"kind": "stone", "strength": 1.2, "offset": [35, 0]}, "events": []
+    },
+    "bell": {
+      "name": "Sino do Esquecimento", "phase": 1, "pose_family": "bell", "cooldown": 7.0,
+      "seconds": [0.16, 0.22, 0.25, 0.49, 0.08, 0.20, 0.40, 0.35, 0.45], "contact_pose": 5,
+      "damage": 24, "parry": "dodge", "shape": {"kind": "ring", "reach": 115, "width": 10, "wave_seconds": 0.85},
+      "impact": {"kind": "bell", "strength": 0.7, "offset": [0, 0]}, "events": []
+    },
+    "warning": {
+      "name": "Última Advertência", "phase": 1, "pose_family": "guard", "cooldown": 5.5,
+      "seconds": [0.18, 0.23, 0.30, 0.66, 0.08, 0.13, 0.20, 0.38, 0.45], "contact_pose": 5,
+      "damage": 44, "parry": "stagger", "shape": {"kind": "arc", "reach": 68, "degrees": 110},
+      "impact": {"kind": "stone", "strength": 1.1, "offset": [36, 0]}, "events": []
+    },
+    "echo_charge": {
+      "name": "Ecos da Investida", "phase": 2, "pose_family": "echo", "cooldown": 6.0,
+      "seconds": [0.16, 0.16, 0.20, 0.35, 0.08, 0.15, 0.25, 0.40, 0.55], "contact_pose": 5,
+      "damage": 32, "parry": "normal", "shape": {"kind": "line", "reach": 115, "width": 12},
+      "impact": {"kind": "scrape", "strength": 0.6, "offset": [38, 0]},
+      "events": [{"after_contact": 0.65, "kind": "echo", "offset": [38, 0], "damage": 18}]
+    },
+    "names": {
+      "name": "Nomes Esquecidos", "phase": 2, "pose_family": "sigils", "cooldown": 7.0,
+      "seconds": [0.14, 0.18, 0.23, 0.37, 0.08, 0.18, 0.36, 0.48, 0.55], "contact_pose": 5,
+      "damage": 26, "parry": "dodge", "shape": {"kind": "zones", "radius": 18, "zones": [[24, -30], [60, 0], [24, 30]], "delay": 0.80, "active_seconds": 0.3},
+      "impact": {"kind": "stone", "strength": 0.9, "offset": [29, 2]},
+      "events": [{"after_contact": 0.80, "kind": "zones", "offset": [0, 0]}]
+    },
+    "chains": {
+      "name": "Correntes do Limiar", "phase": 2, "pose_family": "chain", "cooldown": 5.0,
+      "seconds": [0.14, 0.18, 0.22, 0.38, 0.08, 0.18, 0.25, 0.36, 0.40], "contact_pose": 5,
+      "damage": 22, "parry": "normal", "shape": {"kind": "line", "reach": 95, "width": 13},
+      "slow": {"scale": 0.8, "seconds": 0.6},
+      "impact": {"kind": "chains", "strength": 0.6, "offset": [65, 0]}, "events": []
+    },
+    "last_name": {
+      "name": "Golpe do Último Nome", "phase": 2, "pose_family": "ultimate", "cooldown": 8.0,
+      "seconds": [0.20, 0.27, 0.35, 0.75, 0.08, 0.16, 0.23, 0.48, 0.65], "contact_pose": 5,
+      "damage": 52, "parry": "perfect_stagger", "shape": {"kind": "disc", "radius": 42, "offset": [39, 0]},
+      "impact": {"kind": "stone", "strength": 2.0, "offset": [39, 0]}, "events": []
+    }
+  }
+}

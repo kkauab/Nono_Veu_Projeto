@@ -79,7 +79,11 @@ func _scan(node: Node) -> void:
 
 func _node_added(node: Node) -> void:
 	if node is BaseButton and node.get_viewport() == get_viewport():
-		_attach.call_deferred(node)
+		_attach_when_alive.call_deferred(weakref(node))
+
+func _attach_when_alive(reference: WeakRef) -> void:
+	var button=reference.get_ref()
+	if is_instance_valid(button) and button is BaseButton:_attach(button)
 
 func _attach(button: BaseButton) -> void:
 	if not is_instance_valid(button) or not button.is_inside_tree(): return

@@ -1,0 +1,10 @@
+{
+  "directions/right.pxo": "c55d1088f51d48be2178f7edb524dc66e9134ba4e69640fe263084050e8a6494",
+  "directions/down_right.pxo": "d798f8cb02a460cc00e0858f84f3ebe9c338a57f44c5176f52ff562c810c55de",
+  "directions/down.pxo": "58ad4b444236a24241b49efb2e81989999fde6a2f6e8eccb4972c6ae8b22a0c7",
+  "directions/down_left.pxo": "577fdee17af13206d7939e0fdfa6b47ced5f7ac1d08c5e8e7b9a29edecf28c5a",
+  "directions/left.pxo": "a1ea7518b565f8a42210e1ef635c546e92db5b2c01bd9292e9038c3de3654241",
+  "directions/up_left.pxo": "ce3debaa44e86e75452e0f155e1654819a37e744df21c9e4d5cdc085ea623da8",
+  "directions/up.pxo": "3c8586410f06a2aa02a0fcc8baf4842184cb674bc3a3a19d6dcb53a149d3d88d",
+  "directions/up_right.pxo": "d91034ca428655d0de65eab14095e00be476b44be8e36191418afd78ba5c73f2"
+}

@@ -6,6 +6,7 @@ const Economy = preload("res://scripts/economy/economy.gd")
 const Skills = preload("res://scripts/progression/skill_catalog.gd")
 const KHOPESH = preload("res://resources/weapons/khopesh.tres")
 const DAGGERS = preload("res://resources/weapons/daggers.tres")
+const KEY_SPEAR = preload("res://resources/weapons/gatekeeper_key_spear.tres")
 const FILTERS := ["Todos", "Armas", "Itens", "Fragmentos", "Chaves"]
 const QUEST_OBJECTS := {
 	"quest_mirra": ["Jarro de mirra", "Merit espera este jarro recuperado no Jardim Inundado.", "quest_done_merit", "jar"],
@@ -49,6 +50,8 @@ static func entries(data: Dictionary, weapons: Array = []) -> Array[Dictionary]:
 			stats = ["Capacidade de bálsamo: +1", "Recompensa da Ilha do Bennu"]
 		result.append({"id": id, "name": item["name"], "description": item["description"], "category": "Itens", "kind": "upgrade", "icon": icon, "count": count, "stats": stats, "note": "Melhoria ativa"})
 	var collected: Array = data.get("collected", [])
+	if "gatekeeper_key_spear" in collected:
+		result.append({"id":"gatekeeper_key_spear","name":KEY_SPEAR.display_name,"description":KEY_SPEAR.description,"category":"Armas","kind":"heirloom","icon":"key_spear","count":1,"stats":["Arma pesada · haste cerimonial","Poder latente: Último Chamado"],"note":"Guardada entre os pertences de Senu"})
 	for id in QUEST_OBJECTS:
 		var item: Array = QUEST_OBJECTS[id]
 		if id not in collected or item[2] in collected: continue

@@ -40,6 +40,7 @@ func _run() -> void:
 	await _test_walls()
 	await _test_chest_and_note()
 	await _test_leave()
+	await _test_chest_after_tower()
 	print("HOUSE RESULT checks=%d failures=%d" % [checks, failures.size()])
 	quit(0 if failures.is_empty() else 1)
 
@@ -170,8 +171,7 @@ func _test_chest_and_note() -> void:
 	_check(Economy.coins(world.store.data) == coins + 30 and "bau_guarda" in world.store.data["collected"], "the chest pays 30 coins once")
 	_check(chest.opened and not chest.active, "the chest stays open")
 	_check(not world.activate(chest), "an open chest cannot be opened again")
-	var on_disk := SaveStore.new(world.store.path)
-	_check(on_disk.load_progress() and "bau_guarda" in on_disk.data["collected"] and Economy.coins(on_disk.data) == coins + 30, "chest and coins are saved together")
+	_check(not FileAccess.file_exists(world.store.path), "opening the chest does not create an autosave inside the house")
 	var note := _fixture("nota_guarda")
 	player.position = note.position + Vector2(-14, 14)
 	_check(world.activate(note) and world.hud.overlay == "dialog" and world.hud.dialog_title == Catalog.NOTES["nota_guarda"][0], "the note opens its own text")
@@ -192,6 +192,17 @@ func _test_leave() -> void:
 	_check(world.map_position() == player.position, "the map follows Senu again")
 	if "--capture-houses" in OS.get_cmdline_user_args():
 		await _capture("casa_guarda_fora")
+
+
+func _test_chest_after_tower() -> void:
+	var coins := Economy.coins(world.store.data)
+	var tower := _fixture("s1")
+	world.player.position = tower.position
+	_check(world.activate(tower), "tower outside the house anchors the chest reward")
+	await process_frame
+	await process_frame
+	var on_disk := SaveStore.new(world.store.path)
+	_check(on_disk.load_progress() and "bau_guarda" in on_disk.data["collected"] and Economy.coins(on_disk.data) == coins, "chest and coins are saved together after tower meditation")
 
 
 func _fixture(id: String) -> PortInteractable:

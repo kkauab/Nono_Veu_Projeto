@@ -13,6 +13,9 @@ const AnimalLife = preload("res://scripts/world/animal_life.gd")
 const Skills = preload("res://scripts/progression/skill_catalog.gd")
 const Quests = preload("res://scripts/world/port_quests.gd")
 const Ambient = preload("res://scripts/audio/ambient_audio.gd")
+const Gatekeeper=preload("res://scripts/actors/nameless_gatekeeper.gd")
+const GatekeeperEncounter=preload("res://scripts/world/gatekeeper_encounter.gd")
+var gatekeeper_encounter: Node
 var store: DemoSaveStore
 var player: SenuPlayer
 var actors: Node2D
@@ -27,6 +30,8 @@ var nearest: PortInteractable
 var current_room := "hub"
 var respawning := false
 var qa_mode := false
+## Tests may reopen a specific isolated slot; normal play never uses this field.
+var qa_save_path := ""
 var checkpoints: Dictionary = {}
 var layout: PortLayout
 var world_view: SubViewport
@@ -42,7 +47,9 @@ var _last_anchored_data: Dictionary = {}
 func _ready() -> void:
 	Inputs.install()
 	qa_mode = "--qa" in OS.get_cmdline_user_args()
-	store = DemoSaveStore.new("user://qa/run_%d.json" % Time.get_ticks_usec() if qa_mode else "user://progress.json")
+	var slot:="user://qa/run_%d.json"%Time.get_ticks_usec() if qa_mode else "user://progress.json"
+	if qa_mode and qa_save_path.begins_with("user://qa/") and not qa_save_path.contains(".."):slot=qa_save_path
+	store = DemoSaveStore.new(slot)
 	store.load_progress()
 	# Starting a new journey changes memory until the first tower anchors it.
 	# The previous disk slot is retained if the player leaves before that point.
@@ -86,6 +93,9 @@ func _ready() -> void:
 	hud = Hud.new()
 	hud.game = self
 	ui_layer.add_child(hud)
+	gatekeeper_encounter=GatekeeperEncounter.new()
+	add_child(gatekeeper_encounter)
+	gatekeeper_encounter.setup(self)
 	if get_tree().has_meta("nono_autostart"):
 		get_tree().remove_meta("nono_autostart")
 		start_journey()
@@ -232,7 +242,7 @@ func _add_item(id: String, kind: String, tile: Vector2, label: String) -> void:
 func _spawn_enemy(id: String, tile: Vector2, is_boss: bool = false, archetype: String = "guard") -> void:
 	if id in store.data["defeated"] or (is_boss and store.data["flags"]["boss"]):
 		return
-	var enemy := VeilEnemy.new()
+	var enemy: VeilEnemy = Gatekeeper.new() if is_boss and id=="porteiro" else VeilEnemy.new()
 	enemy.enemy_id = id
 	enemy.is_boss = is_boss
 	enemy.archetype = archetype
@@ -288,6 +298,7 @@ func _physics_process(_delta: float) -> void:
 func activate(item: PortInteractable) -> bool:
 	if not is_instance_valid(item) or not item.active or player.position.distance_to(item.position) > 44:
 		return false
+	if gatekeeper_encounter!=null and gatekeeper_encounter.activate(item):return true
 	match item.kind:
 		"townsfolk", "vendor":
 			return Life.activate(self, item)
@@ -413,7 +424,7 @@ func seals_found() -> int:
 	return count
 
 func refresh_seals() -> void:
-	if boss_entry_gate != null and (seals_found() == 3 or store.data["flags"]["boss"]):
+	if boss_entry_gate != null and (seals_found() == 3 or store.data["flags"]["boss"]) and (gatekeeper_encounter==null or not gatekeeper_encounter.gate_locked):
 		boss_entry_gate.open()
 	var puzzles: Dictionary = store.data["puzzles"]
 	for object in get_tree().get_nodes_in_group("interactables"):
@@ -597,6 +608,7 @@ func _on_enemy_defeated(id: String, is_boss: bool) -> void:
 		store.data["defeated"].append(id)
 	if is_boss:
 		store.data["flags"]["boss"] = true
+		if gatekeeper_encounter!=null:gatekeeper_encounter.award_victory()
 		exit_gate.open()
 		hud.toast("PORTEIRO VENCIDO · O selo das Catacumbas se desfez.", Color("dfc38c"), 5)
 	_save()

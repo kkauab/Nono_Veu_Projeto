@@ -20,7 +20,7 @@ const ROOMS := [
 	{"id": "lower_dock", "label": "Embarcadouro Velho", "name": "Embarcadouro Velho", "rect": Rect2i(24, 31, 13, 5), "color": Color("6f634a"), "theme": "wood"},
 	{"id": "garden", "label": "Jardim Inundado", "name": "Jardim Inundado", "rect": Rect2i(12, 20, 11, 10), "color": Color("58634f"), "theme": "garden"},
 	{"id": "p4", "label": "Guarita do Retorno", "name": "Guarita do Retorno", "rect": Rect2i(2, 17, 10, 12), "color": Color("646453"), "theme": "stone"},
-	{"id": "b1", "label": "Porteiro Sem Nome", "name": "O Limiar Sem Nome", "rect": Rect2i(-12, 16, 13, 15), "color": Color("62544f"), "theme": "arena"},
+	{"id": "b1", "label": "Guarita do Retorno", "name": "Guarita do Retorno", "rect": Rect2i(-12, 16, 13, 15), "color": Color("62544f"), "theme": "arena"},
 	{"id": "a02", "label": "Catacumbas do Eco", "name": "Catacumbas do Eco · limiar", "rect": Rect2i(-25, 20, 10, 11), "color": Color("444854"), "theme": "crypt"},
 	{"id": "aqueduct", "label": "Aqueduto Silencioso", "name": "Aqueduto Silencioso", "rect": Rect2i(20, 5, 2, 15), "color": Color("56635c"), "theme": "aqueduct"},
 	{"id": "pilgrim", "label": "Peregrinos", "name": "Escadaria dos Peregrinos", "rect": Rect2i(16, -20, 18, 13), "color": Color("766c58"), "theme": "sand"},

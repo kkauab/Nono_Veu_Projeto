@@ -147,8 +147,9 @@ func _check_water() -> void:
 	var camera := Camera2D.new()
 	stage.add_child(camera)
 	camera.make_current()
-	# Mar aberto a sudoeste do santuário, com a borda do mapa à vista.
-	camera.position = PortLayout.iso(Vector2(-9, 9))
+	# The old (-9,9) water fixture is inside the new Cloister. Keep the test
+	# over real open water after the approved map expansion.
+	camera.position = PortLayout.iso(Vector2(-30, -10))
 	var layout := PortLayout.new()
 	stage.add_child(layout)
 	await process_frame
@@ -157,12 +158,19 @@ func _check_water() -> void:
 	check(life != null and life.z_index == -1 and life.get_parent() == layout, "A vida na água desenha na faixa do mar")
 	check(life.get_parent() != null and not life.is_in_group("world_obstacles"), "A vida na água não é obstáculo")
 	life.set_process(false)
+	# Discard fish spawned while the viewport was still at its initial origin.
+	# The seeded water fixture starts only after the camera has settled.
+	life._fish.clear()
+	life._jumps.clear()
+	life._next_spawn = 0.0
+	life._next_jump = 2.0
 	life.rng.seed = 7
 	check(not life.is_open_water(PortLayout.iso(Vector2(-1, -1))), "O piso do santuário não é água")
-	var edge := Vector2i(-4, 2)
+	# The gap at x=-1 still separates Cloister and shortcut; (-4,3) is land now.
+	var edge := Vector2i(-1, 2)
 	check(layout.tiles.has(edge) and not layout.tiles.has(edge + Vector2i(0, 1)), "Borda sul do santuário encontrada")
 	check(not life.is_open_water(PortLayout.iso(Vector2(edge)) + Vector2(-16, 20)), "A face de pedra abaixo da borda não é água")
-	check(life.is_open_water(PortLayout.iso(Vector2(-9, 9))), "O mar aberto é água")
+	check(life.is_open_water(PortLayout.iso(Vector2(-30, -10))), "O mar aberto é água")
 	check(life._floaters.size() >= 10, "Lótus e troncos espalhados pelas margens")
 	check(life._floaters.all(func(floater): return life.is_open_water(floater["anchor"])), "Lótus e troncos só sobre a água")
 

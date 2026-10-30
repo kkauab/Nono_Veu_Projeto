@@ -36,8 +36,10 @@ func _run() -> void:
 	check(Vector2i(data.pivot[0],data.pivot[1]) == PIVOT, "Walking feet use the unchanged physical foot pivot")
 	check(int(data.columns) == 8 and int(data.frames) == 192, "Twelve appearances have eight phases with and without cargo")
 	check(sheet.get_size() == Vector2i(512,1536), "Walking atlas has no missing rows or unexpected scaling")
-	check(data.looks == Catalog.LOOKS, "Walking rows preserve the existing appearance indices")
-	check(data.sprites.size() == Catalog.LOOKS.size(), "Walking atlas covers every current appearance")
+	# The PR appends four appearances with a separate v3 sheet. The walking-only
+	# atlas keeps Kauã's original twelve; later looks use the resident fallback.
+	check(data.looks == Array(Catalog.LOOKS).slice(0, 12), "Walking rows preserve the original twelve appearance indices")
+	check(data.sprites.size() == 12, "Walking atlas covers every original appearance")
 	var zip := ZIPReader.new()
 	var native_ok := zip.open(ProjectSettings.globalize_path(data.source)) == OK
 	check(native_ok, "Walking source is an editable Pixelorama project")
@@ -98,6 +100,8 @@ func _run() -> void:
 	WalkArt._ensure()
 	check(not WalkArt.draw(null,-1,false,0.0), "Missing appearance declines drawing so the resident renderer can fall back")
 	check(not WalkArt.draw(null,12,true,0.0), "Out-of-range appearance safely declines drawing")
+	for index in range(12, Catalog.LOOKS.size()):
+		check(not WalkArt.draw(null,index,false,0.0) and not WalkArt.draw(null,index,true,12.0), "Appended appearance uses its own resident sheet: " + Catalog.LOOKS[index])
 	var texture: Texture2D = WalkArt._texture
 	WalkArt._texture = null
 	check(not WalkArt.draw(null,0,false,12.0), "Unavailable walking texture safely keeps the existing renderer")

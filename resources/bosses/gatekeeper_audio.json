@@ -1,0 +1,7 @@
+{
+  "effort": {"stream":"res://assets/audio/sfx/gatekeeper_breath.wav","volume_db":-23,"pitch":0.90},
+  "despair": {"stream":"res://assets/audio/sfx/gatekeeper_breath.wav","volume_db":-20,"pitch":0.75},
+  "nervous_laugh": {"stream":"res://assets/audio/sfx/gatekeeper_breath.wav","volume_db":-24,"pitch":1.08},
+  "scream": {"stream":"res://assets/audio/sfx/gatekeeper_breath.wav","volume_db":-18,"pitch":0.90},
+  "last_breath": {"stream":"res://assets/audio/sfx/gatekeeper_breath.wav","volume_db":-27,"pitch":0.82}
+}

@@ -605,10 +605,17 @@ func _draw_gameplay() -> void:
 		_text("ADAGAS" if weapon.category == "leve" else "ESPADA", Vector2(89, 500), 10, GOLD, true)
 		_text("Q  Pronto" if ready else "Q  %.1f s" % hero.power_cooldown_remaining, Vector2(215, 500), 11, IVORY if ready else MUTED)
 	if game.nearest != null and is_instance_valid(game.nearest) and not game.respawning and overlay == "": _draw_interaction()
-	if is_instance_valid(game.boss) and game.boss.health > 0 and hero.position.distance_to(game.boss.position) < 240 and overlay == "":
-		_text("O PORTEIRO SEM NOME", Vector2(430, 426), 16, GOLD)
-		draw_rect(Rect2(349, 438, 480, 7), Color("45312a"))
-		draw_rect(Rect2(349, 438, 480 * float(game.boss.health) / maxf(1, game.boss.max_health), 7), Color("bb8062"))
+	if is_instance_valid(game.boss) and game.boss.health > 0 and overlay == "":
+		var active: Variant=game.boss.get("encounter_active")
+		if active==true or (active==null and hero.position.distance_to(game.boss.position)<240):
+			var boss_name:="O PORTEIRO SEM NOME"
+			var width:=font.get_string_size(boss_name,HORIZONTAL_ALIGNMENT_LEFT,-1,15).x
+			_text(boss_name,Vector2(480-width*.5,427),15,GOLD)
+			draw_rect(Rect2(239,435,482,11),Color("172124"))
+			draw_rect(Rect2(240,436,480,9),Color("45312a"))
+			var desperate: Variant=game.boss.get("phase")
+			draw_rect(Rect2(241,437,478*float(game.boss.health)/maxf(1,game.boss.max_health),7),Color("ba8764") if desperate!=2 else Color("af775d"))
+			draw_line(Vector2(240,435),Vector2(720,435),Color(GOLD,.55))
 	if message_time > 0 and overlay == "":
 		var toast_width := minf(690, font.get_string_size(message, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x + 40)
 		var toast_rows := _wrapped_text(message, toast_width - 38, font, 16).split("\n").size()

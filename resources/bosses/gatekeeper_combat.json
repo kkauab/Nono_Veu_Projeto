@@ -1,0 +1,19 @@
+{
+  "health": 720,
+  "move_speed": 46,
+  "phase_two_move_scale": 1.18,
+  "phase_two_speed": 1.10,
+  "recovery_gap": 0.28,
+  "phase_two_gap": 0.16,
+  "attacks": {
+    "charge": {"active_seconds": 0.30, "motion_distance": 74, "motion_seconds": 0.30, "motion_lead": 0.08, "contact_reach": 53, "min_distance": 55, "max_distance": 150},
+    "sweep": {"active_seconds": 0.18, "min_distance": 0, "max_distance": 70},
+    "register": {"active_seconds": 0.14, "min_distance": 12, "max_distance": 62},
+    "bell": {"active_seconds": 0.85, "min_distance": 25, "max_distance": 120},
+    "warning": {"active_seconds": 0.18, "min_distance": 0, "max_distance": 75},
+    "echo_charge": {"active_seconds": 0.30, "motion_distance": 78, "motion_seconds": 0.30, "motion_lead": 0.08, "contact_reach": 53, "min_distance": 55, "max_distance": 155},
+    "names": {"active_seconds": 0.14, "min_distance": 25, "max_distance": 90},
+    "chains": {"active_seconds": 0.45, "min_distance": 30, "max_distance": 100, "impact": {"kind":"chains","strength":0.35,"offset":[0,0]}, "events":[{"after_contact":0.30,"kind":"scrape","strength":0.7,"offset":[95,0]}]},
+    "last_name": {"active_seconds": 0.22, "min_distance": 12, "max_distance": 85}
+  }
+}
