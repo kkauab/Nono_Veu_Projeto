@@ -1,0 +1,28 @@
+{
+  "breeds": [
+    "cat_black",
+    "cat_mau",
+    "dog_tesem",
+    "dog_guard"
+  ],
+  "cell": [
+    32,
+    32
+  ],
+  "pivot": [
+    16,
+    26
+  ],
+  "poses": [
+    "sit",
+    "sleep",
+    "walk_1",
+    "walk_2",
+    "walk_3",
+    "walk_4",
+    "react"
+  ],
+  "source": "res://tools/pixelorama/build_animals_v1.gd",
+  "texture": "res://assets/world/animals_v1.png",
+  "version": 1
+}

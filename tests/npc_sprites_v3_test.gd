@@ -10,7 +10,8 @@ var failures: Array[String] = []
 var _idle_hashes := {}
 
 func _init() -> void:
-	check(Array(Catalog.LOOKS) == LOOKS, "NPC appearance order retains catalog indices")
+	# Aparências novas entram no fim do catálogo; as 12 da folha v3 mantêm o índice.
+	check(Array(Catalog.LOOKS).slice(0, LOOKS.size()) == LOOKS, "NPC appearance order retains catalog indices")
 	validate_sheet("townsfolk_v3", LOOKS, POSES, Vector2i(64, 64), Vector2i(32, 58), 16)
 	validate_sheet("ankhet_v3", ["ankhet"], ["rest", "breathe", "blink", "gesture"], Vector2i(128, 144), Vector2i(64, 112), 4)
 	validate_runtime_poses()

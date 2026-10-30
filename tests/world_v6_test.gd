@@ -33,8 +33,8 @@ func _run() -> void:
 	catalog = PortLayout.tile_catalog()
 	print("WORLD_V6_LAYOUT rooms=", PortLayout.ROOMS.size(), " tiles=", catalog.size(), " enemies=", PortLayout.ENEMY_SPAWNS.size())
 	check(world.store.path.begins_with("user://qa/"), "New world test never uses the real save")
-	check(PortLayout.ROOMS.size() == 30 and catalog.size() >= 4000, "Expanded port has 27 districts, the echo route, the Bennu island and at least 4000 floor cells")
-	check(PortLayout.ENEMY_SPAWNS.size() == 41 and get_nodes_in_group("enemies").size() == 41, "Forty regular enemies (three on the island) and one boss spawn")
+	check(PortLayout.ROOMS.size() == 33 and catalog.size() >= 4000, "Expanded port has 27 districts, the echo route, the cloister, the Bennu island, the two far isles and at least 4000 floor cells")
+	check(PortLayout.ENEMY_SPAWNS.size() == 45 and get_nodes_in_group("enemies").size() == 45, "Forty-four regular enemies (seven on the islands) and one boss spawn")
 	for enemy in get_nodes_in_group("enemies"):
 		enemy.queue_free()
 	await physics_frame
@@ -43,14 +43,14 @@ func _run() -> void:
 	check(not reachable.has(Vector2i(-12, 0)) and not reachable.has(Vector2i(-20, 25)), "Closed echo grate keeps its gallery and the Catacombs behind it")
 	for spawn in PortLayout.ENEMY_SPAWNS:
 		check(catalog.has(Vector2i(spawn["tile"])), "Enemy starts on valid ground: " + spawn["id"])
-	var island: Dictionary = PortLayout.IsleLayout.tiles()
+	# As ilhas (Bennu, Íbis e o recife) só se alcançam de barco (boat_test e far_isles_test).
+	var island: Dictionary = PortLayout.sea_only_tiles()
 	var all_regular_reachable := true
 	for spawn in PortLayout.ENEMY_SPAWNS:
-		# A Ilha do Bennu só se alcança de barco (boat_test.gd cobre a travessia).
 		if not spawn.get("boss", false) and not island.has(Vector2i(spawn["tile"])) and not reachable.has(Vector2i(spawn["tile"])):
 			all_regular_reachable = false
 	check(all_regular_reachable, "All regular encounters can be reached before entering the boss arena")
-	check(flood(Vector2i(PortLayout.MARKERS["hub_spawn"]), true).size() == catalog.size() - island.size(), "Every floor cell outside the island belongs to the connected explored port once gates are open")
+	check(flood(Vector2i(PortLayout.MARKERS["hub_spawn"]), true).size() == catalog.size() - island.size(), "Every floor cell outside the islands belongs to the connected explored port once gates are open")
 	for id in ["bells_clue", "bell_moon", "bell_sun", "bell_star", "water_clue", "valve_two", "valve_three", "valve_drain", "valve_reset", "water_altar", "stars_clue", "star_sun", "star_moon", "star_eye", "stars_altar", "caravan_rest", "cistern_rest"]:
 		check(reachable.has(Vector2i(PortLayout.MARKERS[id])), "Exploration mechanism is reachable before the boss: " + id)
 	check(not world.boss_entry_gate.opened and world.seals_found() == 0, "Fresh journey starts with no seals and a closed boss entrance")
@@ -95,8 +95,10 @@ func _run() -> void:
 		await finish()
 		return
 	check(world.store.data["puzzles"]["water"] == 4, "Drain removes exactly one mark")
+	# Só as torres gravam a jornada: o estado parcial sobrevive depois de ancorado.
+	check(world._persist_progress(), "A tower anchors the partial valve state")
 	var partial := DemoSaveStore.new(world.store.path)
-	check(partial.load_progress() and partial.data["puzzles"]["water"] == 4 and partial.data["puzzles"]["water_sources"] == [true, true], "Partial valve state survives a save reload")
+	check(partial.load_progress() and partial.data["puzzles"]["water"] == 4 and partial.data["puzzles"]["water_sources"] == [true, true], "Partial valve state survives a save reload once anchored")
 	if not await use_item("water_altar"):
 		await finish()
 		return
@@ -128,8 +130,9 @@ func _run() -> void:
 	check(world.seals_found() == 3 and world.boss_entry_gate.opened and world.boss_entry_gate.get_node("Barrier").disabled, "All three explored seals physically remove the boss entrance collision")
 	var reward_before: int = world.store.data["fragments"]
 	check(not world.activate(item("stars_altar")) and world.store.data["fragments"] == reward_before, "A completed puzzle cannot duplicate its reward")
+	check(world._persist_progress(), "A tower anchors the three seals")
 	var reloaded := DemoSaveStore.new(world.store.path)
-	check(reloaded.load_progress() and reloaded.data["flags"]["seal_bells"] and reloaded.data["flags"]["seal_water"] and reloaded.data["flags"]["seal_stars"], "All mandatory discoveries survive reload")
+	check(reloaded.load_progress() and reloaded.data["flags"]["seal_bells"] and reloaded.data["flags"]["seal_water"] and reloaded.data["flags"]["seal_stars"], "All mandatory discoveries survive reload once anchored")
 	if not await walk_to(Vector2(-5, 23)):
 		check(false, "Unlocked arena can be entered by actual movement")
 	else:

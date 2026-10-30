@@ -86,8 +86,23 @@ O Gustavo achou o mar "meio travado" e os navios ancorados flutuando. Medido com
 
 Medida depois: 165 quadros e 165 passos de física por segundo, um passo por quadro desenhado. A tela rola 0 ou 1 px por quadro, regular, e o barco fica parado no centro. Antes eram 60 quadros num ritmo torto, com saltos de 1 px a cada quadro.
 
+## Bichos do mar, naufrágio, nado e escadas (Gustavo, 30/10/2026)
+
+O mar deixou de ser calmo. Crocodilos do Nilo espreitam em mar aberto, mordem o casco do barco e, se ele ceder, Senu cai na água e precisa nadar até uma escada.
+
+| Peça | Onde | Como funciona |
+|---|---|---|
+| Crocodilos | `scripts/world/sea_beasts.gd` | 5 crocodilos comuns e 1 de Sobek (maior, escuro, colar dourado), cada um com casa em mar aberto (`HOMES`). Espreitam quase submersos; a até 210 px (Sobek 250) de um barco com Senu ou de Senu nadando, caçam a 88 px/s e dão bote a 150 por 0,8 s. A mordida tira 20 de casco (Sobek 34) ou 10 de vida de Senu (Sobek 16); depois recuam 1,1 s e esperam 2,3 s. Desistem a 620 px de casa, em terra ou perto dos píeres (130 px em volta da água de cada píer é segura). Colidem só com a camada 1, então ficam no mar como o barco. Não são inimigos do porto: nem o grupo "enemies" nem `enemy.gd`. |
+| Casco | `scripts/world/sea_boat.gd` | `hull` de 100, barrinha sobre o barco depois da primeira mordida, tremor e respingo. Atracar remenda. Em 0 emite `wrecked`. |
+| Naufrágio | `sea.gd` `capsize` | O barco emborca e afunda onde estava (`SinkingBoat`, 2,6 s); Sabu o recupera inteiro no píer do último santuário; Senu passa a nadar no mesmo ponto. |
+| Nado | `scripts/world/sea_swim.gd` | Controles de Senu desligados (sem golpe, esquiva nem selo); o módulo move o corpo dele com `move_and_collide` a 48 px/s (Shift 65), e as bordas dos tiles seguram o nadador no mar. `SwimView` desenha o sprite real de Senu (`senu_supplied_view`) cortado no peito, com anéis e respingos. O estado é a meta "swimming" do `port_demo`; o HUD mostra "Baía das Garças". Morrer na água leva ao santuário como sempre. |
+| Escadas | `scripts/world/sea_ladders.gd` | Calculadas ao montar o mundo: faces visíveis do paredão (+x e +y) que dão para o mar ligado aos píeres, em chão alcançável **com todos os portões fechados** a partir do santuário e de cada píer, uma a cada 7 tiles, longe dos postes e de peças. Desenho num nó só junto do chão; cada uma tem um ponto de subida (`sea_ladder`, inativo em terra). Nadando, as próximas acendem anéis no pé; E ao pé sobe com a mesma animação do desembarque. Subindo num chão com píer, a correnteza leva o barco a esse píer, para ninguém ficar preso numa ilha. |
+| Arte | `tools/pixelorama/build_sea_v2.gd` | Gera `art/pixelorama/sea_v2/sea_beasts_v1.pxo` e a folha `assets/world/sea_beasts_v1.png` com manifesto (`sea_art.gd`): crocodilo e Sobek em 8 direções (nadando 4 quadros, à espreita 2, mordendo 2) e escadas de madeira para paredão de pedra (20 px) e píer (11 px). Paleta do Porto v7. |
+
+Teste: `tests/sea_beasts_test.gd` (355 verificações: casas em mar aberto, escadas fora de áreas com portão, mordidas no casco até ceder, nado preso ao mar, mordida no nadador, subida, barco levado ao píer do Íbis, bichos desistindo em terra e morte na água). Capturas: `qa/mar/` (`qa/mar/mar_preview.gd`).
+
 ## Ainda não feito
 
-- Inimigos ou perigos no mar. Hoje a baía é calma: só os rochedos atrapalham.
+- Entrar na água de propósito (mergulhar do píer).
 - Desembarcar fora dos píeres: de propósito, para não pular os portões do porto.
 - Um terceiro píer, por exemplo no Cais do Cobre, para viagens mais longas.

@@ -10,7 +10,7 @@ func _init() -> void:
 	var sheet := Image.load_from_file("res://assets/world/townsfolk_v2.png")
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/world/townsfolk_v2_manifest.json"))
 	check(sheet != null and sheet.get_size() == Vector2i(512, 624), "Resident atlas has all 12 appearances and 16 poses")
-	check(manifest["looks"] == Catalog.LOOKS, "Catalog appearances retain their original indices")
+	check(manifest["looks"] == Array(Catalog.LOOKS).slice(0, manifest["looks"].size()), "Catalog appearances retain their original indices")
 	check(Vector2(manifest["pivot"][0], manifest["pivot"][1]) == Vector2(16,49), "Resident foot pivot remains unchanged")
 	for row in range(12):
 		for pose in range(12):

@@ -94,6 +94,9 @@ func _test_dressing() -> void:
 	var props := []
 	var herons := []
 	for node in world.actors.get_children():
+		# As ilhas além da baía usam a mesma vegetação (far_isles_test.gd as confere).
+		if not IsleLayout.RECT.grow(2).has_point(Vector2i(Layout.unproject(node.position).round())):
+			continue
 		if node is Isle.IsleProp:
 			props.append(node)
 		elif node is Isle.Heron:

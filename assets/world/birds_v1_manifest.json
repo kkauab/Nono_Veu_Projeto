@@ -1,0 +1,26 @@
+{
+  "cell": [
+    32,
+    32
+  ],
+  "pivot": [
+    16,
+    20
+  ],
+  "poses": [
+    "perch_idle",
+    "perch_look",
+    "fly_down",
+    "fly_glide",
+    "fly_up"
+  ],
+  "source": "res://tools/pixelorama/build_birds_v1.gd",
+  "species": [
+    "parrot",
+    "seagull",
+    "falcon",
+    "heron"
+  ],
+  "texture": "res://assets/world/birds_v1.png",
+  "version": 1
+}

@@ -13,8 +13,12 @@ const Boat = preload("res://scripts/world/sea_boat.gd")
 const SeaArt = preload("res://scripts/world/sea_art.gd")
 const Layout = preload("res://scripts/world/port_layout.gd")
 const IsleStory = preload("res://scripts/world/isle_story.gd")
+const FarIsles = preload("res://scripts/world/far_isles.gd")
 const Sfx = preload("res://scripts/audio/sfx.gd")
 const Art = preload("res://scripts/world/port_art.gd")
+const Swim = preload("res://scripts/world/sea_swim.gd")
+const Beasts = preload("res://scripts/world/sea_beasts.gd")
+const Ladders = preload("res://scripts/world/sea_ladders.gd")
 const MOORED_SHADER = preload("res://assets/shaders/harbor_pixel_moored.gdshader")
 static var _hull_texture: ImageTexture
 const HOP := .48
@@ -27,11 +31,16 @@ const AMPHORA_COINS := 12
 const DOCKS := {
 	"sabu": {"name": "Píer de Sabu", "land": Vector2(25.5, 38.1), "water": Vector2(25.5, 39.4), "heading": PI * .75, "side": "port"},
 	"bennu": {"name": "Píer do Bennu", "land": Vector2(44.5, 59.1), "water": Vector2(44.5, 57.6), "heading": -PI * .25, "side": "isle"},
+	# Ilhas além da baía (far_isles_layout.gd; docs/MUNDO_PROPOSTA_2026-10-30.md).
+	"ibis": {"name": "Píer do Íbis", "land": Vector2(12.5, 64.1), "water": Vector2(12.5, 62.6), "heading": -PI * .25, "side": "far"},
+	"wreck": {"name": "Píer do Recife", "land": Vector2(66.1, 66.5), "water": Vector2(64.6, 66.5), "heading": -PI * .75, "side": "far"},
 }
 ## Ânforas de uma carga perdida, boiando na Baía das Garças.
-const AMPHORAE := [Vector2(31, 47), Vector2(51, 51), Vector2(60, 62), Vector2(31, 68)]
+## As três últimas são carga do navio encalhado e boiam em volta do recife e do Íbis.
+const AMPHORAE := [Vector2(31, 47), Vector2(51, 51), Vector2(60, 62), Vector2(31, 68), Vector2(69, 61), Vector2(93, 68.5), Vector2(24.5, 70.5)]
 ## Rochedos para contornar no caminho.
-const SEA_ROCKS := [Vector2(33, 50), Vector2(48, 55.5), Vector2(38.5, 58.5)]
+## Os quatro últimos são o recife em volta do navio e as pedras da costa do Íbis.
+const SEA_ROCKS := [Vector2(33, 50), Vector2(48, 55.5), Vector2(38.5, 58.5), Vector2(71, 59.5), Vector2(91.5, 62.5), Vector2(4, 66), Vector2(22.5, 81)]
 const SEA_NAME := "Baía das Garças"
 
 
@@ -215,6 +224,13 @@ static func build(game) -> void:
 		game.actors.add_child(rock)
 	seat_moored_ships(game)
 	moor(game, dock_for_checkpoint(game))
+	# Bichos do mar, casco que cede e escadas para sair da água (30/10/2026).
+	boat.wrecked.connect(capsize.bind(game))
+	Ladders.build(game, DOCKS)
+	var safe := PackedVector2Array()
+	for id in DOCKS:
+		safe.append(Layout.iso(DOCKS[id]["water"]))
+	Beasts.build(game, safe)
 
 
 ## Os navios de cenário do porto (port_dressing.gd, peça "boat") ganham linha
@@ -324,6 +340,11 @@ static func update(game, _delta: float) -> bool:
 	if game.sea_busy:
 		game.nearest = null
 		return true
+	if Swim.active(game):
+		var ladder := Swim.update(game, _delta)
+		if ladder != null:
+			climb(game, ladder)
+		return true
 	if not game.at_sea:
 		return false
 	game.nearest = null
@@ -431,8 +452,13 @@ static func _ashore(game, dock: String) -> void:
 	game.sea_busy = false
 	game.boat_dock = dock
 	_refresh_posts(game)
+	if game.boat.hull < Boat.HULL_MAX:
+		game.boat.repair()
+		game.hud.toast("Casco remendado no %s." % DOCKS[dock]["name"], Color("e2c693"), 3)
 	if DOCKS[dock]["side"] == "isle":
 		IsleStory.on_landed(game)
+	elif DOCKS[dock]["side"] == "far":
+		FarIsles.on_landed(game, dock)
 
 
 ## Devolve a Senu o corpo, a colisão e os controles.
@@ -493,11 +519,15 @@ static func respawn(game) -> void:
 		var tween: Tween = game.get_meta("sea_tween")
 		if tween != null and tween.is_valid():
 			tween.kill()
-	if game.at_sea or game.sea_busy:
+	var was_swimming := Swim.active(game)
+	Swim.stop(game)
+	if game.at_sea or game.sea_busy or was_swimming:
 		_release(game.player)
 	game.at_sea = false
 	game.sea_busy = false
 	moor(game, dock_for_checkpoint(game))
+	game.boat.repair()
+	Beasts.reset(game)
 
 
 static func _collect_amphorae(game) -> void:
@@ -518,3 +548,86 @@ static func _collect_amphorae(game) -> void:
 static func _sound(at: Node2D, bank: String, volume: float) -> void:
 	if Sfx.has_bank(bank):
 		Sfx.play(at, bank, at.global_position, volume)
+
+
+## O casco cedeu às mordidas: Senu cai na água onde o barco estava, o barco vira
+## e afunda ali, e Sabu o recupera no píer do último santuário.
+static func capsize(game) -> void:
+	if not game.at_sea or game.sea_busy:
+		return
+	var boat: Node2D = game.boat
+	var player: SenuPlayer = game.player
+	var spot := boat.global_position
+	var sinking := SinkingBoat.new()
+	sinking.direction = boat.direction()
+	game.actors.add_child(sinking)
+	sinking.global_position = spot
+	boat.rider = null
+	game.at_sea = false
+	moor(game, dock_for_checkpoint(game))
+	boat.repair()
+	_release(player)
+	Swim.start(game, spot)
+	_sound(sinking, "water_splash", -4.0)
+	game.hud.toast("O casco cedeu! Nade até uma escada no paredão · E para subir", Color("dfb5b0"), 5)
+
+
+## Senu sobe pela escada: do pé, na água, para o alto, em terra. Se o barco ficou
+## em outro pedaço de chão, a correnteza o leva ao píer deste (sem píer, fica onde está).
+static func climb(game, ladder: Node2D) -> void:
+	if game.sea_busy or not Swim.active(game):
+		return
+	game.sea_busy = true
+	game.nearest = null
+	var player: SenuPlayer = game.player
+	var from := player.global_position
+	Swim.stop(game)
+	player.set_meta("sea_collision", [player.collision_layer, player.collision_mask])
+	player.collision_layer = 0
+	player.collision_mask = 0
+	var tween: Tween = game.create_tween()
+	game.set_meta("sea_tween", tween)
+	_hop(tween, player, from, ladder.global_position, "land")
+	tween.tween_callback(_climbed.bind(game, str(ladder.dock)))
+	_sound(player, "water_splash", -14.0)
+
+
+static func _climbed(game, dock: String) -> void:
+	_release(game.player)
+	game.sea_busy = false
+	if dock != "" and dock != game.boat_dock and not game.at_sea:
+		moor(game, dock)
+		game.hud.toast("A correnteza levou o barco de Sabu até o %s." % DOCKS[dock]["name"], Color("e2c693"), 4)
+	else:
+		game.hud.toast("Senu sobe pela escada, encharcado.", Color("e2c693"), 3)
+
+
+## O barco virado: emborca, afunda e some em bolhas.
+class SinkingBoat extends Node2D:
+	const LIFE := 2.6
+	var direction := 0
+	var _age := 0.0
+
+	func _ready() -> void:
+		texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+
+	func _process(delta: float) -> void:
+		_age += delta
+		if _age >= LIFE:
+			queue_free()
+			return
+		queue_redraw()
+
+	func _draw() -> void:
+		var progress := _age / LIFE
+		var depth := roundf(progress * progress * 26.0)
+		var alpha := 1.0 - smoothstep(.45, 1.0, progress)
+		SeaArt.draw_frame(self, "boat_v4", "boat_%02d" % posmod(direction + 4, 16), 9, Vector2(0, depth), Color(.75, .82, .8, alpha))
+		draw_set_transform(Vector2(0, 2), 0, Vector2(1, .5))
+		for ring in range(3):
+			var grow := fposmod(progress * 2.0 + ring * .33, 1.0)
+			draw_arc(Vector2.ZERO, 10.0 + grow * 30.0, 0, TAU, 24, Color(.86, .94, .9, .5 * (1.0 - grow) * (1.0 - progress)), 1)
+		draw_set_transform(Vector2.ZERO)
+		for bubble in range(5):
+			var rise := fposmod(_age * 1.3 + bubble * .23, 1.0)
+			draw_rect(Rect2(Vector2(sin(bubble * 2.1) * 14.0, -rise * 14.0).floor(), Vector2(1, 1)), Color(.9, .97, .94, .8 * (1.0 - rise)))
