@@ -19,6 +19,10 @@ const Art = preload("res://scripts/world/port_art.gd")
 const Swim = preload("res://scripts/world/sea_swim.gd")
 const Beasts = preload("res://scripts/world/sea_beasts.gd")
 const Ladders = preload("res://scripts/world/sea_ladders.gd")
+const Depth = preload("res://scripts/world/sea_depth.gd")
+const Dive = preload("res://scripts/world/sea_dive.gd")
+## Nadando a esta distância do barco vazio, E sobe nele.
+const BOAT_REACH := 34.0
 const MOORED_SHADER = preload("res://assets/shaders/harbor_pixel_moored.gdshader")
 static var _hull_texture: ImageTexture
 const HOP := .48
@@ -223,10 +227,21 @@ static func build(game) -> void:
 		rock.position = Layout.iso(tile)
 		game.actors.add_child(rock)
 	seat_moored_ships(game)
+	# Água rasa perto do chão e o fundo do mergulho (sea_depth.gd).
+	Depth.build(game.layout)
 	moor(game, dock_for_checkpoint(game))
 	# Bichos do mar, casco que cede e escadas para sair da água (30/10/2026).
 	boat.wrecked.connect(capsize.bind(game))
 	Ladders.build(game, DOCKS)
+	# Mergulho (30/10/2026): tesouros do fundo e o ponto de subir no barco pela água.
+	Dive.build(game)
+	var climb := PortInteractable.new()
+	climb.name = "SubirNoBarco"
+	climb.item_id = "boat_climb"
+	climb.kind = "boat_climb"
+	climb.label = "Subir no barco"
+	climb.active = false
+	boat.add_child(climb)
 	var safe := PackedVector2Array()
 	for id in DOCKS:
 		safe.append(Layout.iso(DOCKS[id]["water"]))
@@ -341,9 +356,18 @@ static func update(game, _delta: float) -> bool:
 		game.nearest = null
 		return true
 	if Swim.active(game):
+		if Dive.active(game):
+			Dive.update(game, _delta)
+			return true
+		if Input.is_action_just_pressed("dodge") and Dive.start(game):
+			return true
 		var ladder := Swim.update(game, _delta)
 		if ladder != null:
 			climb(game, ladder)
+		elif boat_in_reach(game):
+			game.nearest = game.boat.get_node_or_null("SubirNoBarco")
+			if Input.is_action_just_pressed("interact"):
+				reboard(game)
 		return true
 	if not game.at_sea:
 		return false
@@ -357,6 +381,9 @@ static func update(game, _delta: float) -> bool:
 			game.nearest = post
 	if dock != "" and Input.is_action_just_pressed("interact"):
 		land(game, dock)
+	elif dock == "" and Input.is_action_just_pressed("dodge"):
+		leap(game)
+		return true
 	_collect_amphorae(game)
 	var wake: Node2D = game.layout.get_node_or_null("BoatWake")
 	if wake != null:
@@ -512,6 +539,44 @@ static func _clear_transfer(body: Node2D) -> void:
 		body.remove_meta("sea_transfer")
 
 
+## Senu salta do barco parado para a água; o barco fica onde está, vazio, e os
+## crocodilos não ligam para ele.
+static func leap(game) -> bool:
+	var boat: Node2D = game.boat
+	var player: SenuPlayer = game.player
+	if game.sea_busy or not game.at_sea or player.dead or boat.velocity.length() > DOCK_SPEED:
+		return false
+	var spot := boat.global_position
+	for side in [1.0, -1.0]:
+		var aside: Vector2 = boat.global_position + Vector2(-sin(boat.heading), cos(boat.heading) * .5) * 20.0 * side
+		if Depth.at_point(aside) > 0:
+			spot = aside
+			break
+	boat.rider = null
+	boat.velocity = Vector2.ZERO
+	boat.rowing = false
+	boat.queue_redraw()
+	game.at_sea = false
+	_release(player)
+	Swim.start(game, spot)
+	game.hud.toast("Senu salta na água · Espaço mergulha, E volta ao barco", Color("9fd0c4"), 4)
+	return true
+
+
+## Nadando, o barco vazio ao alcance para subir.
+static func boat_in_reach(game) -> bool:
+	var boat: Node2D = game.boat
+	return is_instance_valid(boat) and boat.rider == null and not boat.transfer_locked and boat.global_position.distance_to(game.player.global_position) <= BOAT_REACH
+
+
+## Da água para o barco: o mesmo salto do píer.
+static func reboard(game) -> bool:
+	if game.sea_busy or game.respawning or game.player.dead or not Swim.active(game) or Dive.active(game):
+		return false
+	Swim.stop(game)
+	return board(game)
+
+
 ## Ao voltar ao santuário: Senu desce do barco e o barco vai para o píer do
 ## lado desse santuário.
 static func respawn(game) -> void:
@@ -519,6 +584,7 @@ static func respawn(game) -> void:
 		var tween: Tween = game.get_meta("sea_tween")
 		if tween != null and tween.is_valid():
 			tween.kill()
+	Dive.stop(game)
 	var was_swimming := Swim.active(game)
 	Swim.stop(game)
 	if game.at_sea or game.sea_busy or was_swimming:

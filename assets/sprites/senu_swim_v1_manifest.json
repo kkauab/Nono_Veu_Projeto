@@ -1,0 +1,191 @@
+{
+	"body_source": "res://assets/sprites/senu_shared_v6.png",
+	"canvas": [
+		96,
+		96
+	],
+	"columns": 8,
+	"directions": [
+		"right",
+		"down_right",
+		"down",
+		"down_left",
+		"left",
+		"up_left",
+		"up",
+		"up_right"
+	],
+	"frame_count": 96,
+	"frames_per_clip": 6,
+	"game_scale": 1.0,
+	"note": "surface: o pivô é a linha d'água. dive: o pivô é o ponto do leito sob Senu; o corpo flutua acima dele.",
+	"pivot": [
+		48,
+		76
+	],
+	"source": "res://art/pixelorama/senu/swim_v1/senu_swim_v1.pxo",
+	"sprites": {
+		"dive_down": {
+			"frames": [
+				60,
+				61,
+				62,
+				63,
+				64,
+				65
+			]
+		},
+		"dive_down_left": {
+			"frames": [
+				66,
+				67,
+				68,
+				69,
+				70,
+				71
+			]
+		},
+		"dive_down_right": {
+			"frames": [
+				54,
+				55,
+				56,
+				57,
+				58,
+				59
+			]
+		},
+		"dive_left": {
+			"frames": [
+				72,
+				73,
+				74,
+				75,
+				76,
+				77
+			]
+		},
+		"dive_right": {
+			"frames": [
+				48,
+				49,
+				50,
+				51,
+				52,
+				53
+			]
+		},
+		"dive_up": {
+			"frames": [
+				84,
+				85,
+				86,
+				87,
+				88,
+				89
+			]
+		},
+		"dive_up_left": {
+			"frames": [
+				78,
+				79,
+				80,
+				81,
+				82,
+				83
+			]
+		},
+		"dive_up_right": {
+			"frames": [
+				90,
+				91,
+				92,
+				93,
+				94,
+				95
+			]
+		},
+		"surface_down": {
+			"frames": [
+				12,
+				13,
+				14,
+				15,
+				16,
+				17
+			]
+		},
+		"surface_down_left": {
+			"frames": [
+				18,
+				19,
+				20,
+				21,
+				22,
+				23
+			]
+		},
+		"surface_down_right": {
+			"frames": [
+				6,
+				7,
+				8,
+				9,
+				10,
+				11
+			]
+		},
+		"surface_left": {
+			"frames": [
+				24,
+				25,
+				26,
+				27,
+				28,
+				29
+			]
+		},
+		"surface_right": {
+			"frames": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5
+			]
+		},
+		"surface_up": {
+			"frames": [
+				36,
+				37,
+				38,
+				39,
+				40,
+				41
+			]
+		},
+		"surface_up_left": {
+			"frames": [
+				30,
+				31,
+				32,
+				33,
+				34,
+				35
+			]
+		},
+		"surface_up_right": {
+			"frames": [
+				42,
+				43,
+				44,
+				45,
+				46,
+				47
+			]
+		}
+	},
+	"texture": "res://assets/sprites/senu_swim_v1.png",
+	"version": 1
+}

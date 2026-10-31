@@ -18,6 +18,7 @@ Consolidação em 2026-10-29. Registra escolhas duradouras; andamento fica em [S
 - Fontes editáveis no Pixelorama e exports no Godot; nearest para sprites. No piso 2:1, base, sombra, colisão e profundidade devem representar o mesmo contato físico; interiores atuais usam o atlas v4.
 - Abertura obrigatória ao iniciar nova jornada, com opção de pular segurando Espaço continuamente por 3 s. Retratos sem fundo, atrás da caixa; apenas o falante anima, com atuação independente da digitação. Ver [sistema de diálogo](SISTEMA_DIALOGO_RETRATOS.md).
 - Reutilizar o padrão documentado de morte, fragmentos e moedas ao criar efeitos compatíveis: [guia](GUIA_ANIMACOES_REUTILIZAVEIS.md).
+- O chão usa a mesma família de cores das construções (madeiras, arenito ocre/oliva, areia, dourado; cinzas frios só na cripta) e é uma textura contínua por tema, sem borda por tile: ver [chão v8](MUNDO_CHAO_V8.md).
 
 ## Interface e progressão
 - A pausa inteira é um caderno; página inicial mostra Senu. Inventário usa slots selecionáveis e prévia com descrição/estatísticas reais. Controles ficam dentro de Configurações; saída não oferece salvar. Ver [caderno v8](CADERNO_PAUSA_V8.md).
@@ -51,3 +52,8 @@ Consolidação em 2026-10-29. Registra escolhas duradouras; andamento fica em [S
 - Ataques longos identificam explicitamente o agressor e o resultado da defesa. A janela base de parry permanece 0,25 s; os primeiros 0,10 s dão o desequilíbrio maior do Último Nome. Cancelar um golpe remove seus contatos, ecos, partículas e vozes próprias, sem apagar efeitos de Senu.
 - Silhueta do Porteiro: ombros/cintura/pernas legíveis, túnica em abas e manto assimétrico; evitar coluna vermelha uniforme. Costas devem distinguir cabelo/nuca/gola e mostrar manto sobre o dorso, com braços/arma em profundidades separadas. Placas pendem ao longo do cinto, sem barra lateral. Preservar rosto v3 e densidade/pivô; fontes anteriores ficam separadas para comparação. Exports antigos só são reutilizados após comprovar igualdade dos pixels nativos.
 - Porteiro só confirma `porteiro`/`flags.boss` após a morte narrativa; `gatekeeper_reward` e `gatekeeper_key_spear` são marcadores únicos em `collected`. Vitória e recompensa são ancoradas juntas pela próxima torre. Saves antigos oferecem recuperação explícita nos pertences. Chave-lança é um pertence de classe pesada, sem botão de equipar nem poder funcional até haver suporte no arsenal.
+
+## Chão, mar e mergulho — 2026-10-30
+- O chão recua atrás das figuras: tons vizinhos de valor parecido, variação por manchas e juntas longe do escuro dos contornos (faixa p5–p95 de cada tema perto de 50). Madeira não se mistura em pontilhado com outro chão: termina numa viga. Detalhes em [MUNDO_CHAO_V8.md](MUNDO_CHAO_V8.md).
+- No mar, **Espaço** salta do barco parado, mergulha e volta à tona; **E** sobe no barco pela água. Mergulhado, Senu não é alvo dos crocodilos. Fôlego acabando devolve Senu à tona com dano, sem morte instantânea.
+- Tesouros do fundo usam IDs `dive_*` em `collected` e pagam só óbolos (nada de Nous). A camada do fundo vive em `world_stage`, a SubViewport de pixel do mundo, como os atores. Detalhes em [MUNDO_BARCO_ILHA.md](MUNDO_BARCO_ILHA.md).

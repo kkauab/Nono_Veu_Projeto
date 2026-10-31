@@ -154,12 +154,16 @@ static func _ground_from(bottom: PackedFloat32Array) -> PackedFloat32Array:
 			line[x] = bottom[maxi(left, right)]
 	return line
 
-static func draw_water(canvas: CanvasItem, rect: Rect2, _clock: float) -> bool:
-	_ensure()
-	if _materials == null: return false
+## O material da água, compartilhado; sea_depth.gd liga nele o mapa de profundidade.
+static func water_material() -> ShaderMaterial:
 	if _water_material == null:
 		_water_material = ShaderMaterial.new()
 		_water_material.shader = load("res://assets/shaders/harbor_pixel_water.gdshader") as Shader
-	canvas.material = _water_material
+	return _water_material
+
+static func draw_water(canvas: CanvasItem, rect: Rect2, _clock: float) -> bool:
+	_ensure()
+	if _materials == null: return false
+	canvas.material = water_material()
 	canvas.draw_polygon(PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]), PackedColorArray([Color.WHITE]), PackedVector2Array([Vector2.ZERO, Vector2.RIGHT, Vector2.ONE, Vector2.DOWN]), _materials)
 	return true

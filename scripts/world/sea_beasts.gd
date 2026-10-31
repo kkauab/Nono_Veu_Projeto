@@ -108,7 +108,8 @@ class Beast extends CharacterBody2D:
 			return []
 		if game.at_sea and not game.sea_busy and is_instance_valid(game.boat) and game.boat.rider != null:
 			return [game.boat, REACH_BOAT, "boat"]
-		if Swim.active(game) and not game.sea_busy and not game.player.dead:
+		# Mergulhado (sea_dive.gd), Senu some do faro deles.
+		if Swim.active(game) and not game.sea_busy and not game.player.dead and not bool(game.get_meta("diving", false)):
 			return [game.player, REACH_SWIMMER, "swimmer"]
 		return []
 
