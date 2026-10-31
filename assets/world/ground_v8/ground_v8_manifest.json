@@ -1,0 +1,29 @@
+{
+	"face_size": [
+		128,
+		32
+	],
+	"faces": [
+		"face_stone",
+		"face_wood"
+	],
+	"note": "UV = posição no mundo ÷ size, com repetição; faces: u = x ÷ face_size.x, v = profundidade ÷ face_size.y",
+	"period_tiles": 8,
+	"pixel_art": true,
+	"size": [
+		512,
+		256
+	],
+	"source": "res://art/pixelorama/ground_v8/ground_v8.pxo",
+	"themes": [
+		"stone",
+		"sand",
+		"wood",
+		"mosaic",
+		"garden",
+		"crypt",
+		"aqueduct",
+		"arena"
+	],
+	"version": 8
+}

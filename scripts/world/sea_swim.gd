@@ -18,7 +18,43 @@ const BOUNDS := Rect2(-3600, -2000, 7200, 5200)
 ## Distância do ponto de nado de uma escada em que dá para subir.
 const LADDER_REACH := 26.0
 ## Altura da linha d'água no corpo de Senu, em pixels do canvas do sprite, acima do pé.
+## Só para o desenho de reserva, quando a folha de nado não existe.
 const WATERLINE := 108.0
+## Poses de nado (tools/pixelorama/build_senu_swim_v1.gd), do Senu real: "surface"
+## tem a linha d'água no pivô; "dive", o ponto do leito sob Senu.
+const POSES := "res://assets/sprites/senu_swim_v1_manifest.json"
+const POSE_DIRECTIONS := ["right", "down_right", "down", "down_left", "left", "up_left", "up", "up_right"]
+## Ciclos de braçada por segundo: nadando, com braçada forte e boiando parado.
+const STROKES := 1.5
+const STROKES_STRONG := 2.0
+const STROKES_IDLE := .55
+static var _poses: Dictionary = {}
+static var _pose_texture: Texture2D
+
+
+## Um quadro do ciclo de nado (`phase` de 0 a 1) na direção de `facing`, ou {}.
+## "lying" diz se o corpo está deitado (todas as direções menos cima e baixo).
+static func pose(mode: String, facing: Vector2, phase: float) -> Dictionary:
+	if _pose_texture == null:
+		if not FileAccess.file_exists(POSES):
+			return {}
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(POSES))
+		if not parsed is Dictionary or not ResourceLoader.exists(str(parsed.get("texture", ""))):
+			return {}
+		_poses = parsed
+		_pose_texture = load(str(_poses["texture"])) as Texture2D
+		if _pose_texture == null:
+			return {}
+	var index := posmod(roundi(facing.angle() / (PI / 4.0)), 8)
+	var clip: Dictionary = _poses.get("sprites", {}).get(mode + "_" + POSE_DIRECTIONS[index], {})
+	var frames: Array = clip.get("frames", [])
+	if frames.is_empty():
+		return {}
+	var frame := int(frames[mini(frames.size() - 1, int(fposmod(phase, 1.0) * frames.size()))])
+	var columns := int(_poses["columns"])
+	var size := Vector2(float(_poses["canvas"][0]), float(_poses["canvas"][1]))
+	return {"texture": _pose_texture, "region": Rect2(Vector2(frame % columns, frame / columns) * size, size),
+		"size": size, "offset": -Vector2(float(_poses["pivot"][0]), float(_poses["pivot"][1])), "lying": index != 2 and index != 6}
 
 
 static func active(game) -> bool:
@@ -45,6 +81,7 @@ static func start(game, at: Vector2) -> void:
 	swimmer.player = player
 	swimmer.global_position = at
 	swimmer.splash = 1.0
+	swimmer.strong = false
 	if Sfx.has_bank("water_splash"):
 		Sfx.play(player, "water_splash", at, -6.0)
 
@@ -86,6 +123,7 @@ static func swim_step(game, input: Vector2, strong: bool, delta: float) -> void:
 	if swimmer != null:
 		swimmer.global_position = player.global_position
 		swimmer.moving = motion.length_squared() > 0.0001
+		swimmer.strong = strong
 		swimmer.queue_redraw()
 
 
@@ -111,18 +149,25 @@ static func _light_ladders(game, chosen: Node2D) -> void:
 			ladder.queue_redraw()
 
 
-## Senu nadando: o sprite de verdade dele (senu_supplied_view), só acima d'água.
+## Senu nadando: a braçada de peito da folha de nado (cabeça e ombros acima d'água);
+## sem a folha, o sprite de verdade dele (senu_supplied_view) cortado no peito.
 class SwimView extends Node2D:
 	var player: SenuPlayer
 	var moving := false
+	var strong := false
 	var splash := 0.0
+	var phase := 0.0
 	var _clock := 0.0
+	## Este próprio módulo, para a classe chamar `pose`.
+	var _module: GDScript
 
 	func _ready() -> void:
 		texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		_module = load("res://scripts/world/sea_swim.gd")
 
 	func _process(delta: float) -> void:
 		_clock += delta
+		phase = fposmod(phase + delta * ((STROKES_STRONG if strong else STROKES) if moving else STROKES_IDLE), 1.0)
 		splash = maxf(0.0, splash - delta)
 		queue_redraw()
 
@@ -142,8 +187,14 @@ class SwimView extends Node2D:
 			draw_circle(Vector2(0, -3 + bob), 2.0, Color("dbcfaa"))
 			return
 		var drawn := false
+		var tint := Color(1.6, 1.3, 1.1) if player.get("_hurt_visual") > 0.0 else Color.WHITE
+		var stroke: Dictionary = _module.pose("surface", player.facing, phase)
+		if not stroke.is_empty():
+			draw_texture_rect_region(stroke["texture"], Rect2(stroke["offset"], stroke["size"]), stroke["region"], tint)
+			drawn = true
+			bob = 0.0
 		var supplied = player.get("_supplied_view")
-		if supplied != null and supplied.has_method("sample"):
+		if not drawn and supplied != null and supplied.has_method("sample"):
 			var frame: Dictionary = supplied.sample(player)
 			if not frame.is_empty():
 				var region: Rect2 = frame["region"]
@@ -154,7 +205,6 @@ class SwimView extends Node2D:
 				var keep := clampf(foot - WATERLINE, 0.0, region.size.y)
 				var source := Rect2(region.position, Vector2(region.size.x, keep))
 				var target := Rect2(Vector2(offset.x, -keep * scale + bob), Vector2(size.x, keep * scale))
-				var tint := Color(1.6, 1.3, 1.1) if player.get("_hurt_visual") > 0.0 else Color.WHITE
 				draw_texture_rect_region(frame["texture"], target, source, tint)
 				drawn = true
 		if not drawn:

@@ -1,0 +1,222 @@
+{
+	"floor": "res://assets/world/seabed_v1/floor.png",
+	"floor_size": [
+		512,
+		256
+	],
+	"note": "Chão: UV = posição no mundo ÷ floor_size, com repetição. Peças: rect na folha e pivô (pé) dentro do rect.",
+	"period_tiles": 8,
+	"pixel_art": true,
+	"props": {
+		"amphora": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				192,
+				96,
+				96,
+				96
+			]
+		},
+		"anchor": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				0,
+				192,
+				96,
+				96
+			]
+		},
+		"column": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				384,
+				96,
+				96,
+				96
+			]
+		},
+		"drum": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				288,
+				96,
+				96,
+				96
+			]
+		},
+		"grass_a_0": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				0,
+				0,
+				96,
+				96
+			]
+		},
+		"grass_a_1": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				96,
+				0,
+				96,
+				96
+			]
+		},
+		"grass_a_2": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				192,
+				0,
+				96,
+				96
+			]
+		},
+		"grass_b_0": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				288,
+				0,
+				96,
+				96
+			]
+		},
+		"grass_b_1": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				384,
+				0,
+				96,
+				96
+			]
+		},
+		"grass_b_2": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				480,
+				0,
+				96,
+				96
+			]
+		},
+		"head": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				480,
+				96,
+				96,
+				96
+			]
+		},
+		"rock_large": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				96,
+				96,
+				96,
+				96
+			]
+		},
+		"rock_small": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				0,
+				96,
+				96,
+				96
+			]
+		},
+		"shells": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				288,
+				192,
+				96,
+				96
+			]
+		},
+		"stela": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				192,
+				192,
+				96,
+				96
+			]
+		},
+		"urchins": {
+			"pivot": [
+				48,
+				88
+			],
+			"rect": [
+				96,
+				192,
+				96,
+				96
+			]
+		},
+		"wreck": {
+			"pivot": [
+				96,
+				88
+			],
+			"rect": [
+				0,
+				288,
+				192,
+				96
+			]
+		}
+	},
+	"props_sheet": "res://assets/world/seabed_v1/props.png",
+	"source": [
+		"res://art/pixelorama/seabed_v1/seabed_floor_v1.pxo",
+		"res://art/pixelorama/seabed_v1/seabed_props_v1.pxo"
+	],
+	"version": 1
+}

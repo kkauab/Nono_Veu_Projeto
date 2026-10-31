@@ -283,7 +283,98 @@ func _build_floor_chunks() -> void:
 		chunk.layout = self
 		chunk.coordinates = groups[key]
 		chunk.show_behind_parent = true
+		# O chão v8 é uma textura contínua mapeada pelo mundo: repete sem emenda.
+		chunk.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+		chunk.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		add_child(chunk)
+
+## Chão v8 (tools/pixelorama/build_ground_v8.gd; docs/MUNDO_CHAO_V8.md): uma textura
+## contínua por tema e as faces dos paredões, na paleta quente das construções.
+## Sem os PNG, `_draw_tile` volta aos ladrilhos do Porto v7.
+const GROUND_DIR := "res://assets/world/ground_v8/"
+const GROUND_SIZE := Vector2(512, 256)
+const FACE_SIZE := Vector2(128, 32)
+## Quanto da cor do setor tinge o chão: distritos vizinhos do mesmo tema não ficam idênticos.
+const GROUND_TINT := .22
+static var _ground_textures: Dictionary = {}
+
+static func ground_texture(name: String) -> Texture2D:
+	if not _ground_textures.has(name):
+		var path := GROUND_DIR + name + ".png"
+		_ground_textures[name] = load(path) as Texture2D if ResourceLoader.exists(path) else null
+	return _ground_textures[name]
+
+## Tinta do setor sobre a textura: a cor dele clareada, misturada de leve ao branco.
+static func ground_tint(base: Color) -> Color:
+	var light := base.lightened(.5)
+	return Color.WHITE.lerp(light / maxf(maxf(light.r, light.g), maxf(light.b, .001)), GROUND_TINT)
+
+## Ordem dos temas no shader de transição (harbor_pixel_ground_blend.gdshader).
+const GROUND_THEMES := ["stone", "sand", "wood", "mosaic", "garden", "crypt", "aqueduct", "arena"]
+const GROUND_BLEND_SHADER := "res://assets/shaders/harbor_pixel_ground_blend.gdshader"
+## Em volta de cada canto do tile, até onde (em tiles) o chão vizinho conta para a
+## mistura. Com 0,75 entram só os quatro tiles do canto: meio a meio na borda e nada
+## no canto seguinte, então a areia avança menos de um tile. Com 1,6 ela se espalhava
+## por um tile e meio e virava chuvisco.
+const BLEND_RADIUS := .75
+static var _blend_material: ShaderMaterial
+
+static func ground_blend_material() -> ShaderMaterial:
+	if _blend_material == null and ResourceLoader.exists(GROUND_BLEND_SHADER):
+		var material := ShaderMaterial.new()
+		material.shader = load(GROUND_BLEND_SHADER)
+		for theme in GROUND_THEMES:
+			var texture := ground_texture(theme)
+			if texture == null:
+				return null
+			material.set_shader_parameter("ground_" + theme, texture)
+		material.set_shader_parameter("ground_size", GROUND_SIZE)
+		_blend_material = material
+	return _blend_material
+
+## O chão vizinho que avança sobre este tile: [índice do tema, pesos nos quatro
+## cantos (cima, direita, baixo, esquerda), tinta do vizinho], ou [] longe de bordas.
+## Madeira não se mistura: o píer termina numa viga (`_draw_wood_trim`).
+func ground_blend(tile: Vector2i) -> Array:
+	var own: String = tile_themes[tile]
+	if own == "wood":
+		return []
+	var corners := [Vector2(-.5, -.5), Vector2(.5, -.5), Vector2(.5, .5), Vector2(-.5, .5)]
+	var shares: Array[Dictionary] = []
+	var sums := {}
+	var tints := {}
+	for corner: Vector2 in corners:
+		var at := Vector2(tile) + corner
+		var counts := {}
+		var total := 0
+		for y in range(floori(at.y - BLEND_RADIUS), ceili(at.y + BLEND_RADIUS) + 1):
+			for x in range(floori(at.x - BLEND_RADIUS), ceili(at.x + BLEND_RADIUS) + 1):
+				var near := Vector2i(x, y)
+				if not tiles.has(near) or Vector2(near).distance_to(at) > BLEND_RADIUS:
+					continue
+				var theme: String = tile_themes[near]
+				if theme == "wood":
+					continue
+				counts[theme] = int(counts.get(theme, 0)) + 1
+				total += 1
+				if theme != own and not tints.has(theme):
+					tints[theme] = tiles[near]
+		var share := {}
+		for theme in counts:
+			share[theme] = float(counts[theme]) / maxf(total, 1)
+			if theme != own:
+				sums[theme] = float(sums.get(theme, 0.0)) + share[theme]
+		shares.append(share)
+	var other := ""
+	for theme in sums:
+		if other == "" or float(sums[theme]) > float(sums[other]):
+			other = theme
+	if other == "" or GROUND_THEMES.find(other) < 0:
+		return []
+	var weights := PackedFloat32Array()
+	for share in shares:
+		weights.append(float(share.get(other, 0.0)))
+	return [GROUND_THEMES.find(other), weights, ground_tint(tints[other])]
 
 func _build_boundaries() -> void:
 	var body := StaticBody2D.new()
@@ -319,18 +410,36 @@ func _draw_tile(tile: Vector2i, target: CanvasItem) -> void:
 	var color := base.lightened(float(noise) / 180.0)
 	var top := PackedVector2Array([center + Vector2(0, -16), center + Vector2(32, 0), center + Vector2(0, 16), center + Vector2(-32, 0)])
 	var depth := 20.0 if theme != "wood" else 11.0
+	var floor_texture := ground_texture(theme)
+	var face_texture := ground_texture("face_wood" if theme == "wood" else "face_stone")
+	var tint := ground_tint(base)
 	for edge in [Vector2i(1, 0), Vector2i(0, 1)]:
 		if tiles.has(tile + edge):
 			continue
 		var a := center + (Vector2(32, 0) if edge.x == 1 else Vector2(0, 16))
 		var b := center + (Vector2(0, 16) if edge.x == 1 else Vector2(-32, 0))
-		target.draw_colored_polygon(PackedVector2Array([a, b, b + Vector2(0, depth), a + Vector2(0, depth)]), base.darkened(.42))
+		var face := PackedVector2Array([a, b, b + Vector2(0, depth), a + Vector2(0, depth)])
+		if face_texture != null:
+			# Blocos do paredão em fiadas paralelas à borda: u segue x, v desce do topo.
+			var uvs := PackedVector2Array([Vector2(a.x / FACE_SIZE.x, 0), Vector2(b.x / FACE_SIZE.x, 0), Vector2(b.x / FACE_SIZE.x, depth / FACE_SIZE.y), Vector2(a.x / FACE_SIZE.x, depth / FACE_SIZE.y)])
+			target.draw_colored_polygon(face, tint, uvs, face_texture)
+		else:
+			target.draw_colored_polygon(face, base.darkened(.42))
 		target.draw_line(a + Vector2(0, depth), b + Vector2(0, depth), Color("243e3e"), 2)
 		if theme == "wood":
 			target.draw_line(a + Vector2(-2, 3), a + Vector2(-2, 33), Color("443e32"), 4)
-		else:
+		elif face_texture == null:
 			target.draw_line(a + Vector2(0, 8), b + Vector2(0, 8), base.darkened(.6), 1)
-		target.draw_line(a, b, base.lightened(.18), 1)
+		if face_texture == null:
+			target.draw_line(a, b, base.lightened(.18), 1)
+	if floor_texture != null:
+		var uvs := PackedVector2Array()
+		for corner in top:
+			uvs.append(corner / GROUND_SIZE)
+		target.draw_colored_polygon(top, tint, uvs, floor_texture)
+		if theme == "wood":
+			_draw_wood_trim(tile, center, tint, target)
+		return
 	if Art.draw_tile(target, center, theme, tile):
 		return
 	target.draw_colored_polygon(top, color)
@@ -361,6 +470,22 @@ func _draw_tile(tile: Vector2i, target: CanvasItem) -> void:
 			if not tiles.has(tile + side):
 				var rail := center + Vector2(17 if side.x == 1 else -17, 8)
 				target.draw_line(rail, rail - Vector2(0, 11), Color("7e8e7a"), 2)
+
+## Viga de arremate onde as tábuas encontram outro chão: uma faixa escura de ~3 px
+## com o fio de luz em cima. Madeira e pedra se encontram numa borda construída, não
+## em pontilhado.
+func _draw_wood_trim(tile: Vector2i, center: Vector2, tint: Color, target: CanvasItem) -> void:
+	var edges := {Vector2i(1, 0): [Vector2(32, 0), Vector2(0, 16)], Vector2i(0, 1): [Vector2(0, 16), Vector2(-32, 0)], Vector2i(-1, 0): [Vector2(-32, 0), Vector2(0, -16)], Vector2i(0, -1): [Vector2(0, -16), Vector2(32, 0)]}
+	for direction: Vector2i in edges:
+		var near: Vector2i = tile + direction
+		if not tile_themes.has(near) or tile_themes[near] == "wood":
+			continue
+		var a: Vector2 = center + edges[direction][0]
+		var b: Vector2 = center + edges[direction][1]
+		var inner_a := a.lerp(center, .2)
+		var inner_b := b.lerp(center, .2)
+		target.draw_colored_polygon(PackedVector2Array([a, b, inner_b, inner_a]), Color("4b3b2d") * tint)
+		target.draw_line(inner_a, inner_b, Color("a27d50") * tint, 1)
 
 func _draw_seal(tile: Vector2, radius: float, color: Color) -> void:
 	draw_set_transform(iso(tile), 0, Vector2(1, .5))
@@ -395,9 +520,42 @@ class FloorChunk:
 				shore.lines.append(b + Vector2(-1, depth + 4))
 		add_child(shore)
 
+		# Bordas entre temas: o chão vizinho avança em pontilhado (GroundBlend).
+		var material: ShaderMaterial = layout.ground_blend_material()
+		if material != null:
+			var blends := []
+			for tile: Vector2i in coordinates:
+				var blend: Array = layout.ground_blend(tile)
+				if not blend.is_empty():
+					blends.append([tile, blend[0], blend[1], blend[2]])
+			if not blends.is_empty():
+				var overlay := GroundBlend.new()
+				overlay.name = "GroundBlend"
+				overlay.layout = layout
+				overlay.blends = blends
+				overlay.material = material
+				add_child(overlay)
+
 	func _draw() -> void:
 		for tile: Vector2i in coordinates:
 			layout._draw_tile(tile, self)
+
+## O chão vizinho sobre os tiles de borda, pelo shader de transição.
+class GroundBlend:
+	extends Node2D
+	var layout: Node2D
+	## [tile, índice do tema vizinho, pesos nos quatro cantos, tinta].
+	var blends: Array = []
+
+	func _draw() -> void:
+		for entry: Array in blends:
+			var center: Vector2 = layout.iso(Vector2(entry[0]))
+			var weights: PackedFloat32Array = entry[2]
+			var tint: Color = entry[3]
+			var index := float(entry[1])
+			var points := PackedVector2Array([center + Vector2(0, -16), center + Vector2(32, 0), center + Vector2(0, 16), center + Vector2(-32, 0)])
+			var uvs := PackedVector2Array([Vector2(index, weights[0]), Vector2(index, weights[1]), Vector2(index, weights[2]), Vector2(index, weights[3])])
+			draw_polygon(points, PackedColorArray([tint, tint, tint, tint]), uvs)
 
 class ShoreFoam:
 	extends Node2D
